@@ -1,13 +1,13 @@
 {
   "name": "@mg-mart/server",
   "version": "1.0.0",
-  "description": "Fastify server for MG Mart",
-  "main": "src/app.ts",
+  "description": "Express server for MG Mart",
+  "main": "server.ts",
   "type": "module",
   "scripts": {
-    "dev": "nodemon --exec \"node --loader ts-node/esm\" src/app.ts",
+    "dev": "nodemon --exec \"node --loader ts-node/esm\" server.ts",
     "build": "tsc",
-    "start": "node dist/app.js",
+    "start": "node dist/server.js",
     "type-check": "tsc --noEmit",
     "lint": "echo 'Lint not configured yet'"
   },
@@ -16,14 +16,16 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^24.3.1",
+    "@types/express": "^5.0.0",
+    "@types/cors": "^2.8.17",
     "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2"
   },
   "dependencies": {
-    "@fastify/cors": "^11.1.0",
-    "@fastify/env": "^5.0.1",
+    "cors": "^2.8.5",
+    "express": "^5.0.0",
     "dotenv": "^17.2.2",
-    "fastify": "^5.6.0"
+    "firebase-admin": "^13.5.0"
   }
 }
