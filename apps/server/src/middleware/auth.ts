@@ -9,7 +9,7 @@
  */
 
 import { Request, Response, NextFunction } from "express";
-import * as jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { ApiError } from "../utils/errorHandler.js";
 
 /**
@@ -20,6 +20,7 @@ declare global {
     interface Request {
       user?: {
         userId: string;
+        role?: string;
       };
     }
   }
@@ -38,11 +39,11 @@ interface JWTPayload {
  * Authentication middleware to verify JWT tokens
  * Extracts token from Authorization header and validates it
  */
-export const authenticateToken = (
+export const authenticateToken = async (
   req: Request,
   res: Response,
   next: NextFunction
-): void => {
+): Promise<void> => {
   try {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(" ")[1]; // Bearer TOKEN
@@ -59,9 +60,21 @@ export const authenticateToken = (
     // Verify token
     const decoded = jwt.verify(token, secret) as JWTPayload;
 
-    // Attach user info to request
+    // Get user role from database
+    const { UserRepository } = await import(
+      "../repositories/UserRepository.js"
+    );
+    const userRepository = new UserRepository();
+    const user = await userRepository.findById(decoded.userId);
+
+    if (!user) {
+      throw new ApiError("User not found", 401);
+    }
+
+    // Attach user info to request including role
     req.user = {
       userId: decoded.userId,
+      role: user.role,
     };
 
     next();
@@ -112,5 +125,40 @@ export const optionalAuth = (
   } catch (error) {
     // For optional auth, we don't throw errors for invalid tokens
     next();
+  }
+};
+
+/**
+ * Admin authorization middleware
+ * Checks if the authenticated user has admin role
+ */
+export const requireAdmin = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const userId = req.user?.userId;
+    if (!userId) {
+      throw new ApiError("Authentication required", 401);
+    }
+
+    const { UserRepository } = await import(
+      "../repositories/UserRepository.js"
+    );
+    const userRepository = new UserRepository();
+
+    const user = await userRepository.findById(userId);
+    if (!user) {
+      throw new ApiError("User not found", 404);
+    }
+
+    if (user.role !== "admin") {
+      throw new ApiError("Admin access required", 403);
+    }
+
+    next();
+  } catch (error) {
+    next(error);
   }
 };

@@ -20,8 +20,8 @@ router.use(authenticateToken);
 // Order routes
 router.post("/", orderController.createOrder);
 router.get("/", orderController.getAllOrders);
-router.get("/:id", orderController.getOrderById);
-router.put("/:id/status", orderController.updateOrderStatus);
+router.get("/:orderId", orderController.getOrderById);
+router.put("/:orderId/status", orderController.updateOrderStatus);
 
 export default router;
 

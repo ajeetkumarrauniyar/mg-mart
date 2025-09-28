@@ -46,11 +46,21 @@ export class OrderController {
         throw new ApiError("User not authenticated", 401);
       }
 
-      const { paymentMethod, deliveryAddress, notes } = req.body;
+      const { paymentMethod, shippingAddress, notes } = req.body;
 
       // Validate required fields
       validateRequired(paymentMethod, "paymentMethod");
-      validateRequired(deliveryAddress, "deliveryAddress");
+      validateRequired(shippingAddress, "shippingAddress");
+
+      if (
+        !shippingAddress ||
+        !shippingAddress.street ||
+        !shippingAddress.city ||
+        !shippingAddress.state ||
+        !shippingAddress.zipCode
+      ) {
+        throw new ApiError("Complete shipping address is required", 400);
+      }
 
       // Validate payment method
       const validPaymentMethods: PaymentMethod[] = ["COD", "Online"];
@@ -108,12 +118,7 @@ export class OrderController {
           price: item.unitPrice,
           quantity: item.quantity,
         })),
-        shippingAddress: {
-          street: deliveryAddress,
-          city: "",
-          state: "",
-          zipCode: "",
-        },
+        shippingAddress,
         paymentDetails: {
           paymentMethod: paymentMethod as PaymentMethod,
         },

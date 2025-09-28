@@ -19,7 +19,7 @@ import {
 } from "../utils/validation.js";
 import { ApiError } from "../utils/errorHandler.js";
 import * as bcrypt from "bcrypt";
-import * as jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import {
   CreateUserInput,
   UpdateUserInput,
@@ -69,7 +69,7 @@ export class UserController {
         password: hashedPassword,
         name: `${firstName} ${lastName}`,
         phoneNumber: phone,
-        address,
+        ...(address && { address }), // Only include address if provided
       };
 
       // Create user
@@ -198,9 +198,13 @@ export class UserController {
 
       const updateData: UpdateUserInput = {
         ...(email && { email }),
-        ...(firstName && { firstName }),
-        ...(lastName && { lastName }),
-        ...(phone && { phone }),
+        ...((firstName || lastName) && {
+          name:
+            firstName && lastName
+              ? `${firstName} ${lastName}`
+              : firstName || lastName,
+        }),
+        ...(phone && { phoneNumber: phone }),
         ...(address && { address }),
       };
 

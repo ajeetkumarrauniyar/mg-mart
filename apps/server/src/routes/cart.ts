@@ -20,8 +20,8 @@ router.use(authenticateToken);
 // Cart routes
 router.get("/", cartController.getCart);
 router.post("/add", cartController.addItem);
-router.put("/update", cartController.updateItem);
-router.delete("/remove", cartController.removeItem);
+router.put("/update/:productId", cartController.updateItem);
+router.delete("/remove/:productId", cartController.removeItem);
 router.delete("/clear", cartController.clearCart);
 
 export default router;

@@ -15,7 +15,7 @@ export interface User {
   passwordHash: string;
   name: string;
   phoneNumber: string;
-  address: Address;
+  address?: Address;
   role: UserRole;
   createdAt: Timestamp;
   updatedAt: Timestamp;
@@ -26,11 +26,12 @@ export interface CreateUserInput {
   password: string;
   name: string;
   phoneNumber: string;
-  address: Address;
+  address?: Address;
   role?: UserRole;
 }
 
 export interface UpdateUserInput {
+  email?: string;
   name?: string;
   phoneNumber?: string;
   address?: Address;
@@ -41,7 +42,7 @@ export interface UserResponse {
   email: string;
   name: string;
   phoneNumber: string;
-  address: Address;
+  address?: Address;
   role: UserRole;
   createdAt: string;
   updatedAt: string;

@@ -20,13 +20,13 @@ import { AddToCartInput, UpdateCartItemInput } from "../models/Cart.js";
  * for better error handling and user feedback
  */
 export class ValidationError extends Error {
-    constructor(
-        message: string,
-        public field?: string
-    ) {
-        super(message);
-        this.name = "ValidationError";
-    }
+  constructor(
+    message: string,
+    public field?: string
+  ) {
+    super(message);
+    this.name = "ValidationError";
+  }
 }
 
 /**
@@ -35,8 +35,8 @@ export class ValidationError extends Error {
  * @returns true if email format is valid, false otherwise
  */
 export const validateEmail = (email: string): boolean => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
 };
 
 /**
@@ -46,8 +46,8 @@ export const validateEmail = (email: string): boolean => {
  * @returns true if phone format is valid, false otherwise
  */
 export const validatePhoneNumber = (phone: string): boolean => {
-    const phoneRegex = /^\+?[\d\s\-\(\)]{10,}$/;
-    return phoneRegex.test(phone);
+  const phoneRegex = /^\+?[\d\s\-\(\)]{10,}$/;
+  return phoneRegex.test(phone);
 };
 
 /**
@@ -56,37 +56,37 @@ export const validatePhoneNumber = (phone: string): boolean => {
  * @throws ValidationError when validation rules are not met
  */
 export const validateCreateUser = (userData: CreateUserInput): void => {
-    if (!userData.email || !validateEmail(userData.email)) {
-        throw new ValidationError("Valid email is required", "email");
-    }
+  if (!userData.email || !validateEmail(userData.email)) {
+    throw new ValidationError("Valid email is required", "email");
+  }
 
-    if (!userData.password || userData.password.length < 6) {
-        throw new ValidationError(
-            "Password must be at least 6 characters long",
-            "password"
-        );
-    }
+  if (!userData.password || userData.password.length < 6) {
+    throw new ValidationError(
+      "Password must be at least 6 characters long",
+      "password"
+    );
+  }
 
-    if (!userData.name || userData.name.trim().length < 2) {
-        throw new ValidationError(
-            "Name must be at least 2 characters long",
-            "name"
-        );
-    }
+  if (!userData.name || userData.name.trim().length < 2) {
+    throw new ValidationError(
+      "Name must be at least 2 characters long",
+      "name"
+    );
+  }
 
-    if (!userData.phoneNumber || !validatePhoneNumber(userData.phoneNumber)) {
-        throw new ValidationError("Valid phone number is required", "phoneNumber");
-    }
+  if (!userData.phoneNumber || !validatePhoneNumber(userData.phoneNumber)) {
+    throw new ValidationError("Valid phone number is required", "phoneNumber");
+  }
 
-    if (
-        !userData.address ||
-        !userData.address.street ||
-        !userData.address.city ||
-        !userData.address.state ||
-        !userData.address.zipCode
-    ) {
-        throw new ValidationError("Complete address is required", "address");
-    }
+  /*if (
+    !userData.address ||
+    !userData.address.street ||
+    !userData.address.city ||
+    !userData.address.state ||
+    !userData.address.zipCode
+  ) {
+    throw new ValidationError("Complete address is required", "address");
+  }*/
 };
 
 /**
@@ -96,16 +96,16 @@ export const validateCreateUser = (userData: CreateUserInput): void => {
  * @throws ValidationError when validation rules are not met
  */
 export const validateUpdateUser = (userData: UpdateUserInput): void => {
-    if (userData.name && userData.name.trim().length < 2) {
-        throw new ValidationError(
-            "Name must be at least 2 characters long",
-            "name"
-        );
-    }
+  if (userData.name && userData.name.trim().length < 2) {
+    throw new ValidationError(
+      "Name must be at least 2 characters long",
+      "name"
+    );
+  }
 
-    if (userData.phoneNumber && !validatePhoneNumber(userData.phoneNumber)) {
-        throw new ValidationError("Valid phone number is required", "phoneNumber");
-    }
+  if (userData.phoneNumber && !validatePhoneNumber(userData.phoneNumber)) {
+    throw new ValidationError("Valid phone number is required", "phoneNumber");
+  }
 };
 
 /**
@@ -115,33 +115,33 @@ export const validateUpdateUser = (userData: UpdateUserInput): void => {
  * @throws ValidationError when validation rules are not met
  */
 export const validateCreateProduct = (
-    productData: CreateProductInput
+  productData: CreateProductInput
 ): void => {
-    if (!productData.name || productData.name.trim().length < 2) {
-        throw new ValidationError(
-            "Product name must be at least 2 characters long",
-            "name"
-        );
-    }
+  if (!productData.name || productData.name.trim().length < 2) {
+    throw new ValidationError(
+      "Product name must be at least 2 characters long",
+      "name"
+    );
+  }
 
-    if (!productData.description || productData.description.trim().length < 10) {
-        throw new ValidationError(
-            "Product description must be at least 10 characters long",
-            "description"
-        );
-    }
+  if (!productData.description || productData.description.trim().length < 10) {
+    throw new ValidationError(
+      "Product description must be at least 10 characters long",
+      "description"
+    );
+  }
 
-    if (!productData.price || productData.price <= 0) {
-        throw new ValidationError("Product price must be greater than 0", "price");
-    }
+  if (!productData.price || productData.price <= 0) {
+    throw new ValidationError("Product price must be greater than 0", "price");
+  }
 
-    if (!productData.stock || productData.stock < 0) {
-        throw new ValidationError("Product stock cannot be negative", "stock");
-    }
+  if (!productData.stock || productData.stock < 0) {
+    throw new ValidationError("Product stock cannot be negative", "stock");
+  }
 
-    if (!productData.imageUrl || !isValidUrl(productData.imageUrl)) {
-        throw new ValidationError("Valid image URL is required", "imageUrl");
-    }
+  if (!productData.imageUrl || !isValidUrl(productData.imageUrl)) {
+    throw new ValidationError("Valid image URL is required", "imageUrl");
+  }
 };
 
 /**
@@ -151,33 +151,33 @@ export const validateCreateProduct = (
  * @throws ValidationError when validation rules are not met
  */
 export const validateUpdateProduct = (
-    productData: UpdateProductInput
+  productData: UpdateProductInput
 ): void => {
-    if (productData.name && productData.name.trim().length < 2) {
-        throw new ValidationError(
-            "Product name must be at least 2 characters long",
-            "name"
-        );
-    }
+  if (productData.name && productData.name.trim().length < 2) {
+    throw new ValidationError(
+      "Product name must be at least 2 characters long",
+      "name"
+    );
+  }
 
-    if (productData.description && productData.description.trim().length < 10) {
-        throw new ValidationError(
-            "Product description must be at least 10 characters long",
-            "description"
-        );
-    }
+  if (productData.description && productData.description.trim().length < 10) {
+    throw new ValidationError(
+      "Product description must be at least 10 characters long",
+      "description"
+    );
+  }
 
-    if (productData.price !== undefined && productData.price <= 0) {
-        throw new ValidationError("Product price must be greater than 0", "price");
-    }
+  if (productData.price !== undefined && productData.price <= 0) {
+    throw new ValidationError("Product price must be greater than 0", "price");
+  }
 
-    if (productData.stock !== undefined && productData.stock < 0) {
-        throw new ValidationError("Product stock cannot be negative", "stock");
-    }
+  if (productData.stock !== undefined && productData.stock < 0) {
+    throw new ValidationError("Product stock cannot be negative", "stock");
+  }
 
-    if (productData.imageUrl && !isValidUrl(productData.imageUrl)) {
-        throw new ValidationError("Valid image URL is required", "imageUrl");
-    }
+  if (productData.imageUrl && !isValidUrl(productData.imageUrl)) {
+    throw new ValidationError("Valid image URL is required", "imageUrl");
+  }
 };
 
 /**
@@ -187,38 +187,38 @@ export const validateUpdateProduct = (
  * @throws ValidationError when validation rules are not met
  */
 export const validateCreateOrder = (orderData: CreateOrderInput): void => {
-    if (!orderData.items || orderData.items.length === 0) {
-        throw new ValidationError("Order must contain at least one item", "items");
-    }
+  if (!orderData.items || orderData.items.length === 0) {
+    throw new ValidationError("Order must contain at least one item", "items");
+  }
 
-    // Validate each order item
-    for (const item of orderData.items) {
-        if (
-            !item.productId ||
-            !item.name ||
-            item.price <= 0 ||
-            item.quantity <= 0
-        ) {
-            throw new ValidationError("Invalid order item", "items");
-        }
-    }
-
+  // Validate each order item
+  for (const item of orderData.items) {
     if (
-        !orderData.shippingAddress ||
-        !orderData.shippingAddress.street ||
-        !orderData.shippingAddress.city ||
-        !orderData.shippingAddress.state ||
-        !orderData.shippingAddress.zipCode
+      !item.productId ||
+      !item.name ||
+      item.price <= 0 ||
+      item.quantity <= 0
     ) {
-        throw new ValidationError(
-            "Complete shipping address is required",
-            "shippingAddress"
-        );
+      throw new ValidationError("Invalid order item", "items");
     }
+  }
 
-    if (!orderData.paymentDetails || !orderData.paymentDetails.paymentMethod) {
-        throw new ValidationError("Payment details are required", "paymentDetails");
-    }
+  if (
+    !orderData.shippingAddress ||
+    !orderData.shippingAddress.street ||
+    !orderData.shippingAddress.city ||
+    !orderData.shippingAddress.state ||
+    !orderData.shippingAddress.zipCode
+  ) {
+    throw new ValidationError(
+      "Complete shipping address is required",
+      "shippingAddress"
+    );
+  }
+
+  if (!orderData.paymentDetails || !orderData.paymentDetails.paymentMethod) {
+    throw new ValidationError("Payment details are required", "paymentDetails");
+  }
 };
 
 /**
@@ -228,13 +228,13 @@ export const validateCreateOrder = (orderData: CreateOrderInput): void => {
  * @throws ValidationError when validation rules are not met
  */
 export const validateAddToCart = (cartData: AddToCartInput): void => {
-    if (!cartData.productId) {
-        throw new ValidationError("Product ID is required", "productId");
-    }
+  if (!cartData.productId) {
+    throw new ValidationError("Product ID is required", "productId");
+  }
 
-    if (!cartData.quantity || cartData.quantity <= 0) {
-        throw new ValidationError("Quantity must be greater than 0", "quantity");
-    }
+  if (!cartData.quantity || cartData.quantity <= 0) {
+    throw new ValidationError("Quantity must be greater than 0", "quantity");
+  }
 };
 
 /**
@@ -244,9 +244,9 @@ export const validateAddToCart = (cartData: AddToCartInput): void => {
  * @throws ValidationError when validation rules are not met
  */
 export const validateUpdateCartItem = (cartData: UpdateCartItemInput): void => {
-    if (cartData.quantity < 0) {
-        throw new ValidationError("Quantity cannot be negative", "quantity");
-    }
+  if (cartData.quantity < 0) {
+    throw new ValidationError("Quantity cannot be negative", "quantity");
+  }
 };
 
 /**
@@ -256,9 +256,9 @@ export const validateUpdateCartItem = (cartData: UpdateCartItemInput): void => {
  * @throws ValidationError when field is empty or undefined
  */
 export const validateRequired = (value: any, fieldName: string): void => {
-    if (value === undefined || value === null || value === '') {
-        throw new ValidationError(`${fieldName} is required`, fieldName);
-    }
+  if (value === undefined || value === null || value === "") {
+    throw new ValidationError(`${fieldName} is required`, fieldName);
+  }
 };
 
 /**
@@ -267,10 +267,16 @@ export const validateRequired = (value: any, fieldName: string): void => {
  * @param fieldName - Name of the field for error messages
  * @throws ValidationError when number is not positive
  */
-export const validatePositiveNumber = (value: number, fieldName: string): void => {
-    if (typeof value !== 'number' || value <= 0) {
-        throw new ValidationError(`${fieldName} must be a positive number`, fieldName);
-    }
+export const validatePositiveNumber = (
+  value: number,
+  fieldName: string
+): void => {
+  if (typeof value !== "number" || value <= 0) {
+    throw new ValidationError(
+      `${fieldName} must be a positive number`,
+      fieldName
+    );
+  }
 };
 
 /**
@@ -279,12 +285,12 @@ export const validatePositiveNumber = (value: number, fieldName: string): void =
  * @throws ValidationError when password doesn't meet requirements
  */
 export const validatePassword = (password: string): void => {
-    if (!password || password.length < 6) {
-        throw new ValidationError(
-            "Password must be at least 6 characters long",
-            "password"
-        );
-    }
+  if (!password || password.length < 6) {
+    throw new ValidationError(
+      "Password must be at least 6 characters long",
+      "password"
+    );
+  }
 };
 
 /**
@@ -294,10 +300,10 @@ export const validatePassword = (password: string): void => {
  * @returns true if URL is valid, false otherwise
  */
 const isValidUrl = (url: string): boolean => {
-    try {
-        new URL(url);
-        return true;
-    } catch {
-        return false;
-    }
+  try {
+    new URL(url);
+    return true;
+  } catch {
+    return false;
+  }
 };

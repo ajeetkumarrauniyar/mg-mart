@@ -52,7 +52,7 @@ export class UserRepository {
       passwordHash: userData.password, // Note: Password should be hashed before calling this method
       name: userData.name,
       phoneNumber: userData.phoneNumber,
-      address: userData.address,
+      ...(userData.address && { address: userData.address }), // Only include address if provided
       role: userData.role || "customer", // Default to customer role
       createdAt: now,
       updatedAt: now,
@@ -178,7 +178,8 @@ export class UserRepository {
       email: user.email,
       name: user.name,
       phoneNumber: user.phoneNumber,
-      address: user.address,
+      // Only include address if it's provided
+      ...(user.address && { address: user.address }),
       role: user.role,
       createdAt: timestampToString(user.createdAt),
       updatedAt: timestampToString(user.updatedAt),

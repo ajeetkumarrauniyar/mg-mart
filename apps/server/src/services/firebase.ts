@@ -12,8 +12,7 @@
 import { initializeApp, cert, getApps } from "firebase-admin/app";
 import { getFirestore, Firestore, Timestamp } from "firebase-admin/firestore";
 import { getAuth as getAuthService } from "firebase-admin/auth";
-// Use require for JSON import to avoid module resolution issues
-import firebaseKeyCredentials from "../../key.json";
+import firebaseKeyCredentials from "../../key.json" with { type: "json" };
 
 // Global Firestore database instance
 let db: Firestore;
@@ -53,6 +52,9 @@ export const initializeFirebase = () => {
   db = getFirestore();
   return db;
 };
+
+// Initialize Firebase immediately when this module is loaded
+initializeFirebase();
 
 /**
  * Returns the initialized Firestore database instance
