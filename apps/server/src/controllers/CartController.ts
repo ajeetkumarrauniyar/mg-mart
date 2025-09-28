@@ -1,0 +1,378 @@
+/**
+ * Cart Controller for MG Mart grocery application
+ *
+ * Handles cart operations including adding/removing items, updating quantities,
+ * cart management, and cart-to-order conversion with proper validation.
+ *
+ * @author MG Mart Development Team
+ * @version 1.0.0
+ */
+
+import { Request, Response, NextFunction } from "express";
+import { CartRepository } from "../repositories/CartRepository.js";
+import { ProductRepository } from "../repositories/ProductRepository.js";
+import {
+  validateRequired,
+  validatePositiveNumber,
+} from "../utils/validation.js";
+import { ApiError } from "../utils/errorHandler.js";
+import { AddToCartInput, UpdateCartItemInput } from "../models/Cart.js";
+
+export class CartController {
+  private cartRepository: CartRepository;
+  private productRepository: ProductRepository;
+
+  constructor() {
+    this.cartRepository = new CartRepository();
+    this.productRepository = new ProductRepository();
+  }
+
+  /**
+   * Get user's current cart with all items and totals
+   */
+  getCart = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      const userId = req.user?.userId;
+      if (!userId) {
+        throw new ApiError("User not authenticated", 401);
+      }
+
+      const cart = await this.cartRepository.getCart(userId);
+      if (!cart) {
+        // Return empty cart if none exists
+        res.json({
+          success: true,
+          data: {
+            cartId: null,
+            userId,
+            items: [],
+            totalAmount: 0,
+            totalItems: 0,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          },
+        });
+        return;
+      }
+
+      res.json({
+        success: true,
+        data: cart,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  /**
+   * Add item to cart or update quantity if item already exists
+   */
+  addItem = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      const userId = req.user?.userId;
+      if (!userId) {
+        throw new ApiError("User not authenticated", 401);
+      }
+
+      const { productId, quantity } = req.body;
+
+      // Validate input
+      validateRequired(productId, "productId");
+      validateRequired(quantity, "quantity");
+      validatePositiveNumber(quantity, "Quantity");
+
+      // Verify product exists and has sufficient stock
+      const product = await this.productRepository.findById(productId);
+      if (!product) {
+        throw new ApiError("Product not found", 404);
+      }
+
+      if (product.stock < quantity) {
+        throw new ApiError(
+          `Insufficient stock. Available: ${product.stock}`,
+          400
+        );
+      }
+
+      // Add item to cart using repository
+      const addItemInput = {
+        productId,
+        quantity: parseInt(quantity, 10),
+      };
+
+      await this.cartRepository.addItem(userId, addItemInput);
+
+      // Get updated cart to return
+      const updatedCart = await this.cartRepository.getCart(userId);
+
+      res.json({
+        success: true,
+        message: "Item added to cart successfully",
+        data: updatedCart,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  /**
+   * Update item quantity in cart
+   */
+  updateItem = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      const userId = req.user?.userId;
+      if (!userId) {
+        throw new ApiError("User not authenticated", 401);
+      }
+
+      const { productId } = req.params;
+      const { quantity } = req.body;
+
+      // Validate input
+      validateRequired(quantity, "quantity");
+      validatePositiveNumber(quantity, "Quantity");
+
+      // Get user's cart
+      const cart = await this.cartRepository.getCart(userId);
+      if (!cart) {
+        throw new ApiError("Cart not found", 404);
+      }
+
+      // Check if item exists in cart
+      const existingItem = cart.items.find(
+        (item) => item.productId === productId
+      );
+      if (!existingItem) {
+        throw new ApiError("Item not found in cart", 404);
+      }
+
+      // Verify product stock
+      const product = await this.productRepository.findById(productId!);
+      if (!product) {
+        throw new ApiError("Product not found", 404);
+      }
+
+      if (product.stock < quantity) {
+        throw new ApiError(
+          `Insufficient stock. Available: ${product.stock}`,
+          400
+        );
+      }
+
+      // Update item quantity
+      const updateInput: UpdateCartItemInput = {
+        quantity: parseInt(quantity, 10),
+      };
+
+      await this.cartRepository.updateItem(userId, productId!, updateInput);
+      const updatedCart = await this.cartRepository.getCart(userId);
+
+      res.json({
+        success: true,
+        message: "Cart item updated successfully",
+        data: updatedCart,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  /**
+   * Remove item from cart
+   */
+  removeItem = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      const userId = req.user?.userId;
+      if (!userId) {
+        throw new ApiError("User not authenticated", 401);
+      }
+
+      const { productId } = req.params;
+
+      if (!productId) {
+        throw new ApiError("Product ID is required", 400);
+      }
+
+      // Get user's cart
+      const cart = await this.cartRepository.getCart(userId);
+      if (!cart) {
+        throw new ApiError("Cart not found", 404);
+      }
+
+      // Check if item exists in cart
+      const existingItem = cart.items.find(
+        (item) => item.productId === productId
+      );
+      if (!existingItem) {
+        throw new ApiError("Item not found in cart", 404);
+      }
+
+      // Remove item from cart
+      const updatedCart = await this.cartRepository.removeItem(
+        userId,
+        productId!
+      );
+
+      res.json({
+        success: true,
+        message: "Item removed from cart successfully",
+        data: updatedCart,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  /**
+   * Clear all items from cart
+   */
+  clearCart = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      const userId = req.user?.userId;
+      if (!userId) {
+        throw new ApiError("User not authenticated", 401);
+      }
+
+      // Get user's cart
+      const cart = await this.cartRepository.getCart(userId);
+      if (!cart) {
+        throw new ApiError("Cart not found", 404);
+      }
+
+      // Clear cart
+      await this.cartRepository.clearCart(userId);
+      const clearedCart = await this.cartRepository.getCart(userId);
+
+      res.json({
+        success: true,
+        message: "Cart cleared successfully",
+        data: clearedCart,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  /**
+   * Get cart item count for user
+   */
+  getCartItemCount = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      const userId = req.user?.userId;
+      if (!userId) {
+        throw new ApiError("User not authenticated", 401);
+      }
+
+      const cart = await this.cartRepository.getCart(userId);
+      const itemCount = cart ? cart.totalItems : 0;
+
+      res.json({
+        success: true,
+        data: {
+          itemCount,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  /**
+   * Validate cart items before checkout
+   * Checks product availability and stock levels
+   */
+  validateCart = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      const userId = req.user?.userId;
+      if (!userId) {
+        throw new ApiError("User not authenticated", 401);
+      }
+
+      const cart = await this.cartRepository.getCart(userId);
+      if (!cart || cart.items.length === 0) {
+        throw new ApiError("Cart is empty", 400);
+      }
+
+      const validationErrors: string[] = [];
+      const validatedItems = [];
+
+      // Validate each cart item
+      for (const item of cart.items) {
+        const product = await this.productRepository.findById(item.productId);
+
+        if (!product) {
+          validationErrors.push(
+            `Product ${item.productId} is no longer available`
+          );
+          continue;
+        }
+
+        if (product.stock < item.quantity) {
+          validationErrors.push(
+            `Insufficient stock for ${product.name}. Available: ${product.stock}, Requested: ${item.quantity}`
+          );
+          continue;
+        }
+
+        validatedItems.push({
+          ...item,
+          product: {
+            name: product.name,
+            price: product.price,
+            stock: product.stock,
+          },
+        });
+      }
+
+      if (validationErrors.length > 0) {
+        res.status(400).json({
+          success: false,
+          message: "Cart validation failed",
+          errors: validationErrors,
+        });
+        return;
+      }
+
+      res.json({
+        success: true,
+        message: "Cart is valid for checkout",
+        data: {
+          // Cart response doesn't include cartId
+          items: validatedItems,
+          totalAmount: cart.totalAmount,
+          totalItems: cart.totalItems,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+}
