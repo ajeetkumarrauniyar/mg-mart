@@ -156,7 +156,7 @@ getOrderStats(userId?: string): Promise<OrderStatistics>
 ## Data Flow
 
 ```
-Client Request → API Endpoint → Repository → Firebase Firestore → Response
+Client Request → API Endpoint →  Controller →Repository → Firebase Firestore → Response
 ```
 
 ### Example Usage
