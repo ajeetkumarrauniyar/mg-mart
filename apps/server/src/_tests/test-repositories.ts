@@ -3,13 +3,13 @@
  * Run this to verify all repositories are working correctly
  */
 
-import { initializeFirebase } from "./services/firebase.js";
+import { initializeFirebase } from "../services/firebase.js";
 import {
   UserRepository,
   ProductRepository,
   OrderRepository,
   CartRepository,
-} from "./repositories/index.js";
+} from "../repositories/index.js";
 
 // Initialize Firebase before testing
 initializeFirebase();
