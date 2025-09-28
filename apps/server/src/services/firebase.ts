@@ -12,10 +12,8 @@
 import { initializeApp, cert, getApps } from "firebase-admin/app";
 import { getFirestore, Firestore, Timestamp } from "firebase-admin/firestore";
 import { getAuth as getAuthService } from "firebase-admin/auth";
-import { createRequire } from "module";
-
-// Create require function for ES modules
-const require = createRequire(import.meta.url);
+// Use require for JSON import to avoid module resolution issues
+import firebaseKeyCredentials from "../../key.json";
 
 // Global Firestore database instance
 let db: Firestore;
@@ -34,7 +32,7 @@ export const initializeFirebase = () => {
     // Load service account credentials from environment or local file
     const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT_KEY
       ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY)
-      : require("../../key.json");
+      : firebaseKeyCredentials;
 
     // Validate required environment variables
     const projectId =
@@ -124,12 +122,8 @@ export const stringToTimestamp = (dateString: string): Timestamp => {
  * These names correspond to the Firestore collections in the database
  */
 export const COLLECTIONS = {
-  /** User accounts and profiles */
   USERS: "users",
-  /** Product catalog */
   PRODUCTS: "products",
-  /** Customer orders */
   ORDERS: "orders",
-  /** Shopping cart items (subcollection under users) */
   CART: "cart",
 } as const;

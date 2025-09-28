@@ -1,0 +1,303 @@
+/**
+ * Validation utilities
+ *
+ * This module provides comprehensive input validation for all data models
+ * including users, products, orders, and cart operations. It ensures data
+ * integrity before database operations and provides meaningful error messages.
+ *
+ * @author MG Mart Development Team
+ * @version 1.0.0
+ */
+
+import { CreateUserInput, UpdateUserInput } from "../models/User.js";
+import { CreateProductInput, UpdateProductInput } from "../models/Product.js";
+import { CreateOrderInput } from "../models/Order.js";
+import { AddToCartInput, UpdateCartItemInput } from "../models/Cart.js";
+
+/**
+ * Custom error class for validation failures
+ * Extends the base Error class to include field-specific information
+ * for better error handling and user feedback
+ */
+export class ValidationError extends Error {
+    constructor(
+        message: string,
+        public field?: string
+    ) {
+        super(message);
+        this.name = "ValidationError";
+    }
+}
+
+/**
+ * Validates email format using RFC-compliant regex pattern
+ * @param email - Email address to validate
+ * @returns true if email format is valid, false otherwise
+ */
+export const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+};
+
+/**
+ * Validates phone number format (supports international formats)
+ * Accepts numbers with optional country codes, spaces, dashes, and parentheses
+ * @param phone - Phone number to validate
+ * @returns true if phone format is valid, false otherwise
+ */
+export const validatePhoneNumber = (phone: string): boolean => {
+    const phoneRegex = /^\+?[\d\s\-\(\)]{10,}$/;
+    return phoneRegex.test(phone);
+};
+
+/**
+ * Validates user creation data including email, password, name, phone, and address
+ * @param userData - User data to validate for creation
+ * @throws ValidationError when validation rules are not met
+ */
+export const validateCreateUser = (userData: CreateUserInput): void => {
+    if (!userData.email || !validateEmail(userData.email)) {
+        throw new ValidationError("Valid email is required", "email");
+    }
+
+    if (!userData.password || userData.password.length < 6) {
+        throw new ValidationError(
+            "Password must be at least 6 characters long",
+            "password"
+        );
+    }
+
+    if (!userData.name || userData.name.trim().length < 2) {
+        throw new ValidationError(
+            "Name must be at least 2 characters long",
+            "name"
+        );
+    }
+
+    if (!userData.phoneNumber || !validatePhoneNumber(userData.phoneNumber)) {
+        throw new ValidationError("Valid phone number is required", "phoneNumber");
+    }
+
+    if (
+        !userData.address ||
+        !userData.address.street ||
+        !userData.address.city ||
+        !userData.address.state ||
+        !userData.address.zipCode
+    ) {
+        throw new ValidationError("Complete address is required", "address");
+    }
+};
+
+/**
+ * Validates user update data (partial validation for optional fields)
+ * Only validates fields that are provided in the update request
+ * @param userData - User data to validate for updates
+ * @throws ValidationError when validation rules are not met
+ */
+export const validateUpdateUser = (userData: UpdateUserInput): void => {
+    if (userData.name && userData.name.trim().length < 2) {
+        throw new ValidationError(
+            "Name must be at least 2 characters long",
+            "name"
+        );
+    }
+
+    if (userData.phoneNumber && !validatePhoneNumber(userData.phoneNumber)) {
+        throw new ValidationError("Valid phone number is required", "phoneNumber");
+    }
+};
+
+/**
+ * Validates product creation data including name, description, price, stock, and image
+ * Ensures all required fields are present and meet business rules
+ * @param productData - Product data to validate for creation
+ * @throws ValidationError when validation rules are not met
+ */
+export const validateCreateProduct = (
+    productData: CreateProductInput
+): void => {
+    if (!productData.name || productData.name.trim().length < 2) {
+        throw new ValidationError(
+            "Product name must be at least 2 characters long",
+            "name"
+        );
+    }
+
+    if (!productData.description || productData.description.trim().length < 10) {
+        throw new ValidationError(
+            "Product description must be at least 10 characters long",
+            "description"
+        );
+    }
+
+    if (!productData.price || productData.price <= 0) {
+        throw new ValidationError("Product price must be greater than 0", "price");
+    }
+
+    if (!productData.stock || productData.stock < 0) {
+        throw new ValidationError("Product stock cannot be negative", "stock");
+    }
+
+    if (!productData.imageUrl || !isValidUrl(productData.imageUrl)) {
+        throw new ValidationError("Valid image URL is required", "imageUrl");
+    }
+};
+
+/**
+ * Validates product update data (partial validation for optional fields)
+ * Only validates fields that are provided in the update request
+ * @param productData - Product data to validate for updates
+ * @throws ValidationError when validation rules are not met
+ */
+export const validateUpdateProduct = (
+    productData: UpdateProductInput
+): void => {
+    if (productData.name && productData.name.trim().length < 2) {
+        throw new ValidationError(
+            "Product name must be at least 2 characters long",
+            "name"
+        );
+    }
+
+    if (productData.description && productData.description.trim().length < 10) {
+        throw new ValidationError(
+            "Product description must be at least 10 characters long",
+            "description"
+        );
+    }
+
+    if (productData.price !== undefined && productData.price <= 0) {
+        throw new ValidationError("Product price must be greater than 0", "price");
+    }
+
+    if (productData.stock !== undefined && productData.stock < 0) {
+        throw new ValidationError("Product stock cannot be negative", "stock");
+    }
+
+    if (productData.imageUrl && !isValidUrl(productData.imageUrl)) {
+        throw new ValidationError("Valid image URL is required", "imageUrl");
+    }
+};
+
+/**
+ * Validates order creation data including items, shipping address, and payment details
+ * Ensures order has valid items and complete shipping/payment information
+ * @param orderData - Order data to validate for creation
+ * @throws ValidationError when validation rules are not met
+ */
+export const validateCreateOrder = (orderData: CreateOrderInput): void => {
+    if (!orderData.items || orderData.items.length === 0) {
+        throw new ValidationError("Order must contain at least one item", "items");
+    }
+
+    // Validate each order item
+    for (const item of orderData.items) {
+        if (
+            !item.productId ||
+            !item.name ||
+            item.price <= 0 ||
+            item.quantity <= 0
+        ) {
+            throw new ValidationError("Invalid order item", "items");
+        }
+    }
+
+    if (
+        !orderData.shippingAddress ||
+        !orderData.shippingAddress.street ||
+        !orderData.shippingAddress.city ||
+        !orderData.shippingAddress.state ||
+        !orderData.shippingAddress.zipCode
+    ) {
+        throw new ValidationError(
+            "Complete shipping address is required",
+            "shippingAddress"
+        );
+    }
+
+    if (!orderData.paymentDetails || !orderData.paymentDetails.paymentMethod) {
+        throw new ValidationError("Payment details are required", "paymentDetails");
+    }
+};
+
+/**
+ * Validates cart item addition data
+ * Ensures product ID is provided and quantity is positive
+ * @param cartData - Cart item data to validate
+ * @throws ValidationError when validation rules are not met
+ */
+export const validateAddToCart = (cartData: AddToCartInput): void => {
+    if (!cartData.productId) {
+        throw new ValidationError("Product ID is required", "productId");
+    }
+
+    if (!cartData.quantity || cartData.quantity <= 0) {
+        throw new ValidationError("Quantity must be greater than 0", "quantity");
+    }
+};
+
+/**
+ * Validates cart item update data
+ * Ensures quantity is not negative (0 quantity removes the item)
+ * @param cartData - Cart item update data to validate
+ * @throws ValidationError when validation rules are not met
+ */
+export const validateUpdateCartItem = (cartData: UpdateCartItemInput): void => {
+    if (cartData.quantity < 0) {
+        throw new ValidationError("Quantity cannot be negative", "quantity");
+    }
+};
+
+/**
+ * Validates that a required field is not empty or undefined
+ * @param value - Value to validate
+ * @param fieldName - Name of the field for error messages
+ * @throws ValidationError when field is empty or undefined
+ */
+export const validateRequired = (value: any, fieldName: string): void => {
+    if (value === undefined || value === null || value === '') {
+        throw new ValidationError(`${fieldName} is required`, fieldName);
+    }
+};
+
+/**
+ * Validates that a number is positive (greater than 0)
+ * @param value - Number to validate
+ * @param fieldName - Name of the field for error messages
+ * @throws ValidationError when number is not positive
+ */
+export const validatePositiveNumber = (value: number, fieldName: string): void => {
+    if (typeof value !== 'number' || value <= 0) {
+        throw new ValidationError(`${fieldName} must be a positive number`, fieldName);
+    }
+};
+
+/**
+ * Validates password strength requirements
+ * @param password - Password to validate
+ * @throws ValidationError when password doesn't meet requirements
+ */
+export const validatePassword = (password: string): void => {
+    if (!password || password.length < 6) {
+        throw new ValidationError(
+            "Password must be at least 6 characters long",
+            "password"
+        );
+    }
+};
+
+/**
+ * Helper function to validate URL format
+ * Uses the URL constructor to check if the string is a valid URL
+ * @param url - URL string to validate
+ * @returns true if URL is valid, false otherwise
+ */
+const isValidUrl = (url: string): boolean => {
+    try {
+        new URL(url);
+        return true;
+    } catch {
+        return false;
+    }
+};
