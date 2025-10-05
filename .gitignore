@@ -43,7 +43,11 @@ yarn-error.log*
 # Misc
 .DS_Store
 *.pem
+
+# Ignore shell scripts except deployment scripts
 *.sh
+!apps/server/deploy.sh
+!apps/server/check-deployment.sh
 
 # Ignore all markdown files except specific ones
 *.md
