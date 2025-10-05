@@ -12,7 +12,7 @@
 import { initializeApp, cert, getApps } from "firebase-admin/app";
 import { getFirestore, Firestore, Timestamp } from "firebase-admin/firestore";
 import { getAuth as getAuthService } from "firebase-admin/auth";
-import firebaseKeyCredentials from "../../key.json" with { type: "json" };
+// Firebase key will be loaded from environment variables
 
 // Global Firestore database instance
 let db: Firestore;
@@ -28,10 +28,12 @@ let db: Firestore;
 export const initializeFirebase = () => {
   // Check if Firebase is already initialized to prevent duplicate initialization
   if (getApps().length === 0) {
-    // Load service account credentials from environment or local file
-    const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT_KEY
-      ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY)
-      : firebaseKeyCredentials;
+    // Load service account credentials from environment variables
+    if (!process.env.FIREBASE_SERVICE_ACCOUNT_KEY) {
+      throw new Error("FIREBASE_SERVICE_ACCOUNT_KEY environment variable is required");
+    }
+
+    const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
 
     // Validate required environment variables
     const projectId =

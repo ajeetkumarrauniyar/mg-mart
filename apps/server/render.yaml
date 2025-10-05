@@ -1,0 +1,25 @@
+apps/server/.env.prodservices:
+  - type: web
+    name: mg-mart-server
+    env: node
+    region: oregon
+    plan: starter
+    buildCommand: |
+      cd apps/server
+      pnpm install --frozen-lockfile
+      pnpm run build
+    startCommand: |
+      cd apps/server
+      pnpm run start:prod
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: HOST
+        value: 0.0.0.0
+      - key: FIREBASE_PROJECT_ID
+        sync: false
+      - key: FIREBASE_SERVICE_ACCOUNT_KEY
+        sync: false

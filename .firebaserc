@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "staging": "mg-supermart-staging",
+    "prod": "mg-supermart-prod"
+  }
+}
