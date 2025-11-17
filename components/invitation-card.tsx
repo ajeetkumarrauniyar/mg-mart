@@ -147,11 +147,11 @@ export default function InvitationCard() {
               <p className="text-red-600 text-lg font-serif tracking-wider mb-2">
                 FRESH PRODUCE | DAILY ESSENTIALS | PREMIUM QUALITY | BEST PRICES
               </p>
-              <p className="text-red-700 text-base font-serif tracking-wide mb-6">
+              <p className="text-red-700 text-xl font-serif tracking-wide mb-6">
                 ताज़ा उत्पाद | दैनिक आवश्यकताएं | प्रीमियम गुणवत्ता | सर्वोत्तम मूल्य
               </p>
 
-              <p className="text-gray-700 font-serif text-base italic mb-6">
+              <p className="text-gray-700 font-serif text-base italic mb-2">
                 You presence will make this special day even more memorable.
               </p>
             </div>
@@ -175,8 +175,11 @@ export default function InvitationCard() {
               {/* Title */}
               <div className="text-center mb-5">
                 <div className="inline-block bg-gradient-to-r from-red-700 to-red-800 px-6 py-2 rounded-lg shadow-md">
-                  <p className="text-amber-300 font-serif text-sm font-bold tracking-widest">
-                    WHOLESALE AVAILABLE
+                  <p className="text-amber-300 font-serif text-sm font-bold tracking-widest mb-1">
+                    ALSO, WHOLESALE AVAILABLE
+                  </p>
+                  <p className="text-amber-300 font-serif text-md font-bold tracking-widest">
+                    खुदरा एवं थोक विक्रेता
                   </p>
                 </div>
               </div>
@@ -227,6 +230,7 @@ export default function InvitationCard() {
                   <div className="text-center">
                     <div className="bg-gradient-to-br from-red-700 to-red-800 rounded-2xl shadow-2xl p-5 border-4 border-amber-400 transform scale-110">
                       <p className="text-amber-300 font-serif text-5xl font-bold">19</p>
+                      <p className="text-amber-300 font-serif text-xl font-bold">NOV</p>
                     </div>
                   </div>
 
@@ -240,7 +244,7 @@ export default function InvitationCard() {
                   {/* Month & Year */}
                   <div className="text-center">
                     <div className="bg-white rounded-xl shadow-lg p-3 border-2 border-red-600 min-w-[90px]">
-                      <p className="text-red-800 font-serif text-lg font-bold">NOV</p>
+                      {/* <p className="text-red-800 font-serif text-lg font-bold">NOV</p> */}
                       <p className="text-amber-600 font-serif text-lg font-bold">2025</p>
                     </div>
                   </div>
@@ -274,7 +278,8 @@ export default function InvitationCard() {
               {/* Contact Column */}
               <div className="text-center">
                 <div className="mb-3 text-2xl">📞</div>
-                <p className="text-amber-600 font-serif text-lg font-bold mb-2">Mob.: 8809979748</p>
+                <p className="text-amber-600 font-serif text-lg font-bold mb-2">Mob.: 8809979748,<br />
+                  <span className='ml-14'> 8409652834</span></p>
                 <p className="text-gray-600 font-serif text-sm">Call us for more details</p>
               </div>
             </div>
@@ -309,14 +314,14 @@ export default function InvitationCard() {
 
           {/* Invitation message */}
           <div className="text-center px-6 pb-8">
-            <div className="mb-3 flex items-center justify-center gap-2">
+            {/* <div className="mb-3 flex items-center justify-center gap-2">
               <span className="text-xl">🎉</span>
               <span className="text-xl">🎊</span>
               <span className="text-xl">🎁</span>
-            </div>
+            </div> */}
             <p className="text-gray-700 text-base font-serif italic leading-relaxed">
-              Please join us for the<br />
-              inaugural ceremony and puja<br />
+              Please join us for the
+              inaugural ceremony and <br />puja
               followed by light refreshments<br />
               & lots of exciting offers.
             </p>
@@ -333,6 +338,6 @@ export default function InvitationCard() {
           Download Invitation Card
         </button>
       </div>
-    </div>
+    </div >
   )
 }
