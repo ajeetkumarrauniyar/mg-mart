@@ -13,7 +13,8 @@ export default function InvitationCard() {
     { name: 'Johnson\'s', logo: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-KJyNmfIHepKEcNuqQQZw2HuG3rbwG9.png' },
     { name: 'Dabur', logo: '/dabur-logo.jpg' },
     { name: 'Marico', logo: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-IIiet8sZ4nMeOxnTr5dUToitUgoZf0.png' },
-    { name: 'Mamy Poko', logo: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-WnpH08pCkoAeth3Qxpt7PgdJT9qi1f.png' }
+    { name: 'Mamy Poko', logo: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-WnpH08pCkoAeth3Qxpt7PgdJT9qi1f.png' },
+    { name: 'Hindustan Unilever Ltd.', logo: 'https://animationvisarts.com/wp-content/uploads/2022/01/Unilever-Logo.jpg' }
   ]
 
   const handleDownload = async () => {
@@ -111,8 +112,8 @@ export default function InvitationCard() {
                 />
               </div>
 
-              <p className="text-red-800 text-base font-serif italic mb-2">with immense joy</p>
-              <p className="text-red-800 text-base font-serif italic mb-6">and gratitude, we cordially invite</p>
+              <p className="text-red-800 text-base font-serif italic mb-2">With immense joy</p>
+              <p className="text-red-800 text-base font-serif italic mb-2">and gratitude, we cordially invite</p>
               <p className="text-red-800 text-base font-serif italic mb-6">you to the</p>
             </div>
 
@@ -143,12 +144,15 @@ export default function InvitationCard() {
                 SUPERMART
               </h2>
 
-              <p className="text-red-600 text-lg font-serif tracking-wider mb-6">
+              <p className="text-red-600 text-lg font-serif tracking-wider mb-2">
                 FRESH PRODUCE | DAILY ESSENTIALS | PREMIUM QUALITY | BEST PRICES
+              </p>
+              <p className="text-red-700 text-base font-serif tracking-wide mb-6">
+                ताज़ा उत्पाद | दैनिक आवश्यकताएं | प्रीमियम गुणवत्ता | सर्वोत्तम मूल्य
               </p>
 
               <p className="text-gray-700 font-serif text-base italic mb-6">
-                presence will make this special day even more memorable
+                You presence will make this special day even more memorable.
               </p>
             </div>
 
@@ -178,7 +182,7 @@ export default function InvitationCard() {
               </div>
 
               {/* Brand logos in clean grid */}
-              <div className="grid grid-cols-4 md:grid-cols-7 gap-2.5">
+              <div className="grid grid-cols-4 gap-2.5">
                 {brands.map((brand) => (
                   <div key={brand.name} className="flex flex-col items-center justify-center p-2 bg-gradient-to-b from-gray-50 to-white rounded-lg shadow-sm hover:shadow-md transition-shadow h-20 border border-gray-200">
                     <img
@@ -258,12 +262,40 @@ export default function InvitationCard() {
           </div>
 
           {/* Address and Contact */}
-          <div className="text-center px-6 py-6">
-            <div className="mb-3 text-2xl">📍</div>
-            <p className="text-red-800 font-serif text-lg mb-2">Pipra Main Road</p>
-            <p className="text-red-800 font-serif text-lg mb-6">Near Central Bank of India, East Champaran, Bihar</p>
-            <div className="mb-2 text-2xl">📞</div>
-            <p className="text-amber-600 font-serif text-lg font-bold">Mob.: 8809979748</p>
+          <div className="px-6 py-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
+              {/* Address Column */}
+              <div className="text-center">
+                <div className="mb-3 text-2xl">📍</div>
+                <p className="text-red-800 font-serif text-lg mb-2">Pipra Main Road</p>
+                <p className="text-red-800 font-serif text-base">Near Central Bank of India, East Champaran, Bihar</p>
+              </div>
+
+              {/* Contact Column */}
+              <div className="text-center">
+                <div className="mb-3 text-2xl">📞</div>
+                <p className="text-amber-600 font-serif text-lg font-bold mb-2">Mob.: 8809979748</p>
+                <p className="text-gray-600 font-serif text-sm">Call us for more details</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Other Firm Info */}
+          <div className="mx-6 mb-6">
+            <div className="bg-gradient-to-r from-amber-50 via-yellow-50 to-amber-50 rounded-xl p-4 border-2 border-amber-400 shadow-md">
+              <div className="flex flex-col items-center justify-center gap-1 mb-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">🏪</span>
+                  <p className="text-red-700 font-serif text-sm font-bold">आप हमें </p>
+                </div>
+              </div>
+              <div className="text-center">
+                <p className="text-amber-800 font-serif text-lg font-bold mb-1">Asha Enterprises</p>
+                <p className="text-gray-700 font-serif text-sm italic">Authorized Fortune Distributor, Pipra</p>
+                <p className="text-red-700 font-serif text-sm font-bold">के नाम से भी जानते है</p>
+
+              </div>
+            </div>
           </div>
 
           {/* Decorative flourish */}
@@ -283,7 +315,7 @@ export default function InvitationCard() {
               <span className="text-xl">🎁</span>
             </div>
             <p className="text-gray-700 text-base font-serif italic leading-relaxed">
-              please join us for the<br />
+              Please join us for the<br />
               inaugural ceremony and puja<br />
               followed by light refreshments<br />
               & lots of exciting offers.

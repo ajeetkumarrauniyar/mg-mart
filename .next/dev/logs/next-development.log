@@ -811,3 +811,237 @@ It can also happen if the client has a browser extension installed which messes 
 [00:15:00.433] Server  LOG      ✓ Compiled in 292ms
 [00:16:54.435] Server  LOG      ✓ Compiled in 236ms
 [00:17:14.316] Server  LOG      ✓ Compiled in 234ms
+[01:40:47.441] Server  LOG      ✓ Compiled in 626ms
+[01:40:57.001] Server  LOG      ✓ Compiled in 398ms
+[02:28:06.920] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:28:07.138] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/a5" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
+-                         suppresshydrationwarning="true"
+-                         data-lt-installed="true"
+-                         className="hydrated"
+                        >
+                  ...
+
+[02:28:07.138] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[02:28:07.138] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/a5","route":"/a5"}
+[02:28:07.138] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/a5 color: rgb(120, 120, 120) color: inherit {"dp":"/a5","o":"http://localhost:3000/a5","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1763362434024}
+[02:28:35.132] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:28:35.289] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
+-                         suppresshydrationwarning="true"
+-                         data-lt-installed="true"
+-                         className="hydrated"
+                        >
+                  ...
+
+[02:28:35.289] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[02:28:35.289] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
+[02:28:35.289] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1763362462170}
+[02:34:29.584] Server  LOG      ✓ Compiled in 445ms
+[02:39:19.776] Server  LOG      ✓ Compiled in 149ms
+[02:40:28.746] Server  LOG      ✓ Compiled in 108ms
+[02:40:29.696] Server  LOG      ✓ Compiled in 51ms
+[02:42:28.169] Server  LOG      ✓ Compiled in 384ms
+[02:42:50.788] Server  LOG      ✓ Compiled in 88ms
+[02:45:40.213] Server  LOG      ✓ Compiled in 317ms
+[02:46:31.368] Server  LOG      ✓ Compiled in 147ms
+[02:47:01.028] Server  LOG      ✓ Compiled in 82ms
+[02:47:06.526] Server  LOG      ✓ Compiled in 100ms
+[02:47:14.611] Server  LOG      ✓ Compiled in 72ms
+[02:47:41.559] Server  LOG      ✓ Compiled in 142ms
+[02:47:42.505] Browser ERROR   ./components/invitation-card.tsx:290:17
+Parsing ecmascript source code failed
+  288 |                   <span className="text-lg">🏪</span>
+  289 |                   <p className="text-red-700 font-serif text-sm font-bold">आप हमें इस नाम से भी जानते< /p>
+> 290 |                 </div>
+      |                 ^
+  291 |               </div>
+  292 |               <div className="text-center">
+  293 |                 <p className="text-amber-800 font-serif text-lg font-bold mb-1">Asha Enterprises</p>
+
+Expression expected
+
+Import trace:
+  Server Component:
+    ./components/invitation-card.tsx
+    ./app/page.tsx
+[02:47:42.505] Browser ERROR   ./components/invitation-card.tsx:290:18
+Parsing ecmascript source code failed
+  288 |                   <span className="text-lg">🏪</span>
+  289 |                   <p className="text-red-700 font-serif text-sm font-bold">आप हमें इस नाम से भी जानते< /p>
+> 290 |                 </div>
+      |                  ^^^^^
+  291 |               </div>
+  292 |               <div className="text-center">
+  293 |                 <p className="text-amber-800 font-serif text-lg font-bold mb-1">Asha Enterprises</p>
+
+Unterminated regexp literal
+
+Import trace:
+  Server Component:
+    ./components/invitation-card.tsx
+    ./app/page.tsx
+[02:47:42.654] Server  LOG      ✓ Compiled in 95ms
+[02:47:44.110] Server  LOG      ✓ Compiled in 82ms
+[02:47:46.091] Server  LOG      ✓ Compiled in 85ms
+[02:47:51.359] Server  LOG      ✓ Compiled in 83ms
+[02:48:08.776] Server  LOG      ✓ Compiled in 54ms
+[02:48:11.062] Server  LOG      ✓ Compiled in 33ms
+[02:48:12.386] Server  LOG      ✓ Compiled in 66ms
+[02:48:22.605] Server  LOG      ✓ Compiled in 56ms
+[02:48:27.057] Server  LOG      ✓ Compiled in 67ms
+[02:49:01.340] Server  LOG      ✓ Compiled in 85ms
+[02:49:03.494] Server  LOG      ✓ Compiled in 52ms
+[02:49:05.224] Server  LOG      ✓ Compiled in 53ms
+[02:49:10.863] Server  LOG      ✓ Compiled in 69ms
+[02:49:31.316] Server  LOG      ✓ Compiled in 110ms
+[02:50:02.835] Server  LOG      ✓ Compiled in 78ms
+[02:50:28.533] Server  LOG      ✓ Compiled in 56ms
+[02:50:35.630] Server  LOG      ✓ Compiled in 83ms
+[02:50:39.019] Server  LOG      ✓ Compiled in 62ms
+[02:50:47.608] Server  LOG      ✓ Compiled in 64ms
+[02:51:06.299] Server  LOG      ✓ Compiled in 49ms
+[02:51:13.404] Server  LOG      ✓ Compiled in 64ms
+[02:51:16.278] Server  LOG      ✓ Compiled in 40ms
+[02:51:19.634] Server  LOG      ✓ Compiled in 69ms
+[02:51:21.924] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:51:22.124] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/a5" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
+-                         suppresshydrationwarning="true"
+-                         data-lt-installed="true"
+-                         className="hydrated"
+                        >
+                  ...
+
+[02:51:22.124] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[02:51:22.125] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/a5","route":"/a5"}
+[02:51:22.125] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/a5 color: rgb(120, 120, 120) color: inherit {"dp":"/a5","o":"http://localhost:3000/a5","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1763363829075}
+[02:51:24.563] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:51:24.703] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
+-                         suppresshydrationwarning="true"
+-                         data-lt-installed="true"
+-                         className="hydrated"
+                        >
+                  ...
+
+[02:51:24.704] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[02:51:24.704] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
+[02:51:24.704] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1763363831647}
+[02:52:47.918] Server  LOG      ✓ Compiled in 91ms

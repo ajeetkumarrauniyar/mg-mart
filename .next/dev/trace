@@ -1,3 +1,769 @@
-[{"name":"hot-reloader","duration":36,"timestamp":5228348436219,"id":3,"tags":{"version":"16.0.3"},"startTime":1763353547149,"traceId":"38b076ff94dfed11"},{"name":"setup-dev-bundler","duration":257636,"timestamp":5228348283111,"id":2,"parentId":1,"tags":{},"startTime":1763353546995,"traceId":"38b076ff94dfed11"},{"name":"start-dev-server","duration":504641,"timestamp":5228348098474,"id":1,"tags":{"cpus":"8","platform":"darwin","memory.freeMem":"122257408","memory.totalMem":"8589934592","memory.heapSizeLimit":"4345298944","memory.rss":"222232576","memory.heapTotal":"68206592","memory.heapUsed":"40271256"},"startTime":1763353546811,"traceId":"38b076ff94dfed11"},{"name":"compile-path","duration":1414101,"timestamp":5228355234487,"id":6,"tags":{"trigger":"/"},"startTime":1763353553947,"traceId":"38b076ff94dfed11"},{"name":"ensure-page","duration":1414565,"timestamp":5228355234185,"id":5,"parentId":3,"tags":{"inputPage":"/page"},"startTime":1763353553947,"traceId":"38b076ff94dfed11"}]
-[{"name":"handle-request","duration":1849440,"timestamp":5228355229973,"id":4,"tags":{"url":"/"},"startTime":1763353553942,"traceId":"38b076ff94dfed11"},{"name":"memory-usage","duration":6,"timestamp":5228357079475,"id":7,"parentId":4,"tags":{"url":"/","memory.rss":"519421952","memory.heapUsed":"74784184","memory.heapTotal":"110854144"},"startTime":1763353555792,"traceId":"38b076ff94dfed11"},{"name":"compile-path","duration":15516,"timestamp":5228433851248,"id":10,"tags":{"trigger":"/"},"startTime":1763353632565,"traceId":"38b076ff94dfed11"}]
-[{"name":"client-hmr-latency","duration":211000,"timestamp":5228433652635,"id":11,"parentId":3,"tags":{"updatedModules":["[project]/components/invitation-card.tsx [app-client]"],"page":"/","isPageHidden":false},"startTime":1763353632751,"traceId":"38b076ff94dfed11"},{"name":"handle-request","duration":191355,"timestamp":5228433849416,"id":8,"tags":{"url":"/?_rsc=fsnpp"},"startTime":1763353632563,"traceId":"38b076ff94dfed11"},{"name":"memory-usage","duration":5,"timestamp":5228434040844,"id":12,"parentId":8,"tags":{"url":"/?_rsc=fsnpp","memory.rss":"299417600","memory.heapUsed":"90382376","memory.heapTotal":"100794368"},"startTime":1763353632754,"traceId":"38b076ff94dfed11"},{"name":"client-hmr-latency","duration":189000,"timestamp":5228465005517,"id":13,"parentId":3,"tags":{"updatedModules":["[project]/components/invitation-card.tsx [app-client]","[project]/node_modules/.pnpm/modern-screenshot@4.6.6/node_modules/modern-screenshot/dist/index.mjs [app-client]"],"page":"/","isPageHidden":false},"startTime":1763353663929,"traceId":"38b076ff94dfed11"},{"name":"ensure-page","duration":52723,"timestamp":5229141697005,"id":15,"parentId":3,"tags":{"inputPage":"/page"},"startTime":1763354340464,"traceId":"38b076ff94dfed11"},{"name":"handle-request","duration":225237,"timestamp":5229141688973,"id":14,"tags":{"url":"/"},"startTime":1763354340456,"traceId":"38b076ff94dfed11"},{"name":"memory-usage","duration":5,"timestamp":5229141914267,"id":16,"parentId":14,"tags":{"url":"/","memory.rss":"149323776","memory.heapUsed":"102051704","memory.heapTotal":"116817920"},"startTime":1763354340681,"traceId":"38b076ff94dfed11"},{"name":"ensure-page","duration":30823,"timestamp":5229142154265,"id":18,"parentId":3,"tags":{"inputPage":"/page"},"startTime":1763354340921,"traceId":"38b076ff94dfed11"},{"name":"handle-request","duration":110499,"timestamp":5229142151730,"id":17,"tags":{"url":"/"},"startTime":1763354340919,"traceId":"38b076ff94dfed11"},{"name":"memory-usage","duration":15,"timestamp":5229142262313,"id":19,"parentId":17,"tags":{"url":"/","memory.rss":"150274048","memory.heapUsed":"104578288","memory.heapTotal":"117850112"},"startTime":1763354341029,"traceId":"38b076ff94dfed11"},{"name":"client-hmr-latency","duration":788000,"timestamp":5229206536559,"id":20,"parentId":3,"tags":{"updatedModules":["[project]/components/invitation-card.tsx [app-client]"],"page":"/","isPageHidden":false},"startTime":1763354406394,"traceId":"38b076ff94dfed11"},{"name":"client-hmr-latency","duration":275000,"timestamp":5229208272012,"id":21,"parentId":3,"tags":{"updatedModules":["[project]/components/invitation-card.tsx [app-client]"],"page":"/","isPageHidden":false},"startTime":1763354407338,"traceId":"38b076ff94dfed11"},{"name":"client-hmr-latency","duration":312000,"timestamp":5229225716094,"id":22,"parentId":3,"tags":{"updatedModules":["[project]/components/invitation-card.tsx [app-client]"],"page":"/","isPageHidden":false},"startTime":1763354424979,"traceId":"38b076ff94dfed11"},{"name":"client-hmr-latency","duration":371000,"timestamp":5229243506684,"id":23,"parentId":3,"tags":{"updatedModules":["[project]/components/invitation-card.tsx [app-client]"],"page":"/","isPageHidden":false},"startTime":1763354442836,"traceId":"38b076ff94dfed11"},{"name":"client-hmr-latency","duration":591000,"timestamp":5229247676895,"id":24,"parentId":3,"tags":{"updatedModules":["[project]/components/invitation-card.tsx [app-client]"],"page":"/","isPageHidden":false},"startTime":1763354447071,"traceId":"38b076ff94dfed11"},{"name":"client-hmr-latency","duration":300000,"timestamp":5229361960651,"id":25,"parentId":3,"tags":{"updatedModules":["[project]/components/invitation-card.tsx [app-client]"],"page":"/","isPageHidden":false},"startTime":1763354561074,"traceId":"38b076ff94dfed11"},{"name":"client-hmr-latency","duration":266000,"timestamp":5229381879165,"id":26,"parentId":3,"tags":{"updatedModules":["[project]/components/invitation-card.tsx [app-client]"],"page":"/","isPageHidden":false},"startTime":1763354580958,"traceId":"38b076ff94dfed11"},{"name":"compile-path","duration":67342,"timestamp":5229382213332,"id":29,"tags":{"trigger":"/"},"startTime":1763354580992,"traceId":"38b076ff94dfed11"}]
+[
+    {
+        "name": "hot-reloader",
+        "duration": 36,
+        "timestamp": 5228348436219,
+        "id": 3,
+        "tags": {
+            "version": "16.0.3"
+        },
+        "startTime": 1763353547149,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "setup-dev-bundler",
+        "duration": 257636,
+        "timestamp": 5228348283111,
+        "id": 2,
+        "parentId": 1,
+        "tags": {},
+        "startTime": 1763353546995,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "start-dev-server",
+        "duration": 504641,
+        "timestamp": 5228348098474,
+        "id": 1,
+        "tags": {
+            "cpus": "8",
+            "platform": "darwin",
+            "memory.freeMem": "122257408",
+            "memory.totalMem": "8589934592",
+            "memory.heapSizeLimit": "4345298944",
+            "memory.rss": "222232576",
+            "memory.heapTotal": "68206592",
+            "memory.heapUsed": "40271256"
+        },
+        "startTime": 1763353546811,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "compile-path",
+        "duration": 1414101,
+        "timestamp": 5228355234487,
+        "id": 6,
+        "tags": {
+            "trigger": "/"
+        },
+        "startTime": 1763353553947,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "ensure-page",
+        "duration": 1414565,
+        "timestamp": 5228355234185,
+        "id": 5,
+        "parentId": 3,
+        "tags": {
+            "inputPage": "/page"
+        },
+        "startTime": 1763353553947,
+        "traceId": "38b076ff94dfed11"
+    }
+]
+[
+    {
+        "name": "handle-request",
+        "duration": 1849440,
+        "timestamp": 5228355229973,
+        "id": 4,
+        "tags": {
+            "url": "/"
+        },
+        "startTime": 1763353553942,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "memory-usage",
+        "duration": 6,
+        "timestamp": 5228357079475,
+        "id": 7,
+        "parentId": 4,
+        "tags": {
+            "url": "/",
+            "memory.rss": "519421952",
+            "memory.heapUsed": "74784184",
+            "memory.heapTotal": "110854144"
+        },
+        "startTime": 1763353555792,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "compile-path",
+        "duration": 15516,
+        "timestamp": 5228433851248,
+        "id": 10,
+        "tags": {
+            "trigger": "/"
+        },
+        "startTime": 1763353632565,
+        "traceId": "38b076ff94dfed11"
+    }
+]
+[
+    {
+        "name": "client-hmr-latency",
+        "duration": 211000,
+        "timestamp": 5228433652635,
+        "id": 11,
+        "parentId": 3,
+        "tags": {
+            "updatedModules": [
+                "[project]/components/invitation-card.tsx [app-client]"
+            ],
+            "page": "/",
+            "isPageHidden": false
+        },
+        "startTime": 1763353632751,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "handle-request",
+        "duration": 191355,
+        "timestamp": 5228433849416,
+        "id": 8,
+        "tags": {
+            "url": "/?_rsc=fsnpp"
+        },
+        "startTime": 1763353632563,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "memory-usage",
+        "duration": 5,
+        "timestamp": 5228434040844,
+        "id": 12,
+        "parentId": 8,
+        "tags": {
+            "url": "/?_rsc=fsnpp",
+            "memory.rss": "299417600",
+            "memory.heapUsed": "90382376",
+            "memory.heapTotal": "100794368"
+        },
+        "startTime": 1763353632754,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "client-hmr-latency",
+        "duration": 189000,
+        "timestamp": 5228465005517,
+        "id": 13,
+        "parentId": 3,
+        "tags": {
+            "updatedModules": [
+                "[project]/components/invitation-card.tsx [app-client]",
+                "[project]/node_modules/.pnpm/modern-screenshot@4.6.6/node_modules/modern-screenshot/dist/index.mjs [app-client]"
+            ],
+            "page": "/",
+            "isPageHidden": false
+        },
+        "startTime": 1763353663929,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "ensure-page",
+        "duration": 52723,
+        "timestamp": 5229141697005,
+        "id": 15,
+        "parentId": 3,
+        "tags": {
+            "inputPage": "/page"
+        },
+        "startTime": 1763354340464,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "handle-request",
+        "duration": 225237,
+        "timestamp": 5229141688973,
+        "id": 14,
+        "tags": {
+            "url": "/"
+        },
+        "startTime": 1763354340456,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "memory-usage",
+        "duration": 5,
+        "timestamp": 5229141914267,
+        "id": 16,
+        "parentId": 14,
+        "tags": {
+            "url": "/",
+            "memory.rss": "149323776",
+            "memory.heapUsed": "102051704",
+            "memory.heapTotal": "116817920"
+        },
+        "startTime": 1763354340681,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "ensure-page",
+        "duration": 30823,
+        "timestamp": 5229142154265,
+        "id": 18,
+        "parentId": 3,
+        "tags": {
+            "inputPage": "/page"
+        },
+        "startTime": 1763354340921,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "handle-request",
+        "duration": 110499,
+        "timestamp": 5229142151730,
+        "id": 17,
+        "tags": {
+            "url": "/"
+        },
+        "startTime": 1763354340919,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "memory-usage",
+        "duration": 15,
+        "timestamp": 5229142262313,
+        "id": 19,
+        "parentId": 17,
+        "tags": {
+            "url": "/",
+            "memory.rss": "150274048",
+            "memory.heapUsed": "104578288",
+            "memory.heapTotal": "117850112"
+        },
+        "startTime": 1763354341029,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "client-hmr-latency",
+        "duration": 788000,
+        "timestamp": 5229206536559,
+        "id": 20,
+        "parentId": 3,
+        "tags": {
+            "updatedModules": [
+                "[project]/components/invitation-card.tsx [app-client]"
+            ],
+            "page": "/",
+            "isPageHidden": false
+        },
+        "startTime": 1763354406394,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "client-hmr-latency",
+        "duration": 275000,
+        "timestamp": 5229208272012,
+        "id": 21,
+        "parentId": 3,
+        "tags": {
+            "updatedModules": [
+                "[project]/components/invitation-card.tsx [app-client]"
+            ],
+            "page": "/",
+            "isPageHidden": false
+        },
+        "startTime": 1763354407338,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "client-hmr-latency",
+        "duration": 312000,
+        "timestamp": 5229225716094,
+        "id": 22,
+        "parentId": 3,
+        "tags": {
+            "updatedModules": [
+                "[project]/components/invitation-card.tsx [app-client]"
+            ],
+            "page": "/",
+            "isPageHidden": false
+        },
+        "startTime": 1763354424979,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "client-hmr-latency",
+        "duration": 371000,
+        "timestamp": 5229243506684,
+        "id": 23,
+        "parentId": 3,
+        "tags": {
+            "updatedModules": [
+                "[project]/components/invitation-card.tsx [app-client]"
+            ],
+            "page": "/",
+            "isPageHidden": false
+        },
+        "startTime": 1763354442836,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "client-hmr-latency",
+        "duration": 591000,
+        "timestamp": 5229247676895,
+        "id": 24,
+        "parentId": 3,
+        "tags": {
+            "updatedModules": [
+                "[project]/components/invitation-card.tsx [app-client]"
+            ],
+            "page": "/",
+            "isPageHidden": false
+        },
+        "startTime": 1763354447071,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "client-hmr-latency",
+        "duration": 300000,
+        "timestamp": 5229361960651,
+        "id": 25,
+        "parentId": 3,
+        "tags": {
+            "updatedModules": [
+                "[project]/components/invitation-card.tsx [app-client]"
+            ],
+            "page": "/",
+            "isPageHidden": false
+        },
+        "startTime": 1763354561074,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "client-hmr-latency",
+        "duration": 266000,
+        "timestamp": 5229381879165,
+        "id": 26,
+        "parentId": 3,
+        "tags": {
+            "updatedModules": [
+                "[project]/components/invitation-card.tsx [app-client]"
+            ],
+            "page": "/",
+            "isPageHidden": false
+        },
+        "startTime": 1763354580958,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "compile-path",
+        "duration": 67342,
+        "timestamp": 5229382213332,
+        "id": 29,
+        "tags": {
+            "trigger": "/"
+        },
+        "startTime": 1763354580992,
+        "traceId": "38b076ff94dfed11"
+    }
+]
+[
+    {
+        "name": "handle-request",
+        "duration": 438640,
+        "timestamp": 5229382189234,
+        "id": 27,
+        "tags": {
+            "url": "/?_rsc=fsnpp"
+        },
+        "startTime": 1763354580968,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "memory-usage",
+        "duration": 11,
+        "timestamp": 5229382628267,
+        "id": 30,
+        "parentId": 27,
+        "tags": {
+            "url": "/?_rsc=fsnpp",
+            "memory.rss": "275759104",
+            "memory.heapUsed": "115944856",
+            "memory.heapTotal": "129646592"
+        },
+        "startTime": 1763354581407,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "ensure-page",
+        "duration": 10359,
+        "timestamp": 5229382733026,
+        "id": 31,
+        "parentId": 3,
+        "tags": {
+            "inputPage": "/favicon.ico/route"
+        },
+        "startTime": 1763354581511,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "ensure-page",
+        "duration": 356,
+        "timestamp": 5229382743493,
+        "id": 32,
+        "parentId": 3,
+        "tags": {
+            "inputPage": "/favicon.ico"
+        },
+        "startTime": 1763354581522,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "ensure-page",
+        "duration": 340,
+        "timestamp": 5229382751723,
+        "id": 33,
+        "parentId": 3,
+        "tags": {
+            "inputPage": "/favicon.ico/route"
+        },
+        "startTime": 1763354581530,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "ensure-page",
+        "duration": 729,
+        "timestamp": 5229382752244,
+        "id": 34,
+        "parentId": 3,
+        "tags": {
+            "inputPage": "/favicon.ico"
+        },
+        "startTime": 1763354581531,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "client-hmr-latency",
+        "duration": 663000,
+        "timestamp": 5234394575367,
+        "id": 35,
+        "parentId": 3,
+        "tags": {
+            "updatedModules": [],
+            "page": "/",
+            "isPageHidden": false
+        },
+        "startTime": 1763359594333,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "client-hmr-latency",
+        "duration": 251000,
+        "timestamp": 5234404053777,
+        "id": 36,
+        "parentId": 3,
+        "tags": {
+            "updatedModules": [],
+            "page": "/",
+            "isPageHidden": false
+        },
+        "startTime": 1763359603467,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "ensure-page",
+        "duration": 233672,
+        "timestamp": 5234404425229,
+        "id": 38,
+        "parentId": 3,
+        "tags": {
+            "inputPage": "/page"
+        },
+        "startTime": 1763359603473,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "client-hmr-latency",
+        "duration": 523000,
+        "timestamp": 5234404307118,
+        "id": 39,
+        "parentId": 3,
+        "tags": {
+            "updatedModules": [],
+            "page": "/",
+            "isPageHidden": false
+        },
+        "startTime": 1763359603889,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "handle-request",
+        "duration": 425644,
+        "timestamp": 5234404421423,
+        "id": 37,
+        "tags": {
+            "url": "/?_rsc=fsnpp"
+        },
+        "startTime": 1763359603469,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "memory-usage",
+        "duration": 10,
+        "timestamp": 5234404847729,
+        "id": 40,
+        "parentId": 37,
+        "tags": {
+            "url": "/?_rsc=fsnpp",
+            "memory.rss": "273907712",
+            "memory.heapUsed": "134354360",
+            "memory.heapTotal": "145653760"
+        },
+        "startTime": 1763359603896,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "ensure-page",
+        "duration": 1247,
+        "timestamp": 5234404861789,
+        "id": 42,
+        "parentId": 3,
+        "tags": {
+            "inputPage": "/page"
+        },
+        "startTime": 1763359603910,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "handle-request",
+        "duration": 26940,
+        "timestamp": 5234404860427,
+        "id": 41,
+        "tags": {
+            "url": "/?_rsc=fsnpp"
+        },
+        "startTime": 1763359603908,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "memory-usage",
+        "duration": 7,
+        "timestamp": 5234404887415,
+        "id": 43,
+        "parentId": 41,
+        "tags": {
+            "url": "/?_rsc=fsnpp",
+            "memory.rss": "286523392",
+            "memory.heapUsed": "135076304",
+            "memory.heapTotal": "155877376"
+        },
+        "startTime": 1763359603935,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "ensure-page",
+        "duration": 1300,
+        "timestamp": 5234404890782,
+        "id": 45,
+        "parentId": 3,
+        "tags": {
+            "inputPage": "/page"
+        },
+        "startTime": 1763359603939,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "handle-request",
+        "duration": 25521,
+        "timestamp": 5234404890187,
+        "id": 44,
+        "tags": {
+            "url": "/?_rsc=fsnpp"
+        },
+        "startTime": 1763359603938,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "memory-usage",
+        "duration": 5,
+        "timestamp": 5234404915748,
+        "id": 46,
+        "parentId": 44,
+        "tags": {
+            "url": "/?_rsc=fsnpp",
+            "memory.rss": "293191680",
+            "memory.heapUsed": "130046608",
+            "memory.heapTotal": "152043520"
+        },
+        "startTime": 1763359603964,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "ensure-page",
+        "duration": 679,
+        "timestamp": 5234404920871,
+        "id": 48,
+        "parentId": 3,
+        "tags": {
+            "inputPage": "/page"
+        },
+        "startTime": 1763359603969,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "handle-request",
+        "duration": 22123,
+        "timestamp": 5234404920318,
+        "id": 47,
+        "tags": {
+            "url": "/?_rsc=fsnpp"
+        },
+        "startTime": 1763359603968,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "memory-usage",
+        "duration": 8,
+        "timestamp": 5234404943096,
+        "id": 49,
+        "parentId": 47,
+        "tags": {
+            "url": "/?_rsc=fsnpp",
+            "memory.rss": "294289408",
+            "memory.heapUsed": "133206800",
+            "memory.heapTotal": "152305664"
+        },
+        "startTime": 1763359603991,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "ensure-page",
+        "duration": 896,
+        "timestamp": 5234404948095,
+        "id": 51,
+        "parentId": 3,
+        "tags": {
+            "inputPage": "/page"
+        },
+        "startTime": 1763359603996,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "handle-request",
+        "duration": 16498,
+        "timestamp": 5234404947349,
+        "id": 50,
+        "tags": {
+            "url": "/?_rsc=fsnpp"
+        },
+        "startTime": 1763359603995,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "memory-usage",
+        "duration": 14,
+        "timestamp": 5234404963896,
+        "id": 52,
+        "parentId": 50,
+        "tags": {
+            "url": "/?_rsc=fsnpp",
+            "memory.rss": "297107456",
+            "memory.heapUsed": "135927520",
+            "memory.heapTotal": "152567808"
+        },
+        "startTime": 1763359604012,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "ensure-page",
+        "duration": 604,
+        "timestamp": 5234404966596,
+        "id": 54,
+        "parentId": 3,
+        "tags": {
+            "inputPage": "/page"
+        },
+        "startTime": 1763359604015,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "handle-request",
+        "duration": 20900,
+        "timestamp": 5234404966153,
+        "id": 53,
+        "tags": {
+            "url": "/?_rsc=fsnpp"
+        },
+        "startTime": 1763359604014,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "memory-usage",
+        "duration": 6,
+        "timestamp": 5234404987091,
+        "id": 55,
+        "parentId": 53,
+        "tags": {
+            "url": "/?_rsc=fsnpp",
+            "memory.rss": "286932992",
+            "memory.heapUsed": "132946800",
+            "memory.heapTotal": "153075712"
+        },
+        "startTime": 1763359604035,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "ensure-page",
+        "duration": 1025,
+        "timestamp": 5234405107826,
+        "id": 56,
+        "parentId": 3,
+        "tags": {
+            "inputPage": "/favicon.ico/route"
+        },
+        "startTime": 1763359604156,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "ensure-page",
+        "duration": 454,
+        "timestamp": 5234405113805,
+        "id": 57,
+        "parentId": 3,
+        "tags": {
+            "inputPage": "/favicon.ico"
+        },
+        "startTime": 1763359604162,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "ensure-page",
+        "duration": 327,
+        "timestamp": 5234405117370,
+        "id": 58,
+        "parentId": 3,
+        "tags": {
+            "inputPage": "/favicon.ico/route"
+        },
+        "startTime": 1763359604165,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "ensure-page",
+        "duration": 108,
+        "timestamp": 5234405117731,
+        "id": 59,
+        "parentId": 3,
+        "tags": {
+            "inputPage": "/favicon.ico"
+        },
+        "startTime": 1763359604166,
+        "traceId": "38b076ff94dfed11"
+    },
+    {
+        "name": "compile-path",
+        "duration": 1331718,
+        "timestamp": 5237232791746,
+        "id": 62,
+        "tags": {
+            "trigger": "/a5"
+        },
+        "startTime": 1763362431949,
+        "traceId": "38b076ff94dfed11"
+    }
+][{"name":"handle-request","duration":1588107,"timestamp":5237232770726,"id":60,"tags":{"url":"/a5"},"startTime":1763362431929,"traceId":"38b076ff94dfed11"},{"name":"memory-usage","duration":10,"timestamp":5237234358959,"id":63,"parentId":60,"tags":{"url":"/a5","memory.rss":"357089280","memory.heapUsed":"141475456","memory.heapTotal":"154206208"},"startTime":1763362433517,"traceId":"38b076ff94dfed11"},{"name":"ensure-page","duration":10967,"timestamp":5237262692366,"id":65,"parentId":3,"tags":{"inputPage":"/page"},"startTime":1763362461851,"traceId":"38b076ff94dfed11"},{"name":"handle-request","duration":95114,"timestamp":5237262689375,"id":64,"tags":{"url":"/"},"startTime":1763362461848,"traceId":"38b076ff94dfed11"},{"name":"memory-usage","duration":17,"timestamp":5237262784781,"id":66,"parentId":64,"tags":{"url":"/","memory.rss":"95551488","memory.heapUsed":"128401256","memory.heapTotal":"142163968"},"startTime":1763362461943,"traceId":"38b076ff94dfed11"},{"name":"client-hmr-latency","duration":519000,"timestamp":5237616886797,"id":67,"parentId":3,"tags":{"updatedModules":["[project]/components/invitation-card.tsx [app-client]"],"page":"/","isPageHidden":false},"startTime":1763362816625,"traceId":"38b076ff94dfed11"},{"name":"client-hmr-latency","duration":163000,"timestamp":5237907417779,"id":68,"parentId":3,"tags":{"updatedModules":["[project]/components/invitation-card.tsx [app-client]"],"page":"/","isPageHidden":false},"startTime":1763363106814,"traceId":"38b076ff94dfed11"},{"name":"ensure-page","duration":10697,"timestamp":5237907670983,"id":69,"parentId":3,"tags":{"inputPage":"/hul-logo.png"},"startTime":1763363106872,"traceId":"38b076ff94dfed11"},{"name":"ensure-page","duration":1824,"timestamp":5237907682478,"id":70,"parentId":3,"tags":{"inputPage":"/hul-logo.png"},"startTime":1763363106884,"traceId":"38b076ff94dfed11"},{"name":"ensure-page","duration":445,"timestamp":5237907688641,"id":71,"parentId":3,"tags":{"inputPage":"/hul-logo.png"},"startTime":1763363106890,"traceId":"38b076ff94dfed11"},{"name":"ensure-page","duration":934,"timestamp":5237907689116,"id":72,"parentId":3,"tags":{"inputPage":"/hul-logo.png"},"startTime":1763363106890,"traceId":"38b076ff94dfed11"},{"name":"compile-path","duration":571162,"timestamp":5237907709859,"id":75,"tags":{"trigger":"/_not-found/page"},"startTime":1763363106911,"traceId":"38b076ff94dfed11"}]
+[{"name":"ensure-page","duration":2063,"timestamp":5237908283977,"id":76,"parentId":3,"tags":{"inputPage":"/_not-found/page"},"startTime":1763363107485,"traceId":"38b076ff94dfed11"},{"name":"client-hmr-latency","duration":110000,"timestamp":5237976439616,"id":77,"parentId":3,"tags":{"updatedModules":["[project]/components/invitation-card.tsx [app-client]"],"page":"/","isPageHidden":false},"startTime":1763363175779,"traceId":"38b076ff94dfed11"},{"name":"client-hmr-latency","duration":60000,"timestamp":5237977441541,"id":78,"parentId":3,"tags":{"updatedModules":["[project]/components/invitation-card.tsx [app-client]"],"page":"/","isPageHidden":false},"startTime":1763363176729,"traceId":"38b076ff94dfed11"},{"name":"client-hmr-latency","duration":410000,"timestamp":5238095580387,"id":79,"parentId":3,"tags":{"updatedModules":["[project]/components/invitation-card.tsx [app-client]"],"page":"/","isPageHidden":false},"startTime":1763363295231,"traceId":"38b076ff94dfed11"},{"name":"client-hmr-latency","duration":96000,"timestamp":5238118497601,"id":80,"parentId":3,"tags":{"updatedModules":["[project]/components/invitation-card.tsx [app-client]"],"page":"/","isPageHidden":false},"startTime":1763363317825,"traceId":"38b076ff94dfed11"},{"name":"client-hmr-latency","duration":357000,"timestamp":5238287681482,"id":81,"parentId":3,"tags":{"updatedModules":["[project]/components/invitation-card.tsx [app-client]"],"page":"/","isPageHidden":false},"startTime":1763363487288,"traceId":"38b076ff94dfed11"},{"name":"client-hmr-latency","duration":156000,"timestamp":5238339018023,"id":82,"parentId":3,"tags":{"updatedModules":["[project]/components/invitation-card.tsx [app-client]"],"page":"/","isPageHidden":false},"startTime":1763363538413,"traceId":"38b076ff94dfed11"},{"name":"client-hmr-latency","duration":95000,"timestamp":5238368744982,"id":83,"parentId":3,"tags":{"updatedModules":["[project]/components/invitation-card.tsx [app-client]"],"page":"/","isPageHidden":false},"startTime":1763363568073,"traceId":"38b076ff94dfed11"},{"name":"client-hmr-latency","duration":130000,"timestamp":5238374223526,"id":84,"parentId":3,"tags":{"updatedModules":["[project]/components/invitation-card.tsx [app-client]"],"page":"/","isPageHidden":false},"startTime":1763363573586,"traceId":"38b076ff94dfed11"},{"name":"client-hmr-latency","duration":83000,"timestamp":5238382337499,"id":85,"parentId":3,"tags":{"updatedModules":["[project]/components/invitation-card.tsx [app-client]"],"page":"/","isPageHidden":false},"startTime":1763363581658,"traceId":"38b076ff94dfed11"},{"name":"compile-path","duration":27447,"timestamp":5238410481494,"id":88,"tags":{"trigger":"/"},"startTime":1763363609698,"traceId":"38b076ff94dfed11"}]
