@@ -1,6 +1,13 @@
-[00:00:00.773] Server  LOG      ✓ Ready in 506ms
-[00:00:09.394] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:09.546] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+[00:00:01.828] Server  LOG      ✓ Ready in 1599ms
+[00:00:05.973] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:06.834] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:00:06.834] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
+[00:00:06.834] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1763366866876}
+[00:00:35.100] Server  LOG      ✓ Compiled in 159ms
+[00:00:43.319] Server  LOG      ✓ Compiled in 101ms
+[00:00:44.975] Server  LOG      ✓ Compiled in 58ms
+[00:00:46.541] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:46.676] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
 
 - A server/client branch `if (typeof window !== 'undefined')`.
 - Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
@@ -33,889 +40,196 @@ It can also happen if the client has a browser extension installed which messes 
                           lang="en"
 -                         suppresshydrationwarning="true"
 -                         data-lt-installed="true"
--                         className="hydrated"
                         >
                   ...
 
-[00:00:09.546] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:00:09.546] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[00:00:09.546] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1763353555971}
-[00:00:52.598] Server  ERROR    ⨯ ./components/invitation-card.tsx:4:1
-Module not found: Can't resolve 'html2canvas'
-  2 |
-  3 | import { useRef } from 'react'
-> 4 | import html2canvas from 'html2canvas'
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 |
-  6 | export default function InvitationCard() {
-  7 |   const cardRef = useRef<HTMLDivElement>(null)
-
-
-
-Import trace:
-  Server Component:
-    ./components/invitation-card.tsx
-    ./app/page.tsx
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[00:00:52.606] Server  ERROR    ⨯ ./components/invitation-card.tsx:4:1
-Module not found: Can't resolve 'html2canvas'
-  2 |
-  3 | import { useRef } from 'react'
-> 4 | import html2canvas from 'html2canvas'
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 |
-  6 | export default function InvitationCard() {
-  7 |   const cardRef = useRef<HTMLDivElement>(null)
-
-
-
-Import trace:
-  Server Component:
-    ./components/invitation-card.tsx
-    ./app/page.tsx
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[00:00:52.615] Server  ERROR    ⨯ ./components/invitation-card.tsx:4:1
-Module not found: Can't resolve 'html2canvas'
-  2 |
-  3 | import { useRef } from 'react'
-> 4 | import html2canvas from 'html2canvas'
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 |
-  6 | export default function InvitationCard() {
-  7 |   const cardRef = useRef<HTMLDivElement>(null)
-
-
-
-Import trace:
-  Server Component:
-    ./components/invitation-card.tsx
-    ./app/page.tsx
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[00:00:52.628] Server  ERROR    ⨯ ./components/invitation-card.tsx:4:1
-Module not found: Can't resolve 'html2canvas'
-  2 |
-  3 | import { useRef } from 'react'
-> 4 | import html2canvas from 'html2canvas'
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 |
-  6 | export default function InvitationCard() {
-  7 |   const cardRef = useRef<HTMLDivElement>(null)
-
-
-
-Import trace:
-  Server Component:
-    ./components/invitation-card.tsx
-    ./app/page.tsx
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[00:00:52.638] Server  ERROR    ⨯ ./components/invitation-card.tsx:4:1
-Module not found: Can't resolve 'html2canvas'
-  2 |
-  3 | import { useRef } from 'react'
-> 4 | import html2canvas from 'html2canvas'
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 |
-  6 | export default function InvitationCard() {
-  7 |   const cardRef = useRef<HTMLDivElement>(null)
-
-
-
-Import trace:
-  Server Component:
-    ./components/invitation-card.tsx
-    ./app/page.tsx
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[00:00:52.641] Server  ERROR    ⨯ ./components/invitation-card.tsx:4:1
-Module not found: Can't resolve 'html2canvas'
-  2 |
-  3 | import { useRef } from 'react'
-> 4 | import html2canvas from 'html2canvas'
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 |
-  6 | export default function InvitationCard() {
-  7 |   const cardRef = useRef<HTMLDivElement>(null)
-
-
-
-Import trace:
-  Server Component:
-    ./components/invitation-card.tsx
-    ./app/page.tsx
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[00:00:52.645] Server  ERROR    ⨯ ./components/invitation-card.tsx:4:1
-Module not found: Can't resolve 'html2canvas'
-  2 |
-  3 | import { useRef } from 'react'
-> 4 | import html2canvas from 'html2canvas'
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 |
-  6 | export default function InvitationCard() {
-  7 |   const cardRef = useRef<HTMLDivElement>(null)
-
-
-
-Import trace:
-  Server Component:
-    ./components/invitation-card.tsx
-    ./app/page.tsx
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[00:00:52.647] Server  ERROR    ⨯ ./components/invitation-card.tsx:4:1
-Module not found: Can't resolve 'html2canvas'
-  2 |
-  3 | import { useRef } from 'react'
-> 4 | import html2canvas from 'html2canvas'
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 |
-  6 | export default function InvitationCard() {
-  7 |   const cardRef = useRef<HTMLDivElement>(null)
-
-
-
-Import trace:
-  Server Component:
-    ./components/invitation-card.tsx
-    ./app/page.tsx
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[00:00:52.651] Server  ERROR    ⨯ ./components/invitation-card.tsx:4:1
-Module not found: Can't resolve 'html2canvas'
-  2 |
-  3 | import { useRef } from 'react'
-> 4 | import html2canvas from 'html2canvas'
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 |
-  6 | export default function InvitationCard() {
-  7 |   const cardRef = useRef<HTMLDivElement>(null)
-
-
-
-Import trace:
-  Server Component:
-    ./components/invitation-card.tsx
-    ./app/page.tsx
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[00:00:52.653] Server  ERROR    ⨯ ./components/invitation-card.tsx:4:1
-Module not found: Can't resolve 'html2canvas'
-  2 |
-  3 | import { useRef } from 'react'
-> 4 | import html2canvas from 'html2canvas'
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 |
-  6 | export default function InvitationCard() {
-  7 |   const cardRef = useRef<HTMLDivElement>(null)
-
-
-
-Import trace:
-  Server Component:
-    ./components/invitation-card.tsx
-    ./app/page.tsx
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[00:00:52.655] Server  ERROR    ⨯ ./components/invitation-card.tsx:4:1
-Module not found: Can't resolve 'html2canvas'
-  2 |
-  3 | import { useRef } from 'react'
-> 4 | import html2canvas from 'html2canvas'
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 |
-  6 | export default function InvitationCard() {
-  7 |   const cardRef = useRef<HTMLDivElement>(null)
-
-
-
-Import trace:
-  Server Component:
-    ./components/invitation-card.tsx
-    ./app/page.tsx
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[00:00:52.656] Server  ERROR    ⨯ ./components/invitation-card.tsx:4:1
-Module not found: Can't resolve 'html2canvas'
-  2 |
-  3 | import { useRef } from 'react'
-> 4 | import html2canvas from 'html2canvas'
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 |
-  6 | export default function InvitationCard() {
-  7 |   const cardRef = useRef<HTMLDivElement>(null)
-
-
-
-Import trace:
-  Server Component:
-    ./components/invitation-card.tsx
-    ./app/page.tsx
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[00:00:52.659] Server  ERROR    ⨯ ./components/invitation-card.tsx:4:1
-Module not found: Can't resolve 'html2canvas'
-  2 |
-  3 | import { useRef } from 'react'
-> 4 | import html2canvas from 'html2canvas'
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 |
-  6 | export default function InvitationCard() {
-  7 |   const cardRef = useRef<HTMLDivElement>(null)
-
-
-
-Import trace:
-  Server Component:
-    ./components/invitation-card.tsx
-    ./app/page.tsx
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[00:00:52.661] Server  ERROR    ⨯ ./components/invitation-card.tsx:4:1
-Module not found: Can't resolve 'html2canvas'
-  2 |
-  3 | import { useRef } from 'react'
-> 4 | import html2canvas from 'html2canvas'
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 |
-  6 | export default function InvitationCard() {
-  7 |   const cardRef = useRef<HTMLDivElement>(null)
-
-
-
-Import trace:
-  Server Component:
-    ./components/invitation-card.tsx
-    ./app/page.tsx
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[00:00:52.663] Server  ERROR    ⨯ ./components/invitation-card.tsx:4:1
-Module not found: Can't resolve 'html2canvas'
-  2 |
-  3 | import { useRef } from 'react'
-> 4 | import html2canvas from 'html2canvas'
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 |
-  6 | export default function InvitationCard() {
-  7 |   const cardRef = useRef<HTMLDivElement>(null)
-
-
-
-Import trace:
-  Server Component:
-    ./components/invitation-card.tsx
-    ./app/page.tsx
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[00:00:52.664] Server  ERROR    ⨯ ./components/invitation-card.tsx:4:1
-Module not found: Can't resolve 'html2canvas'
-  2 |
-  3 | import { useRef } from 'react'
-> 4 | import html2canvas from 'html2canvas'
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 |
-  6 | export default function InvitationCard() {
-  7 |   const cardRef = useRef<HTMLDivElement>(null)
-
-
-
-Import trace:
-  Server Component:
-    ./components/invitation-card.tsx
-    ./app/page.tsx
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[00:00:52.666] Server  ERROR    ⨯ ./components/invitation-card.tsx:4:1
-Module not found: Can't resolve 'html2canvas'
-  2 |
-  3 | import { useRef } from 'react'
-> 4 | import html2canvas from 'html2canvas'
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 |
-  6 | export default function InvitationCard() {
-  7 |   const cardRef = useRef<HTMLDivElement>(null)
-
-
-
-Import trace:
-  Server Component:
-    ./components/invitation-card.tsx
-    ./app/page.tsx
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[00:00:52.667] Server  ERROR    ⨯ ./components/invitation-card.tsx:4:1
-Module not found: Can't resolve 'html2canvas'
-  2 |
-  3 | import { useRef } from 'react'
-> 4 | import html2canvas from 'html2canvas'
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 |
-  6 | export default function InvitationCard() {
-  7 |   const cardRef = useRef<HTMLDivElement>(null)
-
-
-
-Import trace:
-  Server Component:
-    ./components/invitation-card.tsx
-    ./app/page.tsx
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[00:00:52.669] Server  ERROR    ⨯ ./components/invitation-card.tsx:4:1
-Module not found: Can't resolve 'html2canvas'
-  2 |
-  3 | import { useRef } from 'react'
-> 4 | import html2canvas from 'html2canvas'
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 |
-  6 | export default function InvitationCard() {
-  7 |   const cardRef = useRef<HTMLDivElement>(null)
-
-
-
-Import trace:
-  Server Component:
-    ./components/invitation-card.tsx
-    ./app/page.tsx
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[00:00:52.670] Server  ERROR    ⨯ ./components/invitation-card.tsx:4:1
-Module not found: Can't resolve 'html2canvas'
-  2 |
-  3 | import { useRef } from 'react'
-> 4 | import html2canvas from 'html2canvas'
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 |
-  6 | export default function InvitationCard() {
-  7 |   const cardRef = useRef<HTMLDivElement>(null)
-
-
-
-Import trace:
-  Server Component:
-    ./components/invitation-card.tsx
-    ./app/page.tsx
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[00:00:52.673] Server  ERROR    ⨯ ./components/invitation-card.tsx:4:1
-Module not found: Can't resolve 'html2canvas'
-  2 |
-  3 | import { useRef } from 'react'
-> 4 | import html2canvas from 'html2canvas'
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 |
-  6 | export default function InvitationCard() {
-  7 |   const cardRef = useRef<HTMLDivElement>(null)
-
-
-
-Import trace:
-  Server Component:
-    ./components/invitation-card.tsx
-    ./app/page.tsx
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[00:00:52.678] Server  ERROR    ⨯ ./components/invitation-card.tsx:4:1
-Module not found: Can't resolve 'html2canvas'
-  2 |
-  3 | import { useRef } from 'react'
-> 4 | import html2canvas from 'html2canvas'
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 |
-  6 | export default function InvitationCard() {
-  7 |   const cardRef = useRef<HTMLDivElement>(null)
-
-
-
-Import trace:
-  Server Component:
-    ./components/invitation-card.tsx
-    ./app/page.tsx
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[00:00:52.681] Server  ERROR    ⨯ ./components/invitation-card.tsx:4:1
-Module not found: Can't resolve 'html2canvas'
-  2 |
-  3 | import { useRef } from 'react'
-> 4 | import html2canvas from 'html2canvas'
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 |
-  6 | export default function InvitationCard() {
-  7 |   const cardRef = useRef<HTMLDivElement>(null)
-
-
-
-Import trace:
-  Server Component:
-    ./components/invitation-card.tsx
-    ./app/page.tsx
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[00:00:52.684] Server  ERROR    ⨯ ./components/invitation-card.tsx:4:1
-Module not found: Can't resolve 'html2canvas'
-  2 |
-  3 | import { useRef } from 'react'
-> 4 | import html2canvas from 'html2canvas'
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 |
-  6 | export default function InvitationCard() {
-  7 |   const cardRef = useRef<HTMLDivElement>(null)
-
-
-
-Import trace:
-  Server Component:
-    ./components/invitation-card.tsx
-    ./app/page.tsx
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[00:00:52.686] Server  ERROR    ⨯ ./components/invitation-card.tsx:4:1
-Module not found: Can't resolve 'html2canvas'
-  2 |
-  3 | import { useRef } from 'react'
-> 4 | import html2canvas from 'html2canvas'
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 |
-  6 | export default function InvitationCard() {
-  7 |   const cardRef = useRef<HTMLDivElement>(null)
-
-
-
-Import trace:
-  Server Component:
-    ./components/invitation-card.tsx
-    ./app/page.tsx
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[00:00:52.688] Server  ERROR    ⨯ ./components/invitation-card.tsx:4:1
-Module not found: Can't resolve 'html2canvas'
-  2 |
-  3 | import { useRef } from 'react'
-> 4 | import html2canvas from 'html2canvas'
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 |
-  6 | export default function InvitationCard() {
-  7 |   const cardRef = useRef<HTMLDivElement>(null)
-
-
-
-Import trace:
-  Server Component:
-    ./components/invitation-card.tsx
-    ./app/page.tsx
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[00:00:52.690] Server  ERROR    ⨯ ./components/invitation-card.tsx:4:1
-Module not found: Can't resolve 'html2canvas'
-  2 |
-  3 | import { useRef } from 'react'
-> 4 | import html2canvas from 'html2canvas'
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 |
-  6 | export default function InvitationCard() {
-  7 |   const cardRef = useRef<HTMLDivElement>(null)
-
-
-
-Import trace:
-  Server Component:
-    ./components/invitation-card.tsx
-    ./app/page.tsx
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[00:00:52.692] Server  ERROR    ⨯ ./components/invitation-card.tsx:4:1
-Module not found: Can't resolve 'html2canvas'
-  2 |
-  3 | import { useRef } from 'react'
-> 4 | import html2canvas from 'html2canvas'
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 |
-  6 | export default function InvitationCard() {
-  7 |   const cardRef = useRef<HTMLDivElement>(null)
-
-
-
-Import trace:
-  Server Component:
-    ./components/invitation-card.tsx
-    ./app/page.tsx
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[00:00:52.702] Server  LOG      ✓ Compiled in 1ms
-[00:01:16.178] Browser ERROR   Error generating image: {}
-[00:01:16.297] Browser ERROR   ./components/invitation-card.tsx:4:1
-Module not found: Can't resolve 'html2canvas'
-  2 |
-  3 | import { useRef } from 'react'
-> 4 | import html2canvas from 'html2canvas'
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 |
-  6 | export default function InvitationCard() {
-  7 |   const cardRef = useRef<HTMLDivElement>(null)
-
-Import trace:
-  Server Component:
-    ./components/invitation-card.tsx
-    ./app/page.tsx
-
-https://nextjs.org/docs/messages/module-not-found
-[00:01:16.297] Browser ERROR   ./components/invitation-card.tsx:4:1
-Module not found: Can't resolve 'html2canvas'
-  2 |
-  3 | import { useRef } from 'react'
-> 4 | import html2canvas from 'html2canvas'
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 |
-  6 | export default function InvitationCard() {
-  7 |   const cardRef = useRef<HTMLDivElement>(null)
-
-Import trace:
-  Server Component:
-    ./components/invitation-card.tsx
-    ./app/page.tsx
-
-https://nextjs.org/docs/messages/module-not-found
-[00:01:16.297] Browser ERROR   ./components/invitation-card.tsx:4:1
-Module not found: Can't resolve 'html2canvas'
-  2 |
-  3 | import { useRef } from 'react'
-> 4 | import html2canvas from 'html2canvas'
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 |
-  6 | export default function InvitationCard() {
-  7 |   const cardRef = useRef<HTMLDivElement>(null)
-
-Import trace:
-  Server Component:
-    ./components/invitation-card.tsx
-    ./app/page.tsx
-
-https://nextjs.org/docs/messages/module-not-found
-[00:01:16.297] Browser ERROR   ./components/invitation-card.tsx:4:1
-Module not found: Can't resolve 'html2canvas'
-  2 |
-  3 | import { useRef } from 'react'
-> 4 | import html2canvas from 'html2canvas'
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 |
-  6 | export default function InvitationCard() {
-  7 |   const cardRef = useRef<HTMLDivElement>(null)
-
-Import trace:
-  Server Component:
-    ./components/invitation-card.tsx
-    ./app/page.tsx
-
-https://nextjs.org/docs/messages/module-not-found
-[00:01:16.298] Browser ERROR   ./components/invitation-card.tsx:4:1
-Module not found: Can't resolve 'html2canvas'
-  2 |
-  3 | import { useRef } from 'react'
-> 4 | import html2canvas from 'html2canvas'
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 |
-  6 | export default function InvitationCard() {
-  7 |   const cardRef = useRef<HTMLDivElement>(null)
-
-Import trace:
-  Server Component:
-    ./components/invitation-card.tsx
-    ./app/page.tsx
-
-https://nextjs.org/docs/messages/module-not-found
-[00:01:16.298] Browser ERROR   ./components/invitation-card.tsx:4:1
-Module not found: Can't resolve 'html2canvas'
-  2 |
-  3 | import { useRef } from 'react'
-> 4 | import html2canvas from 'html2canvas'
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 |
-  6 | export default function InvitationCard() {
-  7 |   const cardRef = useRef<HTMLDivElement>(null)
-
-Import trace:
-  Server Component:
-    ./components/invitation-card.tsx
-    ./app/page.tsx
-
-https://nextjs.org/docs/messages/module-not-found
-[00:01:16.298] Browser ERROR   ./components/invitation-card.tsx:4:1
-Module not found: Can't resolve 'html2canvas'
-  2 |
-  3 | import { useRef } from 'react'
-> 4 | import html2canvas from 'html2canvas'
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 |
-  6 | export default function InvitationCard() {
-  7 |   const cardRef = useRef<HTMLDivElement>(null)
-
-Import trace:
-  Server Component:
-    ./components/invitation-card.tsx
-    ./app/page.tsx
-
-https://nextjs.org/docs/messages/module-not-found
-[00:01:16.298] Browser ERROR   ./components/invitation-card.tsx:4:1
-Module not found: Can't resolve 'html2canvas'
-  2 |
-  3 | import { useRef } from 'react'
-> 4 | import html2canvas from 'html2canvas'
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 |
-  6 | export default function InvitationCard() {
-  7 |   const cardRef = useRef<HTMLDivElement>(null)
-
-Import trace:
-  Server Component:
-    ./components/invitation-card.tsx
-    ./app/page.tsx
-
-https://nextjs.org/docs/messages/module-not-found
-[00:01:16.418] Browser ERROR   ./components/invitation-card.tsx:4:1
-Module not found: Can't resolve 'html2canvas'
-  2 |
-  3 | import { useRef } from 'react'
-> 4 | import html2canvas from 'html2canvas'
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 |
-  6 | export default function InvitationCard() {
-  7 |   const cardRef = useRef<HTMLDivElement>(null)
-
-Import trace:
-  Server Component:
-    ./components/invitation-card.tsx
-    ./app/page.tsx
-
-https://nextjs.org/docs/messages/module-not-found
-[00:01:25.494] Browser ERROR   ./components/invitation-card.tsx:4:1
-Module not found: Can't resolve 'html2canvas'
-  2 |
-  3 | import { useRef } from 'react'
-> 4 | import html2canvas from 'html2canvas'
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 |
-  6 | export default function InvitationCard() {
-  7 |   const cardRef = useRef<HTMLDivElement>(null)
-
-Import trace:
-  Server Component:
-    ./components/invitation-card.tsx
-    ./app/page.tsx
-
-https://nextjs.org/docs/messages/module-not-found
-[00:01:57.386] Server  LOG      ✓ Compiled in 176ms
-[00:13:14.585] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:13:14.707] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
-
-- A server/client branch `if (typeof window !== 'undefined')`.
-- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
-- Date formatting in a user's locale which doesn't match the server.
-- External changing data without sending a snapshot of it along with the HTML.
-- Invalid HTML tag nesting.
-
-It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
-
-%s%s https://react.dev/link/hydration-mismatch 
-
-  ...
-    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
-      <AppDevOverlayErrorBoundary globalError={[...]}>
-        <ReplaySsrOnlyErrors>
-        <DevRootHTTPAccessFallbackBoundary>
-          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
-            <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<NotAllowedRootHTTPFallbackError>} ...>
-              <RedirectBoundary>
-                <RedirectErrorBoundary router={{...}}>
-                  <Head>
-                  <__next_root_layout_boundary__>
-                    <SegmentViewNode type="layout" pagePath="layout.tsx">
-                      <SegmentTrieNode>
-                      <link>
-                      <script>
-                      <script>
-                      <RootLayout>
-                        <html
-                          lang="en"
--                         suppresshydrationwarning="true"
--                         data-lt-installed="true"
--                         className="hydrated"
-                        >
-                  ...
-
-[00:13:14.945] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:13:14.945] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[00:13:14.945] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1763354341434}
-[00:14:19.547] Server  LOG      ✓ Compiled in 793ms
-[00:14:20.732] Server  LOG      ✓ Compiled in 255ms
-[00:14:38.190] Server  LOG      ✓ Compiled in 186ms
-[00:14:56.037] Server  LOG      ✓ Compiled in 227ms
-[00:15:00.433] Server  LOG      ✓ Compiled in 292ms
-[00:16:54.435] Server  LOG      ✓ Compiled in 236ms
-[00:17:14.316] Server  LOG      ✓ Compiled in 234ms
-[01:40:47.441] Server  LOG      ✓ Compiled in 626ms
-[01:40:57.001] Server  LOG      ✓ Compiled in 398ms
-[02:28:06.920] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[02:28:07.138] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
-
-- A server/client branch `if (typeof window !== 'undefined')`.
-- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
-- Date formatting in a user's locale which doesn't match the server.
-- External changing data without sending a snapshot of it along with the HTML.
-- Invalid HTML tag nesting.
-
-It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
-
-%s%s https://react.dev/link/hydration-mismatch 
-
-  ...
-    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
-      <AppDevOverlayErrorBoundary globalError={[...]}>
-        <ReplaySsrOnlyErrors>
-        <DevRootHTTPAccessFallbackBoundary>
-          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
-            <HTTPAccessFallbackErrorBoundary pathname="/a5" notFound={<NotAllowedRootHTTPFallbackError>} ...>
-              <RedirectBoundary>
-                <RedirectErrorBoundary router={{...}}>
-                  <Head>
-                  <__next_root_layout_boundary__>
-                    <SegmentViewNode type="layout" pagePath="layout.tsx">
-                      <SegmentTrieNode>
-                      <link>
-                      <script>
-                      <script>
-                      <RootLayout>
-                        <html
-                          lang="en"
--                         suppresshydrationwarning="true"
--                         data-lt-installed="true"
--                         className="hydrated"
-                        >
-                  ...
-
-[02:28:07.138] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[02:28:07.138] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/a5","route":"/a5"}
-[02:28:07.138] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/a5 color: rgb(120, 120, 120) color: inherit {"dp":"/a5","o":"http://localhost:3000/a5","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1763362434024}
-[02:28:35.132] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[02:28:35.289] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
-
-- A server/client branch `if (typeof window !== 'undefined')`.
-- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
-- Date formatting in a user's locale which doesn't match the server.
-- External changing data without sending a snapshot of it along with the HTML.
-- Invalid HTML tag nesting.
-
-It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
-
-%s%s https://react.dev/link/hydration-mismatch 
-
-  ...
-    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
-      <AppDevOverlayErrorBoundary globalError={[...]}>
-        <ReplaySsrOnlyErrors>
-        <DevRootHTTPAccessFallbackBoundary>
-          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
-            <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<NotAllowedRootHTTPFallbackError>} ...>
-              <RedirectBoundary>
-                <RedirectErrorBoundary router={{...}}>
-                  <Head>
-                  <__next_root_layout_boundary__>
-                    <SegmentViewNode type="layout" pagePath="layout.tsx">
-                      <SegmentTrieNode>
-                      <link>
-                      <script>
-                      <script>
-                      <RootLayout>
-                        <html
-                          lang="en"
--                         suppresshydrationwarning="true"
--                         data-lt-installed="true"
--                         className="hydrated"
-                        >
-                  ...
-
-[02:28:35.289] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[02:28:35.289] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[02:28:35.289] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1763362462170}
-[02:34:29.584] Server  LOG      ✓ Compiled in 445ms
-[02:39:19.776] Server  LOG      ✓ Compiled in 149ms
-[02:40:28.746] Server  LOG      ✓ Compiled in 108ms
-[02:40:29.696] Server  LOG      ✓ Compiled in 51ms
-[02:42:28.169] Server  LOG      ✓ Compiled in 384ms
-[02:42:50.788] Server  LOG      ✓ Compiled in 88ms
-[02:45:40.213] Server  LOG      ✓ Compiled in 317ms
-[02:46:31.368] Server  LOG      ✓ Compiled in 147ms
-[02:47:01.028] Server  LOG      ✓ Compiled in 82ms
-[02:47:06.526] Server  LOG      ✓ Compiled in 100ms
-[02:47:14.611] Server  LOG      ✓ Compiled in 72ms
-[02:47:41.559] Server  LOG      ✓ Compiled in 142ms
-[02:47:42.505] Browser ERROR   ./components/invitation-card.tsx:290:17
+[00:00:46.676] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:00:46.676] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
+[00:00:46.676] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1763366907401}
+[00:00:51.418] Server  LOG      ✓ Compiled in 59ms
+[00:00:55.475] Server  LOG      ✓ Compiled in 40ms
+[00:00:57.487] Server  LOG      ✓ Compiled in 30ms
+[00:01:00.439] Server  LOG      ✓ Compiled in 29ms
+[00:01:02.039] Server  LOG      ✓ Compiled in 37ms
+[00:01:13.180] Server  LOG      ✓ Compiled in 54ms
+[00:01:17.957] Server  LOG      ✓ Compiled in 66ms
+[00:02:00.077] Server  LOG      ✓ Compiled in 58ms
+[00:02:01.452] Server  LOG      ✓ Compiled in 28ms
+[00:02:08.989] Server  LOG      ✓ Compiled in 83ms
+[00:02:14.948] Server  LOG      ✓ Compiled in 59ms
+[00:02:43.076] Server  LOG      ✓ Compiled in 74ms
+[00:02:47.086] Server  LOG      ✓ Compiled in 31ms
+[00:02:55.979] Server  LOG      ✓ Compiled in 87ms
+[00:03:01.273] Server  LOG      ✓ Compiled in 70ms
+[00:03:14.190] Server  LOG      ✓ Compiled in 48ms
+[00:03:41.254] Server  LOG      ✓ Compiled in 59ms
+[00:03:43.306] Server  LOG      ✓ Compiled in 37ms
+[00:03:56.378] Server  LOG      ✓ Compiled in 68ms
+[00:04:00.148] Server  LOG      ✓ Compiled in 29ms
+[00:04:02.223] Server  LOG      ✓ Compiled in 33ms
+[00:04:24.905] Server  LOG      ✓ Compiled in 64ms
+[00:04:26.408] Server  LOG      ✓ Compiled in 30ms
+[00:04:59.977] Server  LOG      ✓ Compiled in 77ms
+[00:05:06.967] Server  LOG      ✓ Compiled in 79ms
+[00:05:58.490] Server  LOG      ✓ Compiled in 163ms
+[00:06:09.363] Server  LOG      ✓ Compiled in 85ms
+[00:06:10.531] Server  LOG      ✓ Compiled in 59ms
+[00:06:38.305] Server  LOG      ✓ Compiled in 69ms
+[00:06:41.078] Server  LOG      ✓ Compiled in 43ms
+[00:07:00.316] Server  LOG      ✓ Compiled in 73ms
+[00:07:11.991] Server  LOG      ✓ Compiled in 74ms
+[00:07:14.177] Server  LOG      ✓ Compiled in 41ms
+[00:07:27.021] Server  LOG      ✓ Compiled in 109ms
+[00:08:01.971] Server  LOG      ✓ Compiled in 75ms
+[00:08:21.052] Server  LOG      ✓ Compiled in 56ms
+[00:08:23.086] Server  LOG      ✓ Compiled in 41ms
+[00:08:31.018] Server  LOG      ✓ Compiled in 57ms
+[00:08:36.198] Server  LOG      ✓ Compiled in 30ms
+[00:08:43.772] Server  LOG      ✓ Compiled in 51ms
+[00:08:47.688] Server  LOG      ✓ Compiled in 82ms
+[00:08:51.997] Server  LOG      ✓ Compiled in 122ms
+[00:08:52.831] Browser ERROR   ./components/invitation-card.tsx:323:48
 Parsing ecmascript source code failed
-  288 |                   <span className="text-lg">🏪</span>
-  289 |                   <p className="text-red-700 font-serif text-sm font-bold">आप हमें इस नाम से भी जानते< /p>
-> 290 |                 </div>
-      |                 ^
-  291 |               </div>
-  292 |               <div className="text-center">
-  293 |                 <p className="text-amber-800 font-serif text-lg font-bold mb-1">Asha Enterprises</p>
+  321 |             <p className="text-gray-700 text-base font-serif italic leading-relaxed">
+  322 |               Please join us for the 
+> 323 |               inaugural ceremony and <br/></br>puja
+      |                                                ^^^^
+> 324 |               followed by light refreshments<br />
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  325 |               & lots of exciting offers.
+  326 |             </p>
+  327 |           </div>
+
+Expected '</', got 'jsx text (puja
+              followed by light refreshments)'
+
+Import trace:
+  Server Component:
+    ./components/invitation-card.tsx
+    ./app/page.tsx
+[00:09:00.088] Server  LOG      ✓ Compiled in 77ms
+[00:32:28.212] Server  LOG      ✓ Compiled in 199ms
+[00:32:35.207] Server  LOG      ✓ Compiled in 72ms
+[00:32:35.832] Browser ERROR   ./components/invitation-card.tsx:282:20
+Parsing ecmascript source code failed
+  280 |                 <div className="mb-3 text-2xl">📞</div>
+  281 |                 <p className="text-amber-600 font-serif text-lg font-bold mb-2">Mob.: 8809979748,<br/
+> 282 |                    8409652834</p>
+      |                    ^^^^^^^^^^
+  283 |                 <p className="text-gray-600 font-serif text-sm">Call us for more details</p>
+  284 |               </div>
+  285 |             </div>
+
+Expected '</', got 'numeric literal (8409652834, 8409652834)'
+
+Import trace:
+  Server Component:
+    ./components/invitation-card.tsx
+    ./app/page.tsx
+[00:32:38.831] Browser ERROR   ./components/invitation-card.tsx:282:20
+Parsing ecmascript source code failed
+  280 |                 <div className="mb-3 text-2xl">📞</div>
+  281 |                 <p className="text-amber-600 font-serif text-lg font-bold mb-2">Mob.: 8809979748,</
+> 282 |                    8409652834</p>
+      |                    ^^^^^^^^^^
+  283 |                 <p className="text-gray-600 font-serif text-sm">Call us for more details</p>
+  284 |               </div>
+  285 |             </div>
+
+Expected '</', got 'numeric literal (8409652834, 8409652834)'
+
+Import trace:
+  Server Component:
+    ./components/invitation-card.tsx
+    ./app/page.tsx
+[00:32:40.830] Browser ERROR   ./components/invitation-card.tsx:282:20
+Parsing ecmascript source code failed
+  280 |                 <div className="mb-3 text-2xl">📞</div>
+  281 |                 <p className="text-amber-600 font-serif text-lg font-bold mb-2">Mob.: 8809979748,</br
+> 282 |                    8409652834</p>
+      |                    ^^^^^^^^^^
+  283 |                 <p className="text-gray-600 font-serif text-sm">Call us for more details</p>
+  284 |               </div>
+  285 |             </div>
+
+Expected '</', got 'numeric literal (8409652834, 8409652834)'
+
+Import trace:
+  Server Component:
+    ./components/invitation-card.tsx
+    ./app/page.tsx
+[00:32:41.386] Server  LOG      ✓ Compiled in 97ms
+[00:32:41.830] Browser ERROR   ./components/invitation-card.tsx:281:103
+Parsing ecmascript source code failed
+  279 |               <div className="text-center">
+  280 |                 <div className="mb-3 text-2xl">📞</div>
+> 281 |                 <p className="text-amber-600 font-serif text-lg font-bold mb-2">Mob.: 8809979748,</br>
+      |                                                                                                       ^
+> 282 |                    8409652834</p>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  283 |                 <p className="text-gray-600 font-serif text-sm">Call us for more details</p>
+  284 |               </div>
+  285 |             </div>
+
+Expected '</', got 'jsx text (
+                   8409652834)'
+
+Import trace:
+  Server Component:
+    ./components/invitation-card.tsx
+    ./app/page.tsx
+[00:32:44.100] Server  LOG      ✓ Compiled in 64ms
+[00:32:44.829] Browser ERROR   ./components/invitation-card.tsx:281:103
+Parsing ecmascript source code failed
+  279 |               <div className="text-center">
+  280 |                 <div className="mb-3 text-2xl">📞</div>
+> 281 |                 <p className="text-amber-600 font-serif text-lg font-bold mb-2">Mob.: 8809979748,</br>
+      |                                                                                                       ^
+> 282 |                 8409652834</p>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  283 |               <p className="text-gray-600 font-serif text-sm">Call us for more details</p>
+  284 |             </div>
+  285 |           </div>
+
+Expected '</', got 'jsx text (
+                8409652834)'
+
+Import trace:
+  Server Component:
+    ./components/invitation-card.tsx
+    ./app/page.tsx
+[00:32:47.232] Server  LOG      ✓ Compiled in 40ms
+[00:32:47.829] Browser ERROR   ./components/invitation-card.tsx:282:31
+Parsing ecmascript source code failed
+  280 |                 <div className="mb-3 text-2xl">📞</div>
+  281 |                 <p className="text-amber-600 font-serif text-lg font-bold mb-2">Mob.: 8809979748,<br>
+> 282 |                 8409652834</p>
+      |                               ^
+> 283 |               <p className="text-gray-600 font-serif text-sm">Call us for more details</p>
+      | ^^^^^^^^^^^^^^^
+  284 |             </div>
+  285 |           </div>
+  286 |         </div>
+
+Expected '</', got 'jsx text (
+              )'
+
+Import trace:
+  Server Component:
+    ./components/invitation-card.tsx
+    ./app/page.tsx
+[00:32:49.977] Server  LOG      ✓ Compiled in 82ms
+[00:33:03.755] Server  LOG      ✓ Compiled in 70ms
+[00:33:09.071] Server  LOG      ✓ Compiled in 68ms
+[00:33:09.833] Browser ERROR   ./components/invitation-card.tsx:282:23
+Parsing ecmascript source code failed
+  280 |                 <div className="mb-3 text-2xl">📞</div>
+  281 |                 <p className="text-amber-600 font-serif text-lg font-bold mb-2">Mob.: 8809979748,<br />
+> 282 |                  <span</p>
+      |                       ^
+  283 |                 <p className="text-gray-600 font-serif text-sm">Call us for more details</p>
+  284 |               </div>
+  285 |             </div>
 
 Expression expected
 
@@ -923,15 +237,15 @@ Import trace:
   Server Component:
     ./components/invitation-card.tsx
     ./app/page.tsx
-[02:47:42.505] Browser ERROR   ./components/invitation-card.tsx:290:18
+[00:33:09.833] Browser ERROR   ./components/invitation-card.tsx:282:24
 Parsing ecmascript source code failed
-  288 |                   <span className="text-lg">🏪</span>
-  289 |                   <p className="text-red-700 font-serif text-sm font-bold">आप हमें इस नाम से भी जानते< /p>
-> 290 |                 </div>
-      |                  ^^^^^
-  291 |               </div>
-  292 |               <div className="text-center">
-  293 |                 <p className="text-amber-800 font-serif text-lg font-bold mb-1">Asha Enterprises</p>
+  280 |                 <div className="mb-3 text-2xl">📞</div>
+  281 |                 <p className="text-amber-600 font-serif text-lg font-bold mb-2">Mob.: 8809979748,<br />
+> 282 |                  <span</p>
+      |                        ^^^
+  283 |                 <p className="text-gray-600 font-serif text-sm">Call us for more details</p>
+  284 |               </div>
+  285 |             </div>
 
 Unterminated regexp literal
 
@@ -939,109 +253,10 @@ Import trace:
   Server Component:
     ./components/invitation-card.tsx
     ./app/page.tsx
-[02:47:42.654] Server  LOG      ✓ Compiled in 95ms
-[02:47:44.110] Server  LOG      ✓ Compiled in 82ms
-[02:47:46.091] Server  LOG      ✓ Compiled in 85ms
-[02:47:51.359] Server  LOG      ✓ Compiled in 83ms
-[02:48:08.776] Server  LOG      ✓ Compiled in 54ms
-[02:48:11.062] Server  LOG      ✓ Compiled in 33ms
-[02:48:12.386] Server  LOG      ✓ Compiled in 66ms
-[02:48:22.605] Server  LOG      ✓ Compiled in 56ms
-[02:48:27.057] Server  LOG      ✓ Compiled in 67ms
-[02:49:01.340] Server  LOG      ✓ Compiled in 85ms
-[02:49:03.494] Server  LOG      ✓ Compiled in 52ms
-[02:49:05.224] Server  LOG      ✓ Compiled in 53ms
-[02:49:10.863] Server  LOG      ✓ Compiled in 69ms
-[02:49:31.316] Server  LOG      ✓ Compiled in 110ms
-[02:50:02.835] Server  LOG      ✓ Compiled in 78ms
-[02:50:28.533] Server  LOG      ✓ Compiled in 56ms
-[02:50:35.630] Server  LOG      ✓ Compiled in 83ms
-[02:50:39.019] Server  LOG      ✓ Compiled in 62ms
-[02:50:47.608] Server  LOG      ✓ Compiled in 64ms
-[02:51:06.299] Server  LOG      ✓ Compiled in 49ms
-[02:51:13.404] Server  LOG      ✓ Compiled in 64ms
-[02:51:16.278] Server  LOG      ✓ Compiled in 40ms
-[02:51:19.634] Server  LOG      ✓ Compiled in 69ms
-[02:51:21.924] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[02:51:22.124] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
-
-- A server/client branch `if (typeof window !== 'undefined')`.
-- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
-- Date formatting in a user's locale which doesn't match the server.
-- External changing data without sending a snapshot of it along with the HTML.
-- Invalid HTML tag nesting.
-
-It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
-
-%s%s https://react.dev/link/hydration-mismatch 
-
-  ...
-    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
-      <AppDevOverlayErrorBoundary globalError={[...]}>
-        <ReplaySsrOnlyErrors>
-        <DevRootHTTPAccessFallbackBoundary>
-          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
-            <HTTPAccessFallbackErrorBoundary pathname="/a5" notFound={<NotAllowedRootHTTPFallbackError>} ...>
-              <RedirectBoundary>
-                <RedirectErrorBoundary router={{...}}>
-                  <Head>
-                  <__next_root_layout_boundary__>
-                    <SegmentViewNode type="layout" pagePath="layout.tsx">
-                      <SegmentTrieNode>
-                      <link>
-                      <script>
-                      <script>
-                      <RootLayout>
-                        <html
-                          lang="en"
--                         suppresshydrationwarning="true"
--                         data-lt-installed="true"
--                         className="hydrated"
-                        >
-                  ...
-
-[02:51:22.124] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[02:51:22.125] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/a5","route":"/a5"}
-[02:51:22.125] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/a5 color: rgb(120, 120, 120) color: inherit {"dp":"/a5","o":"http://localhost:3000/a5","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1763363829075}
-[02:51:24.563] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[02:51:24.703] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
-
-- A server/client branch `if (typeof window !== 'undefined')`.
-- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
-- Date formatting in a user's locale which doesn't match the server.
-- External changing data without sending a snapshot of it along with the HTML.
-- Invalid HTML tag nesting.
-
-It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
-
-%s%s https://react.dev/link/hydration-mismatch 
-
-  ...
-    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
-      <AppDevOverlayErrorBoundary globalError={[...]}>
-        <ReplaySsrOnlyErrors>
-        <DevRootHTTPAccessFallbackBoundary>
-          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
-            <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<NotAllowedRootHTTPFallbackError>} ...>
-              <RedirectBoundary>
-                <RedirectErrorBoundary router={{...}}>
-                  <Head>
-                  <__next_root_layout_boundary__>
-                    <SegmentViewNode type="layout" pagePath="layout.tsx">
-                      <SegmentTrieNode>
-                      <link>
-                      <script>
-                      <script>
-                      <RootLayout>
-                        <html
-                          lang="en"
--                         suppresshydrationwarning="true"
--                         data-lt-installed="true"
--                         className="hydrated"
-                        >
-                  ...
-
-[02:51:24.704] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[02:51:24.704] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[02:51:24.704] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1763363831647}
-[02:52:47.918] Server  LOG      ✓ Compiled in 91ms
+[00:33:12.446] Server  LOG      ✓ Compiled in 68ms
+[00:33:19.807] Server  LOG      ✓ Compiled in 63ms
+[00:33:22.107] Server  LOG      ✓ Compiled in 203ms
+[00:33:26.881] Server  LOG      ✓ Compiled in 81ms
+[00:33:32.828] Server  LOG      ✓ Compiled in 135ms
+[00:33:38.013] Server  LOG      ✓ Compiled in 117ms
+[00:33:41.634] Server  LOG      ✓ Compiled in 133ms
