@@ -10,11 +10,17 @@ import {
     Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { Product } from '@mg-mart/types';
 import { COLORS, SIZES } from '@/constants';
 import { useProductStore } from '@/stores';
+import { RootStackParamList } from '@/navigation/AppNavigator';
+
+type NavigationProp = StackNavigationProp<RootStackParamList>;
 
 export default function ProductsScreen() {
+    const navigation = useNavigation<NavigationProp>();
     const {
         products,
         isLoading,
@@ -40,7 +46,11 @@ export default function ProductsScreen() {
     };
 
     const renderProductCard = ({ item }: { item: Product }) => (
-        <View style={styles.productCard}>
+        <TouchableOpacity
+            style={styles.productCard}
+            onPress={() => navigation.navigate('ProductDetail', { productId: item.productId })}
+            activeOpacity={0.7}
+        >
             <View style={styles.imageContainer}>
                 <Image
                     source={{ uri: item.imageUrl || 'https://via.placeholder.com/150' }}
@@ -71,7 +81,10 @@ export default function ProductsScreen() {
                             styles.addButton,
                             item.stock <= 0 && styles.addButtonDisabled,
                         ]}
-                        onPress={() => handleAddToCart(item)}
+                        onPress={(e) => {
+                            e.stopPropagation();
+                            handleAddToCart(item);
+                        }}
                         disabled={item.stock <= 0}
                         activeOpacity={0.7}
                     >
@@ -79,7 +92,7 @@ export default function ProductsScreen() {
                     </TouchableOpacity>
                 </View>
             </View>
-        </View>
+        </TouchableOpacity>
     );
 
     const renderHeader = () => (
