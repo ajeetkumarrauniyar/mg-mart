@@ -14,6 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from '@/navigation/AppNavigator';
 import { useProductStore } from '@/stores';
+import { useCartStore } from '@/stores/cartStore';
 import { COLORS, SIZES } from '@/constants';
 
 type Props = StackScreenProps<RootStackParamList, 'ProductDetail'>;
@@ -21,8 +22,10 @@ type Props = StackScreenProps<RootStackParamList, 'ProductDetail'>;
 export default function ProductDetailScreen({ route, navigation }: Props) {
     const { productId } = route.params;
     const { products } = useProductStore();
+    const { addItem } = useCartStore();
     const [quantity, setQuantity] = useState(1);
     const [isFavorite, setIsFavorite] = useState(false);
+    const [isAddingToCart, setIsAddingToCart] = useState(false);
 
     const product = products.find((p) => p.productId === productId);
 
@@ -51,16 +54,29 @@ export default function ProductDetailScreen({ route, navigation }: Props) {
         }
     };
 
-    const handleAddToCart = () => {
+    const handleAddToCart = async () => {
         if (product.stock <= 0) {
             Alert.alert('Out of Stock', 'This product is currently unavailable');
             return;
         }
-        Alert.alert(
-            'Added to Cart',
-            `${quantity} x ${product.name} added to your cart`,
-            [{ text: 'OK' }]
-        );
+
+        setIsAddingToCart(true);
+        try {
+            await addItem(product.productId, quantity);
+            Alert.alert(
+                'Added to Cart',
+                `${quantity} x ${product.name} added to your cart`,
+                [
+                    { text: 'Continue Shopping', style: 'cancel' },
+                    { text: 'View Cart', onPress: () => navigation.navigate('MainTabs') },
+                ]
+            );
+            setQuantity(1); // Reset quantity after adding
+        } catch (error) {
+            Alert.alert('Error', 'Failed to add item to cart. Please try again.');
+        } finally {
+            setIsAddingToCart(false);
+        }
     };
 
     const toggleFavorite = () => {
@@ -185,14 +201,18 @@ export default function ProductDetailScreen({ route, navigation }: Props) {
                     <Text style={styles.totalPrice}>₹{totalPrice.toFixed(2)}</Text>
                 </View>
                 <TouchableOpacity
-                    style={[styles.addToCartButton, isOutOfStock && styles.addToCartButtonDisabled]}
+                    style={[styles.addToCartButton, (isOutOfStock || isAddingToCart) && styles.addToCartButtonDisabled]}
                     onPress={handleAddToCart}
-                    disabled={isOutOfStock}
+                    disabled={isOutOfStock || isAddingToCart}
                     activeOpacity={0.8}
                 >
-                    <Ionicons name="cart-outline" size={20} color={COLORS.white} />
+                    {isAddingToCart ? (
+                        <ActivityIndicator size="small" color={COLORS.white} />
+                    ) : (
+                        <Ionicons name="cart-outline" size={20} color={COLORS.white} />
+                    )}
                     <Text style={styles.addToCartText}>
-                        {isOutOfStock ? 'Out of Stock' : 'Add to Cart'}
+                        {isOutOfStock ? 'Out of Stock' : isAddingToCart ? 'Adding...' : 'Add to Cart'}
                     </Text>
                 </TouchableOpacity>
             </View>
