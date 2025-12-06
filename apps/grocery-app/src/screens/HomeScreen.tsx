@@ -1,9 +1,12 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { User } from '@mg-mart/types';
 import { COLORS, SIZES } from '../constants';
+import { productService } from '../services/productsService';
 
 export default function HomeScreen() {
+    const [apiStatus, setApiStatus] = useState<'idle' | 'testing' | 'success' | 'error'>('idle');
+
     // Test our shared types
     const testUser: User = {
         userId: '123',
@@ -19,6 +22,44 @@ export default function HomeScreen() {
         console.log('Home Screen - User:', testUser.name);
     };
 
+    const testApiConnection = async () => {
+        setApiStatus('testing');
+        try {
+            console.log('🧪 Testing API connection...');
+
+            // First, let's try a simple health check or root endpoint
+            const response = await fetch('https://mg-mart-server.onrender.com');
+            const text = await response.text();
+            console.log('🌐 Server response:', text);
+
+            // Now try the products endpoint
+            const products = await productService.getProducts({ limit: 1 });
+            console.log('✅ API connection successful:', products);
+            setApiStatus('success');
+            Alert.alert('Success!', `API connected! Found ${products.total} products.`);
+        } catch (error: any) {
+            console.error('❌ API connection failed:', error);
+            setApiStatus('error');
+
+            // Try to get more info about the error
+            let errorMessage = 'Unknown error';
+            if (error && typeof error === 'object') {
+                if ('message' in error && typeof error.message === 'string') {
+                    errorMessage = error.message;
+                }
+                if ('data' in error && typeof error.data === 'string') {
+                    // If it's HTML, extract the error message
+                    const match = error.data.match(/<pre>(.*?)<\/pre>/);
+                    if (match) {
+                        errorMessage = match[1];
+                    }
+                }
+            }
+
+            Alert.alert('API Error', `Failed to connect: ${errorMessage}`);
+        }
+    };
+
     return (
         <ScrollView style={styles.container}>
             <View style={styles.content}>
@@ -29,23 +70,34 @@ export default function HomeScreen() {
                     <Text style={styles.buttonText}>Hello, {testUser.name}!</Text>
                 </TouchableOpacity>
 
+                <TouchableOpacity
+                    style={[styles.button, styles.testButton]}
+                    onPress={testApiConnection}
+                    disabled={apiStatus === 'testing'}
+                >
+                    <Text style={styles.buttonText}>
+                        {apiStatus === 'testing' ? '🔄 Testing API...' : '🧪 Test API Connection'}
+                    </Text>
+                </TouchableOpacity>
+
                 <View style={styles.infoCard}>
                     <Text style={styles.infoTitle}>🎉 App Status</Text>
                     <Text style={styles.infoText}>
                         ✅ Navigation Working{'\n'}
                         ✅ Shared Types Working{'\n'}
                         ✅ Home Screen Active{'\n'}
+                        {apiStatus === 'success' ? '✅' : apiStatus === 'error' ? '❌' : '⏳'} API Connection{'\n'}
                         ✅ Ready for Development
                     </Text>
                 </View>
 
                 <View style={styles.featuresCard}>
-                    <Text style={styles.infoTitle}>🚀 Coming Soon</Text>
+                    <Text style={styles.infoTitle}>🚀 Backend Integration</Text>
                     <Text style={styles.infoText}>
-                        📱 Product Catalog{'\n'}
-                        🛍️ Shopping Cart{'\n'}
-                        👤 User Profile{'\n'}
-                        🔍 Search & Filters
+                        🌐 Server: mg-mart-server.onrender.com{'\n'}
+                        📡 API Status: {apiStatus === 'success' ? 'Connected' : apiStatus === 'error' ? 'Failed' : 'Not tested'}{'\n'}
+                        📋 Postman Collection Available{'\n'}
+                        🔧 Ready for API Testing
                     </Text>
                 </View>
             </View>
@@ -92,6 +144,10 @@ const styles = StyleSheet.create({
         fontSize: SIZES.fontSize.medium,
         fontWeight: '600',
         textAlign: 'center',
+    },
+    testButton: {
+        backgroundColor: '#3182ce',
+        marginBottom: 20,
     },
     infoCard: {
         backgroundColor: COLORS.successLight,
