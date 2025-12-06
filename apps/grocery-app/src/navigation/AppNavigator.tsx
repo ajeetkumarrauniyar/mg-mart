@@ -76,8 +76,16 @@ function TabNavigator() {
 export default function AppNavigator() {
     return (
         <NavigationContainer>
-            <Stack.Navigator screenOptions={{ headerShown: false }}>
-                <Stack.Screen name="MainTabs" component={TabNavigator} />
+            <Stack.Navigator
+                initialRouteName="MainTabs"
+                screenOptions={{ headerShown: false }}
+            >
+                <Stack.Screen
+                    name="MainTabs"
+                    options={{ headerShown: false }}
+                >
+                    {() => <TabNavigator />}
+                </Stack.Screen>
                 {/* Add other screens that need to be outside of tabs */}
             </Stack.Navigator>
         </NavigationContainer>
