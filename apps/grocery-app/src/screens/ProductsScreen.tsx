@@ -15,6 +15,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { Product } from '@mg-mart/types';
 import { COLORS, SIZES } from '@/constants';
 import { useProductStore } from '@/stores';
+import { useCartStore } from '@/stores/cartStore';
 import { RootStackParamList } from '@/navigation/AppNavigator';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
@@ -27,6 +28,7 @@ export default function ProductsScreen() {
         error,
         fetchProducts,
     } = useProductStore();
+    const { addItem } = useCartStore();
 
 
     useEffect(() => {
@@ -37,12 +39,17 @@ export default function ProductsScreen() {
         await fetchProducts();
     };
 
-    const handleAddToCart = (product: Product) => {
+    const handleAddToCart = async (product: Product) => {
         if (product.stock <= 0) {
             Alert.alert('Out of Stock', 'This product is currently unavailable');
             return;
         }
-        Alert.alert('Added to Cart', `${product.name} has been added to your cart`);
+        try {
+            await addItem(product.productId, 1);
+            Alert.alert('Added to Cart', `${product.name} has been added to your cart`);
+        } catch (error) {
+            Alert.alert('Error', 'Failed to add item to cart');
+        }
     };
 
     const renderProductCard = ({ item }: { item: Product }) => (

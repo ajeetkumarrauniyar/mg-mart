@@ -1,4 +1,5 @@
 import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -10,6 +11,7 @@ import CartScreen from '@/screens/CartScreen';
 import ProfileScreen from '@/screens/ProfileScreen';
 import WhislistScreen from '@/screens/WhislistScreen';
 import ProductDetailScreen from '@/screens/ProductDetailScreen';
+import { useCartStore } from '@/stores/cartStore';
 
 // Navigation types
 export type RootTabParamList = {
@@ -68,9 +70,21 @@ function TabNavigator() {
                 component={CartScreen}
                 options={{
                     tabBarLabel: 'Cart',
-                    tabBarIcon: ({ color, size }) => (
-                        <Ionicons name="cart-outline" size={size} color={color} />
-                    ),
+                    tabBarIcon: ({ color, size }) => {
+                        const { totalItems } = useCartStore();
+                        return (
+                            <View>
+                                <Ionicons name="cart-outline" size={size} color={color} />
+                                {totalItems > 0 && (
+                                    <View style={styles.badge}>
+                                        <Text style={styles.badgeText}>
+                                            {totalItems > 99 ? '99+' : totalItems}
+                                        </Text>
+                                    </View>
+                                )}
+                            </View>
+                        );
+                    },
                 }}
             />
             <Tab.Screen
@@ -120,3 +134,24 @@ export default function AppNavigator() {
         </NavigationContainer>
     );
 }
+
+
+const styles = StyleSheet.create({
+    badge: {
+        position: 'absolute',
+        right: -8,
+        top: -4,
+        backgroundColor: '#e53e3e',
+        borderRadius: 10,
+        minWidth: 18,
+        height: 18,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 4,
+    },
+    badgeText: {
+        color: '#ffffff',
+        fontSize: 10,
+        fontWeight: '700',
+    },
+});
