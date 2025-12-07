@@ -8,20 +8,30 @@ const validateEnvironmentVariables = (): void => {
 
   if (missingVars.length > 0) {
     console.warn(
-      `Missing optional environment variables: ${missingVars.join(", ")}`
+      `⚠️  Missing environment variables: ${missingVars.join(", ")}`
     );
-    console.warn("Using default values for missing variables");
+    console.warn("📋 Using default values for missing variables");
   }
 };
 
 // Initialize validation
 validateEnvironmentVariables();
 
+// Get current environment from env vars
+const currentEnv = process.env.EXPO_PUBLIC_ENVIRONMENT || "production";
+
+// Debug: Log environment configuration
+console.log("🔧 Environment Configuration:");
+console.log(`  📍 Current Environment: ${currentEnv.toUpperCase()}`);
+console.log("  🌐 API Base URL:", process.env.EXPO_PUBLIC_API_BASE_URL);
+console.log("  📱 App Name:", process.env.EXPO_PUBLIC_APP_NAME);
+console.log("  ⏱️  Timeout:", process.env.EXPO_PUBLIC_API_TIMEOUT);
+
 // Environment configuration object
 export const environmentConfig: EnvironmentConfig = {
   // App Information
-  APP_NAME: "MG Mart",
-  APP_VERSION: "1.0.0",
+  APP_NAME: process.env.EXPO_PUBLIC_APP_NAME || "MG Mart",
+  APP_VERSION: process.env.EXPO_PUBLIC_APP_VERSION || "1.0.0",
 
   // API Configuration
   API_BASE_URL:

@@ -7,3 +7,6 @@ export { default as WhislistScreen } from "./WhislistScreen";
 export { default as ProductDetailScreen } from "./ProductDetailScreen";
 export { SplashScreen } from "./SplashScreen";
 export { OnboardingScreen } from "./OnboardingScreen";
+export { AuthScreen } from "./AuthScreen";
+export { LoginScreen } from "./LoginScreen";
+export { RegisterScreen } from "./RegisterScreen";
