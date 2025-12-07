@@ -1,17 +1,24 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { View, Text, ActivityIndicator } from 'react-native';
 import { AppNavigator } from './navigation';
 import { useAppInitialization } from './hooks';
 import { initializeDebugging } from './config/debugger';
+import { SplashScreen } from './screens';
 
 export default function App() {
   const { isInitialized, initError } = useAppInitialization();
+  const [showSplash, setShowSplash] = useState(true);
 
   // Initialize debugging tools
   useEffect(() => {
     initializeDebugging();
   }, []);
+
+  // Show splash screen
+  if (showSplash) {
+    return <SplashScreen onFinish={() => setShowSplash(false)} />;
+  }
 
   // Show loading screen while app is initializing
   if (!isInitialized) {
