@@ -11,6 +11,7 @@ import CartScreen from '@/screens/CartScreen';
 import ProfileScreen from '@/screens/ProfileScreen';
 import WhislistScreen from '@/screens/WhislistScreen';
 import ProductDetailScreen from '@/screens/ProductDetailScreen';
+import CheckoutScreen from '@/screens/CheckoutScreen';
 import { useCartStore } from '@/stores/cartStore';
 
 // Navigation types
@@ -128,6 +129,11 @@ export default function AppNavigator() {
                 <Stack.Screen
                     name="ProductDetail"
                     component={ProductDetailScreen}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="Checkout"
+                    component={CheckoutScreen}
                     options={{ headerShown: false }}
                 />
             </Stack.Navigator>
