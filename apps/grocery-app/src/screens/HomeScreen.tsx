@@ -1,25 +1,43 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
-import { User } from '@mg-mart/types';
 import { COLORS, SIZES } from '../constants';
 import { productService } from '../services/productsService';
+import { useAuthStore } from '../stores';
+import { config } from '../config';
 
 export default function HomeScreen() {
     const [apiStatus, setApiStatus] = useState<'idle' | 'testing' | 'success' | 'error'>('idle');
+    const { user, logout } = useAuthStore();
 
-    // Test our shared types
-    const testUser: User = {
-        userId: '123',
-        email: 'test@mgmart.com',
-        name: 'Test User',
-        phoneNumber: '+1234567890',
-        role: 'customer',
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+    // Get current environment configuration
+    const apiBaseUrl = config.environment.API_BASE_URL;
+    const appName = config.environment.APP_NAME;
+    const isProduction = config.isProduction;
+    const currentEnv = isProduction ? 'Production' : 'Development';
+
+    // Extract server domain from API URL
+    const serverDomain = apiBaseUrl.replace(/^https?:\/\//, '').replace(/\/api.*$/, '');
+
+    const handleLogout = () => {
+        Alert.alert(
+            'Logout',
+            'Are you sure you want to logout?',
+            [
+                { text: 'Cancel', style: 'cancel' },
+                {
+                    text: 'Logout',
+                    style: 'destructive',
+                    onPress: () => {
+                        logout();
+                        Alert.alert('Success', 'Logged out successfully');
+                    },
+                },
+            ]
+        );
     };
 
     const handlePress = () => {
-        console.log('Home Screen - User:', testUser.name);
+        console.log('Home Screen - User:', user?.name);
     };
 
     const testApiConnection = async () => {
@@ -28,15 +46,16 @@ export default function HomeScreen() {
             console.log('🧪 Testing API connection...');
 
             // First, let's try a simple health check or root endpoint
-            const response = await fetch('https://mg-mart-server.onrender.com');
+            const baseUrl = apiBaseUrl.replace(/\/api.*$/, '');
+            const response = await fetch(baseUrl);
             const text = await response.text();
             console.log('🌐 Server response:', text);
 
             // Now try the products endpoint
-            const products = await productService.getProducts({ limit: 1 });
+            const products = await productService.getProducts();
             console.log('✅ API connection successful:', products);
             setApiStatus('success');
-            Alert.alert('Success!', `API connected! Found ${products.total} products.`);
+            Alert.alert('Success!', `API connected! Found ${products.products?.length || 0} products.`);
         } catch (error: any) {
             console.error('❌ API connection failed:', error);
             setApiStatus('error');
@@ -67,7 +86,14 @@ export default function HomeScreen() {
                 <Text style={styles.subtitle}>Your one-stop grocery solution</Text>
 
                 <TouchableOpacity style={styles.button} onPress={handlePress}>
-                    <Text style={styles.buttonText}>Hello, {testUser.name}!</Text>
+                    <Text style={styles.buttonText}>Hello, {user?.name || 'Guest'}!</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={[styles.button, styles.logoutButton]}
+                    onPress={handleLogout}
+                >
+                    <Text style={styles.buttonText}>🚪 Logout</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
@@ -79,24 +105,13 @@ export default function HomeScreen() {
                         {apiStatus === 'testing' ? '🔄 Testing API...' : '🧪 Test API Connection'}
                     </Text>
                 </TouchableOpacity>
-
-                <View style={styles.infoCard}>
-                    <Text style={styles.infoTitle}>🎉 App Status</Text>
-                    <Text style={styles.infoText}>
-                        ✅ Navigation Working{'\n'}
-                        ✅ Shared Types Working{'\n'}
-                        ✅ Home Screen Active{'\n'}
-                        {apiStatus === 'success' ? '✅' : apiStatus === 'error' ? '❌' : '⏳'} API Connection{'\n'}
-                        ✅ Ready for Development
-                    </Text>
-                </View>
-
                 <View style={styles.featuresCard}>
                     <Text style={styles.infoTitle}>🚀 Backend Integration</Text>
                     <Text style={styles.infoText}>
-                        🌐 Server: mg-mart-server.onrender.com{'\n'}
-                        📡 API Status: {apiStatus === 'success' ? 'Connected' : apiStatus === 'error' ? 'Failed' : 'Not tested'}{'\n'}
-                        📋 Postman Collection Available{'\n'}
+                        📱 App: {appName}{'\n'}
+                        🌍 Environment: {currentEnv}{'\n'}
+                        🌐 Server: {serverDomain}{'\n'}
+                        �  API Status: {apiStatus === 'success' ? 'Connected' : apiStatus === 'error' ? 'Failed' : 'Not tested'}{'\n'}
                         🔧 Ready for API Testing
                     </Text>
                 </View>
@@ -144,6 +159,10 @@ const styles = StyleSheet.create({
         fontSize: SIZES.fontSize.medium,
         fontWeight: '600',
         textAlign: 'center',
+    },
+    logoutButton: {
+        backgroundColor: '#e53e3e',
+        marginBottom: 15,
     },
     testButton: {
         backgroundColor: '#3182ce',
