@@ -83,7 +83,7 @@ export default function CartScreen() {
             Alert.alert('Empty Cart', 'Please add items to your cart before checkout');
             return;
         }
-        Alert.alert('Checkout', 'Checkout feature coming soon!');
+        navigation.navigate('Checkout');
     };
 
     const renderCartItem = ({ item }: { item: CartItemWithProduct }) => (
