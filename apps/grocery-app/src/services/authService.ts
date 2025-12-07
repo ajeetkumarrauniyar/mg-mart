@@ -33,6 +33,11 @@ export interface ResetPasswordRequest {
   newPassword: string;
 }
 
+export interface RefreshTokenResponse {
+  token: string;
+  user: User;
+}
+
 // Authentication service
 export const authService = {
   // Login user
@@ -94,6 +99,26 @@ export const authService = {
   // Refresh profile
   refreshProfile: async (): Promise<User> => {
     return await api.get<User>("/users/profile");
+  },
+
+  // Refresh token
+  refreshToken: async (): Promise<RefreshTokenResponse> => {
+    const response = await api.post<RefreshTokenResponse>("/auth/refresh");
+
+    // Store new token
+    await tokenManager.setToken(response.token);
+
+    return response;
+  },
+
+  // Forgot password
+  forgotPassword: async (email: string): Promise<void> => {
+    await api.post("/auth/forgot-password", { email });
+  },
+
+  // Reset password
+  resetPassword: async (data: ResetPasswordRequest): Promise<void> => {
+    await api.post("/auth/reset-password", data);
   },
 };
 

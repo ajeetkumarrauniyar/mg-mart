@@ -16,6 +16,7 @@ import {
   validateEmail,
   validatePassword,
   validateRequired,
+  validatePhoneNumber,
 } from "../utils/validation.js";
 import { ApiError } from "../utils/errorHandler.js";
 import * as bcrypt from "bcrypt";
@@ -50,8 +51,16 @@ export class UserController {
       validateRequired(password, "password");
       validateRequired(firstName, "firstName");
       validateRequired(lastName, "lastName");
-      validateEmail(email);
+
+      if (!validateEmail(email)) {
+        throw new ApiError("Invalid email format", 400);
+      }
       validatePassword(password);
+
+      // Validate phone number if provided
+      if (phone && !validatePhoneNumber(phone)) {
+        throw new ApiError("Invalid phone number format", 400);
+      }
 
       // Check if user already exists
       const existingUser = await this.userRepository.findByEmail(email);
@@ -140,6 +149,89 @@ export class UserController {
   };
 
   /**
+   * Logout user
+   * In a stateless JWT system, logout is handled client-side by removing the token
+   * This endpoint can be used for logging purposes or future token blacklisting
+   */
+  logout = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      // In a stateless JWT system, logout is primarily handled client-side
+      // This endpoint can be used for audit logging or future token blacklisting
+      res.json({
+        success: true,
+        message: "Logout successful",
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  /**
+   * Refresh JWT token
+   * Generates a new token for the authenticated user
+   */
+  refreshToken = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      const authHeader = req.headers.authorization;
+      const token = authHeader && authHeader.split(" ")[1];
+
+      if (!token) {
+        throw new ApiError("Access token required", 401);
+      }
+
+      const secret = process.env.JWT_SECRET;
+      if (!secret) {
+        throw new ApiError("JWT secret not configured", 500);
+      }
+
+      // Verify the current token (even if expired, we can still decode it)
+      let decoded;
+      try {
+        decoded = jwt.verify(token, secret) as any;
+      } catch (error) {
+        if (error instanceof jwt.TokenExpiredError) {
+          // Allow refresh of expired tokens
+          decoded = jwt.decode(token) as any;
+        } else {
+          throw new ApiError("Invalid token", 401);
+        }
+      }
+
+      if (!decoded || !decoded.userId) {
+        throw new ApiError("Invalid token", 401);
+      }
+
+      // Verify user still exists
+      const user = await this.userRepository.findById(decoded.userId);
+      if (!user) {
+        throw new ApiError("User not found", 401);
+      }
+
+      // Generate new token
+      const newToken = this.generateToken(decoded.userId);
+
+      res.json({
+        success: true,
+        message: "Token refreshed successfully",
+        data: {
+          token: newToken,
+          user,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  /**
    * Get current user profile
    * Returns authenticated user's profile information
    */
@@ -187,13 +279,20 @@ export class UserController {
 
       // Validate email if provided
       if (email) {
-        validateEmail(email);
+        if (!validateEmail(email)) {
+          throw new ApiError("Invalid email format", 400);
+        }
 
         // Check if email is already taken by another user
         const existingUser = await this.userRepository.findByEmail(email);
         if (existingUser && existingUser.userId !== userId) {
           throw new ApiError("Email is already taken", 409);
         }
+      }
+
+      // Validate phone number if provided
+      if (phone && !validatePhoneNumber(phone)) {
+        throw new ApiError("Invalid phone number format", 400);
       }
 
       const updateData: UpdateUserInput = {
@@ -273,12 +372,11 @@ export class UserController {
       const saltRounds = 12;
       const hashedNewPassword = await bcrypt.hash(newPassword, saltRounds);
 
-      // Update password - Note: We'll need to add a method to update password hash
-      // For now, let's create a temporary solution
-      const userRef = await this.userRepository.findById(userId);
-      if (userRef) {
-        // This is a temporary workaround - ideally we'd have an updatePassword method
-        await this.userRepository.update(userId, {} as any);
+      // Update password hash in the database
+      const passwordUpdated = await this.userRepository.updatePassword(userId, hashedNewPassword);
+
+      if (!passwordUpdated) {
+        throw new ApiError("Failed to update password", 500);
       }
 
       res.json({
@@ -316,6 +414,103 @@ export class UserController {
       });
     } catch (error) {
       next(error);
+    }
+  };
+
+  /**
+   * Forgot password - sends reset email
+   * Generates a password reset token and sends it via email
+   */
+  forgotPassword = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      const { email } = req.body;
+
+      validateRequired(email, "email");
+      if (!validateEmail(email)) {
+        throw new ApiError("Invalid email format", 400);
+      }
+
+      // Check if user exists
+      const user = await this.userRepository.findByEmail(email);
+      if (!user) {
+        // Don't reveal if email exists or not for security
+        res.json({
+          success: true,
+          message: "If the email exists, a password reset link has been sent",
+        });
+        return;
+      }
+
+      // Generate reset token (in production, implement proper token generation and email sending)
+      const resetToken = jwt.sign(
+        { userId: user.userId, type: "password-reset" },
+        process.env.JWT_SECRET!,
+        { expiresIn: "1h" }
+      );
+
+      // TODO: Send email with reset token
+      // For now, just return success (in production, implement email service)
+
+      res.json({
+        success: true,
+        message: "If the email exists, a password reset link has been sent",
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  /**
+   * Reset password using reset token
+   * Validates reset token and updates user password
+   */
+  resetPassword = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      const { token, newPassword } = req.body;
+
+      validateRequired(token, "token");
+      validateRequired(newPassword, "newPassword");
+      validatePassword(newPassword);
+
+      // Verify reset token
+      const decoded = jwt.verify(token, process.env.JWT_SECRET!) as any;
+
+      if (decoded.type !== "password-reset") {
+        throw new ApiError("Invalid reset token", 400);
+      }
+
+      // Hash new password
+      const saltRounds = 12;
+      const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+
+      // Update password
+      const passwordUpdated = await this.userRepository.updatePassword(
+        decoded.userId,
+        hashedPassword
+      );
+
+      if (!passwordUpdated) {
+        throw new ApiError("User not found", 404);
+      }
+
+      res.json({
+        success: true,
+        message: "Password reset successfully",
+      });
+    } catch (error) {
+      if (error instanceof jwt.JsonWebTokenError) {
+        next(new ApiError("Invalid or expired reset token", 400));
+      } else {
+        next(error);
+      }
     }
   };
 
