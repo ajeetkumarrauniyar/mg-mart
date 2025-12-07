@@ -1,23 +1,65 @@
 import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { View, Text, ActivityIndicator } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AppNavigator } from './navigation';
 import { useAppInitialization } from './hooks';
 import { initializeDebugging } from './config/debugger';
-import { SplashScreen } from './screens';
+import { SplashScreen, OnboardingScreen } from './screens';
+
+const ONBOARDING_KEY = '@mg_mart_onboarding_complete';
 
 export default function App() {
   const { isInitialized, initError } = useAppInitialization();
   const [showSplash, setShowSplash] = useState(true);
+  const [showOnboarding, setShowOnboarding] = useState<boolean | null>(null);
 
   // Initialize debugging tools
   useEffect(() => {
     initializeDebugging();
   }, []);
 
+  // Check if user has completed onboarding
+  useEffect(() => {
+    checkOnboarding();
+  }, []);
+
+  const checkOnboarding = async () => {
+    try {
+      const value = await AsyncStorage.getItem(ONBOARDING_KEY);
+      setShowOnboarding(value === null);
+    } catch (error) {
+      console.error('Error checking onboarding status:', error);
+      setShowOnboarding(true);
+    }
+  };
+
+  const handleOnboardingComplete = async () => {
+    try {
+      await AsyncStorage.setItem(ONBOARDING_KEY, 'true');
+      setShowOnboarding(false);
+    } catch (error) {
+      console.error('Error saving onboarding status:', error);
+      setShowOnboarding(false);
+    }
+  };
+
   // Show splash screen
   if (showSplash) {
     return <SplashScreen onFinish={() => setShowSplash(false)} />;
+  }
+
+  // Show onboarding if not completed
+  if (showOnboarding === null) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
+        <ActivityIndicator size="large" color="#48bb78" />
+      </View>
+    );
+  }
+
+  if (showOnboarding) {
+    return <OnboardingScreen onComplete={handleOnboardingComplete} />;
   }
 
   // Show loading screen while app is initializing
