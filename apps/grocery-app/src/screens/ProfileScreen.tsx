@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import { COLORS, SIZES } from '../constants';
 import { useAuthStore } from '../stores';
 
@@ -46,10 +47,11 @@ const MenuItem: React.FC<MenuItemProps> = ({
 );
 
 export default function ProfileScreen() {
+    const navigation = useNavigation();
     const { user, logout } = useAuthStore();
 
     const handleEditProfile = () => {
-        Alert.alert('Edit Profile', 'Profile editing coming soon!');
+        navigation.navigate('EditProfile' as never);
     };
 
     const handleOrders = () => {

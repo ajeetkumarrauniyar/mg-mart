@@ -5,6 +5,9 @@ export {
   type LoginRequest,
   type RegisterRequest,
   type AuthResponse,
+  type ForgotPasswordRequest,
+  type ResetPasswordRequest,
+  type RefreshTokenResponse,
 } from "./authService";
 export {
   productService,
@@ -16,9 +19,15 @@ export {
   type AddToCartRequest,
   type UpdateCartItemRequest,
 } from "./cartService";
+export {
+  userService,
+  type UpdateProfileRequest,
+  type ChangePasswordRequest,
+} from "./userService";
 
 // Re-export default exports for convenience
 export { default as apiClient } from "./apiService";
 export { default as authServiceDefault } from "./authService";
 export { default as productServiceDefault } from "./productsService";
 export { default as cartServiceDefault } from "./cartService";
+export { default as userServiceDefault } from "./userService";

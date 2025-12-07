@@ -6,6 +6,7 @@ export { default as ProfileScreen } from "./ProfileScreen";
 export { default as WhislistScreen } from "./WhislistScreen";
 export { default as ProductDetailScreen } from "./ProductDetailScreen";
 export { default as CheckoutScreen } from "./CheckoutScreen";
+export { default as EditProfileScreen } from "./EditProfileScreen";
 export { SplashScreen } from "./SplashScreen";
 export { OnboardingScreen } from "./OnboardingScreen";
 export { AuthScreen } from "./AuthScreen";
