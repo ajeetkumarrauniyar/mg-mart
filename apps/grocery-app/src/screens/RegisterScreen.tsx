@@ -62,7 +62,7 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({ onNavigateToLogi
                 firstName: firstName.trim(),
                 lastName: lastName.trim(),
                 phone: phone.trim() || undefined,
-            } as any);
+            });
         } catch (err: any) {
             Alert.alert('Registration Failed', err.message || 'Unable to create account');
         }
