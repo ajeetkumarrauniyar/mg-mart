@@ -8,10 +8,11 @@ export interface LoginRequest {
 }
 
 export interface RegisterRequest {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
-  phone?: string;
+  phone?: string | undefined;
 }
 
 export interface AuthResponse {
