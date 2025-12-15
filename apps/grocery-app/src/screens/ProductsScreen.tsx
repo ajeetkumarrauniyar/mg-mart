@@ -9,13 +9,13 @@ import {
     ActivityIndicator,
     Alert,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Product } from '@mg-mart/types';
 import { COLORS, SIZES } from '@/constants';
-import { useProductStore } from '@/stores';
-import { useCartStore } from '@/stores/cartStore';
+import { useProductStore, useCartStore, useWishlistStore } from '@/stores';
 import { RootStackParamList } from '@/navigation/AppNavigator';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
@@ -29,6 +29,7 @@ export default function ProductsScreen() {
         fetchProducts,
     } = useProductStore();
     const { addItem } = useCartStore();
+    const { toggleWishlist, isInWishlist } = useWishlistStore();
 
 
     useEffect(() => {
@@ -64,6 +65,20 @@ export default function ProductsScreen() {
                     style={styles.productImage}
                     resizeMode="cover"
                 />
+                <TouchableOpacity
+                    style={styles.wishlistButton}
+                    onPress={(e) => {
+                        e.stopPropagation();
+                        toggleWishlist(item);
+                    }}
+                    activeOpacity={0.7}
+                >
+                    <Ionicons
+                        name={isInWishlist(item.productId) ? "heart" : "heart-outline"}
+                        size={18}
+                        color={isInWishlist(item.productId) ? "#e53e3e" : "#4a5568"}
+                    />
+                </TouchableOpacity>
                 {item.stock <= 0 && (
                     <View style={styles.outOfStockOverlay}>
                         <Text style={styles.outOfStockText}>Out of Stock</Text>
@@ -215,6 +230,22 @@ const styles = StyleSheet.create({
     productImage: {
         width: '100%',
         height: '100%',
+    },
+    wishlistButton: {
+        position: 'absolute',
+        top: 8,
+        right: 8,
+        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+        borderRadius: 18,
+        width: 32,
+        height: 32,
+        justifyContent: 'center',
+        alignItems: 'center',
+        elevation: 2,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.2,
+        shadowRadius: 2,
     },
     productInfo: {
         padding: 12,

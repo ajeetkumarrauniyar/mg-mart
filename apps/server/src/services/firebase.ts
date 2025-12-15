@@ -12,7 +12,9 @@
 import { initializeApp, cert, getApps } from "firebase-admin/app";
 import { getFirestore, Firestore, Timestamp } from "firebase-admin/firestore";
 import { getAuth as getAuthService } from "firebase-admin/auth";
-import firebaseKeyCredentials from "../../key.json" with { type: "json" };
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 
 // Global Firestore database instance
 let db: Firestore;
