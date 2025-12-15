@@ -12,9 +12,7 @@
 import { initializeApp, cert, getApps } from "firebase-admin/app";
 import { getFirestore, Firestore, Timestamp } from "firebase-admin/firestore";
 import { getAuth as getAuthService } from "firebase-admin/auth";
-import path from "path";
-import { fileURLToPath } from "url";
-import fs from "fs";
+import firebaseKeyCredentials from "../../key.json" with { type: "json" };
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -45,13 +43,7 @@ export const initializeFirebase = async () => {
     } else {
       // Fallback to key.json file for local development
       try {
-        // Use fs to read key.json file for ES modules compatibility
-        const __filename = fileURLToPath(import.meta.url);
-        const __dirname = path.dirname(__filename);
-        const keyPath = path.resolve(__dirname, "../../key.json");
-
-        const keyContent = fs.readFileSync(keyPath, 'utf8');
-        serviceAccount = JSON.parse(keyContent);
+        serviceAccount = firebaseKeyCredentials;
       } catch (error) {
         throw new Error("Firebase service account credentials not found - please set FIREBASE_SERVICE_ACCOUNT_KEY environment variable or ensure key.json file exists");
       }
