@@ -9,18 +9,18 @@ import HomeScreen from '@/screens/HomeScreen';
 import ProductsScreen from '@/screens/ProductsScreen';
 import CartScreen from '@/screens/CartScreen';
 import ProfileScreen from '@/screens/ProfileScreen';
-import WhislistScreen from '@/screens/WhislistScreen';
+import WishlistScreen from '@/screens/WishlistScreen';
 import ProductDetailScreen from '@/screens/ProductDetailScreen';
 import CheckoutScreen from '@/screens/CheckoutScreen';
 import EditProfileScreen from '@/screens/EditProfileScreen';
-import { useCartStore } from '@/stores/cartStore';
+import { useCartStore, useWishlistStore } from '@/stores';
 
 // Navigation types
 export type RootTabParamList = {
     Home: undefined;
     Products: undefined;
     Cart: undefined;
-    Whislist: undefined;
+    Wishlist: undefined;
     Profile: undefined;
 };
 
@@ -91,13 +91,25 @@ function TabNavigator() {
                 }}
             />
             <Tab.Screen
-                name="Whislist"
-                component={WhislistScreen}
+                name="Wishlist"
+                component={WishlistScreen}
                 options={{
                     tabBarLabel: 'Favourite',
-                    tabBarIcon: ({ color, size }) => (
-                        <Ionicons name="heart-outline" size={size} color={color} />
-                    ),
+                    tabBarIcon: ({ color, size }) => {
+                        const { wishlistItems } = useWishlistStore();
+                        return (
+                            <View>
+                                <Ionicons name="heart-outline" size={size} color={color} />
+                                {wishlistItems.length > 0 && (
+                                    <View style={styles.badge}>
+                                        <Text style={styles.badgeText}>
+                                            {wishlistItems.length > 99 ? '99+' : wishlistItems.length}
+                                        </Text>
+                                    </View>
+                                )}
+                            </View>
+                        );
+                    },
                 }}
             />
             <Tab.Screen

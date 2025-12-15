@@ -1,8 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { Product } from '@mg-mart/types';
 import { COLORS, SIZES } from '../constants';
-import { useCartStore } from '../stores';
+import { useCartStore, useWishlistStore } from '../stores';
 
 interface ProductCardProps {
     product: Product;
@@ -11,6 +12,7 @@ interface ProductCardProps {
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product, onPress }) => {
     const { addItem } = useCartStore();
+    const { toggleWishlist, isInWishlist } = useWishlistStore();
 
     const handleAddToCart = () => {
         if (product.stock <= 0) {
@@ -21,13 +23,19 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onPress }) =>
         Alert.alert('Added to Cart', `${product.name} has been added to your cart`);
     };
 
+    const handleWishlistToggle = () => {
+        toggleWishlist(product);
+    };
+
     const handlePress = () => {
         if (onPress) {
             onPress(product);
         }
     };
 
-    
+    const isWishlisted = isInWishlist(product.productId);
+
+
 
     return (
         <TouchableOpacity style={styles.card} onPress={handlePress} activeOpacity={0.7}>
@@ -36,6 +44,17 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onPress }) =>
                 style={styles.image}
                 resizeMode="cover"
             />
+            <TouchableOpacity
+                style={styles.wishlistButton}
+                onPress={handleWishlistToggle}
+                activeOpacity={0.7}
+            >
+                <Ionicons
+                    name={isWishlisted ? "heart" : "heart-outline"}
+                    size={20}
+                    color={isWishlisted ? "#e53e3e" : "#4a5568"}
+                />
+            </TouchableOpacity>
             {product.stock <= 0 && (
                 <View style={styles.outOfStockBadge}>
                     <Text style={styles.outOfStockText}>Out of Stock</Text>
@@ -93,10 +112,26 @@ const styles = StyleSheet.create({
         height: 150,
         backgroundColor: '#f0f0f0',
     },
-    outOfStockBadge: {
+    wishlistButton: {
         position: 'absolute',
         top: 8,
         right: 8,
+        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+        borderRadius: 20,
+        width: 36,
+        height: 36,
+        justifyContent: 'center',
+        alignItems: 'center',
+        elevation: 2,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.2,
+        shadowRadius: 2,
+    },
+    outOfStockBadge: {
+        position: 'absolute',
+        top: 8,
+        right: 52,
         backgroundColor: '#fed7d7',
         paddingHorizontal: 8,
         paddingVertical: 4,
