@@ -20,6 +20,9 @@ importers:
 
   apps/admin-panel:
     dependencies:
+      axios:
+        specifier: ^1.12.2
+        version: 1.12.2
       react:
         specifier: ^19.2.0
         version: 19.2.3
