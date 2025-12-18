@@ -3,14 +3,15 @@ import { config } from "../config";
 
 // Product types
 export interface Product {
-    id: string;
+    productId: string;
     name: string;
     description: string;
     price: number;
     category: string;
     imageUrl?: string;
     stock: number;
-    isActive: boolean;
+    unit: string;
+    isFeatured: boolean;
     createdAt: string;
     updatedAt: string;
 }
@@ -22,16 +23,20 @@ export interface CreateProductData {
     category: string;
     imageUrl?: string;
     stock: number;
-    isActive?: boolean;
+    unit: string;
+    isFeatured?: boolean;
 }
 
 export interface UpdateProductData extends Partial<CreateProductData> { }
 
 export interface ProductListResponse {
     products: Product[];
-    total: number;
-    page: number;
-    limit: number;
+    pagination: {
+        total: number;
+        limit: number;
+        offset: number;
+        hasMore: boolean;
+    };
 }
 
 export interface ProductFilters {
