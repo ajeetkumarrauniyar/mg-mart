@@ -201,3 +201,55 @@
 .logout-btn:hover {
   background: rgba(255, 255, 255, 0.3);
 }
+
+/* Navigation buttons */
+.admin-header nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.admin-header nav li {
+  margin: 0;
+}
+
+.nav-btn {
+  background: transparent;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+.nav-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.nav-btn.active {
+  background: rgba(255, 255, 255, 0.2);
+  font-weight: 600;
+}
+
+/* Page placeholder */
+.page-placeholder {
+  padding: 3rem;
+  text-align: center;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.page-placeholder h2 {
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.page-placeholder p {
+  color: #666;
+  font-size: 1.1rem;
+}
