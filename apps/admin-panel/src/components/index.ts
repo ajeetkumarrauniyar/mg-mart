@@ -1,2 +1,5 @@
 export { LoginForm } from './LoginForm'
 export { ProductList } from './ProductList'
+export { ProductModal } from './ProductModal'
+export { ConfirmDialog } from './ConfirmDialog'
+export { ProductDetail } from './ProductDetail'

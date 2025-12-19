@@ -262,3 +262,44 @@
         align-items: stretch;
     }
 }
+
+/* Clickable elements */
+.product-name.clickable {
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.product-name.clickable:hover {
+    color: #007bff;
+}
+
+.product-image {
+    transition: opacity 0.2s;
+}
+
+.product-image[style*="cursor: pointer"]:hover {
+    opacity: 0.9;
+}
+
+.view-btn {
+    flex: 1;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: background-color 0.2s;
+    background: #007bff;
+    color: white;
+}
+
+.view-btn:hover {
+    background: #0056b3;
+}
+
+.product-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.5rem;
+}

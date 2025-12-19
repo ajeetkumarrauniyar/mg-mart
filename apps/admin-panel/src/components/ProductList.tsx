@@ -1,11 +1,17 @@
 import { useEffect, useState } from 'react'
 import { productService } from '../services'
-import type { Product, ProductListResponse } from '../services'
+import type { Product, ProductListResponse, CreateProductData } from '../services'
+import { ProductModal } from './ProductModal'
+import { ConfirmDialog } from './ConfirmDialog'
 
 export function ProductList() {
     const [products, setProducts] = useState<Product[]>([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
+    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+    const [modalMode, setModalMode] = useState<'create' | 'edit'>('create')
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [deleteProduct, setDeleteProduct] = useState<Product | null>(null)
     const [pagination, setPagination] = useState({
         total: 0,
         limit: 20,
@@ -47,6 +53,52 @@ export function ProductList() {
         })
     }
 
+    const handleAddProduct = () => {
+        setSelectedProduct(null)
+        setModalMode('create')
+        setIsModalOpen(true)
+    }
+
+    const handleEditProduct = (product: Product) => {
+        setSelectedProduct(product)
+        setModalMode('edit')
+        setIsModalOpen(true)
+    }
+
+    const handleDeleteProduct = (product: Product) => {
+        setDeleteProduct(product)
+    }
+
+    const confirmDeleteProduct = async () => {
+        if (!deleteProduct) return
+
+        try {
+            await productService.deleteProduct(deleteProduct.productId)
+            // Refresh the products list
+            await loadProducts()
+            setDeleteProduct(null)
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Failed to delete product')
+            console.error('Product deletion error:', err)
+        }
+    }
+
+    const handleSaveProduct = async (productData: CreateProductData) => {
+        if (modalMode === 'create') {
+            await productService.createProduct(productData)
+        } else if (selectedProduct) {
+            await productService.updateProduct(selectedProduct.productId, productData)
+        }
+
+        // Refresh the products list
+        await loadProducts()
+    }
+
+    const closeModal = () => {
+        setIsModalOpen(false)
+        setSelectedProduct(null)
+    }
+
     if (loading) {
         return (
             <div className="products-container">
@@ -72,7 +124,9 @@ export function ProductList() {
         <div className="products-container">
             <div className="products-header">
                 <h2>Products ({pagination.total})</h2>
-                <button className="add-product-btn">Add Product</button>
+                <button className="add-product-btn" onClick={handleAddProduct}>
+                    Add Product
+                </button>
             </div>
 
             {products.length === 0 ? (
@@ -121,8 +175,18 @@ export function ProductList() {
                                 </div>
 
                                 <div className="product-actions">
-                                    <button className="edit-btn">Edit</button>
-                                    <button className="delete-btn">Delete</button>
+                                    <button
+                                        className="edit-btn"
+                                        onClick={() => handleEditProduct(product)}
+                                    >
+                                        Edit
+                                    </button>
+                                    <button
+                                        className="delete-btn"
+                                        onClick={() => handleDeleteProduct(product)}
+                                    >
+                                        Delete
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -137,6 +201,24 @@ export function ProductList() {
                     </button>
                 </div>
             )}
+
+            <ProductModal
+                isOpen={isModalOpen}
+                onClose={closeModal}
+                onSave={handleSaveProduct}
+                product={selectedProduct}
+                mode={modalMode}
+            />
+
+            <ConfirmDialog
+                isOpen={!!deleteProduct}
+                title="Delete Product"
+                message={`Are you sure you want to delete "${deleteProduct?.name}"? This action cannot be undone.`}
+                onConfirm={confirmDeleteProduct}
+                onCancel={() => setDeleteProduct(null)}
+                confirmText="Delete"
+                type="danger"
+            />
         </div>
     )
 }

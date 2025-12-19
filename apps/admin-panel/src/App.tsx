@@ -6,6 +6,9 @@ import { LoginForm } from './components/LoginForm'
 import { ProductList } from './components/ProductList'
 import './components/LoginForm.css'
 import './components/ProductList.css'
+import './components/ProductModal.css'
+import './components/ConfirmDialog.css'
+import './components/ProductDetail.css'
 
 type ActivePage = 'dashboard' | 'products' | 'orders' | 'users' | 'settings'
 
