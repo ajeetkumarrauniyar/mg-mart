@@ -291,6 +291,52 @@ export class UserController {
   };
 
   /**
+   * Get all users (Admin only)
+   * Returns paginated list of all users with optional filtering
+   */
+  getAllUsers = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      // Check if user is admin
+      if (req.user?.role !== "admin" ) {
+        throw new ApiError("Access denied. Admin privileges required.", 403);
+      }
+
+      // Parse pagination parameters
+      const limit = parseInt(req.query.limit as string) || 10;
+      const offset = parseInt(req.query.offset as string) || 0;
+
+      // Validate pagination parameters
+      if (limit < 1 || limit > 100) {
+        throw new ApiError("Limit must be between 1 and 100", 400);
+      }
+      if (offset < 0) {
+        throw new ApiError("Offset must be non-negative", 400);
+      }
+
+      // Get users from repository
+      const users = await this.userRepository.list(limit, offset);
+
+      res.json({
+        success: true,
+        data: {
+          users,
+          pagination: {
+            limit,
+            offset,
+            count: users.length,
+          },
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  /**
    * Delete user account
    * Permanently removes user account and associated data
    */
