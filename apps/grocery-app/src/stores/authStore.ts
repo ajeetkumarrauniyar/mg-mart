@@ -37,9 +37,12 @@ export const useAuthStore = create<AuthStore>()(
 
       // Actions
       login: async (credentials: LoginRequest) => {
+        console.log('🔐 Starting login process...');
         set({ isLoading: true, error: null });
         try {
+          console.log('📡 Calling auth service...');
           const response = await authService.login(credentials);
+          console.log('✅ Login successful, setting auth state...');
           set({
             user: response.user,
             token: response.token,
@@ -47,6 +50,7 @@ export const useAuthStore = create<AuthStore>()(
             isLoading: false,
             error: null,
           });
+          console.log('🎉 Auth state updated, user is now authenticated');
 
           // Sync cart after successful login
           try {
@@ -56,6 +60,7 @@ export const useAuthStore = create<AuthStore>()(
             console.warn('Cart sync failed after login:', syncError);
           }
         } catch (error: any) {
+          console.error('❌ Login failed:', error);
           set({
             isLoading: false,
             error: error.message || "Login failed",
