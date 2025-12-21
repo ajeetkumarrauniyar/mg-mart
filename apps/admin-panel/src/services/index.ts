@@ -30,7 +30,8 @@ export type {
     OrderStatus,
     OrderListResponse,
     OrderFilters,
-    OrderAnalytics
+    OrderAnalytics,
+    OrderStats
 } from "./orderService";
 export type {
     User,
