@@ -74,11 +74,11 @@ const Button: React.FC<ButtonProps> = memo(({
     const getIconSize = (): number => {
         switch (size) {
             case 'small':
-                return SIZES.iconSize.small;
+                return SIZES.icon.small;
             case 'large':
-                return SIZES.iconSize.large;
+                return SIZES.icon.large;
             default:
-                return SIZES.iconSize.medium;
+                return SIZES.icon.medium;
         }
     };
 
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.primary,
     },
     secondaryButton: {
-        backgroundColor: COLORS.gray[600],
+        backgroundColor: COLORS.secondary,
     },
     outlineButton: {
         backgroundColor: 'transparent',
@@ -172,24 +172,24 @@ const styles = StyleSheet.create({
 
     // Sizes
     smallButton: {
-        paddingHorizontal: SIZES.spacing.md,
-        paddingVertical: SIZES.spacing.sm,
-        minHeight: 36,
+        paddingHorizontal: SIZES.paddingSmall,
+        paddingVertical: SIZES.marginSmall,
+        minHeight: SIZES.button.small,
     },
     mediumButton: {
-        paddingHorizontal: SIZES.spacing.lg,
-        paddingVertical: SIZES.spacing.md,
-        minHeight: 44,
+        paddingHorizontal: SIZES.padding,
+        paddingVertical: SIZES.paddingSmall,
+        minHeight: SIZES.button.medium,
     },
     largeButton: {
-        paddingHorizontal: SIZES.spacing.xl,
-        paddingVertical: SIZES.spacing.lg,
-        minHeight: 52,
+        paddingHorizontal: SIZES.paddingLarge,
+        paddingVertical: SIZES.padding,
+        minHeight: SIZES.button.large,
     },
 
     // Text styles
     buttonText: {
-        fontWeight: '600',
+        fontWeight: SIZES.fontWeight.semibold,
         textAlign: 'center',
     },
     primaryText: {
@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
         fontSize: SIZES.fontSize.small,
     },
     mediumText: {
-        fontSize: SIZES.fontSize.medium,
+        fontSize: SIZES.fontSize.regular,
     },
     largeText: {
         fontSize: SIZES.fontSize.large,
@@ -221,10 +221,10 @@ const styles = StyleSheet.create({
 
     // Icons
     iconLeft: {
-        marginRight: SIZES.spacing.sm,
+        marginRight: SIZES.marginSmall,
     },
     iconRight: {
-        marginLeft: SIZES.spacing.sm,
+        marginLeft: SIZES.marginSmall,
     },
 });
 

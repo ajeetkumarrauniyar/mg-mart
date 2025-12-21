@@ -2,9 +2,10 @@ import React, { memo, useCallback } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Product } from '@mg-mart/types';
-import { COLORS, SIZES } from '../constants';
+import { COLORS, SIZES, SHADOWS } from '../constants';
 import { useCartStore, useWishlistStore, useAuthStore } from '../stores';
 import { useRequireAuth } from '../hooks';
+import { addToCartFeedback, selectionFeedback } from '../utils/haptics';
 import OptimizedImage from './OptimizedImage';
 
 interface ProductCardProps {
@@ -24,6 +25,7 @@ export const ProductCard: React.FC<ProductCardProps> = memo(({ product, onPress 
         }
 
         requireAuth(() => {
+            addToCartFeedback(); // Haptic feedback
             addItem(product.productId, 1);
             Alert.alert('Added to Cart', `${product.name} has been added to your cart`);
         });
@@ -32,11 +34,13 @@ export const ProductCard: React.FC<ProductCardProps> = memo(({ product, onPress 
     const handleWishlistToggle = useCallback((e?: any) => {
         if (e) e.stopPropagation();
         requireAuth(() => {
+            selectionFeedback(); // Haptic feedback
             toggleWishlist(product);
         });
     }, [product, toggleWishlist, requireAuth]);
 
     const handlePress = useCallback(() => {
+        selectionFeedback(); // Haptic feedback
         if (onPress) {
             onPress(product);
         }
@@ -104,78 +108,72 @@ export const ProductCard: React.FC<ProductCardProps> = memo(({ product, onPress 
 const styles = StyleSheet.create({
     card: {
         width: '48%',
-        backgroundColor: COLORS.white,
-        borderRadius: SIZES.borderRadius,
-        marginBottom: 16,
+        backgroundColor: COLORS.cardBackground,
+        borderRadius: SIZES.borderRadiusLarge,
+        marginBottom: SIZES.margin,
         overflow: 'hidden',
-        elevation: 2,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
+        ...SHADOWS.medium,
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
     },
     image: {
         width: '100%',
         height: 150,
-        backgroundColor: '#f0f0f0',
+        backgroundColor: COLORS.backgroundDark,
     },
     wishlistButton: {
         position: 'absolute',
-        top: 8,
-        right: 8,
-        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-        borderRadius: 20,
+        top: SIZES.marginSmall,
+        right: SIZES.marginSmall,
+        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+        borderRadius: SIZES.borderRadiusXLarge,
         width: 36,
         height: 36,
         justifyContent: 'center',
         alignItems: 'center',
-        elevation: 2,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.2,
-        shadowRadius: 2,
+        ...SHADOWS.small,
     },
     outOfStockBadge: {
         position: 'absolute',
-        top: 8,
+        top: SIZES.marginSmall,
         right: 52,
-        backgroundColor: '#fed7d7',
-        paddingHorizontal: 8,
+        backgroundColor: COLORS.errorLight,
+        paddingHorizontal: SIZES.marginSmall,
         paddingVertical: 4,
-        borderRadius: 4,
+        borderRadius: SIZES.borderRadiusSmall,
     },
     outOfStockText: {
-        color: '#c53030',
-        fontSize: 10,
-        fontWeight: '600',
+        color: COLORS.error,
+        fontSize: SIZES.fontSize.tiny,
+        fontWeight: SIZES.fontWeight.semibold,
     },
     discountBadge: {
         position: 'absolute',
-        top: 8,
-        left: 8,
-        backgroundColor: '#48bb78',
-        paddingHorizontal: 8,
+        top: SIZES.marginSmall,
+        left: SIZES.marginSmall,
+        backgroundColor: COLORS.primary,
+        paddingHorizontal: SIZES.marginSmall,
         paddingVertical: 4,
-        borderRadius: 4,
+        borderRadius: SIZES.borderRadiusSmall,
     },
     discountText: {
         color: COLORS.white,
-        fontSize: 10,
-        fontWeight: '700',
+        fontSize: SIZES.fontSize.tiny,
+        fontWeight: SIZES.fontWeight.bold,
     },
     info: {
-        padding: 12,
+        padding: SIZES.paddingSmall,
     },
     name: {
         fontSize: SIZES.fontSize.medium,
-        fontWeight: '600',
+        fontWeight: SIZES.fontWeight.semibold,
         color: COLORS.text,
         marginBottom: 4,
     },
     description: {
         fontSize: SIZES.fontSize.small,
         color: COLORS.textSecondary,
-        marginBottom: 8,
+        marginBottom: SIZES.marginSmall,
     },
     footer: {
         flexDirection: 'row',
@@ -184,27 +182,28 @@ const styles = StyleSheet.create({
     },
     price: {
         fontSize: SIZES.fontSize.large,
-        fontWeight: 'bold',
+        fontWeight: SIZES.fontWeight.bold,
         color: COLORS.primary,
     },
     stockText: {
-        fontSize: 11,
-        color: COLORS.textSecondary,
+        fontSize: SIZES.fontSize.tiny,
+        color: COLORS.textLight,
         marginTop: 2,
     },
     addButton: {
         backgroundColor: COLORS.primary,
-        paddingHorizontal: 16,
-        paddingVertical: 8,
+        paddingHorizontal: SIZES.margin,
+        paddingVertical: SIZES.marginSmall,
         borderRadius: SIZES.borderRadius,
+        ...SHADOWS.small,
     },
     addButtonDisabled: {
-        backgroundColor: '#cbd5e0',
+        backgroundColor: COLORS.textMuted,
     },
     addButtonText: {
         color: COLORS.white,
         fontSize: SIZES.fontSize.small,
-        fontWeight: '600',
+        fontWeight: SIZES.fontWeight.semibold,
     },
 });
 
