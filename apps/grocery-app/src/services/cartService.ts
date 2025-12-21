@@ -31,8 +31,8 @@ export interface CartSummary {
 export const cartService = {
   // Get current user's cart
   getCart: async (): Promise<Cart> => {
-    const response = await api.get<CartResponse>("/cart");
-    return response.cart;
+    const response = await api.get<Cart>("/cart");
+    return response;
   },
 
   // Add item to cart
@@ -42,12 +42,12 @@ export const cartService = {
 
   // Update cart item quantity
   updateItem: async (update: UpdateCartItemRequest): Promise<CartItem> => {
-    return await api.put<CartItem>("/cart/update", update);
+    return await api.put<CartItem>(`/cart/items/${update.productId}`, { quantity: update.quantity });
   },
 
   // Remove item from cart
   removeItem: async (productId: string): Promise<void> => {
-    await api.delete(`/cart/remove/${productId}`);
+    await api.delete(`/cart/items/${productId}`);
   },
 
   // Clear entire cart
@@ -62,10 +62,10 @@ export const cartService = {
 
   //TODO: Sync local cart with server (useful after login)
   syncCart: async (localCartItems: CartItem[]): Promise<Cart> => {
-    const response = await api.post<CartResponse>("/cart/sync", {
+    const response = await api.post<Cart>("/cart/sync", {
       items: localCartItems,
     });
-    return response.cart;
+    return response;
   },
 
   //TODO: Validate cart items (check availability, prices, etc.)
@@ -82,16 +82,16 @@ export const cartService = {
 
   //TODO: Apply coupon/discount code
   applyCoupon: async (couponCode: string): Promise<Cart> => {
-    const response = await api.post<CartResponse>("/cart/coupon", {
+    const response = await api.post<Cart>("/cart/coupon", {
       code: couponCode,
     });
-    return response.cart;
+    return response;
   },
 
   //TODO: Remove applied coupon
   removeCoupon: async (): Promise<Cart> => {
-    const response = await api.delete<CartResponse>("/cart/coupon");
-    return response.cart;
+    const response = await api.delete<Cart>("/cart/coupon");
+    return response;
   },
 
   //TODO: Estimate shipping for cart
