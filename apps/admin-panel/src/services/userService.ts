@@ -1,41 +1,43 @@
 import { api } from "./apiService";
 import { config } from "../config";
 
-// User types
+// User types based on actual API response with additional customer fields
 export interface User {
-    id: string;
+    userId: string;
     email: string;
     name: string;
-    phone?: string;
-    isActive: boolean;
-    role: "customer" | "admin";
-    createdAt: string;
-    updatedAt: string;
-    lastLoginAt?: string;
-    orderCount: number;
-    totalSpent: number;
+    phoneNumber?: string;
+    role: "customer" | "admin" | "super_admin";
+    createdAt: string | { _seconds: number; _nanoseconds: number };
+    updatedAt: string | { _seconds: number; _nanoseconds: number };
+    // Additional customer fields
+    orderCount?: number;
+    totalSpent?: number;
+    lastOrderDate?: string;
+    lastOrderId?: string;
 }
 
 export interface UserListResponse {
     users: User[];
-    total: number;
-    page: number;
-    limit: number;
+    pagination?: {
+        total: number;
+        limit: number;
+        offset: number;
+        hasMore: boolean;
+    };
 }
 
 export interface UserFilters {
     role?: "customer" | "admin";
-    isActive?: boolean;
     search?: string;
     page?: number;
     limit?: number;
 }
 
 export interface UpdateUserData {
-    name?: string;
-    email?: string;
+    firstName?: string;
+    lastName?: string;
     phone?: string;
-    isActive?: boolean;
     role?: "customer" | "admin";
 }
 
