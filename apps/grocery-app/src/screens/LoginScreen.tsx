@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { COLORS, SIZES } from '../constants';
 import { useAuthStore } from '../stores';
+import { useAuthRedirect } from '../hooks';
 
 interface LoginScreenProps {
     onNavigateToRegister: () => void;
@@ -24,6 +25,9 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onNavigateToRegister }
     const [showPassword, setShowPassword] = useState(false);
 
     const { login, isLoading, error, clearError } = useAuthStore();
+
+    // This hook will redirect to MainTabs after successful login
+    useAuthRedirect();
 
     const handleLogin = async () => {
         if (!email || !password) {

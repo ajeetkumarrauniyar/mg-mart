@@ -15,7 +15,7 @@ import CheckoutScreen from '@/screens/CheckoutScreen';
 import EditProfileScreen from '@/screens/EditProfileScreen';
 import { AuthScreen } from '@/screens/AuthScreen';
 import { useCartStore, useWishlistStore, useAuthStore } from '@/stores';
-import { AuthGuard, Loading } from '@/components';
+import { Loading } from '@/components';
 
 // Navigation types
 export type RootTabParamList = {
@@ -73,6 +73,7 @@ function TabNavigator() {
             />
             <Tab.Screen
                 name="Cart"
+                component={CartScreen}
                 options={{
                     tabBarLabel: 'Cart',
                     tabBarIcon: ({ color, size }) => {
@@ -91,15 +92,10 @@ function TabNavigator() {
                         );
                     },
                 }}
-            >
-                {() => (
-                    <AuthGuard>
-                        <CartScreen />
-                    </AuthGuard>
-                )}
-            </Tab.Screen>
+            />
             <Tab.Screen
                 name="Wishlist"
+                component={WishlistScreen}
                 options={{
                     tabBarLabel: 'Favourite',
                     tabBarIcon: ({ color, size }) => {
@@ -118,28 +114,17 @@ function TabNavigator() {
                         );
                     },
                 }}
-            >
-                {() => (
-                    <AuthGuard>
-                        <WishlistScreen />
-                    </AuthGuard>
-                )}
-            </Tab.Screen>
+            />
             <Tab.Screen
                 name="Profile"
+                component={ProfileScreen}
                 options={{
                     tabBarLabel: 'Account',
                     tabBarIcon: ({ color, size }) => (
                         <Ionicons name="person-outline" size={size} color={color} />
                     ),
                 }}
-            >
-                {() => (
-                    <AuthGuard>
-                        <ProfileScreen />
-                    </AuthGuard>
-                )}
-            </Tab.Screen>
+            />
         </Tab.Navigator>
     );
 }
@@ -162,6 +147,7 @@ export default function AppNavigator() {
         <NavigationContainer>
             <Stack.Navigator
                 screenOptions={{ headerShown: false }}
+                initialRouteName={isAuthenticated ? "MainTabs" : "Auth"}
             >
                 <Stack.Screen
                     name="Auth"
@@ -181,24 +167,14 @@ export default function AppNavigator() {
                 />
                 <Stack.Screen
                     name="Checkout"
+                    component={CheckoutScreen}
                     options={{ headerShown: false }}
-                >
-                    {() => (
-                        <AuthGuard>
-                            <CheckoutScreen />
-                        </AuthGuard>
-                    )}
-                </Stack.Screen>
+                />
                 <Stack.Screen
                     name="EditProfile"
+                    component={EditProfileScreen}
                     options={{ headerShown: false }}
-                >
-                    {() => (
-                        <AuthGuard>
-                            <EditProfileScreen />
-                        </AuthGuard>
-                    )}
-                </Stack.Screen>
+                />
             </Stack.Navigator>
         </NavigationContainer>
     );
