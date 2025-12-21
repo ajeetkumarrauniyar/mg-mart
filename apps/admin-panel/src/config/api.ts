@@ -21,10 +21,10 @@ const apiEndpoints: ApiEndpoints = {
 
     // Order management endpoints
     ORDERS: {
-        LIST: "/admin/orders",
-        DETAIL: (orderId: string) => `/admin/orders/${orderId}`,
-        UPDATE_STATUS: (orderId: string) => `/admin/orders/${orderId}/status`,
-        ANALYTICS: "/admin/orders/analytics",
+        LIST: "/orders",
+        DETAIL: (orderId: string) => `/orders/${orderId}`,
+        UPDATE_STATUS: (orderId: string) => `/orders/${orderId}/status`,
+        ANALYTICS: "/orders/analytics",
     },
 
     // User management endpoints
