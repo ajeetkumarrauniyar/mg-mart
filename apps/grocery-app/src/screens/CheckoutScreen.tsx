@@ -15,6 +15,7 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { COLORS, SIZES } from '../constants';
 import { useCartStore } from '../stores/cartStore';
+import { orderService } from '../services/orderService';
 import { RootStackParamList } from '../navigation/AppNavigator';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
@@ -61,35 +62,60 @@ export default function CheckoutScreen() {
             return;
         }
 
+        if (items.length === 0) {
+            Alert.alert('Error', 'Your cart is empty');
+            return;
+        }
+
         setIsProcessing(true);
 
         try {
-            // TODO: Call order API
-            // const orderData = {
-            //     items,
-            //     deliveryAddress: { fullName, phone, address, city, pincode },
-            //     paymentMethod,
-            //     totalAmount: totalWithDelivery,
-            // };
-            // await orderService.createOrder(orderData);
+            const orderData = {
+                paymentMethod: paymentMethod === 'cod' ? 'COD' as const : 'Online' as const,
+                shippingAddress: {
+                    street: `${address}, ${fullName}, ${phone}`,
+                    city: city,
+                    state: 'Bihar', 
+                    zipCode: pincode,
+                },
+                notes: `Payment Method: ${paymentMethod.toUpperCase()}. Total: ₹${totalWithDelivery.toFixed(2)} (Items: ₹${totalAmount.toFixed(2)} + Delivery: ₹${deliveryFee.toFixed(2)})`
+            };
 
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 2000));
+            console.log('🛒 Creating order with data:', orderData);
 
+            // Create order in database
+            const createdOrder = await orderService.createOrder(orderData);
+
+            console.log('✅ Order created successfully:', createdOrder);
+
+            // Clear cart after successful order
             await clearCart();
 
             Alert.alert(
-                'Order Placed!',
-                'Your order has been placed successfully. You will receive a confirmation shortly.',
+                'Order Placed Successfully! 🎉',
+                `Your order #${createdOrder.orderId} has been placed successfully. You will receive a confirmation shortly.`,
                 [
                     {
-                        text: 'OK',
+                        text: 'View Orders',
                         onPress: () => navigation.navigate('MainTabs'),
+                    },
+                    {
+                        text: 'Continue Shopping',
+                        onPress: () => navigation.navigate('MainTabs'),
+                        style: 'cancel',
                     },
                 ]
             );
-        } catch (error) {
-            Alert.alert('Error', 'Failed to place order. Please try again.');
+        } catch (error: any) {
+            console.error('❌ Order creation failed:', error);
+            Alert.alert(
+                'Order Failed',
+                error.message || 'Failed to place order. Please check your connection and try again.',
+                [
+                    { text: 'Retry', onPress: handlePlaceOrder },
+                    { text: 'Cancel', style: 'cancel' },
+                ]
+            );
         } finally {
             setIsProcessing(false);
         }
