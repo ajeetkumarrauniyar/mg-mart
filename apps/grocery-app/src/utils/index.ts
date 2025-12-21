@@ -13,6 +13,7 @@ export const capitalizeFirst = (str: string): string => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
-// Export haptics and performance utilities
-export * from './haptics';
+// Export performance utilities
 export * from './performance';
+
+// Note: haptics is imported directly where needed to avoid import chain issues
