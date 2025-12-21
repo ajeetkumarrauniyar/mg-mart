@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -13,7 +13,9 @@ import WishlistScreen from '@/screens/WishlistScreen';
 import ProductDetailScreen from '@/screens/ProductDetailScreen';
 import CheckoutScreen from '@/screens/CheckoutScreen';
 import EditProfileScreen from '@/screens/EditProfileScreen';
-import { useCartStore, useWishlistStore } from '@/stores';
+import { AuthScreen } from '@/screens/AuthScreen';
+import { useCartStore, useWishlistStore, useAuthStore } from '@/stores';
+import { AuthGuard, Loading } from '@/components';
 
 // Navigation types
 export type RootTabParamList = {
@@ -25,6 +27,7 @@ export type RootTabParamList = {
 };
 
 export type RootStackParamList = {
+    Auth: undefined;
     MainTabs: undefined;
     ProductDetail: { productId: string };
     Checkout: undefined;
@@ -70,7 +73,6 @@ function TabNavigator() {
             />
             <Tab.Screen
                 name="Cart"
-                component={CartScreen}
                 options={{
                     tabBarLabel: 'Cart',
                     tabBarIcon: ({ color, size }) => {
@@ -89,10 +91,15 @@ function TabNavigator() {
                         );
                     },
                 }}
-            />
+            >
+                {() => (
+                    <AuthGuard>
+                        <CartScreen />
+                    </AuthGuard>
+                )}
+            </Tab.Screen>
             <Tab.Screen
                 name="Wishlist"
-                component={WishlistScreen}
                 options={{
                     tabBarLabel: 'Favourite',
                     tabBarIcon: ({ color, size }) => {
@@ -111,29 +118,56 @@ function TabNavigator() {
                         );
                     },
                 }}
-            />
+            >
+                {() => (
+                    <AuthGuard>
+                        <WishlistScreen />
+                    </AuthGuard>
+                )}
+            </Tab.Screen>
             <Tab.Screen
                 name="Profile"
-                component={ProfileScreen}
                 options={{
                     tabBarLabel: 'Account',
                     tabBarIcon: ({ color, size }) => (
                         <Ionicons name="person-outline" size={size} color={color} />
                     ),
                 }}
-            />
+            >
+                {() => (
+                    <AuthGuard>
+                        <ProfileScreen />
+                    </AuthGuard>
+                )}
+            </Tab.Screen>
         </Tab.Navigator>
     );
 }
 
 // Main App Navigator
 export default function AppNavigator() {
+    const { isAuthenticated, isLoading, loadStoredAuth } = useAuthStore();
+
+    // Load stored auth on app start
+    useEffect(() => {
+        loadStoredAuth();
+    }, [loadStoredAuth]);
+
+    // Show loading while checking auth state
+    if (isLoading) {
+        return <Loading />;
+    }
+
     return (
         <NavigationContainer>
             <Stack.Navigator
-                initialRouteName="MainTabs"
                 screenOptions={{ headerShown: false }}
             >
+                <Stack.Screen
+                    name="Auth"
+                    component={AuthScreen}
+                    options={{ headerShown: false }}
+                />
                 <Stack.Screen
                     name="MainTabs"
                     options={{ headerShown: false }}
@@ -147,14 +181,24 @@ export default function AppNavigator() {
                 />
                 <Stack.Screen
                     name="Checkout"
-                    component={CheckoutScreen}
                     options={{ headerShown: false }}
-                />
+                >
+                    {() => (
+                        <AuthGuard>
+                            <CheckoutScreen />
+                        </AuthGuard>
+                    )}
+                </Stack.Screen>
                 <Stack.Screen
                     name="EditProfile"
-                    component={EditProfileScreen}
                     options={{ headerShown: false }}
-                />
+                >
+                    {() => (
+                        <AuthGuard>
+                            <EditProfileScreen />
+                        </AuthGuard>
+                    )}
+                </Stack.Screen>
             </Stack.Navigator>
         </NavigationContainer>
     );

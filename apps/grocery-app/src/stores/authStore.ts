@@ -116,6 +116,48 @@ export const useAuthStore = create<AuthStore>()(
       loadStoredAuth: async () => {
         // This will be called automatically by the persist middleware
         // Additional logic can be added here if needed
+        const { token } = get();
+        if (token) {
+          try {
+            // Verify token is still valid
+            await authService.verifyToken();
+          } catch (error) {
+            // Token is invalid, clear auth state
+            set({
+              user: null,
+              token: null,
+              isAuthenticated: false,
+              error: null,
+            });
+          }
+        }
+      },
+
+      refreshToken: async () => {
+        const { token } = get();
+        if (!token) throw new Error("No token to refresh");
+
+        set({ isLoading: true, error: null });
+        try {
+          const response = await authService.refreshToken();
+          set({
+            token: response.token,
+            user: response.user || get().user,
+            isLoading: false,
+            error: null,
+          });
+          return response.token;
+        } catch (error: any) {
+          // Refresh failed, logout user
+          set({
+            user: null,
+            token: null,
+            isAuthenticated: false,
+            isLoading: false,
+            error: error.message || "Token refresh failed",
+          });
+          throw error;
+        }
       },
 
       changePassword: async (currentPassword: string, newPassword: string) => {

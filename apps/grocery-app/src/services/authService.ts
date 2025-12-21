@@ -121,6 +121,11 @@ export const authService = {
   resetPassword: async (data: ResetPasswordRequest): Promise<void> => {
     await api.post("/auth/reset-password", data);
   },
+
+  // Verify token validity
+  verifyToken: async (): Promise<User> => {
+    return await api.get<User>("/auth/verify");
+  },
 };
 
 export default authService;

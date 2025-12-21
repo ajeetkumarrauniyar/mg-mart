@@ -5,14 +5,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AppNavigator } from './navigation';
 import { useAppInitialization } from './hooks';
 import { initializeDebugging } from './config/debugger';
-import { SplashScreen, OnboardingScreen, AuthScreen } from './screens';
-import { useAuthStore } from './stores';
+import { SplashScreen, OnboardingScreen } from './screens';
 
 const ONBOARDING_KEY = '@mg_mart_onboarding_complete';
 
 export default function App() {
   const { isInitialized, initError } = useAppInitialization();
-  const { isAuthenticated } = useAuthStore();
   const [showSplash, setShowSplash] = useState(true);
   const [showOnboarding, setShowOnboarding] = useState<boolean | null>(null);
 
@@ -64,16 +62,6 @@ export default function App() {
     return <OnboardingScreen onComplete={handleOnboardingComplete} />;
   }
 
-  // Show auth screen if not authenticated
-  if (!isAuthenticated) {
-    return (
-      <>
-        <AuthScreen />
-        <StatusBar style="auto" />
-      </>
-    );
-  }
-
   // Show loading screen while app is initializing
   if (!isInitialized) {
     return (
@@ -100,6 +88,7 @@ export default function App() {
     );
   }
 
+  // Navigation handles auth flow now
   return (
     <>
       <AppNavigator />
