@@ -46,3 +46,4 @@ yarn-error.log*
 
 # IDEs and editors
 .vscode/
+**/key.json
