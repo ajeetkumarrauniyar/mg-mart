@@ -5,12 +5,16 @@ import type { DashboardStats } from './services'
 import { LoginForm } from './components/LoginForm'
 import { ProductList } from './components/ProductList'
 import { UserList } from './components/UserList'
+import { OrdersPage } from './components/OrdersPage'
+import { SettingsPage } from './components/SettingsPage'
 import './components/LoginForm.css'
 import './components/ProductList.css'
 import './components/ProductModal.css'
 import './components/ConfirmDialog.css'
 import './components/ProductDetail.css'
 import './components/UserList.css'
+import './components/OrdersPage.css'
+import './components/SettingsPage.css'
 
 type ActivePage = 'dashboard' | 'products' | 'orders' | 'users' | 'settings'
 
@@ -207,21 +211,11 @@ function App() {
 
         {activePage === 'products' && <ProductList />}
 
-        {activePage === 'orders' && (
-          <div className="page-placeholder">
-            <h2>Orders Management</h2>
-            <p>Orders management functionality coming soon...</p>
-          </div>
-        )}
+        {activePage === 'orders' && <OrdersPage />}
 
         {activePage === 'users' && <UserList />}
 
-        {activePage === 'settings' && (
-          <div className="page-placeholder">
-            <h2>Settings</h2>
-            <p>Settings functionality coming soon...</p>
-          </div>
-        )}
+        {activePage === 'settings' && <SettingsPage />}
       </main>
     </div>
   )

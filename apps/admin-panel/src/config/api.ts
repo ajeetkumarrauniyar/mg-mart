@@ -29,10 +29,9 @@ const apiEndpoints: ApiEndpoints = {
 
     // User management endpoints
     USERS: {
-        LIST: "/admin/users",
-        DETAIL: (userId: string) => `/admin/users/${userId}`,
-        UPDATE: (userId: string) => `/admin/users/${userId}`,
-        DELETE: (userId: string) => `/admin/users/${userId}`,
+        LIST: "/users",
+        DETAIL: (userId: string) => `/users/${userId}`,
+        PROFILE_UPDATE: "/users/profile",
     },
 
     // Admin-specific endpoints

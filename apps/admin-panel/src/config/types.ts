@@ -25,8 +25,7 @@ export interface OrderEndpoints {
 export interface UserEndpoints {
     LIST: string;
     DETAIL: (userId: string) => string;
-    UPDATE: (userId: string) => string;
-    DELETE: (userId: string) => string;
+    PROFILE_UPDATE: string;
 }
 
 export interface AdminEndpoints {

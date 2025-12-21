@@ -1,7 +1,7 @@
 import { api } from "./apiService";
 import { config } from "../config";
 
-// User types based on actual API response with additional customer fields
+// User types with additional customer fields
 export interface User {
     userId: string;
     email: string;
@@ -27,13 +27,6 @@ export interface UserListResponse {
     };
 }
 
-export interface UserFilters {
-    role?: "customer" | "admin";
-    search?: string;
-    page?: number;
-    limit?: number;
-}
-
 export interface UpdateUserData {
     firstName?: string;
     lastName?: string;
@@ -43,25 +36,14 @@ export interface UpdateUserData {
 
 // User service
 export const userService = {
-    // Get all users with filters
-    getUsers: async (filters: UserFilters = {}): Promise<UserListResponse> => {
-        const params = new URLSearchParams();
-
-        Object.entries(filters).forEach(([key, value]) => {
-            if (value !== undefined && value !== null) {
-                params.append(key, value.toString());
-            }
-        });
-
-        const url = `${config.api.ENDPOINTS.USERS.LIST}?${params.toString()}`;
-        return await api.get<UserListResponse>(url);
-    },
-
-    // Get single user
-    getUser: async (userId: string): Promise<User> => {
-        return await api.get<User>(
-            config.api.ENDPOINTS.USERS.DETAIL(userId)
-        );
+    // Get all users
+    getUsers: async (): Promise<UserListResponse> => {
+        try {
+            const response = await api.get<UserListResponse>(config.api.ENDPOINTS.USERS.LIST);
+            return response;
+        } catch (error) {
+            throw error;
+        }
     },
 
     // Update user
@@ -69,22 +51,22 @@ export const userService = {
         userId: string,
         userData: UpdateUserData
     ): Promise<User> => {
-        return await api.put<User>(
-            config.api.ENDPOINTS.USERS.UPDATE(userId),
-            userData
-        );
-    },
+        console.log('🔄 Updating user:', userId, userData);
 
-    // Delete user
-    deleteUser: async (userId: string): Promise<void> => {
-        await api.delete(config.api.ENDPOINTS.USERS.DELETE(userId));
-    },
-
-    // Toggle user active status
-    toggleUserStatus: async (userId: string): Promise<User> => {
-        return await api.patch<User>(
-            config.api.ENDPOINTS.USERS.UPDATE(userId),
-            { isActive: undefined } // Server will toggle the status
-        );
+        try {
+            const response = await api.put<User>(
+                config.api.ENDPOINTS.USERS.PROFILE_UPDATE,
+                {
+                    firstName: userData.firstName,
+                    lastName: userData.lastName,
+                    phone: userData.phone
+                }
+            );
+            console.log('✅ User updated successfully:', response);
+            return response;
+        } catch (error: any) {
+            console.error('❌ Update user error:', error);
+            throw error;
+        }
     },
 };
