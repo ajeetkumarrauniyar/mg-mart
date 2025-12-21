@@ -29,7 +29,7 @@ const EmptyState: React.FC<EmptyStateProps> = memo(({
     return (
         <View style={[styles.container, style]}>
             <View style={styles.iconContainer}>
-                <Ionicons name={icon} size={64} color={COLORS.gray[400]} />
+                <Ionicons name={icon} size={64} color={COLORS.textMuted} />
             </View>
 
             <Text style={styles.title}>{title}</Text>
@@ -57,31 +57,31 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        paddingHorizontal: SIZES.spacing.xl,
-        paddingVertical: SIZES.spacing.xxl,
+        paddingHorizontal: SIZES.paddingLarge,
+        paddingVertical: SIZES.paddingLarge,
     },
     iconContainer: {
         width: 120,
         height: 120,
         borderRadius: 60,
-        backgroundColor: COLORS.gray[100],
+        backgroundColor: COLORS.backgroundDark,
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: SIZES.spacing.lg,
+        marginBottom: SIZES.marginLarge,
     },
     title: {
         fontSize: SIZES.fontSize.xlarge,
-        fontWeight: '700',
+        fontWeight: SIZES.fontWeight.bold,
         color: COLORS.text,
         textAlign: 'center',
-        marginBottom: SIZES.spacing.sm,
+        marginBottom: SIZES.marginSmall,
     },
     description: {
         fontSize: SIZES.fontSize.medium,
         color: COLORS.textSecondary,
         textAlign: 'center',
         lineHeight: 24,
-        marginBottom: SIZES.spacing.xl,
+        marginBottom: SIZES.marginLarge,
     },
     actionButton: {
         minWidth: 160,

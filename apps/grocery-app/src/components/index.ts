@@ -4,4 +4,4 @@ export { default as LazyImage } from './LazyImage';
 export { default as Button } from './Button';
 export { default as Loading } from './Loading';
 export { default as EmptyState } from './EmptyState';
-export { AuthGuard } from './AuthGuard';
+// AuthGuard is imported directly to avoid circular dependency

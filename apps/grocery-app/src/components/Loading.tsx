@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     container: {
         justifyContent: 'center',
         alignItems: 'center',
-        padding: SIZES.spacing.lg,
+        padding: SIZES.paddingLarge,
     },
     overlay: {
         position: 'absolute',
@@ -59,9 +59,9 @@ const styles = StyleSheet.create({
         zIndex: 1000,
     },
     text: {
-        marginTop: SIZES.spacing.md,
+        marginTop: SIZES.margin,
         fontSize: SIZES.fontSize.medium,
-        fontWeight: '500',
+        fontWeight: SIZES.fontWeight.medium,
     },
 });
 
