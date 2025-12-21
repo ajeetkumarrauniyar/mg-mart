@@ -3,26 +3,26 @@ import { config } from "../config";
 
 // Order types
 export interface Order {
-    id: string;
+    orderId: string;
     userId: string;
     customerName: string;
     customerEmail: string;
     items: OrderItem[];
-    total: number;
+    totalAmount: number;
     status: OrderStatus;
     shippingAddress: Address;
-    paymentMethod: string;
+    paymentDetails: {
+        paymentMethod: string;
+    };
     createdAt: string;
     updatedAt: string;
 }
 
 export interface OrderItem {
-    id: string;
     productId: string;
-    productName: string;
-    quantity: number;
+    name: string;
     price: number;
-    total: number;
+    quantity: number;
 }
 
 export interface Address {
@@ -30,7 +30,7 @@ export interface Address {
     city: string;
     state: string;
     zipCode: string;
-    country: string;
+    country?: string;
 }
 
 export type OrderStatus =
@@ -43,9 +43,12 @@ export type OrderStatus =
 
 export interface OrderListResponse {
     orders: Order[];
-    total: number;
-    page: number;
-    limit: number;
+    pagination: {
+        total: number;
+        limit: number;
+        offset: number;
+        hasMore: boolean;
+    };
 }
 
 export interface OrderFilters {
@@ -64,6 +67,19 @@ export interface OrderAnalytics {
     averageOrderValue: number;
     ordersByStatus: { status: OrderStatus; count: number }[];
     revenueByMonth: { month: string; revenue: number }[];
+}
+
+export interface OrderStats {
+    totalOrders: number;
+    totalRevenue: number;
+    statusBreakdown: {
+        pending: number;
+        processing: number;
+        shipped: number;
+        delivered: number;
+        cancelled: number;
+    };
+    averageOrderValue: number;
 }
 
 // Order service
@@ -94,7 +110,7 @@ export const orderService = {
         orderId: string,
         status: OrderStatus
     ): Promise<Order> => {
-        return await api.patch<Order>(
+        return await api.put<Order>(
             config.api.ENDPOINTS.ORDERS.UPDATE_STATUS(orderId),
             { status }
         );
@@ -105,5 +121,51 @@ export const orderService = {
         return await api.get<OrderAnalytics>(
             `${config.api.ENDPOINTS.ORDERS.ANALYTICS}?period=${period}`
         );
+    },
+
+    // Get order statistics (optional - gracefully handle if not available)
+    getOrderStats: async (): Promise<OrderStats | null> => {
+        try {
+            return await api.get<OrderStats>(
+                `${config.api.ENDPOINTS.ORDERS.LIST}/stats`
+            );
+        } catch (error) {
+            console.warn('Order stats endpoint not available:', error);
+            return null;
+        }
+    },
+
+    // Bulk update order status (optional - gracefully handle if not available)
+    bulkUpdateStatus: async (
+        orderIds: string[],
+        status: OrderStatus
+    ): Promise<{ success: number; failed: number; errors: string[] } | null> => {
+        try {
+            return await api.put<{ success: number; failed: number; errors: string[] }>(
+                `${config.api.ENDPOINTS.ORDERS.LIST}/bulk-status`,
+                { orderIds, status }
+            );
+        } catch (error) {
+            console.warn('Bulk update endpoint not available:', error);
+            return null;
+        }
+    },
+
+    // Export orders to CSV (optional - gracefully handle if not available)
+    exportOrders: async (filters: OrderFilters = {}): Promise<Blob | null> => {
+        try {
+            const params = new URLSearchParams();
+            Object.entries(filters).forEach(([key, value]) => {
+                if (value !== undefined && value !== null) {
+                    params.append(key, value.toString());
+                }
+            });
+
+            const url = `${config.api.ENDPOINTS.ORDERS.LIST}/export?${params.toString()}`;
+            return await api.getBlob(url);
+        } catch (error) {
+            console.warn('Export endpoint not available:', error);
+            return null;
+        }
     },
 };
