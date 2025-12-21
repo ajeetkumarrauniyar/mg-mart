@@ -4,11 +4,13 @@ import { dashboardService, authService } from './services'
 import type { DashboardStats } from './services'
 import { LoginForm } from './components/LoginForm'
 import { ProductList } from './components/ProductList'
+import { UserList } from './components/UserList'
 import './components/LoginForm.css'
 import './components/ProductList.css'
 import './components/ProductModal.css'
 import './components/ConfirmDialog.css'
 import './components/ProductDetail.css'
+import './components/UserList.css'
 
 type ActivePage = 'dashboard' | 'products' | 'orders' | 'users' | 'settings'
 
@@ -212,12 +214,7 @@ function App() {
           </div>
         )}
 
-        {activePage === 'users' && (
-          <div className="page-placeholder">
-            <h2>User Management</h2>
-            <p>User management functionality coming soon...</p>
-          </div>
-        )}
+        {activePage === 'users' && <UserList />}
 
         {activePage === 'settings' && (
           <div className="page-placeholder">
