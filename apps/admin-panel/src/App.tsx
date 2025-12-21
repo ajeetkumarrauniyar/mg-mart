@@ -6,7 +6,6 @@ import { LoginForm } from './components/LoginForm'
 import { ProductList } from './components/ProductList'
 import { UserList } from './components/UserList'
 import { OrderManagement } from './components/OrderManagement'
-import { SettingsPage } from './components/SettingsPage'
 import './components/LoginForm.css'
 import './components/ProductList.css'
 import './components/ProductModal.css'
@@ -14,7 +13,6 @@ import './components/ConfirmDialog.css'
 import './components/ProductDetail.css'
 import './components/UserList.css'
 import './components/OrdersPage.css'
-import './components/SettingsPage.css'
 
 type ActivePage = 'dashboard' | 'products' | 'orders' | 'users' | 'settings'
 
@@ -115,14 +113,6 @@ function App() {
                 Users
               </button>
             </li>
-            <li>
-              <button
-                className={`nav-btn ${activePage === 'settings' ? 'active' : ''}`}
-                onClick={() => setActivePage('settings')}
-              >
-                Settings
-              </button>
-            </li>
           </ul>
         </nav>
         <button onClick={handleLogout} className="logout-btn">
@@ -215,7 +205,6 @@ function App() {
 
         {activePage === 'users' && <UserList />}
 
-        {activePage === 'settings' && <SettingsPage />}
       </main>
     </div>
   )
