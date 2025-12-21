@@ -12,3 +12,7 @@ export const formatCurrency = (amount: number, currency = "INR"): string => {
 export const capitalizeFirst = (str: string): string => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
+
+// Export haptics and performance utilities
+export * from './haptics';
+export * from './performance';

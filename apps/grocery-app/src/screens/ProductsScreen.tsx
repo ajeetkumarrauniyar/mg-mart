@@ -5,7 +5,6 @@ import {
     StyleSheet,
     FlatList,
     TouchableOpacity,
-    Image,
     ActivityIndicator,
     Alert,
 } from 'react-native';
@@ -17,6 +16,7 @@ import { Product } from '@mg-mart/types';
 import { COLORS, SIZES } from '@/constants';
 import { useProductStore, useCartStore, useWishlistStore } from '@/stores';
 import { RootStackParamList } from '@/navigation/AppNavigator';
+import { OptimizedImage } from '@/components';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -60,7 +60,7 @@ export default function ProductsScreen() {
             activeOpacity={0.7}
         >
             <View style={styles.imageContainer}>
-                <Image
+                <OptimizedImage
                     source={{ uri: item.imageUrl || 'https://via.placeholder.com/150' }}
                     style={styles.productImage}
                     resizeMode="cover"

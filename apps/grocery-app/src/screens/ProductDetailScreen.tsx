@@ -4,7 +4,6 @@ import {
     Text,
     StyleSheet,
     ScrollView,
-    Image,
     TouchableOpacity,
     ActivityIndicator,
     Alert,
@@ -13,6 +12,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from '@/navigation/AppNavigator';
+import { OptimizedImage } from '@/components';
 import { useProductStore } from '@/stores';
 import { useCartStore } from '@/stores/cartStore';
 import { COLORS, SIZES } from '@/constants';
@@ -108,7 +108,7 @@ export default function ProductDetailScreen({ route, navigation }: Props) {
             <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
                 {/* Product Image */}
                 <View style={styles.imageContainer}>
-                    <Image
+                    <OptimizedImage
                         source={{ uri: product.imageUrl || 'https://via.placeholder.com/400' }}
                         style={styles.productImage}
                         resizeMode="cover"

@@ -1,13 +1,21 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import { COLORS, SIZES } from '../constants';
 import { productService } from '../services/productsService';
-import { useAuthStore } from '../stores';
+import { useAuthStore, useProductStore } from '../stores';
 import { config } from '../config';
+import { Product } from '@mg-mart/types';
+import { OptimizedImage } from '../components';
 
 export default function HomeScreen() {
     const [apiStatus, setApiStatus] = useState<'idle' | 'testing' | 'success' | 'error'>('idle');
     const { user, logout } = useAuthStore();
+    const { featuredProducts, fetchFeaturedProducts, isLoading } = useProductStore();
+
+    useEffect(() => {
+        // Load featured products on mount
+        fetchFeaturedProducts();
+    }, [fetchFeaturedProducts]);
 
     // Get current environment configuration
     const apiBaseUrl = config.environment.API_BASE_URL;

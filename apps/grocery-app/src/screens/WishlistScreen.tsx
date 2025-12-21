@@ -5,7 +5,6 @@ import {
     StyleSheet,
     FlatList,
     TouchableOpacity,
-    Image,
     Alert,
     SafeAreaView,
 } from 'react-native';
@@ -13,6 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Product } from '@mg-mart/types';
 import { useWishlistStore, useCartStore } from '../stores';
 import { COLORS, SIZES } from '../constants';
+import { OptimizedImage } from '../components';
 
 interface WishlistItemProps {
     product: Product;
@@ -23,7 +23,7 @@ interface WishlistItemProps {
 const WishlistItem: React.FC<WishlistItemProps> = ({ product, onRemove, onAddToCart }) => {
     return (
         <View style={styles.itemContainer}>
-            <Image
+            <OptimizedImage
                 source={{ uri: product.imageUrl || 'https://via.placeholder.com/80' }}
                 style={styles.itemImage}
                 resizeMode="cover"

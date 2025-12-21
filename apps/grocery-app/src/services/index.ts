@@ -20,6 +20,12 @@ export {
   type UpdateCartItemRequest,
 } from "./cartService";
 export {
+  orderService,
+  type CreateOrderRequest,
+  type OrdersListResponse,
+  type ShippingAddress,
+} from "./orderService";
+export {
   userService,
   type UpdateProfileRequest,
   type ChangePasswordRequest,
@@ -30,4 +36,5 @@ export { default as apiClient } from "./apiService";
 export { default as authServiceDefault } from "./authService";
 export { default as productServiceDefault } from "./productsService";
 export { default as cartServiceDefault } from "./cartService";
+export { default as orderServiceDefault } from "./orderService";
 export { default as userServiceDefault } from "./userService";
