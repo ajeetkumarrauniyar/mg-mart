@@ -7,11 +7,13 @@ import { productService } from "../services";
 export interface ProductStore {
   // State
   products: Product[];
+  featuredProducts: Product[];
   isLoading: boolean;
   error: string | null;
 
   // Actions
   fetchProducts: () => Promise<void>;
+  fetchFeaturedProducts: () => Promise<void>;
   clearError: () => void;
 }
 
@@ -20,6 +22,7 @@ export const useProductStore = create<ProductStore>()(
     (set) => ({
       // Initial state
       products: [],
+      featuredProducts: [],
       isLoading: false,
       error: null,
 
@@ -37,6 +40,24 @@ export const useProductStore = create<ProductStore>()(
           set({
             isLoading: false,
             error: error.message || "Failed to fetch products",
+          });
+        }
+      },
+
+      fetchFeaturedProducts: async () => {
+        set({ isLoading: true, error: null });
+        try {
+          const response = await productService.getProducts();
+          // Filter featured products from all products
+          const featured = response.products?.filter(product => product.isFeatured) || [];
+          set({
+            featuredProducts: featured,
+            isLoading: false,
+          });
+        } catch (error: any) {
+          set({
+            isLoading: false,
+            error: error.message || "Failed to fetch featured products",
           });
         }
       },

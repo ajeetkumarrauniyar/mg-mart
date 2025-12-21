@@ -48,6 +48,43 @@ export default function HomeScreen() {
         console.log('Home Screen - User:', user?.name);
     };
 
+    const renderFeaturedProducts = () => {
+        if (isLoading && featuredProducts.length === 0) {
+            return (
+                <View style={styles.featuredSection}>
+                    <Text style={styles.sectionTitle}>⭐ Featured Products</Text>
+                    <View style={styles.loadingContainer}>
+                        <ActivityIndicator size="small" color={COLORS.primary} />
+                        <Text style={styles.loadingText}>Loading featured products...</Text>
+                    </View>
+                </View>
+            );
+        }
+
+        if (featuredProducts.length === 0) {
+            return null;
+        }
+
+        return (
+            <View style={styles.featuredSection}>
+                <Text style={styles.sectionTitle}>⭐ Featured Products</Text>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.featuredScroll}>
+                    {featuredProducts.slice(0, 5).map((product: Product) => (
+                        <TouchableOpacity key={product.productId} style={styles.featuredCard}>
+                            <OptimizedImage
+                                source={{ uri: product.imageUrl || 'https://via.placeholder.com/100' }}
+                                style={styles.featuredImage}
+                                resizeMode="cover"
+                            />
+                            <Text style={styles.featuredName} numberOfLines={2}>{product.name}</Text>
+                            <Text style={styles.featuredPrice}>₹{product.price.toFixed(2)}</Text>
+                        </TouchableOpacity>
+                    ))}
+                </ScrollView>
+            </View>
+        );
+    };
+
     const testApiConnection = async () => {
         setApiStatus('testing');
         try {
@@ -96,6 +133,8 @@ export default function HomeScreen() {
                 <TouchableOpacity style={styles.button} onPress={handlePress}>
                     <Text style={styles.buttonText}>Hello, {user?.name || 'Guest'}!</Text>
                 </TouchableOpacity>
+
+                {renderFeaturedProducts()}
 
                 <TouchableOpacity
                     style={[styles.button, styles.logoutButton]}
@@ -206,5 +245,60 @@ const styles = StyleSheet.create({
         fontSize: SIZES.fontSize.medium,
         color: COLORS.text,
         lineHeight: 24,
+    },
+    featuredSection: {
+        marginBottom: 20,
+    },
+    sectionTitle: {
+        fontSize: SIZES.fontSize.large,
+        fontWeight: 'bold',
+        color: COLORS.text,
+        marginBottom: 15,
+    },
+    featuredScroll: {
+        paddingLeft: 5,
+    },
+    featuredCard: {
+        backgroundColor: COLORS.white,
+        borderRadius: 12,
+        padding: 12,
+        marginRight: 15,
+        width: 120,
+        elevation: 2,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 3,
+        borderWidth: 1,
+        borderColor: '#f0f0f0',
+    },
+    featuredImage: {
+        width: '100%',
+        height: 80,
+        borderRadius: 8,
+        marginBottom: 8,
+        backgroundColor: '#f8f9fa',
+    },
+    featuredName: {
+        fontSize: 12,
+        fontWeight: '600',
+        color: COLORS.text,
+        marginBottom: 4,
+        lineHeight: 16,
+    },
+    featuredPrice: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: COLORS.primary,
+    },
+    loadingContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingVertical: 20,
+    },
+    loadingText: {
+        marginLeft: 10,
+        fontSize: SIZES.fontSize.medium,
+        color: COLORS.textSecondary,
     },
 });
