@@ -194,6 +194,14 @@ export const api = {
 
         return response.data;
     },
+
+    // GET request for blob data (file downloads)
+    getBlob: async (url: string): Promise<Blob> => {
+        const response = await apiClient.get(url, {
+            responseType: 'blob'
+        });
+        return response.data;
+    },
 };
 
 // Token management utilities using localStorage

@@ -5,7 +5,7 @@ import type { DashboardStats } from './services'
 import { LoginForm } from './components/LoginForm'
 import { ProductList } from './components/ProductList'
 import { UserList } from './components/UserList'
-import { OrdersPage } from './components/OrdersPage'
+import { OrderManagement } from './components/OrderManagement'
 import { SettingsPage } from './components/SettingsPage'
 import './components/LoginForm.css'
 import './components/ProductList.css'
@@ -211,7 +211,7 @@ function App() {
 
         {activePage === 'products' && <ProductList />}
 
-        {activePage === 'orders' && <OrdersPage />}
+        {activePage === 'orders' && <OrderManagement />}
 
         {activePage === 'users' && <UserList />}
 
