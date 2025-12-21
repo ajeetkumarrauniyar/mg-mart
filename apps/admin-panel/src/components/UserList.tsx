@@ -1,18 +1,15 @@
 import { useEffect, useState } from 'react'
 import { userService } from '../services'
-import type { User, UserListResponse, UpdateUserData } from '../services'
-import { ConfirmDialog } from './ConfirmDialog'
+import type { User, UpdateUserData } from '../services'
 
-// Simple inline UserModal component
 interface UserModalProps {
     isOpen: boolean
     onClose: () => void
     onSave: (userData: UpdateUserData) => Promise<void>
     user?: User | null
-    mode: 'create' | 'edit'
 }
 
-function UserModal({ isOpen, onClose, onSave, user, mode }: UserModalProps) {
+function UserModal({ isOpen, onClose, onSave, user }: UserModalProps) {
     const [formData, setFormData] = useState<UpdateUserData & { email?: string }>({
         firstName: '',
         lastName: '',
@@ -24,7 +21,7 @@ function UserModal({ isOpen, onClose, onSave, user, mode }: UserModalProps) {
     const [error, setError] = useState<string | null>(null)
 
     useEffect(() => {
-        if (user && mode === 'edit') {
+        if (user) {
             const nameParts = user.name.split(' ')
             setFormData({
                 firstName: nameParts[0] || '',
@@ -33,17 +30,9 @@ function UserModal({ isOpen, onClose, onSave, user, mode }: UserModalProps) {
                 phone: user.phoneNumber || '',
                 role: user.role === 'super_admin' ? 'admin' : user.role
             })
-        } else {
-            setFormData({
-                firstName: '',
-                lastName: '',
-                email: '',
-                phone: '',
-                role: 'customer'
-            })
         }
         setError(null)
-    }, [user, mode, isOpen])
+    }, [user, isOpen])
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target
@@ -58,10 +47,6 @@ function UserModal({ isOpen, onClose, onSave, user, mode }: UserModalProps) {
         try {
             if (!formData.firstName?.trim() || !formData.lastName?.trim()) {
                 throw new Error('First name and last name are required')
-            }
-
-            if (mode === 'create' && !formData.email?.trim()) {
-                throw new Error('Email is required')
             }
 
             await onSave(formData)
@@ -80,7 +65,7 @@ function UserModal({ isOpen, onClose, onSave, user, mode }: UserModalProps) {
         <div className="modal-overlay" onClick={onClose}>
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                 <div className="modal-header">
-                    <h2>{mode === 'create' ? 'Add New User' : 'Edit User'}</h2>
+                    <h2>Edit User</h2>
                     <button className="close-btn" onClick={onClose}>&times;</button>
                 </div>
 
@@ -121,13 +106,10 @@ function UserModal({ isOpen, onClose, onSave, user, mode }: UserModalProps) {
                             name="email"
                             value={formData.email}
                             onChange={handleChange}
-                            required={mode === 'create'}
-                            disabled={loading || mode === 'edit'}
+                            disabled={true}
                             placeholder="user@example.com"
                         />
-                        {mode === 'edit' && (
-                            <small className="form-note">Email cannot be changed</small>
-                        )}
+                        <small className="form-note">Email cannot be changed</small>
                     </div>
 
                     <div className="form-row">
@@ -160,6 +142,10 @@ function UserModal({ isOpen, onClose, onSave, user, mode }: UserModalProps) {
                         </div>
                     </div>
 
+                    <div className="edit-warning">
+                        ℹ️ <strong>Note:</strong> User updates use the profile endpoint. Role updates may have limitations.
+                    </div>
+
                     {error && (
                         <div className="error-message">
                             {error}
@@ -171,7 +157,7 @@ function UserModal({ isOpen, onClose, onSave, user, mode }: UserModalProps) {
                             Cancel
                         </button>
                         <button type="submit" disabled={loading} className="save-btn">
-                            {loading ? 'Saving...' : mode === 'create' ? 'Create User' : 'Update User'}
+                            {loading ? 'Saving...' : 'Update User'}
                         </button>
                     </div>
                 </form>
@@ -185,11 +171,10 @@ export function UserList() {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
     const [selectedUser, setSelectedUser] = useState<User | null>(null)
-    const [modalMode, setModalMode] = useState<'create' | 'edit'>('create')
     const [isModalOpen, setIsModalOpen] = useState(false)
-    const [deleteUser, setDeleteUser] = useState<User | null>(null)
     const [searchTerm, setSearchTerm] = useState('')
     const [roleFilter, setRoleFilter] = useState<'all' | 'customer' | 'admin'>('all')
+    const [apiStatus, setApiStatus] = useState<'success' | 'error' | 'fallback' | null>(null)
 
     useEffect(() => {
         loadUsers()
@@ -199,85 +184,21 @@ export function UserList() {
         try {
             setLoading(true)
             setError(null)
+            setApiStatus(null)
 
-            // Mock data with enhanced customer information
-            const mockUsers: User[] = [
-                {
-                    userId: "HpjvtXJ6OwhHozmfrGyF",
-                    email: "ajeetkumar5487@gmail.com",
-                    name: "Ajeet Kumar",
-                    phoneNumber: "+918084840429",
-                    role: "admin",
-                    createdAt: "2025-12-17T07:12:28.271Z",
-                    updatedAt: "2025-12-17T07:12:28.271Z"
-                },
-                {
-                    userId: "dvAdPECvLGHkkzJN7AXG",
-                    email: "john@example.com",
-                    name: "John Doe",
-                    phoneNumber: "+1234567890",
-                    role: "customer",
-                    createdAt: "2025-10-07T19:35:53.560Z",
-                    updatedAt: "2025-10-07T19:35:53.560Z",
-                    orderCount: 24,
-                    totalSpent: 1245.00,
-                    lastOrderDate: "2025-12-21T10:30:00.000Z",
-                    lastOrderId: "ORD-2025-001234"
-                },
-                {
-                    userId: "abc123def456ghi789",
-                    email: "jane.smith@example.com",
-                    name: "Jane Smith",
-                    phoneNumber: "+1987654321",
-                    role: "customer",
-                    createdAt: "2025-10-05T14:22:10.123Z",
-                    updatedAt: "2025-10-05T14:22:10.123Z",
-                    orderCount: 8,
-                    totalSpent: 456.75,
-                    lastOrderDate: "2025-12-20T15:45:00.000Z",
-                    lastOrderId: "ORD-2025-001198"
-                },
-                {
-                    userId: "xyz789uvw456rst123",
-                    email: "admin@mgmart.com",
-                    name: "Admin User",
-                    phoneNumber: "+1555123456",
-                    role: "admin",
-                    createdAt: "2025-09-15T09:30:00.000Z",
-                    updatedAt: "2025-09-15T09:30:00.000Z"
-                },
-                {
-                    userId: "customer001active",
-                    email: "sarah.wilson@email.com",
-                    name: "Sarah Wilson",
-                    phoneNumber: "+1555987654",
-                    role: "customer",
-                    createdAt: "2025-11-20T08:15:00.000Z",
-                    updatedAt: "2025-12-15T12:30:00.000Z",
-                    orderCount: 15,
-                    totalSpent: 892.30,
-                    lastOrderDate: "2025-12-19T09:20:00.000Z",
-                    lastOrderId: "ORD-2025-001156"
-                },
-                {
-                    userId: "customer002new",
-                    email: "mike.johnson@gmail.com",
-                    name: "Mike Johnson",
-                    phoneNumber: "+1444555666",
-                    role: "customer",
-                    createdAt: "2025-12-10T16:45:00.000Z",
-                    updatedAt: "2025-12-10T16:45:00.000Z",
-                    orderCount: 3,
-                    totalSpent: 127.50,
-                    lastOrderDate: "2025-12-18T14:10:00.000Z",
-                    lastOrderId: "ORD-2025-001089"
-                }
-            ]
+            // Load all users without filters - we'll filter client-side
+            const response = await userService.getUsers()
 
-            setUsers(mockUsers)
+            // Handle both array response and object response with users property
+            const usersData = Array.isArray(response) ? response : response.users || []
+
+            console.log('✅ Users loaded from API:', usersData.length, 'users')
+            setUsers(usersData)
+            setApiStatus('success')
         } catch (err) {
+            console.error('❌ Users loading error:', err)
             setError(err instanceof Error ? err.message : 'Failed to load users')
-            console.error('Users loading error:', err)
+            setApiStatus('error')
         } finally {
             setLoading(false)
         }
@@ -327,61 +248,32 @@ export function UserList() {
         }
     }
 
-    const handleAddUser = () => {
-        setSelectedUser(null)
-        setModalMode('create')
-        setIsModalOpen(true)
-    }
-
     const handleEditUser = (user: User) => {
         setSelectedUser(user)
-        setModalMode('edit')
         setIsModalOpen(true)
-    }
-
-    const handleDeleteUser = (user: User) => {
-        setDeleteUser(user)
-    }
-
-    const confirmDeleteUser = async () => {
-        if (!deleteUser) return
-
-        try {
-            setUsers(prev => prev.filter(u => u.userId !== deleteUser.userId))
-            setDeleteUser(null)
-        } catch (err) {
-            setError(err instanceof Error ? err.message : 'Failed to delete user')
-            console.error('User deletion error:', err)
-        }
     }
 
     const handleSaveUser = async (userData: UpdateUserData) => {
+        if (!selectedUser) return
+
         try {
-            if (modalMode === 'create') {
-                const newUser: User = {
-                    userId: `user_${Date.now()}`,
-                    email: `${userData.firstName?.toLowerCase()}.${userData.lastName?.toLowerCase()}@example.com`,
-                    name: `${userData.firstName} ${userData.lastName}`,
-                    phoneNumber: userData.phone,
-                    role: userData.role || 'customer',
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                }
-                setUsers(prev => [...prev, newUser])
-            } else if (selectedUser) {
-                setUsers(prev => prev.map(u =>
-                    u.userId === selectedUser.userId
-                        ? {
-                            ...u,
-                            name: `${userData.firstName} ${userData.lastName}`,
-                            phoneNumber: userData.phone,
-                            role: userData.role || u.role,
-                            updatedAt: new Date().toISOString()
-                        }
-                        : u
-                ))
+            console.log('🔄 Updating user:', selectedUser.userId, userData)
+
+            const updatedUser = await userService.updateUser(selectedUser.userId, userData)
+
+            // Update local state with API response
+            const userToUpdate = {
+                ...updatedUser,
+                userId: selectedUser.userId // Preserve original userId
             }
+
+            setUsers(prev => prev.map(u =>
+                u.userId === selectedUser.userId ? userToUpdate : u
+            ))
+
+            console.log('✅ User updated successfully')
         } catch (err) {
+            console.error('❌ User save error:', err)
             throw new Error(err instanceof Error ? err.message : 'Failed to save user')
         }
     }
@@ -391,11 +283,23 @@ export function UserList() {
         setSelectedUser(null)
     }
 
+    // Client-side filtering for better UX (no loading states on search/filter changes)
     const filteredUsers = users.filter(user => {
-        const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.email.toLowerCase().includes(searchTerm.toLowerCase())
-        const matchesRole = roleFilter === 'all' || user.role === roleFilter
-        return matchesSearch && matchesRole
+        // Role filter
+        if (roleFilter !== 'all' && user.role !== roleFilter) {
+            return false
+        }
+
+        // Search filter (name, phone and email)
+        if (searchTerm.trim()) {
+            const searchLower = searchTerm.toLowerCase()
+            const nameMatch = user.name.toLowerCase().includes(searchLower)
+            const emailMatch = user.email.toLowerCase().includes(searchLower)
+            const phoneMatch = user.phoneNumber?.toLowerCase().includes(searchLower) || false
+            return nameMatch || emailMatch || phoneMatch
+        }
+
+        return true
     })
 
     if (loading) {
@@ -423,16 +327,18 @@ export function UserList() {
         <div className="users-container">
             <div className="users-header">
                 <h2>Users ({filteredUsers.length})</h2>
-                <button className="add-user-btn" onClick={handleAddUser}>
-                    Add User
-                </button>
+                <div className="header-actions">
+                    <button className="refresh-btn" onClick={loadUsers} disabled={loading}>
+                        {loading ? '🔄' : '↻'} Refresh
+                    </button>
+                </div>
             </div>
 
             <div className="users-filters">
                 <div className="search-box">
                     <input
                         type="text"
-                        placeholder="Search users by name or email..."
+                        placeholder="Search users by name, email, or phone..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="search-input"
@@ -451,6 +357,21 @@ export function UserList() {
                     </select>
                 </div>
             </div>
+
+            {apiStatus && (
+                <div className={`api-status ${apiStatus}`}>
+                    {apiStatus === 'success' && (
+                        <>
+                            ✅ <span>Data loaded from API successfully</span>
+                        </>
+                    )}
+                    {apiStatus === 'error' && (
+                        <>
+                            ❌ <span>API connection failed</span>
+                        </>
+                    )}
+                </div>
+            )}
 
             {filteredUsers.length === 0 ? (
                 <div className="empty-state">
@@ -523,15 +444,9 @@ export function UserList() {
                                         <button
                                             className="edit-btn"
                                             onClick={() => handleEditUser(user)}
+                                            title="Edit user"
                                         >
                                             Edit
-                                        </button>
-                                        <button
-                                            className="delete-btn"
-                                            onClick={() => handleDeleteUser(user)}
-                                            disabled={user.role === 'admin' && user.email === 'ajeetkumar5487@gmail.com'}
-                                        >
-                                            Delete
                                         </button>
                                     </td>
                                 </tr>
@@ -546,17 +461,6 @@ export function UserList() {
                 onClose={closeModal}
                 onSave={handleSaveUser}
                 user={selectedUser}
-                mode={modalMode}
-            />
-
-            <ConfirmDialog
-                isOpen={!!deleteUser}
-                title="Delete User"
-                message={`Are you sure you want to delete "${deleteUser?.name}"? This action cannot be undone.`}
-                onConfirm={confirmDeleteUser}
-                onCancel={() => setDeleteUser(null)}
-                confirmText="Delete"
-                type="danger"
             />
         </div>
     )
