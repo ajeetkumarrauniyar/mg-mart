@@ -15,6 +15,8 @@ import { RootStackParamList } from '@/navigation/AppNavigator';
 import { OptimizedImage } from '@/components';
 import { useProductStore } from '@/stores';
 import { useCartStore } from '@/stores/cartStore';
+import { useWishlistStore } from '@/stores/wishlistStore';
+import { useRequireAuth } from '@/hooks';
 import { COLORS, SIZES } from '@/constants';
 
 type Props = StackScreenProps<RootStackParamList, 'ProductDetail'>;
@@ -23,8 +25,9 @@ export default function ProductDetailScreen({ route, navigation }: Props) {
     const { productId } = route.params;
     const { products } = useProductStore();
     const { addItem } = useCartStore();
+    const { toggleWishlist, isInWishlist } = useWishlistStore();
+    const { requireAuth } = useRequireAuth();
     const [quantity, setQuantity] = useState(1);
-    const [isFavorite, setIsFavorite] = useState(false);
     const [isAddingToCart, setIsAddingToCart] = useState(false);
 
     const product = products.find((p) => p.productId === productId);
@@ -60,28 +63,34 @@ export default function ProductDetailScreen({ route, navigation }: Props) {
             return;
         }
 
-        setIsAddingToCart(true);
-        try {
-            await addItem(product.productId, quantity);
-            Alert.alert(
-                'Added to Cart',
-                `${quantity} x ${product.name} added to your cart`,
-                [
-                    { text: 'Continue Shopping', style: 'cancel' },
-                    { text: 'View Cart', onPress: () => navigation.navigate('MainTabs') },
-                ]
-            );
-            setQuantity(1); // Reset quantity after adding
-        } catch (error) {
-            Alert.alert('Error', 'Failed to add item to cart. Please try again.');
-        } finally {
-            setIsAddingToCart(false);
-        }
+        requireAuth(async () => {
+            setIsAddingToCart(true);
+            try {
+                await addItem(product.productId, quantity);
+                Alert.alert(
+                    'Added to Cart',
+                    `${quantity} x ${product.name} added to your cart`,
+                    [
+                        { text: 'Continue Shopping', style: 'cancel' },
+                        { text: 'View Cart', onPress: () => navigation.navigate('MainTabs') },
+                    ]
+                );
+                setQuantity(1); // Reset quantity after adding
+            } catch (error) {
+                Alert.alert('Error', 'Failed to add item to cart. Please try again.');
+            } finally {
+                setIsAddingToCart(false);
+            }
+        });
     };
 
     const toggleFavorite = () => {
-        setIsFavorite(!isFavorite);
+        requireAuth(() => {
+            toggleWishlist(product);
+        });
     };
+
+    const isWishlisted = isInWishlist(product.productId);
 
     const totalPrice = product.price * quantity;
     const isOutOfStock = product.stock <= 0;
@@ -98,9 +107,9 @@ export default function ProductDetailScreen({ route, navigation }: Props) {
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.headerButton} onPress={toggleFavorite}>
                     <Ionicons
-                        name={isFavorite ? 'heart' : 'heart-outline'}
+                        name={isWishlisted ? 'heart' : 'heart-outline'}
                         size={24}
-                        color={isFavorite ? '#e53e3e' : COLORS.text}
+                        color={isWishlisted ? '#e53e3e' : COLORS.text}
                     />
                 </TouchableOpacity>
             </View>

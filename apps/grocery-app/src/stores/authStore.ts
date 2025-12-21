@@ -47,6 +47,14 @@ export const useAuthStore = create<AuthStore>()(
             isLoading: false,
             error: null,
           });
+
+          // Sync cart after successful login
+          try {
+            const { useCartStore } = await import('./cartStore');
+            await useCartStore.getState().syncWithServer();
+          } catch (syncError) {
+            console.warn('Cart sync failed after login:', syncError);
+          }
         } catch (error: any) {
           set({
             isLoading: false,
@@ -70,6 +78,14 @@ export const useAuthStore = create<AuthStore>()(
             isLoading: false,
             error: null,
           });
+
+          // Sync cart after successful registration
+          try {
+            const { useCartStore } = await import('./cartStore');
+            await useCartStore.getState().syncWithServer();
+          } catch (syncError) {
+            console.warn('Cart sync failed after registration:', syncError);
+          }
         } catch (error: any) {
           set({
             isLoading: false,
@@ -83,6 +99,14 @@ export const useAuthStore = create<AuthStore>()(
       },
 
       logout: () => {
+        // Clear cart on logout
+        try {
+          const { useCartStore } = require('./cartStore');
+          useCartStore.getState().clearCart();
+        } catch (error) {
+          console.warn('Failed to clear cart on logout:', error);
+        }
+
         set({
           user: null,
           token: null,
