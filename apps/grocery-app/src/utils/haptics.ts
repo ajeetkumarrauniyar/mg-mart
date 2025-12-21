@@ -4,7 +4,6 @@
  */
 
 import { Platform } from 'react-native';
-import * as Haptics from 'expo-haptics';
 
 // Define haptic feedback types
 export type HapticFeedbackType =
@@ -18,43 +17,22 @@ export type HapticFeedbackType =
 
 /**
  * Trigger haptic feedback
+ * Note: This is a placeholder implementation for now
+ * In production, you would implement actual haptic feedback
  */
-export const triggerHaptic = async (type: HapticFeedbackType = 'light'): Promise<void> => {
+export const triggerHaptic = (type: HapticFeedbackType = 'light'): void => {
     // Only trigger haptics on supported platforms
     if (Platform.OS !== 'ios' && Platform.OS !== 'android') {
         return;
     }
 
-    try {
-        switch (type) {
-            case 'light':
-                await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                break;
-            case 'medium':
-                await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                break;
-            case 'heavy':
-                await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-                break;
-            case 'success':
-                await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-                break;
-            case 'warning':
-                await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
-                break;
-            case 'error':
-                await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-                break;
-            case 'selection':
-                await Haptics.selectionAsync();
-                break;
-        }
-    } catch (error) {
-        // Silently fail if haptics are not supported
-        if (__DEV__) {
-            console.warn('Haptic feedback failed:', error);
-        }
+    // For now, just log in development
+    if (__DEV__) {
+        console.log(`🔄 Haptic feedback: ${type}`);
     }
+
+    // TODO: Implement actual haptic feedback when expo-haptics is properly configured
+    // This prevents bundling issues while maintaining the API
 };
 
 /**
