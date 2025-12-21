@@ -29,7 +29,8 @@ export const ProductCard: React.FC<ProductCardProps> = memo(({ product, onPress 
         });
     }, [product.productId, product.stock, product.name, addItem, requireAuth]);
 
-    const handleWishlistToggle = useCallback(() => {
+    const handleWishlistToggle = useCallback((e?: any) => {
+        if (e) e.stopPropagation();
         requireAuth(() => {
             toggleWishlist(product);
         });

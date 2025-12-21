@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import {
     View,
     Text,
@@ -7,6 +7,7 @@ import {
     TouchableOpacity,
     ActivityIndicator,
     Alert,
+    TextInput,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -15,6 +16,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { Product } from '@mg-mart/types';
 import { COLORS, SIZES } from '@/constants';
 import { useProductStore, useCartStore, useWishlistStore } from '@/stores';
+import { useDebounce, useRequireAuth } from '@/hooks';
 import { RootStackParamList } from '@/navigation/AppNavigator';
 import { OptimizedImage } from '@/components';
 
@@ -30,6 +32,43 @@ export default function ProductsScreen() {
     } = useProductStore();
     const { addItem } = useCartStore();
     const { toggleWishlist, isInWishlist } = useWishlistStore();
+    const { requireAuth } = useRequireAuth();
+
+    const [searchQuery, setSearchQuery] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState<string>('all');
+
+    // Debounce search query for better performance
+    const debouncedSearchQuery = useDebounce(searchQuery, 300);
+
+    // Memoized filtered products for performance
+    const filteredProducts = useMemo(() => {
+        let filtered = products;
+
+        // Filter by search query
+        if (debouncedSearchQuery.trim()) {
+            const query = debouncedSearchQuery.toLowerCase().trim();
+            filtered = filtered.filter(product =>
+                product.name.toLowerCase().includes(query) ||
+                product.description.toLowerCase().includes(query) ||
+                product.category.toLowerCase().includes(query)
+            );
+        }
+
+        // Filter by category
+        if (selectedCategory !== 'all') {
+            filtered = filtered.filter(product =>
+                product.category.toLowerCase() === selectedCategory.toLowerCase()
+            );
+        }
+
+        return filtered;
+    }, [products, debouncedSearchQuery, selectedCategory]);
+
+    // Get unique categories for filter
+    const categories = useMemo(() => {
+        const uniqueCategories = [...new Set(products.map(p => p.category))];
+        return ['all', ...uniqueCategories];
+    }, [products]);
 
 
     useEffect(() => {
@@ -45,12 +84,21 @@ export default function ProductsScreen() {
             Alert.alert('Out of Stock', 'This product is currently unavailable');
             return;
         }
-        try {
-            await addItem(product.productId, 1);
-            Alert.alert('Added to Cart', `${product.name} has been added to your cart`);
-        } catch (error) {
-            Alert.alert('Error', 'Failed to add item to cart');
-        }
+
+        requireAuth(async () => {
+            try {
+                await addItem(product.productId, 1);
+                Alert.alert('Added to Cart', `${product.name} has been added to your cart`);
+            } catch (error) {
+                Alert.alert('Error', 'Failed to add item to cart');
+            }
+        });
+    };
+
+    const handleWishlistToggle = (product: Product) => {
+        requireAuth(() => {
+            toggleWishlist(product);
+        });
     };
 
     const renderProductCard = ({ item }: { item: Product }) => (
@@ -69,7 +117,7 @@ export default function ProductsScreen() {
                     style={styles.wishlistButton}
                     onPress={(e) => {
                         e.stopPropagation();
-                        toggleWishlist(item);
+                        handleWishlistToggle(item);
                     }}
                     activeOpacity={0.7}
                 >
@@ -120,7 +168,52 @@ export default function ProductsScreen() {
     const renderHeader = () => (
         <View style={styles.header}>
             <Text style={styles.title}>Products</Text>
-            <Text style={styles.subtitle}>{products.length} items available</Text>
+            <Text style={styles.subtitle}>{filteredProducts.length} items available</Text>
+
+            {/* Search Input */}
+            <View style={styles.searchContainer}>
+                <Ionicons name="search" size={20} color="#718096" style={styles.searchIcon} />
+                <TextInput
+                    style={styles.searchInput}
+                    placeholder="Search products..."
+                    value={searchQuery}
+                    onChangeText={setSearchQuery}
+                    placeholderTextColor="#a0aec0"
+                />
+                {searchQuery.length > 0 && (
+                    <TouchableOpacity
+                        onPress={() => setSearchQuery('')}
+                        style={styles.clearButton}
+                    >
+                        <Ionicons name="close-circle" size={20} color="#718096" />
+                    </TouchableOpacity>
+                )}
+            </View>
+
+            {/* Category Filter */}
+            <FlatList
+                data={categories}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                keyExtractor={(item) => item}
+                renderItem={({ item }) => (
+                    <TouchableOpacity
+                        style={[
+                            styles.categoryButton,
+                            selectedCategory === item && styles.categoryButtonActive
+                        ]}
+                        onPress={() => setSelectedCategory(item)}
+                    >
+                        <Text style={[
+                            styles.categoryButtonText,
+                            selectedCategory === item && styles.categoryButtonTextActive
+                        ]}>
+                            {item === 'all' ? 'All' : item}
+                        </Text>
+                    </TouchableOpacity>
+                )}
+                contentContainerStyle={styles.categoryList}
+            />
         </View>
     );
 
@@ -154,6 +247,16 @@ export default function ProductsScreen() {
             );
         }
 
+        if (debouncedSearchQuery.trim() || selectedCategory !== 'all') {
+            return (
+                <View style={styles.emptyContainer}>
+                    <Ionicons name="search" size={48} color="#cbd5e0" />
+                    <Text style={styles.emptyText}>No products found</Text>
+                    <Text style={styles.emptySubtext}>Try adjusting your search or filters</Text>
+                </View>
+            );
+        }
+
         return (
             <View style={styles.emptyContainer}>
                 <Text style={styles.emptyText}>No products found</Text>
@@ -165,7 +268,7 @@ export default function ProductsScreen() {
     return (
         <SafeAreaView style={styles.container} edges={['top']}>
             <FlatList
-                data={products}
+                data={filteredProducts}
                 renderItem={renderProductCard}
                 keyExtractor={(item) => item.productId}
                 numColumns={2}
@@ -173,7 +276,7 @@ export default function ProductsScreen() {
                 ListHeaderComponent={renderHeader}
                 ListFooterComponent={renderFooter}
                 ListEmptyComponent={renderEmpty}
-                contentContainerStyle={products.length === 0 ? styles.emptyList : undefined}
+                contentContainerStyle={filteredProducts.length === 0 ? styles.emptyList : undefined}
             />
         </SafeAreaView>
     );
@@ -200,7 +303,55 @@ const styles = StyleSheet.create({
     subtitle: {
         fontSize: 14,
         color: '#718096',
-        marginBottom: 8,
+        marginBottom: 16,
+    },
+    searchContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#f7fafc',
+        borderRadius: 12,
+        paddingHorizontal: 12,
+        marginBottom: 16,
+        borderWidth: 1,
+        borderColor: '#e2e8f0',
+    },
+    searchIcon: {
+        marginRight: 8,
+    },
+    searchInput: {
+        flex: 1,
+        height: 44,
+        fontSize: 16,
+        color: COLORS.text,
+    },
+    clearButton: {
+        padding: 4,
+    },
+    categoryList: {
+        paddingRight: SIZES.padding,
+    },
+    categoryButton: {
+        paddingHorizontal: 16,
+        paddingVertical: 8,
+        marginRight: 8,
+        backgroundColor: '#f7fafc',
+        borderRadius: 20,
+        borderWidth: 1,
+        borderColor: '#e2e8f0',
+    },
+    categoryButtonActive: {
+        backgroundColor: COLORS.primary,
+        borderColor: COLORS.primary,
+    },
+    categoryButtonText: {
+        fontSize: 14,
+        fontWeight: '500',
+        color: '#4a5568',
+        textTransform: 'capitalize',
+    },
+    categoryButtonTextActive: {
+        color: COLORS.white,
+        fontWeight: '600',
     },
     row: {
         justifyContent: 'space-between',
