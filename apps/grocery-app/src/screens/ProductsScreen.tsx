@@ -229,18 +229,7 @@ export default function ProductsScreen() {
     );
 
     const renderHeader = () => (
-        <View style={styles.header}>
-            <Text style={styles.title}>Products</Text>
-            <Text style={styles.subtitle}>{filteredProducts.length} items available</Text>
-
-            {/* Search Bar */}
-            <SearchBar
-                value={searchQuery}
-                onChangeText={setSearchQuery}
-                onFilterPress={() => setShowFilterModal(true)}
-                style={styles.searchBar}
-            />
-
+        <View style={styles.categoryHeader}>
             {/* Category Filter */}
             <CategoryFilter
                 categories={categories}
@@ -309,6 +298,20 @@ export default function ProductsScreen() {
 
     return (
         <SafeAreaView style={styles.container} edges={['top']}>
+            {/* Fixed Header with Search */}
+            <View style={styles.header}>
+                <Text style={styles.title}>Products</Text>
+                <Text style={styles.subtitle}>{filteredProducts.length} items available</Text>
+
+                {/* Search Bar */}
+                <SearchBar
+                    value={searchQuery}
+                    onChangeText={setSearchQuery}
+                    onFilterPress={() => setShowFilterModal(true)}
+                    style={styles.searchBar}
+                />
+            </View>
+
             <FlatList
                 data={filteredProducts}
                 renderItem={renderProductCard}
@@ -319,6 +322,7 @@ export default function ProductsScreen() {
                 ListFooterComponent={renderFooter}
                 ListEmptyComponent={renderEmpty}
                 contentContainerStyle={filteredProducts.length === 0 ? styles.emptyList : undefined}
+                keyboardShouldPersistTaps="handled"
             />
 
             <FilterModal
@@ -357,6 +361,11 @@ const styles = StyleSheet.create({
     },
     searchBar: {
         marginBottom: 16,
+    },
+    categoryHeader: {
+        backgroundColor: COLORS.white,
+        paddingHorizontal: SIZES.padding,
+        paddingBottom: 8,
     },
     row: {
         justifyContent: 'space-between',
