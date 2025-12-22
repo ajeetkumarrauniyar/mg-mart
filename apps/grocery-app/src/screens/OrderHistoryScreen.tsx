@@ -12,9 +12,13 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { COLORS, SIZES } from '../constants';
 import { orderService } from '../services';
 import type { Order } from '@mg-mart/types';
+import { RootStackParamList } from '../navigation/AppNavigator';
+
+type NavigationProp = StackNavigationProp<RootStackParamList>;
 
 interface OrderItemProps {
     order: Order;
@@ -107,7 +111,7 @@ const OrderItem: React.FC<OrderItemProps> = ({ order, onPress }) => {
 };
 
 export default function OrderHistoryScreen() {
-    const navigation = useNavigation();
+    const navigation = useNavigation<NavigationProp>();
     const [orders, setOrders] = useState<Order[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isRefreshing, setIsRefreshing] = useState(false);
@@ -138,15 +142,8 @@ export default function OrderHistoryScreen() {
     };
 
     const handleOrderPress = (order: Order) => {
-        // TODO: Navigate to order detail screen
-        Alert.alert(
-            `Order #${order.orderId}`,
-            `Status: ${order.status}\nTotal: ₹${order.totalAmount.toFixed(2)}\nItems: ${order.items.length}`,
-            [
-                { text: 'Track Order', onPress: () => handleTrackOrder(order.orderId) },
-                { text: 'Close', style: 'cancel' },
-            ]
-        );
+        // Navigate to order detail screen
+        navigation.navigate('OrderDetail', { orderId: order.orderId });
     };
 
     const handleTrackOrder = async (orderId: string) => {

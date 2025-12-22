@@ -13,6 +13,8 @@ import WishlistScreen from '@/screens/WishlistScreen';
 import ProductDetailScreen from '@/screens/ProductDetailScreen';
 import CheckoutScreen from '@/screens/CheckoutScreen';
 import EditProfileScreen from '@/screens/EditProfileScreen';
+import OrderHistoryScreen from '@/screens/OrderHistoryScreen';
+import OrderDetailScreen from '@/screens/OrderDetailScreen';
 import { AuthScreen } from '@/screens/AuthScreen';
 import { useCartStore, useWishlistStore, useAuthStore } from '@/stores';
 import { Loading } from '@/components';
@@ -32,6 +34,8 @@ export type RootStackParamList = {
     ProductDetail: { productId: string };
     Checkout: undefined;
     EditProfile: undefined;
+    OrderHistory: undefined;
+    OrderDetail: { orderId: string };
 };
 
 const Tab = createBottomTabNavigator<RootTabParamList>();
@@ -173,6 +177,16 @@ export default function AppNavigator() {
                 <Stack.Screen
                     name="EditProfile"
                     component={EditProfileScreen}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="OrderHistory"
+                    component={OrderHistoryScreen}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="OrderDetail"
+                    component={OrderDetailScreen}
                     options={{ headerShown: false }}
                 />
             </Stack.Navigator>
