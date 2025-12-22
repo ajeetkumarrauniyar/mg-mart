@@ -50,6 +50,11 @@ export default function ProfileScreen() {
     const navigation = useNavigation();
     const { user, logout } = useAuthStore();
 
+    // Debug: Log user data when component renders
+    React.useEffect(() => {
+        console.log('🏠 ProfileScreen user data updated:', user?.name, user?.email);
+    }, [user]);
+
     const handleEditProfile = () => {
         navigation.navigate('EditProfile' as never);
     };

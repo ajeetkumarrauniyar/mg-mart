@@ -3,9 +3,10 @@ import type { User } from "@mg-mart/types";
 
 // User profile types
 export interface UpdateProfileRequest {
-    name?: string | undefined;
+    firstName?: string | undefined;
+    lastName?: string | undefined;
     email?: string | undefined;
-    phoneNumber?: string | undefined;
+    phone?: string | undefined;
 }
 
 export interface ChangePasswordRequest {
@@ -21,6 +22,7 @@ export const userService = {
 
     // Update user profile
     updateProfile: async (data: UpdateProfileRequest): Promise<User> => {
+        // API service already extracts response.data.data, so we get User directly
         return await api.put<User>("/users/profile", data);
     },
 

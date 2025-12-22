@@ -18,17 +18,24 @@ import { userService } from '../services';
 
 export default function EditProfileScreen() {
     const navigation = useNavigation();
-    const { user, updateProfile: updateAuthProfile } = useAuthStore();
+    const { user, setUser } = useAuthStore();
 
-    const [name, setName] = useState(user?.name || '');
+    // Split existing name into firstName and lastName
+    const nameParts = (user?.name || '').split(' ');
+    const [firstName, setFirstName] = useState(nameParts[0] || '');
+    const [lastName, setLastName] = useState(nameParts.slice(1).join(' ') || '');
     const [email, setEmail] = useState(user?.email || '');
     const [phone, setPhone] = useState(user?.phoneNumber || '');
     const [isLoading, setIsLoading] = useState(false);
 
     const handleSave = async () => {
         // Validation
-        if (!name.trim()) {
-            Alert.alert('Error', 'Please enter your name');
+        if (!firstName.trim()) {
+            Alert.alert('Error', 'Please enter your first name');
+            return;
+        }
+        if (!lastName.trim()) {
+            Alert.alert('Error', 'Please enter your last name');
             return;
         }
         if (!email.trim()) {
@@ -42,22 +49,34 @@ export default function EditProfileScreen() {
             return;
         }
 
+        // Phone number validation
+        if (phone.trim() && (phone.trim().length < 10 || phone.trim().length > 15)) {
+            Alert.alert('Error', 'Phone number must be between 10-15 digits');
+            return;
+        }
+
         setIsLoading(true);
 
         try {
             const updateData: any = {
-                name: name.trim(),
+                firstName: firstName.trim(),
+                lastName: lastName.trim(),
                 email: email.trim(),
             };
 
             if (phone.trim()) {
-                updateData.phoneNumber = phone.trim();
+                updateData.phone = phone.trim();
             }
 
-            const updatedUser = await userService.updateProfile(updateData);
+            console.log('🔄 Updating profile with data:', updateData);
+            const response = await userService.updateProfile(updateData);
+            console.log('✅ Profile update response:', response);
+            console.log('✅ Response type:', typeof response);
+            console.log('✅ Response keys:', Object.keys(response || {}));
 
-            // Update local auth store
-            await updateAuthProfile(updatedUser);
+            // Update local auth store with the updated user data
+            setUser(response);
+            console.log('✅ Auth store updated with new user data');
 
             Alert.alert('Success', 'Profile updated successfully', [
                 {
@@ -66,6 +85,7 @@ export default function EditProfileScreen() {
                 },
             ]);
         } catch (error: any) {
+            console.error('❌ Profile update failed:', error);
             Alert.alert('Error', error.message || 'Failed to update profile');
         } finally {
             setIsLoading(false);
@@ -95,12 +115,7 @@ export default function EditProfileScreen() {
                 <View style={styles.avatarSection}>
                     <View style={styles.avatarContainer}>
                         <Text style={styles.avatarText}>
-                            {name
-                                .split(' ')
-                                .map(n => n[0])
-                                .join('')
-                                .toUpperCase()
-                                .slice(0, 2) || 'U'}
+                            {(firstName[0] || '') + (lastName[0] || '') || 'U'}
                         </Text>
                     </View>
                     <TouchableOpacity style={styles.changePhotoButton}>
@@ -111,16 +126,32 @@ export default function EditProfileScreen() {
 
                 {/* Form */}
                 <View style={styles.form}>
-                    <View style={styles.inputContainer}>
-                        <Text style={styles.inputLabel}>Full Name *</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Enter your full name"
-                            value={name}
-                            onChangeText={setName}
-                            placeholderTextColor="#a0aec0"
-                            editable={!isLoading}
-                        />
+                    {/* Name Row */}
+                    <View style={styles.row}>
+                        <View style={[styles.inputContainer, styles.halfWidth]}>
+                            <Text style={styles.inputLabel}>First Name *</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Enter first name"
+                                value={firstName}
+                                onChangeText={setFirstName}
+                                placeholderTextColor="#a0aec0"
+                                editable={!isLoading}
+                                autoCapitalize="words"
+                            />
+                        </View>
+                        <View style={[styles.inputContainer, styles.halfWidth]}>
+                            <Text style={styles.inputLabel}>Last Name *</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Enter last name"
+                                value={lastName}
+                                onChangeText={setLastName}
+                                placeholderTextColor="#a0aec0"
+                                editable={!isLoading}
+                                autoCapitalize="words"
+                            />
+                        </View>
                     </View>
 
                     <View style={styles.inputContainer}>
@@ -141,12 +172,19 @@ export default function EditProfileScreen() {
                         <Text style={styles.inputLabel}>Phone Number</Text>
                         <TextInput
                             style={styles.input}
-                            placeholder="Enter your phone number"
+                            placeholder="Enter phone number (10-15 digits)"
                             value={phone}
-                            onChangeText={setPhone}
+                            onChangeText={(text) => {
+                                // Only allow numbers and limit to 15 characters
+                                const numericText = text.replace(/[^0-9]/g, '');
+                                if (numericText.length <= 15) {
+                                    setPhone(numericText);
+                                }
+                            }}
                             keyboardType="phone-pad"
                             placeholderTextColor="#a0aec0"
                             editable={!isLoading}
+                            maxLength={15}
                         />
                     </View>
                 </View>
@@ -245,6 +283,13 @@ const styles = StyleSheet.create({
     form: {
         backgroundColor: COLORS.white,
         padding: SIZES.padding,
+    },
+    row: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    halfWidth: {
+        width: '48%',
     },
     inputContainer: {
         marginBottom: 20,

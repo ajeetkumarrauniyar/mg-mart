@@ -57,6 +57,12 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({ onNavigateToLogi
             return;
         }
 
+        // Phone number validation
+        if (phone.trim() && (phone.trim().length < 10 || phone.trim().length > 15)) {
+            Alert.alert('Error', 'Phone number must be between 10-15 digits');
+            return;
+        }
+
         try {
             clearError();
             // Backend expects this format
@@ -140,13 +146,20 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({ onNavigateToLogi
                         <Text style={styles.label}>Phone No. *</Text>
                         <TextInput
                             style={styles.input}
-                            placeholder="1234567890"
+                            placeholder="1234567890 (10-15 digits)"
                             placeholderTextColor={COLORS.textSecondary}
                             value={phone}
-                            onChangeText={setPhone}
+                            onChangeText={(text) => {
+                                // Only allow numbers and limit to 15 characters
+                                const numericText = text.replace(/[^0-9]/g, '');
+                                if (numericText.length <= 15) {
+                                    setPhone(numericText);
+                                }
+                            }}
                             keyboardType="phone-pad"
                             autoComplete="tel"
                             editable={!isLoading}
+                            maxLength={15}
                         />
                     </View>
 

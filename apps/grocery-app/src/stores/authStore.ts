@@ -21,6 +21,7 @@ export interface AuthStore {
   register: (userData: RegisterRequest) => Promise<void>;
   logout: () => void;
   updateProfile: (data: Partial<User>) => Promise<void>;
+  setUser: (user: User) => void;
   loadStoredAuth: () => Promise<void>;
   clearError: () => void;
 }
@@ -151,7 +152,17 @@ export const useAuthStore = create<AuthStore>()(
 
         set({ isLoading: true, error: null });
         try {
-          const updatedUser = await authService.updateProfile(data);
+          // If data is a complete User object (from API response), use it directly
+          // Otherwise, make API call to update profile
+          let updatedUser: User;
+          if (data.userId && data.name && data.email) {
+            // This is already a complete User object from API response
+            updatedUser = data as User;
+          } else {
+            // This is partial data, make API call
+            updatedUser = await authService.updateProfile(data);
+          }
+
           set({
             user: updatedUser,
             isLoading: false,
@@ -163,6 +174,20 @@ export const useAuthStore = create<AuthStore>()(
             error: error.message || "Profile update failed",
           });
           throw error;
+        }
+      },
+
+      setUser: (user: User) => {
+        console.log('🔄 Setting user in auth store:', user);
+        set({ user });
+        console.log('✅ User set in auth store successfully');
+
+        // Force persist to storage immediately
+        try {
+          const state = get();
+          console.log('💾 Current auth state after setUser:', { user: state.user, isAuthenticated: state.isAuthenticated });
+        } catch (error) {
+          console.error('❌ Error checking auth state:', error);
         }
       },
 
