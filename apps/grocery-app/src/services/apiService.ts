@@ -71,10 +71,18 @@ apiClient.interceptors.response.use(
 
     // Handle 401 unauthorized errors
     if (error.response?.status === 401 && originalRequest) {
+      console.log('🚨 401 Unauthorized - Token expired or invalid');
       try {
         await AsyncStorage.removeItem(getTokenKey());
-        // You can add navigation to login screen here
-        // navigationRef.current?.navigate('Login');
+
+        // Clear auth state in store
+        try {
+          const { useAuthStore } = await import('../stores/authStore');
+          useAuthStore.getState().logout();
+          console.log('✅ Auth state cleared due to 401 error');
+        } catch (storeError) {
+          console.error('Error clearing auth store:', storeError);
+        }
       } catch (storageError) {
         console.error("Error removing auth token:", storageError);
       }
