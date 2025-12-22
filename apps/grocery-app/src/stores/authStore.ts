@@ -52,6 +52,14 @@ export const useAuthStore = create<AuthStore>()(
           });
           console.log('🎉 Auth state updated, user is now authenticated');
 
+          // Clear wishlist for new user session
+          try {
+            const { useWishlistStore } = await import('./wishlistStore');
+            useWishlistStore.getState().setUserId(response.user.userId);
+          } catch (error) {
+            console.warn('Failed to set wishlist user ID on login:', error);
+          }
+
           // Sync cart after successful login
           try {
             const { useCartStore } = await import('./cartStore');
@@ -84,6 +92,14 @@ export const useAuthStore = create<AuthStore>()(
             error: null,
           });
 
+          // Clear wishlist for new user
+          try {
+            const { useWishlistStore } = await import('./wishlistStore');
+            useWishlistStore.getState().setUserId(response.user.userId);
+          } catch (error) {
+            console.warn('Failed to set wishlist user ID on registration:', error);
+          }
+
           // Sync cart after successful registration
           try {
             const { useCartStore } = await import('./cartStore');
@@ -110,6 +126,14 @@ export const useAuthStore = create<AuthStore>()(
           useCartStore.getState().clearCart();
         } catch (error) {
           console.warn('Failed to clear cart on logout:', error);
+        }
+
+        // Clear wishlist on logout
+        try {
+          const { useWishlistStore } = require('./wishlistStore');
+          useWishlistStore.getState().setUserId(null);
+        } catch (error) {
+          console.warn('Failed to clear wishlist on logout:', error);
         }
 
         set({

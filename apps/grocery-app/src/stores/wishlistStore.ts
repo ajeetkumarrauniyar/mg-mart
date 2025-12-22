@@ -6,6 +6,7 @@ import { Product } from "@mg-mart/types";
 export interface WishlistStore {
     // State
     wishlistItems: Product[];
+    currentUserId: string | null;
 
     // Actions
     addToWishlist: (product: Product) => void;
@@ -13,6 +14,7 @@ export interface WishlistStore {
     isInWishlist: (productId: string) => boolean;
     clearWishlist: () => void;
     toggleWishlist: (product: Product) => void;
+    setUserId: (userId: string | null) => void;
 }
 
 export const useWishlistStore = create<WishlistStore>()(
@@ -20,6 +22,7 @@ export const useWishlistStore = create<WishlistStore>()(
         (set, get) => ({
             // Initial state
             wishlistItems: [],
+            currentUserId: null,
 
             // Actions
             addToWishlist: (product: Product) => {
@@ -57,10 +60,25 @@ export const useWishlistStore = create<WishlistStore>()(
                     addToWishlist(product);
                 }
             },
+
+            setUserId: (userId: string | null) => {
+                const { currentUserId } = get();
+                // If user changes, clear the wishlist
+                if (currentUserId !== userId) {
+                    set({
+                        currentUserId: userId,
+                        wishlistItems: []
+                    });
+                }
+            },
         }),
         {
             name: "wishlist-storage",
             storage: createJSONStorage(() => AsyncStorage),
+            partialize: (state) => ({
+                wishlistItems: state.wishlistItems,
+                currentUserId: state.currentUserId,
+            }),
         }
     )
 );

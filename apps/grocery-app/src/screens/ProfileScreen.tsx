@@ -55,7 +55,7 @@ export default function ProfileScreen() {
     };
 
     const handleOrders = () => {
-        Alert.alert('My Orders', 'Order history coming soon!');
+        navigation.navigate('OrderHistory' as never);
     };
 
     const handleAddresses = () => {
