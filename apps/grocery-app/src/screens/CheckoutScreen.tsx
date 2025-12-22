@@ -17,12 +17,13 @@ import { COLORS, SIZES } from '../constants';
 import { useCartStore } from '../stores/cartStore';
 import { orderService } from '../services/orderService';
 import { RootStackParamList } from '../navigation/AppNavigator';
+import { AuthGuard } from '../components';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
 type PaymentMethod = 'cod' | 'card' | 'upi';
 
-export default function CheckoutScreen() {
+function CheckoutContent() {
     const navigation = useNavigation<NavigationProp>();
     const { items, totalAmount, clearCart } = useCartStore();
 
@@ -561,3 +562,10 @@ const styles = StyleSheet.create({
         fontWeight: '700',
     },
 });
+export default function CheckoutScreen() {
+    return (
+        <AuthGuard fallbackMessage="Please login to proceed with checkout">
+            <CheckoutContent />
+        </AuthGuard>
+    );
+}

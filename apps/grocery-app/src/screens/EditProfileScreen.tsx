@@ -15,8 +15,9 @@ import { useNavigation } from '@react-navigation/native';
 import { COLORS, SIZES } from '../constants';
 import { useAuthStore } from '../stores';
 import { userService } from '../services';
+import { AuthGuard } from '../components';
 
-export default function EditProfileScreen() {
+function EditProfileContent() {
     const navigation = useNavigation();
     const { user, setUser } = useAuthStore();
 
@@ -351,3 +352,10 @@ const styles = StyleSheet.create({
         fontWeight: '700',
     },
 });
+export default function EditProfileScreen() {
+    return (
+        <AuthGuard fallbackMessage="Please login to edit your profile">
+            <EditProfileContent />
+        </AuthGuard>
+    );
+}

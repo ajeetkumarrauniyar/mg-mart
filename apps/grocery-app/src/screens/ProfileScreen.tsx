@@ -14,6 +14,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { COLORS, SIZES } from '../constants';
 import { useAuthStore } from '../stores';
 import { RootStackParamList } from '../navigation/AppNavigator';
+import { AuthGuard } from '../components';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -50,7 +51,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
     </TouchableOpacity>
 );
 
-export default function ProfileScreen() {
+function ProfileContent() {
     const navigation = useNavigation<NavigationProp>();
     const { user, logout } = useAuthStore();
 
@@ -420,3 +421,10 @@ const styles = StyleSheet.create({
         color: '#cbd5e0',
     },
 });
+export default function ProfileScreen() {
+    return (
+        <AuthGuard fallbackMessage="Please login to access your profile and account settings">
+            <ProfileContent />
+        </AuthGuard>
+    );
+}

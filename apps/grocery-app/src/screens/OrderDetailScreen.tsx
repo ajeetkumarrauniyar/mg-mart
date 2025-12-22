@@ -17,6 +17,7 @@ import { RootStackParamList } from '../navigation/AppNavigator';
 import { orderService } from '../services';
 import { successFeedback, errorFeedback } from '../utils/haptics';
 import type { Order, OrderItem } from '@mg-mart/types';
+import { AuthGuard } from '../components';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 type RouteProps = NavigationRouteProp<RootStackParamList, 'OrderDetail'>;
@@ -38,7 +39,7 @@ const OrderItemCard: React.FC<OrderItemCardProps> = ({ item }) => (
     </View>
 );
 
-export default function OrderDetailScreen() {
+function OrderDetailContent() {
     const navigation = useNavigation<NavigationProp>();
     const route = useRoute<RouteProps>();
     const { orderId } = route.params;
@@ -565,3 +566,10 @@ const styles = StyleSheet.create({
         color: '#e53e3e',
     },
 });
+export default function OrderDetailScreen() {
+    return (
+        <AuthGuard fallbackMessage="Please login to view order details">
+            <OrderDetailContent />
+        </AuthGuard>
+    );
+}

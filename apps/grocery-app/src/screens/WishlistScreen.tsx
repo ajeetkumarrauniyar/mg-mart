@@ -12,7 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Product } from '@mg-mart/types';
 import { useWishlistStore, useCartStore } from '../stores';
 import { COLORS, SIZES } from '../constants';
-import { OptimizedImage } from '../components';
+import { OptimizedImage, AuthGuard } from '../components';
 
 interface WishlistItemProps {
     product: Product;
@@ -77,7 +77,7 @@ const WishlistItem: React.FC<WishlistItemProps> = ({ product, onRemove, onAddToC
     );
 };
 
-const WishlistScreen: React.FC = () => {
+const WishlistContent: React.FC = () => {
     const { wishlistItems, removeFromWishlist, clearWishlist } = useWishlistStore();
     const { addItem } = useCartStore();
 
@@ -294,5 +294,13 @@ const styles = StyleSheet.create({
         lineHeight: 22,
     },
 });
+
+const WishlistScreen: React.FC = () => {
+    return (
+        <AuthGuard fallbackMessage="Please login to view your favorite items">
+            <WishlistContent />
+        </AuthGuard>
+    );
+};
 
 export default WishlistScreen;

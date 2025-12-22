@@ -17,6 +17,7 @@ import { COLORS, SIZES } from '../constants';
 import { orderService } from '../services';
 import type { Order } from '@mg-mart/types';
 import { RootStackParamList } from '../navigation/AppNavigator';
+import { AuthGuard } from '../components';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -110,7 +111,7 @@ const OrderItem: React.FC<OrderItemProps> = ({ order, onPress }) => {
     );
 };
 
-export default function OrderHistoryScreen() {
+function OrderHistoryContent() {
     const navigation = useNavigation<NavigationProp>();
     const [orders, setOrders] = useState<Order[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -396,3 +397,10 @@ const styles = StyleSheet.create({
         fontWeight: '700',
     },
 });
+export default function OrderHistoryScreen() {
+    return (
+        <AuthGuard fallbackMessage="Please login to view your order history">
+            <OrderHistoryContent />
+        </AuthGuard>
+    );
+}

@@ -15,10 +15,11 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { COLORS, SIZES } from '@/constants';
 import { useCartStore, CartItemWithProduct } from '@/stores/cartStore';
 import { RootStackParamList } from '@/navigation/AppNavigator';
+import { AuthGuard } from '@/components';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
-export default function CartScreen() {
+function CartContent() {
     const navigation = useNavigation<NavigationProp>();
     const { items, totalAmount, totalItems, isLoading, updateItem, removeItem, clearCart } =
         useCartStore();
@@ -486,3 +487,11 @@ const styles = StyleSheet.create({
         fontWeight: '700',
     },
 });
+
+export default function CartScreen() {
+    return (
+        <AuthGuard fallbackMessage="Please login to view your cart and manage items">
+            <CartContent />
+        </AuthGuard>
+    );
+}

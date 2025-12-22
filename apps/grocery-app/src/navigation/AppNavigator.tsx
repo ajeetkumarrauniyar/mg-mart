@@ -136,6 +136,8 @@ function TabNavigator() {
 // Main App Navigator
 export default function AppNavigator() {
     const { isAuthenticated, isLoading, loadStoredAuth, user, token } = useAuthStore();
+    const [navigationReady, setNavigationReady] = React.useState(false);
+    const navigationRef = React.useRef<any>(null);
 
     // Fallback: Load stored auth if not already loaded after a short delay
     useEffect(() => {
@@ -149,6 +151,19 @@ export default function AppNavigator() {
 
         return () => clearTimeout(timer);
     }, [user, token, isAuthenticated, isLoading, loadStoredAuth]);
+
+    // Handle authentication state changes - redirect to Auth when logged out
+    useEffect(() => {
+        if (navigationReady && !isLoading) {
+            if (!isAuthenticated && navigationRef.current) {
+                console.log('🚪 User logged out, redirecting to Auth screen');
+                navigationRef.current.reset({
+                    index: 0,
+                    routes: [{ name: 'Auth' }],
+                });
+            }
+        }
+    }, [isAuthenticated, isLoading, navigationReady]);
 
     // Debug logging
     useEffect(() => {
@@ -170,7 +185,13 @@ export default function AppNavigator() {
     console.log('🎯 AppNavigator: Setting initial route to:', initialRoute);
 
     return (
-        <NavigationContainer>
+        <NavigationContainer
+            ref={navigationRef}
+            onReady={() => {
+                setNavigationReady(true);
+                console.log('✅ Navigation ready');
+            }}
+        >
             <Stack.Navigator
                 screenOptions={{ headerShown: false }}
                 initialRouteName={initialRoute}
