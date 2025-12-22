@@ -7,18 +7,17 @@ import {
     TouchableOpacity,
     ActivityIndicator,
     Alert,
-    TextInput,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { Product } from '@mg-mart/types';
+import { Product, ProductCategory, ProductFilters } from '@mg-mart/types';
 import { COLORS, SIZES } from '@/constants';
 import { useProductStore, useCartStore, useWishlistStore } from '@/stores';
 import { useDebounce, useRequireAuth } from '@/hooks';
 import { RootStackParamList } from '@/navigation/AppNavigator';
-import { OptimizedImage } from '@/components';
+import { OptimizedImage, SearchBar, FilterModal, CategoryFilter, ActiveFilters } from '@/components';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -35,7 +34,9 @@ export default function ProductsScreen() {
     const { requireAuth } = useRequireAuth();
 
     const [searchQuery, setSearchQuery] = useState('');
-    const [selectedCategory, setSelectedCategory] = useState<string>('all');
+    const [selectedCategory, setSelectedCategory] = useState<ProductCategory | 'all'>('all');
+    const [filters, setFilters] = useState<ProductFilters>({});
+    const [showFilterModal, setShowFilterModal] = useState(false);
 
     // Debounce search query for better performance
     const debouncedSearchQuery = useDebounce(searchQuery, 300);
@@ -44,7 +45,7 @@ export default function ProductsScreen() {
     const filteredProducts = useMemo(() => {
         let filtered = products;
 
-        // Filter by search query
+        // Apply search query
         if (debouncedSearchQuery.trim()) {
             const query = debouncedSearchQuery.toLowerCase().trim();
             filtered = filtered.filter(product =>
@@ -54,20 +55,45 @@ export default function ProductsScreen() {
             );
         }
 
-        // Filter by category
+        // Apply category filter
         if (selectedCategory !== 'all') {
             filtered = filtered.filter(product =>
-                product.category.toLowerCase() === selectedCategory.toLowerCase()
+                product.category === selectedCategory
             );
         }
 
+        // Apply additional filters from filter modal
+        if (filters.category && filters.category !== selectedCategory) {
+            filtered = filtered.filter(product => product.category === filters.category);
+        }
+
+        if (filters.minPrice !== undefined) {
+            filtered = filtered.filter(product => product.price >= filters.minPrice!);
+        }
+
+        if (filters.maxPrice !== undefined) {
+            filtered = filtered.filter(product => product.price <= filters.maxPrice!);
+        }
+
+        if (filters.inStock) {
+            filtered = filtered.filter(product => product.stock > 0);
+        }
+
+        if (filters.isFeatured) {
+            filtered = filtered.filter(product => product.isFeatured);
+        }
+
         return filtered;
-    }, [products, debouncedSearchQuery, selectedCategory]);
+    }, [products, debouncedSearchQuery, selectedCategory, filters]);
 
     // Get unique categories for filter
     const categories = useMemo(() => {
         const uniqueCategories = [...new Set(products.map(p => p.category))];
-        return ['all', ...uniqueCategories];
+        return ['all' as const, ...uniqueCategories];
+    }, [products]);
+
+    const availableCategories = useMemo(() => {
+        return [...new Set(products.map(p => p.category))];
     }, [products]);
 
 
@@ -99,6 +125,43 @@ export default function ProductsScreen() {
         requireAuth(() => {
             toggleWishlist(product);
         });
+    };
+
+    const handleApplyFilters = (newFilters: ProductFilters) => {
+        setFilters(newFilters);
+        // If category filter is applied, sync with category selector
+        if (newFilters.category) {
+            setSelectedCategory(newFilters.category);
+        }
+    };
+
+    const handleCategorySelect = (category: ProductCategory | 'all') => {
+        setSelectedCategory(category);
+        // Clear category from advanced filters if selecting from quick filter
+        if (filters.category) {
+            setFilters(prev => {
+                const newFilters = { ...prev };
+                delete newFilters.category;
+                return newFilters;
+            });
+        }
+    };
+
+    const handleRemoveFilter = (filterKey: keyof ProductFilters) => {
+        setFilters(prev => {
+            const newFilters = { ...prev };
+            delete newFilters[filterKey];
+            return newFilters;
+        });
+    };
+
+    const handleRemoveCategory = () => {
+        setSelectedCategory('all');
+    };
+
+    const handleClearAllFilters = () => {
+        setFilters({});
+        setSelectedCategory('all');
     };
 
     const renderProductCard = ({ item }: { item: Product }) => (
@@ -170,49 +233,28 @@ export default function ProductsScreen() {
             <Text style={styles.title}>Products</Text>
             <Text style={styles.subtitle}>{filteredProducts.length} items available</Text>
 
-            {/* Search Input */}
-            <View style={styles.searchContainer}>
-                <Ionicons name="search" size={20} color="#718096" style={styles.searchIcon} />
-                <TextInput
-                    style={styles.searchInput}
-                    placeholder="Search products..."
-                    value={searchQuery}
-                    onChangeText={setSearchQuery}
-                    placeholderTextColor="#a0aec0"
-                />
-                {searchQuery.length > 0 && (
-                    <TouchableOpacity
-                        onPress={() => setSearchQuery('')}
-                        style={styles.clearButton}
-                    >
-                        <Ionicons name="close-circle" size={20} color="#718096" />
-                    </TouchableOpacity>
-                )}
-            </View>
+            {/* Search Bar */}
+            <SearchBar
+                value={searchQuery}
+                onChangeText={setSearchQuery}
+                onFilterPress={() => setShowFilterModal(true)}
+                style={styles.searchBar}
+            />
 
             {/* Category Filter */}
-            <FlatList
-                data={categories}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                keyExtractor={(item) => item}
-                renderItem={({ item }) => (
-                    <TouchableOpacity
-                        style={[
-                            styles.categoryButton,
-                            selectedCategory === item && styles.categoryButtonActive
-                        ]}
-                        onPress={() => setSelectedCategory(item)}
-                    >
-                        <Text style={[
-                            styles.categoryButtonText,
-                            selectedCategory === item && styles.categoryButtonTextActive
-                        ]}>
-                            {item === 'all' ? 'All' : item}
-                        </Text>
-                    </TouchableOpacity>
-                )}
-                contentContainerStyle={styles.categoryList}
+            <CategoryFilter
+                categories={categories}
+                selectedCategory={selectedCategory}
+                onCategorySelect={handleCategorySelect}
+            />
+
+            {/* Active Filters */}
+            <ActiveFilters
+                filters={filters}
+                selectedCategory={selectedCategory}
+                onRemoveFilter={handleRemoveFilter}
+                onRemoveCategory={handleRemoveCategory}
+                onClearAll={handleClearAllFilters}
             />
         </View>
     );
@@ -278,6 +320,14 @@ export default function ProductsScreen() {
                 ListEmptyComponent={renderEmpty}
                 contentContainerStyle={filteredProducts.length === 0 ? styles.emptyList : undefined}
             />
+
+            <FilterModal
+                visible={showFilterModal}
+                onClose={() => setShowFilterModal(false)}
+                filters={filters}
+                onApplyFilters={handleApplyFilters}
+                availableCategories={availableCategories}
+            />
         </SafeAreaView>
     );
 }
@@ -305,53 +355,8 @@ const styles = StyleSheet.create({
         color: '#718096',
         marginBottom: 16,
     },
-    searchContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: '#f7fafc',
-        borderRadius: 12,
-        paddingHorizontal: 12,
+    searchBar: {
         marginBottom: 16,
-        borderWidth: 1,
-        borderColor: '#e2e8f0',
-    },
-    searchIcon: {
-        marginRight: 8,
-    },
-    searchInput: {
-        flex: 1,
-        height: 44,
-        fontSize: 16,
-        color: COLORS.text,
-    },
-    clearButton: {
-        padding: 4,
-    },
-    categoryList: {
-        paddingRight: SIZES.padding,
-    },
-    categoryButton: {
-        paddingHorizontal: 16,
-        paddingVertical: 8,
-        marginRight: 8,
-        backgroundColor: '#f7fafc',
-        borderRadius: 20,
-        borderWidth: 1,
-        borderColor: '#e2e8f0',
-    },
-    categoryButtonActive: {
-        backgroundColor: COLORS.primary,
-        borderColor: COLORS.primary,
-    },
-    categoryButtonText: {
-        fontSize: 14,
-        fontWeight: '500',
-        color: '#4a5568',
-        textTransform: 'capitalize',
-    },
-    categoryButtonTextActive: {
-        color: COLORS.white,
-        fontWeight: '600',
     },
     row: {
         justifyContent: 'space-between',

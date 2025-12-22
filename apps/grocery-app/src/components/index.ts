@@ -5,3 +5,7 @@ export { default as Button } from './Button';
 export { default as Loading } from './Loading';
 export { default as EmptyState } from './EmptyState';
 export { default as AuthGuard } from './AuthGuard';
+export { SearchBar } from './SearchBar';
+export { FilterModal } from './FilterModal';
+export { CategoryFilter } from './CategoryFilter';
+export { ActiveFilters } from './ActiveFilters';
