@@ -38,20 +38,10 @@ export default function EditProfileScreen() {
             Alert.alert('Error', 'Please enter your last name');
             return;
         }
-        if (!email.trim()) {
-            Alert.alert('Error', 'Please enter your email');
-            return;
-        }
-
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            Alert.alert('Error', 'Please enter a valid email address');
-            return;
-        }
 
         // Phone number validation
-        if (phone.trim() && (phone.trim().length < 10 || phone.trim().length > 15)) {
-            Alert.alert('Error', 'Phone number must be between 10-15 digits');
+        if (phone.trim() && (phone.trim().length < 10 || phone.trim().length > 10)) {
+            Alert.alert('Error', 'Phone number must be exactly 10 digits');
             return;
         }
 
@@ -61,7 +51,7 @@ export default function EditProfileScreen() {
             const updateData: any = {
                 firstName: firstName.trim(),
                 lastName: lastName.trim(),
-                email: email.trim(),
+                // Don't include email since it's not editable
             };
 
             if (phone.trim()) {
@@ -155,36 +145,37 @@ export default function EditProfileScreen() {
                     </View>
 
                     <View style={styles.inputContainer}>
-                        <Text style={styles.inputLabel}>Email *</Text>
+                        <Text style={styles.inputLabel}>Email</Text>
                         <TextInput
-                            style={styles.input}
+                            style={[styles.input, styles.disabledInput]}
                             placeholder="Enter your email"
                             value={email}
                             onChangeText={setEmail}
                             keyboardType="email-address"
                             autoCapitalize="none"
                             placeholderTextColor="#a0aec0"
-                            editable={!isLoading}
+                            editable={false}
                         />
+                        <Text style={styles.disabledText}>Email cannot be changed</Text>
                     </View>
 
                     <View style={styles.inputContainer}>
                         <Text style={styles.inputLabel}>Phone Number</Text>
                         <TextInput
                             style={styles.input}
-                            placeholder="Enter phone number (10-15 digits)"
+                            placeholder="Enter phone number (10 digits)"
                             value={phone}
                             onChangeText={(text) => {
-                                // Only allow numbers and limit to 15 characters
+                                // Only allow numbers and limit to 10 characters
                                 const numericText = text.replace(/[^0-9]/g, '');
-                                if (numericText.length <= 15) {
+                                if (numericText.length <= 10) {
                                     setPhone(numericText);
                                 }
                             }}
                             keyboardType="phone-pad"
                             placeholderTextColor="#a0aec0"
                             editable={!isLoading}
-                            maxLength={15}
+                            maxLength={10}
                         />
                     </View>
                 </View>
@@ -309,6 +300,17 @@ const styles = StyleSheet.create({
         color: COLORS.text,
         borderWidth: 1,
         borderColor: '#e2e8f0',
+    },
+    disabledInput: {
+        backgroundColor: '#f7fafc',
+        color: '#a0aec0',
+        borderColor: '#e2e8f0',
+    },
+    disabledText: {
+        fontSize: 12,
+        color: '#718096',
+        marginTop: 4,
+        fontStyle: 'italic',
     },
     footer: {
         position: 'absolute',
