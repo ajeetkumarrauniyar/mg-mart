@@ -30,7 +30,7 @@ export type RootTabParamList = {
 
 export type RootStackParamList = {
     Auth: undefined;
-    MainTabs: undefined;
+    MainTabs: { screen?: keyof RootTabParamList } | undefined;
     ProductDetail: { productId: string };
     Checkout: undefined;
     EditProfile: undefined;
@@ -135,23 +135,45 @@ function TabNavigator() {
 
 // Main App Navigator
 export default function AppNavigator() {
-    const { isAuthenticated, isLoading, loadStoredAuth } = useAuthStore();
+    const { isAuthenticated, isLoading, loadStoredAuth, user, token } = useAuthStore();
 
-    // Load stored auth on app start
+    // Fallback: Load stored auth if not already loaded after a short delay
     useEffect(() => {
-        loadStoredAuth();
-    }, [loadStoredAuth]);
+        const timer = setTimeout(() => {
+            // If we have token/user but not authenticated, something went wrong with rehydration
+            if ((user && token) && !isAuthenticated && !isLoading) {
+                console.log('🔄 AppNavigator: Fallback - calling loadStoredAuth');
+                loadStoredAuth();
+            }
+        }, 100); // Small delay to allow rehydration to complete
+
+        return () => clearTimeout(timer);
+    }, [user, token, isAuthenticated, isLoading, loadStoredAuth]);
+
+    // Debug logging
+    useEffect(() => {
+        console.log('🔍 AppNavigator: Auth state changed', {
+            isAuthenticated,
+            isLoading,
+            hasUser: !!user,
+            hasToken: !!token
+        });
+    }, [isAuthenticated, isLoading, user, token]);
 
     // Show loading while checking auth state
     if (isLoading) {
+        console.log('⏳ AppNavigator: Showing loading screen');
         return <Loading />;
     }
+
+    const initialRoute = isAuthenticated ? "MainTabs" : "Auth";
+    console.log('🎯 AppNavigator: Setting initial route to:', initialRoute);
 
     return (
         <NavigationContainer>
             <Stack.Navigator
                 screenOptions={{ headerShown: false }}
-                initialRouteName={isAuthenticated ? "MainTabs" : "Auth"}
+                initialRouteName={initialRoute}
             >
                 <Stack.Screen
                     name="Auth"

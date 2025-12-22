@@ -23,6 +23,10 @@ export interface AuthStore {
   updateProfile: (data: Partial<User>) => Promise<void>;
   setUser: (user: User) => void;
   loadStoredAuth: () => Promise<void>;
+  refreshToken: () => Promise<string>;
+  changePassword: (currentPassword: string, newPassword: string) => Promise<void>;
+  deleteAccount: () => Promise<void>;
+  refreshProfile: () => Promise<void>;
   clearError: () => void;
 }
 
@@ -33,7 +37,7 @@ export const useAuthStore = create<AuthStore>()(
       user: null,
       token: null,
       isAuthenticated: false,
-      isLoading: false,
+      isLoading: true, // Start with loading true until rehydration completes
       error: null,
 
       // Actions
@@ -192,22 +196,22 @@ export const useAuthStore = create<AuthStore>()(
       },
 
       loadStoredAuth: async () => {
-        // This will be called automatically by the persist middleware
-        // Additional logic can be added here if needed
-        const { token } = get();
-        if (token) {
-          try {
-            // Verify token is still valid
-            await authService.verifyToken();
-          } catch (error) {
-            // Token is invalid, clear auth state
-            set({
-              user: null,
-              token: null,
-              isAuthenticated: false,
-              error: null,
-            });
-          }
+        console.log('🔄 Loading stored auth...');
+        set({ isLoading: true });
+
+        const { token, user } = get();
+        console.log('📊 Stored auth data:', { hasToken: !!token, hasUser: !!user });
+
+        if (token && user) {
+          console.log('✅ Found stored auth data, setting authenticated state');
+          // We have stored auth data, set as authenticated immediately
+          set({ isAuthenticated: true, isLoading: false });
+
+          // Note: Token verification will happen automatically on API calls
+          // No need to verify here since /auth/verify endpoint doesn't exist
+        } else {
+          console.log('❌ No stored auth data found');
+          set({ isAuthenticated: false, isLoading: false });
         }
       },
 
@@ -301,8 +305,26 @@ export const useAuthStore = create<AuthStore>()(
       partialize: (state) => ({
         user: state.user,
         token: state.token,
-        isAuthenticated: state.isAuthenticated,
+        // Don't persist isAuthenticated - it will be set by loadStoredAuth
       }),
+      onRehydrateStorage: () => (state) => {
+        return (state, error) => {
+          if (error) {
+            console.error('❌ Auth store rehydration error:', error);
+            return;
+          }
+
+          console.log('🔄 Auth store rehydrated:', {
+            hasUser: !!state?.user,
+            hasToken: !!state?.token
+          });
+
+          // Call loadStoredAuth after rehydration to set isAuthenticated
+          if (state) {
+            state.loadStoredAuth();
+          }
+        };
+      },
     }
   )
 );
