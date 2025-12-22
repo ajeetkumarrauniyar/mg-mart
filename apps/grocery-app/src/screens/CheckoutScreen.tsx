@@ -75,7 +75,7 @@ export default function CheckoutScreen() {
                 shippingAddress: {
                     street: `${address}, ${fullName}, ${phone}`,
                     city: city,
-                    state: 'Bihar', 
+                    state: 'Bihar',
                     zipCode: pincode,
                 },
                 notes: `Payment Method: ${paymentMethod.toUpperCase()}. Total: ₹${totalWithDelivery.toFixed(2)} (Items: ₹${totalAmount.toFixed(2)} + Delivery: ₹${deliveryFee.toFixed(2)})`
@@ -97,11 +97,11 @@ export default function CheckoutScreen() {
                 [
                     {
                         text: 'View Orders',
-                        onPress: () => navigation.navigate('MainTabs'),
+                        onPress: () => navigation.navigate('OrderHistory'),
                     },
                     {
                         text: 'Continue Shopping',
-                        onPress: () => navigation.navigate('MainTabs'),
+                        onPress: () => navigation.navigate('MainTabs', { screen: 'Products' }),
                         style: 'cancel',
                     },
                 ]
@@ -162,9 +162,15 @@ export default function CheckoutScreen() {
                         <Text style={styles.inputLabel}>Phone Number *</Text>
                         <TextInput
                             style={styles.input}
-                            placeholder="Enter your phone number"
+                            placeholder="Enter your phone number (10 digits)"
                             value={phone}
-                            onChangeText={setPhone}
+                            onChangeText={(text) => {
+                                // Only allow numbers and limit to 10 characters
+                                const numericText = text.replace(/[^0-9]/g, '');
+                                if (numericText.length <= 10) {
+                                    setPhone(numericText);
+                                }
+                            }}
                             keyboardType="phone-pad"
                             maxLength={10}
                             placeholderTextColor="#a0aec0"
@@ -201,9 +207,15 @@ export default function CheckoutScreen() {
                             <Text style={styles.inputLabel}>Pincode *</Text>
                             <TextInput
                                 style={styles.input}
-                                placeholder="Pincode"
+                                placeholder="6-digit pincode"
                                 value={pincode}
-                                onChangeText={setPincode}
+                                onChangeText={(text) => {
+                                    // Only allow numbers and limit to 6 characters
+                                    const numericText = text.replace(/[^0-9]/g, '');
+                                    if (numericText.length <= 6) {
+                                        setPincode(numericText);
+                                    }
+                                }}
                                 keyboardType="number-pad"
                                 maxLength={6}
                                 placeholderTextColor="#a0aec0"

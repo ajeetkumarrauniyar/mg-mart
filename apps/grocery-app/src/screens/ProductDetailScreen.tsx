@@ -72,7 +72,7 @@ export default function ProductDetailScreen({ route, navigation }: Props) {
                     `${quantity} x ${product.name} added to your cart`,
                     [
                         { text: 'Continue Shopping', style: 'cancel' },
-                        { text: 'View Cart', onPress: () => navigation.navigate('MainTabs') },
+                        { text: 'View Cart', onPress: () => navigation.navigate('MainTabs', { screen: 'Cart' }) },
                     ]
                 );
                 setQuantity(1); // Reset quantity after adding

@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { COLORS, SIZES } from '../constants';
 import { productService } from '../services/productsService';
 import { useAuthStore, useProductStore } from '../stores';
 import { config } from '../config';
 import { Product } from '@mg-mart/types';
 import { OptimizedImage } from '../components';
+import { RootStackParamList } from '../navigation/AppNavigator';
+
+type NavigationProp = StackNavigationProp<RootStackParamList>;
 
 export default function HomeScreen() {
+    const navigation = useNavigation<NavigationProp>();
     const [apiStatus, setApiStatus] = useState<'idle' | 'testing' | 'success' | 'error'>('idle');
     const { user, logout } = useAuthStore();
     const { featuredProducts, fetchFeaturedProducts, isLoading } = useProductStore();
@@ -70,7 +76,12 @@ export default function HomeScreen() {
                 <Text style={styles.sectionTitle}>⭐ Featured Products</Text>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.featuredScroll}>
                     {featuredProducts.slice(0, 5).map((product: Product) => (
-                        <TouchableOpacity key={product.productId} style={styles.featuredCard}>
+                        <TouchableOpacity
+                            key={product.productId}
+                            style={styles.featuredCard}
+                            onPress={() => navigation.navigate('ProductDetail', { productId: product.productId })}
+                            activeOpacity={0.7}
+                        >
                             <OptimizedImage
                                 source={{ uri: product.imageUrl || 'https://via.placeholder.com/100' }}
                                 style={styles.featuredImage}

@@ -10,8 +10,12 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { COLORS, SIZES } from '../constants';
 import { useAuthStore } from '../stores';
+import { RootStackParamList } from '../navigation/AppNavigator';
+
+type NavigationProp = StackNavigationProp<RootStackParamList>;
 
 interface MenuItemProps {
     icon: keyof typeof Ionicons.glyphMap;
@@ -47,7 +51,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
 );
 
 export default function ProfileScreen() {
-    const navigation = useNavigation();
+    const navigation = useNavigation<NavigationProp>();
     const { user, logout } = useAuthStore();
 
     // Debug: Log user data when component renders
@@ -56,11 +60,11 @@ export default function ProfileScreen() {
     }, [user]);
 
     const handleEditProfile = () => {
-        navigation.navigate('EditProfile' as never);
+        navigation.navigate('EditProfile');
     };
 
     const handleOrders = () => {
-        navigation.navigate('OrderHistory' as never);
+        navigation.navigate('OrderHistory');
     };
 
     const handleAddresses = () => {

@@ -187,7 +187,7 @@ export default function OrderHistoryScreen() {
                 <Text style={styles.emptySubtitle}>Start shopping to see your orders here</Text>
                 <TouchableOpacity
                     style={styles.shopButton}
-                    onPress={() => navigation.navigate('MainTabs' as never)}
+                    onPress={() => navigation.navigate('MainTabs', { screen: 'Products' })}
                 >
                     <Text style={styles.shopButtonText}>Start Shopping</Text>
                 </TouchableOpacity>
