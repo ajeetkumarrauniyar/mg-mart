@@ -88,7 +88,7 @@ const Button: React.FC<ButtonProps> = memo(({
             case 'ghost':
                 return COLORS.primary;
             case 'danger':
-                return variant === 'outline' ? COLORS.error : COLORS.white;
+                return variant === 'danger' ? COLORS.error : COLORS.white;
             default:
                 return COLORS.white;
         }

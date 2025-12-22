@@ -73,8 +73,6 @@ export const LazyImage: React.FC<LazyImageProps> = memo(({
                     resizeMode={resizeMode}
                     onLoad={handleLoad}
                     onError={handleError}
-                    // Enable native image caching
-                    cache="force-cache"
                 />
             ) : (
                 <View style={[styles.placeholder, style]} />

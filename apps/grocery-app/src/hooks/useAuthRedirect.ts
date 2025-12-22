@@ -11,12 +11,10 @@ export const useAuthRedirect = () => {
         if (!isLoading) {
             if (isAuthenticated) {
                 // User just logged in, navigate to main app
-                navigation.dispatch(
-                    CommonActions.reset({
-                        index: 0,
-                        routes: [{ name: 'MainTabs' as never }],
-                    })
-                );
+                (navigation as any).reset({
+                    index: 0,
+                    routes: [{ name: 'MainTabs' }],
+                });
             }
             // Don't navigate to Auth when not authenticated, 
             // as the user might already be on Auth screen

@@ -10,20 +10,16 @@ export const useAuthNavigation = () => {
         if (!isLoading) {
             if (isAuthenticated) {
                 // User is authenticated, navigate to main app
-                navigation.dispatch(
-                    CommonActions.reset({
-                        index: 0,
-                        routes: [{ name: 'MainTabs' as never }],
-                    })
-                );
+                (navigation as any).reset({
+                    index: 0,
+                    routes: [{ name: 'MainTabs' }],
+                });
             } else {
                 // User is not authenticated, navigate to auth screen
-                navigation.dispatch(
-                    CommonActions.reset({
-                        index: 0,
-                        routes: [{ name: 'Auth' as never }],
-                    })
-                );
+                (navigation as any).reset({
+                    index: 0,
+                    routes: [{ name: 'Auth' }],
+                });
             }
         }
     }, [isAuthenticated, isLoading, navigation]);

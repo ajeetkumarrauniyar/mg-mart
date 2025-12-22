@@ -308,7 +308,7 @@ export const useAuthStore = create<AuthStore>()(
         // Don't persist isAuthenticated - it will be set by loadStoredAuth
       }),
       onRehydrateStorage: () => (state) => {
-        return (state, error) => {
+        return (state: any, error: any) => {
           if (error) {
             console.error('❌ Auth store rehydration error:', error);
             return;

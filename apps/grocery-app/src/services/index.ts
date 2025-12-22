@@ -11,7 +11,6 @@ export {
 } from "./authService";
 export {
   productService,
-  type ProductFilters,
   type ProductsResponse,
 } from "./productsService";
 export {

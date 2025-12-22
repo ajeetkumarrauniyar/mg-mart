@@ -49,8 +49,6 @@ const OptimizedImage: React.FC<OptimizedImageProps> = memo(({
                 resizeMode={resizeMode}
                 onLoad={handleLoad}
                 onError={handleError}
-                // Enable native image caching
-                cache="force-cache"
             />
             {isLoading && (
                 <View style={styles.loadingOverlay}>

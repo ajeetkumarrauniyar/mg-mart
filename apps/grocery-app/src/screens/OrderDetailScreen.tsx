@@ -10,20 +10,16 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute, RouteProp as NavigationRouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { COLORS, SIZES, SHADOWS } from '../constants';
+import { RootStackParamList } from '../navigation/AppNavigator';
 import { orderService } from '../services';
 import { successFeedback, errorFeedback } from '../utils/haptics';
 import type { Order, OrderItem } from '@mg-mart/types';
-import { RootStackParamList } from '../navigation/AppNavigator';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
-type RouteProp = {
-    params: {
-        orderId: string;
-    };
-};
+type RouteProps = NavigationRouteProp<RootStackParamList, 'OrderDetail'>;
 
 interface OrderItemCardProps {
     item: OrderItem;
@@ -44,7 +40,7 @@ const OrderItemCard: React.FC<OrderItemCardProps> = ({ item }) => (
 
 export default function OrderDetailScreen() {
     const navigation = useNavigation<NavigationProp>();
-    const route = useRoute<RouteProp>();
+    const route = useRoute<RouteProps>();
     const { orderId } = route.params;
 
     const [order, setOrder] = useState<Order | null>(null);
