@@ -29,6 +29,13 @@ export {
   type UpdateProfileRequest,
   type ChangePasswordRequest,
 } from "./userService";
+export {
+  locationService,
+  type LocationValidationResult,
+  type LocationCoordinates,
+  type PermissionStatus,
+  ValidationType,
+} from "./location";
 
 // Re-export default exports for convenience
 export { default as apiClient } from "./apiService";

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SIZES } from '../constants';
 import { productService } from '../services/productsService';
 import { useAuthStore, useProductStore } from '../stores';
@@ -141,6 +142,16 @@ export default function HomeScreen() {
                 <Text style={styles.title}>🛒 Welcome to MG Mart</Text>
                 <Text style={styles.subtitle}>Your one-stop grocery solution</Text>
 
+                <TouchableOpacity
+                    style={styles.locationButton}
+                    onPress={() => navigation.navigate('LocationSelection')}
+                    activeOpacity={0.8}
+                >
+                    <Ionicons name="location-outline" size={20} color={COLORS.primary} />
+                    <Text style={styles.locationButtonText}>📍 Set Delivery Location</Text>
+                    <Text style={styles.locationSubtext}>We deliver within 5km radius</Text>
+                </TouchableOpacity>
+
                 <TouchableOpacity style={styles.button} onPress={handlePress}>
                     <Text style={styles.buttonText}>Hello, {user?.name || 'Guest'}!</Text>
                 </TouchableOpacity>
@@ -217,6 +228,34 @@ const styles = StyleSheet.create({
         fontSize: SIZES.fontSize.medium,
         fontWeight: '600',
         textAlign: 'center',
+    },
+    locationButton: {
+        backgroundColor: COLORS.white,
+        paddingHorizontal: 20,
+        paddingVertical: 16,
+        borderRadius: 12,
+        marginBottom: 20,
+        elevation: 2,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        borderWidth: 1,
+        borderColor: '#e2e8f0',
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    locationButtonText: {
+        color: COLORS.primary,
+        fontSize: 16,
+        fontWeight: '600',
+        marginLeft: 8,
+        flex: 1,
+    },
+    locationSubtext: {
+        color: '#666',
+        fontSize: 12,
+        fontStyle: 'italic',
     },
     logoutButton: {
         backgroundColor: '#e53e3e',

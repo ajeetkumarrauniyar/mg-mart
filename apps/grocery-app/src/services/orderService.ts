@@ -1,5 +1,7 @@
 import { api } from "./apiService";
+import { locationService } from "./location";
 import type { Order } from "@mg-mart/types";
+import type { LocationValidationResult } from "./location";
 
 // Order request/response types
 export interface ShippingAddress {
@@ -13,6 +15,7 @@ export interface CreateOrderRequest {
     paymentMethod: 'COD' | 'Online';
     shippingAddress: ShippingAddress;
     notes?: string;
+    locationValidation?: LocationValidationResult; // Optional location validation data
 }
 
 export interface OrdersListResponse {
@@ -27,8 +30,43 @@ export interface OrdersListResponse {
 
 // Order service
 export const orderService = {
-    // Create a new order from user's cart
+    // Validates location before order creation
+    validateLocationForOrder: async (): Promise<LocationValidationResult> => {
+        try {
+            return await locationService.validateOrderLocation();
+        } catch (error) {
+            console.error('Location validation failed:', error);
+            throw new Error(`Location validation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        }
+    },
+
+    // Create a new order from user's cart with location validation
     createOrder: async (orderData: CreateOrderRequest): Promise<Order> => {
+        try {
+            // Validate location before creating order
+            const locationValidation = await orderService.validateLocationForOrder();
+
+            // If location validation fails, throw error
+            if (!locationValidation.isValid) {
+                throw new Error(`Order cannot be placed: ${locationValidation.message}`);
+            }
+
+            // Include location validation in order data
+            const orderWithLocation = {
+                ...orderData,
+                locationValidation
+            };
+
+            const response = await api.post<Order>("/orders", orderWithLocation);
+            return response;
+        } catch (error) {
+            console.error('Order creation failed:', error);
+            throw error;
+        }
+    },
+
+    // Create order without location validation (for testing or special cases)
+    createOrderWithoutLocationValidation: async (orderData: CreateOrderRequest): Promise<Order> => {
         const response = await api.post<Order>("/orders", orderData);
         return response;
     },

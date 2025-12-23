@@ -16,4 +16,7 @@ export const capitalizeFirst = (str: string): string => {
 // Export performance utilities
 export * from './performance';
 
+// Export location utilities
+export * from './location';
+
 // Note: haptics is imported directly where needed to avoid import chain issues

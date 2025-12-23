@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+// Enhanced checkout screen with location-based ordering integration
+import React, { useState, useEffect } from 'react';
 import {
     View,
     Text,
     StyleSheet,
-    ScrollView,
     TouchableOpacity,
-    TextInput,
+    ScrollView,
     Alert,
     ActivityIndicator,
 } from 'react-native';
@@ -15,110 +15,202 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { COLORS, SIZES } from '../constants';
 import { useCartStore } from '../stores/cartStore';
-import { orderService } from '../services/orderService';
 import { RootStackParamList } from '../navigation/AppNavigator';
-import { AuthGuard } from '../components';
+import { LocationPermissionModal, LocationValidationModal } from '../components/location';
+import {
+    locationService,
+    PermissionStatus,
+    ValidationType,
+    type LocationValidationResult
+} from '../services/location';
+import { orderService } from '../services';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
-type PaymentMethod = 'cod' | 'card' | 'upi';
-
-function CheckoutContent() {
+export default function CheckoutScreen() {
     const navigation = useNavigation<NavigationProp>();
     const { items, totalAmount, clearCart } = useCartStore();
 
-    const [isProcessing, setIsProcessing] = useState(false);
-    const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('cod');
+    // Location state
+    const [showPermissionModal, setShowPermissionModal] = useState(false);
+    const [showValidationModal, setShowValidationModal] = useState(false);
+    const [validationResult, setValidationResult] = useState<LocationValidationResult | null>(null);
+    const [isValidatingLocation, setIsValidatingLocation] = useState(false);
+    const [isPlacingOrder, setIsPlacingOrder] = useState(false);
+    const [locationStatus, setLocationStatus] = useState<'unknown' | 'checking' | 'valid' | 'invalid'>('unknown');
 
-    // Delivery Address
-    const [fullName, setFullName] = useState('');
-    const [phone, setPhone] = useState('');
-    const [address, setAddress] = useState('');
-    const [city, setCity] = useState('');
-    const [pincode, setPincode] = useState('');
-
+    // Order details
     const deliveryFee = 40;
     const totalWithDelivery = totalAmount + deliveryFee;
 
-    const handlePlaceOrder = async () => {
-        // Validation
-        if (!fullName.trim()) {
-            Alert.alert('Error', 'Please enter your full name');
-            return;
-        }
-        if (!phone.trim() || phone.length < 10) {
-            Alert.alert('Error', 'Please enter a valid phone number');
-            return;
-        }
-        if (!address.trim()) {
-            Alert.alert('Error', 'Please enter your delivery address');
-            return;
-        }
-        if (!city.trim()) {
-            Alert.alert('Error', 'Please enter your city');
-            return;
-        }
-        if (!pincode.trim() || pincode.length !== 6) {
-            Alert.alert('Error', 'Please enter a valid 6-digit pincode');
-            return;
-        }
+    useEffect(() => {
+        // Check location status when screen loads
+        checkLocationStatus();
+    }, []);
 
-        if (items.length === 0) {
-            Alert.alert('Error', 'Your cart is empty');
-            return;
-        }
+    const checkLocationStatus = async () => {
+        setLocationStatus('checking');
+        try {
+            const serviceStatus = await locationService.getServiceStatus();
 
-        setIsProcessing(true);
+            if (serviceStatus.serviceHealth === 'healthy' && serviceStatus.hasStoredLocation) {
+                setLocationStatus('valid');
+            } else {
+                setLocationStatus('invalid');
+            }
+        } catch (error) {
+            console.error('Error checking location status:', error);
+            setLocationStatus('invalid');
+        }
+    };
+
+    const handleLocationValidation = async () => {
+        setIsValidatingLocation(true);
 
         try {
+            // First check if we need permission
+            const serviceStatus = await locationService.getServiceStatus();
+
+            if (serviceStatus.permissionStatus !== PermissionStatus.GRANTED) {
+                setShowPermissionModal(true);
+                setIsValidatingLocation(false);
+                return;
+            }
+
+            // Validate location for order
+            const result = await locationService.validateOrderLocation();
+            setValidationResult(result);
+
+            if (result.isValid) {
+                setLocationStatus('valid');
+                if (result.validationType === ValidationType.APPROVED) {
+                    // Auto-proceed for approved locations
+                    proceedToOrderPlacement();
+                } else {
+                    // Show validation modal for warning cases
+                    setShowValidationModal(true);
+                }
+            } else {
+                setLocationStatus('invalid');
+                setShowValidationModal(true);
+            }
+        } catch (error) {
+            console.error('Location validation failed:', error);
+            Alert.alert(
+                'Location Error',
+                'Unable to validate your location. Please check your GPS settings and try again.',
+                [{ text: 'OK' }]
+            );
+            setLocationStatus('invalid');
+        } finally {
+            setIsValidatingLocation(false);
+        }
+    };
+
+    const handlePermissionGranted = () => {
+        setShowPermissionModal(false);
+        // Retry location validation after permission granted
+        setTimeout(() => {
+            handleLocationValidation();
+        }, 500);
+    };
+
+    const handlePermissionDenied = () => {
+        setShowPermissionModal(false);
+        setLocationStatus('invalid');
+        Alert.alert(
+            'Location Required',
+            'Location access is required to place orders. Please enable location services to continue.',
+            [{ text: 'OK' }]
+        );
+    };
+
+    const handleValidationSuccess = () => {
+        setShowValidationModal(false);
+        setLocationStatus('valid');
+        proceedToOrderPlacement();
+    };
+
+    const handleValidationFailure = () => {
+        setShowValidationModal(false);
+        setLocationStatus('invalid');
+    };
+
+    const proceedToOrderPlacement = async () => {
+        setIsPlacingOrder(true);
+
+        try {
+            // Create order with location validation
             const orderData = {
-                paymentMethod: paymentMethod === 'cod' ? 'COD' as const : 'Online' as const,
+                paymentMethod: 'COD' as const,
                 shippingAddress: {
-                    street: `${address}, ${fullName}, ${phone}`,
-                    city: city,
+                    street: 'Current Location', // This would be filled from actual address
+                    city: 'Jahingara',
                     state: 'Bihar',
-                    zipCode: pincode,
+                    zipCode: '000000'
                 },
-                notes: `Payment Method: ${paymentMethod.toUpperCase()}. Total: ₹${totalWithDelivery.toFixed(2)} (Items: ₹${totalAmount.toFixed(2)} + Delivery: ₹${deliveryFee.toFixed(2)})`
+                notes: 'Order placed with location validation'
             };
 
-            console.log('🛒 Creating order with data:', orderData);
-
-            // Create order in database
-            const createdOrder = await orderService.createOrder(orderData);
-
-            console.log('✅ Order created successfully:', createdOrder);
+            const order = await orderService.createOrder(orderData);
 
             // Clear cart after successful order
             await clearCart();
 
             Alert.alert(
-                'Order Placed Successfully! 🎉',
-                `Your order #${createdOrder.orderId} has been placed successfully. You will receive a confirmation shortly.`,
+                'Order Placed Successfully!',
+                `Your order #${order.orderId} has been placed and will be delivered soon.`,
                 [
                     {
-                        text: 'View Orders',
-                        onPress: () => navigation.navigate('OrderHistory'),
-                    },
-                    {
-                        text: 'Continue Shopping',
-                        onPress: () => navigation.navigate('MainTabs', { screen: 'Products' }),
-                        style: 'cancel',
-                    },
+                        text: 'OK',
+                        onPress: () => navigation.navigate('MainTabs', { screen: 'Home' })
+                    }
                 ]
             );
-        } catch (error: any) {
-            console.error('❌ Order creation failed:', error);
+        } catch (error) {
+            console.error('Order placement failed:', error);
             Alert.alert(
                 'Order Failed',
-                error.message || 'Failed to place order. Please check your connection and try again.',
-                [
-                    { text: 'Retry', onPress: handlePlaceOrder },
-                    { text: 'Cancel', style: 'cancel' },
-                ]
+                error instanceof Error ? error.message : 'Failed to place order. Please try again.',
+                [{ text: 'OK' }]
             );
         } finally {
-            setIsProcessing(false);
+            setIsPlacingOrder(false);
+        }
+    };
+
+    const renderLocationStatus = () => {
+        switch (locationStatus) {
+            case 'checking':
+                return (
+                    <View style={styles.locationStatus}>
+                        <ActivityIndicator size="small" color={COLORS.primary} />
+                        <Text style={styles.locationStatusText}>Checking location...</Text>
+                    </View>
+                );
+
+            case 'valid':
+                return (
+                    <View style={[styles.locationStatus, styles.locationValid]}>
+                        <Ionicons name="checkmark-circle" size={20} color="#48bb78" />
+                        <Text style={[styles.locationStatusText, { color: '#48bb78' }]}>
+                            Location verified
+                        </Text>
+                    </View>
+                );
+
+            case 'invalid':
+                return (
+                    <View style={[styles.locationStatus, styles.locationInvalid]}>
+                        <Ionicons name="alert-circle" size={20} color="#f56565" />
+                        <Text style={[styles.locationStatusText, { color: '#f56565' }]}>
+                            Location verification required
+                        </Text>
+                    </View>
+                );
+
+            default:
+                return null;
         }
     };
 
@@ -130,211 +222,83 @@ function CheckoutContent() {
                     onPress={() => navigation.goBack()}
                     style={styles.backButton}
                 >
-                    <Ionicons name="arrow-back" size={24} color={COLORS.text} />
+                    <Ionicons name="chevron-back" size={24} color={COLORS.text} />
                 </TouchableOpacity>
                 <Text style={styles.headerTitle}>Checkout</Text>
-                <View style={styles.backButton} />
+                <View style={styles.placeholder} />
             </View>
 
-            <ScrollView
-                style={styles.scrollView}
-                contentContainerStyle={styles.scrollContent}
-                showsVerticalScrollIndicator={false}
-            >
-                {/* Delivery Address Section */}
+            <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+                {/* Order Summary */}
                 <View style={styles.section}>
-                    <View style={styles.sectionHeader}>
-                        <Ionicons name="location" size={20} color={COLORS.primary} />
-                        <Text style={styles.sectionTitle}>Delivery Address</Text>
-                    </View>
-
-                    <View style={styles.inputContainer}>
-                        <Text style={styles.inputLabel}>Full Name *</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Enter your full name"
-                            value={fullName}
-                            onChangeText={setFullName}
-                            placeholderTextColor="#a0aec0"
-                        />
-                    </View>
-
-                    <View style={styles.inputContainer}>
-                        <Text style={styles.inputLabel}>Phone Number *</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Enter your phone number (10 digits)"
-                            value={phone}
-                            onChangeText={(text) => {
-                                // Only allow numbers and limit to 10 characters
-                                const numericText = text.replace(/[^0-9]/g, '');
-                                if (numericText.length <= 10) {
-                                    setPhone(numericText);
-                                }
-                            }}
-                            keyboardType="phone-pad"
-                            maxLength={10}
-                            placeholderTextColor="#a0aec0"
-                        />
-                    </View>
-
-                    <View style={styles.inputContainer}>
-                        <Text style={styles.inputLabel}>Address *</Text>
-                        <TextInput
-                            style={[styles.input, styles.textArea]}
-                            placeholder="House no., Building name, Street"
-                            value={address}
-                            onChangeText={setAddress}
-                            multiline
-                            numberOfLines={3}
-                            textAlignVertical="top"
-                            placeholderTextColor="#a0aec0"
-                        />
-                    </View>
-
-                    <View style={styles.row}>
-                        <View style={[styles.inputContainer, styles.halfWidth]}>
-                            <Text style={styles.inputLabel}>City *</Text>
-                            <TextInput
-                                style={styles.input}
-                                placeholder="City"
-                                value={city}
-                                onChangeText={setCity}
-                                placeholderTextColor="#a0aec0"
-                            />
-                        </View>
-
-                        <View style={[styles.inputContainer, styles.halfWidth]}>
-                            <Text style={styles.inputLabel}>Pincode *</Text>
-                            <TextInput
-                                style={styles.input}
-                                placeholder="6-digit pincode"
-                                value={pincode}
-                                onChangeText={(text) => {
-                                    // Only allow numbers and limit to 6 characters
-                                    const numericText = text.replace(/[^0-9]/g, '');
-                                    if (numericText.length <= 6) {
-                                        setPincode(numericText);
-                                    }
-                                }}
-                                keyboardType="number-pad"
-                                maxLength={6}
-                                placeholderTextColor="#a0aec0"
-                            />
-                        </View>
-                    </View>
-                </View>
-
-                {/* Payment Method Section */}
-                <View style={styles.section}>
-                    <View style={styles.sectionHeader}>
-                        <Ionicons name="card" size={20} color={COLORS.primary} />
-                        <Text style={styles.sectionTitle}>Payment Method</Text>
-                    </View>
-
-                    <TouchableOpacity
-                        style={[
-                            styles.paymentOption,
-                            paymentMethod === 'cod' && styles.paymentOptionSelected,
-                        ]}
-                        onPress={() => setPaymentMethod('cod')}
-                    >
-                        <View style={styles.paymentOptionLeft}>
-                            <Ionicons name="cash" size={24} color={COLORS.text} />
-                            <View style={styles.paymentOptionText}>
-                                <Text style={styles.paymentOptionTitle}>Cash on Delivery</Text>
-                                <Text style={styles.paymentOptionSubtitle}>
-                                    Pay when you receive
-                                </Text>
-                            </View>
-                        </View>
-                        <View
-                            style={[
-                                styles.radio,
-                                paymentMethod === 'cod' && styles.radioSelected,
-                            ]}
-                        >
-                            {paymentMethod === 'cod' && (
-                                <View style={styles.radioDot} />
-                            )}
-                        </View>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                        style={[
-                            styles.paymentOption,
-                            paymentMethod === 'card' && styles.paymentOptionSelected,
-                        ]}
-                        onPress={() => setPaymentMethod('card')}
-                    >
-                        <View style={styles.paymentOptionLeft}>
-                            <Ionicons name="card-outline" size={24} color={COLORS.text} />
-                            <View style={styles.paymentOptionText}>
-                                <Text style={styles.paymentOptionTitle}>Credit/Debit Card</Text>
-                                <Text style={styles.paymentOptionSubtitle}>Coming soon</Text>
-                            </View>
-                        </View>
-                        <View
-                            style={[
-                                styles.radio,
-                                paymentMethod === 'card' && styles.radioSelected,
-                            ]}
-                        >
-                            {paymentMethod === 'card' && (
-                                <View style={styles.radioDot} />
-                            )}
-                        </View>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                        style={[
-                            styles.paymentOption,
-                            paymentMethod === 'upi' && styles.paymentOptionSelected,
-                        ]}
-                        onPress={() => setPaymentMethod('upi')}
-                    >
-                        <View style={styles.paymentOptionLeft}>
-                            <Ionicons name="phone-portrait" size={24} color={COLORS.text} />
-                            <View style={styles.paymentOptionText}>
-                                <Text style={styles.paymentOptionTitle}>UPI Payment</Text>
-                                <Text style={styles.paymentOptionSubtitle}>Coming soon</Text>
-                            </View>
-                        </View>
-                        <View
-                            style={[
-                                styles.radio,
-                                paymentMethod === 'upi' && styles.radioSelected,
-                            ]}
-                        >
-                            {paymentMethod === 'upi' && (
-                                <View style={styles.radioDot} />
-                            )}
-                        </View>
-                    </TouchableOpacity>
-                </View>
-
-                {/* Order Summary Section */}
-                <View style={styles.section}>
-                    <View style={styles.sectionHeader}>
-                        <Ionicons name="receipt" size={20} color={COLORS.primary} />
-                        <Text style={styles.sectionTitle}>Order Summary</Text>
-                    </View>
-
+                    <Text style={styles.sectionTitle}>Order Summary</Text>
                     <View style={styles.summaryRow}>
                         <Text style={styles.summaryLabel}>Items ({items.length})</Text>
                         <Text style={styles.summaryValue}>₹{totalAmount.toFixed(2)}</Text>
                     </View>
-
                     <View style={styles.summaryRow}>
                         <Text style={styles.summaryLabel}>Delivery Fee</Text>
                         <Text style={styles.summaryValue}>₹{deliveryFee.toFixed(2)}</Text>
                     </View>
-
                     <View style={styles.divider} />
-
                     <View style={styles.summaryRow}>
                         <Text style={styles.totalLabel}>Total Amount</Text>
                         <Text style={styles.totalValue}>₹{totalWithDelivery.toFixed(2)}</Text>
+                    </View>
+                </View>
+
+                {/* Location Verification */}
+                <View style={styles.section}>
+                    <Text style={styles.sectionTitle}>Delivery Location</Text>
+                    <Text style={styles.sectionSubtitle}>
+                        We need to verify your location to ensure delivery within our service area
+                    </Text>
+
+                    {renderLocationStatus()}
+
+                    {locationStatus !== 'valid' && (
+                        <TouchableOpacity
+                            style={styles.verifyLocationButton}
+                            onPress={handleLocationValidation}
+                            disabled={isValidatingLocation}
+                        >
+                            {isValidatingLocation ? (
+                                <ActivityIndicator size="small" color={COLORS.white} />
+                            ) : (
+                                <Ionicons name="location" size={20} color={COLORS.white} />
+                            )}
+                            <Text style={styles.verifyLocationButtonText}>
+                                {isValidatingLocation ? 'Verifying...' : 'Verify Location'}
+                            </Text>
+                        </TouchableOpacity>
+                    )}
+                </View>
+
+                {/* Payment Method */}
+                <View style={styles.section}>
+                    <Text style={styles.sectionTitle}>Payment Method</Text>
+                    <View style={styles.paymentOption}>
+                        <View style={styles.paymentOptionContent}>
+                            <Ionicons name="cash" size={24} color={COLORS.primary} />
+                            <View style={styles.paymentOptionText}>
+                                <Text style={styles.paymentOptionTitle}>Cash on Delivery</Text>
+                                <Text style={styles.paymentOptionSubtitle}>Pay when you receive your order</Text>
+                            </View>
+                        </View>
+                        <Ionicons name="checkmark-circle" size={24} color={COLORS.primary} />
+                    </View>
+                </View>
+
+                {/* Delivery Info */}
+                <View style={styles.section}>
+                    <Text style={styles.sectionTitle}>Delivery Information</Text>
+                    <View style={styles.infoRow}>
+                        <Ionicons name="time" size={20} color="#718096" />
+                        <Text style={styles.infoText}>Estimated delivery: 30-45 minutes</Text>
+                    </View>
+                    <View style={styles.infoRow}>
+                        <Ionicons name="location" size={20} color="#718096" />
+                        <Text style={styles.infoText}>Delivery within 5km radius</Text>
                     </View>
                 </View>
             </ScrollView>
@@ -342,23 +306,41 @@ function CheckoutContent() {
             {/* Place Order Button */}
             <View style={styles.footer}>
                 <TouchableOpacity
-                    style={[styles.placeOrderButton, isProcessing && styles.buttonDisabled]}
-                    onPress={handlePlaceOrder}
-                    disabled={isProcessing}
-                    activeOpacity={0.8}
+                    style={[
+                        styles.placeOrderButton,
+                        (locationStatus !== 'valid' || isPlacingOrder) && styles.placeOrderButtonDisabled
+                    ]}
+                    onPress={proceedToOrderPlacement}
+                    disabled={locationStatus !== 'valid' || isPlacingOrder}
                 >
-                    {isProcessing ? (
-                        <ActivityIndicator color={COLORS.white} />
+                    {isPlacingOrder ? (
+                        <ActivityIndicator size="small" color={COLORS.white} />
                     ) : (
                         <>
                             <Text style={styles.placeOrderButtonText}>
                                 Place Order • ₹{totalWithDelivery.toFixed(2)}
                             </Text>
-                            <Ionicons name="checkmark-circle" size={20} color={COLORS.white} />
+                            <Ionicons name="arrow-forward" size={20} color={COLORS.white} />
                         </>
                     )}
                 </TouchableOpacity>
             </View>
+
+            {/* Location Modals */}
+            <LocationPermissionModal
+                visible={showPermissionModal}
+                onPermissionGranted={handlePermissionGranted}
+                onPermissionDenied={handlePermissionDenied}
+                onClose={() => setShowPermissionModal(false)}
+            />
+
+            <LocationValidationModal
+                visible={showValidationModal}
+                validationResult={validationResult}
+                onValidationSuccess={handleValidationSuccess}
+                onValidationFailure={handleValidationFailure}
+                onClose={() => setShowValidationModal(false)}
+            />
         </SafeAreaView>
     );
 }
@@ -386,112 +368,35 @@ const styles = StyleSheet.create({
     },
     headerTitle: {
         fontSize: 18,
-        fontWeight: '700',
+        fontWeight: '600',
         color: COLORS.text,
     },
-    scrollView: {
-        flex: 1,
+    placeholder: {
+        width: 40,
     },
-    scrollContent: {
-        paddingBottom: 100,
+    content: {
+        flex: 1,
     },
     section: {
         backgroundColor: COLORS.white,
-        marginTop: 12,
+        marginHorizontal: SIZES.padding,
+        marginTop: 16,
         padding: SIZES.padding,
-    },
-    sectionHeader: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 20,
+        borderRadius: 12,
+        borderWidth: 1,
+        borderColor: '#e2e8f0',
     },
     sectionTitle: {
         fontSize: 18,
-        fontWeight: '700',
-        color: COLORS.text,
-        marginLeft: 8,
-    },
-    inputContainer: {
-        marginBottom: 16,
-    },
-    inputLabel: {
-        fontSize: 14,
         fontWeight: '600',
         color: COLORS.text,
         marginBottom: 8,
     },
-    input: {
-        backgroundColor: COLORS.background,
-        borderRadius: 8,
-        paddingHorizontal: 16,
-        paddingVertical: 12,
-        fontSize: 16,
-        color: COLORS.text,
-        borderWidth: 1,
-        borderColor: '#e2e8f0',
-    },
-    textArea: {
-        height: 80,
-        paddingTop: 12,
-    },
-    row: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    },
-    halfWidth: {
-        width: '48%',
-    },
-    paymentOption: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: 16,
-        borderRadius: 12,
-        borderWidth: 2,
-        borderColor: '#e2e8f0',
-        marginBottom: 12,
-        backgroundColor: COLORS.background,
-    },
-    paymentOptionSelected: {
-        borderColor: COLORS.primary,
-        backgroundColor: '#f0fdf4',
-    },
-    paymentOptionLeft: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        flex: 1,
-    },
-    paymentOptionText: {
-        marginLeft: 12,
-        flex: 1,
-    },
-    paymentOptionTitle: {
-        fontSize: 16,
-        fontWeight: '600',
-        color: COLORS.text,
-        marginBottom: 2,
-    },
-    paymentOptionSubtitle: {
-        fontSize: 12,
+    sectionSubtitle: {
+        fontSize: 14,
         color: '#718096',
-    },
-    radio: {
-        width: 24,
-        height: 24,
-        borderRadius: 12,
-        borderWidth: 2,
-        borderColor: '#cbd5e0',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    radioSelected: {
-        borderColor: COLORS.primary,
-    },
-    radioDot: {
-        width: 12,
-        height: 12,
-        borderRadius: 6,
-        backgroundColor: COLORS.primary,
+        marginBottom: 16,
+        lineHeight: 20,
     },
     summaryRow: {
         flexDirection: 'row',
@@ -514,47 +419,110 @@ const styles = StyleSheet.create({
         marginVertical: 12,
     },
     totalLabel: {
-        fontSize: 18,
+        fontSize: 16,
         fontWeight: '700',
         color: COLORS.text,
     },
     totalValue: {
-        fontSize: 24,
+        fontSize: 18,
         fontWeight: '700',
         color: COLORS.primary,
     },
+    locationStatus: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 12,
+        borderRadius: 8,
+        backgroundColor: '#f7fafc',
+        marginBottom: 16,
+    },
+    locationValid: {
+        backgroundColor: '#f0fff4',
+        borderWidth: 1,
+        borderColor: '#9ae6b4',
+    },
+    locationInvalid: {
+        backgroundColor: '#fed7d7',
+        borderWidth: 1,
+        borderColor: '#feb2b2',
+    },
+    locationStatusText: {
+        fontSize: 14,
+        fontWeight: '500',
+        marginLeft: 8,
+        color: COLORS.text,
+    },
+    verifyLocationButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: COLORS.primary,
+        paddingVertical: 12,
+        borderRadius: 8,
+        gap: 8,
+    },
+    verifyLocationButtonText: {
+        color: COLORS.white,
+        fontSize: 16,
+        fontWeight: '600',
+    },
+    paymentOption: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: 16,
+        backgroundColor: '#f7fafc',
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: '#e2e8f0',
+    },
+    paymentOptionContent: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        flex: 1,
+    },
+    paymentOptionText: {
+        marginLeft: 12,
+        flex: 1,
+    },
+    paymentOptionTitle: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: COLORS.text,
+        marginBottom: 2,
+    },
+    paymentOptionSubtitle: {
+        fontSize: 14,
+        color: '#718096',
+    },
+    infoRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 12,
+    },
+    infoText: {
+        fontSize: 14,
+        color: '#718096',
+        marginLeft: 12,
+    },
     footer: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
         backgroundColor: COLORS.white,
         paddingHorizontal: SIZES.padding,
         paddingVertical: 16,
         borderTopWidth: 1,
         borderTopColor: '#e2e8f0',
-        elevation: 8,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: -2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 8,
     },
     placeOrderButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
         backgroundColor: COLORS.primary,
         paddingVertical: 16,
         borderRadius: 12,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
         gap: 8,
-        elevation: 2,
-        shadowColor: COLORS.primary,
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.3,
-        shadowRadius: 4,
     },
-    buttonDisabled: {
-        opacity: 0.6,
+    placeOrderButtonDisabled: {
+        backgroundColor: '#cbd5e0',
     },
     placeOrderButtonText: {
         color: COLORS.white,
@@ -562,10 +530,3 @@ const styles = StyleSheet.create({
         fontWeight: '700',
     },
 });
-export default function CheckoutScreen() {
-    return (
-        <AuthGuard fallbackMessage="Please login to proceed with checkout">
-            <CheckoutContent />
-        </AuthGuard>
-    );
-}
