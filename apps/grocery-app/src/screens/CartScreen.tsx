@@ -183,27 +183,27 @@ function CartContent() {
         </View>
     );
 
-    const renderFooter = () => {
-        if (items.length === 0) return null;
+    // const renderFooter = () => {
+    //     if (items.length === 0) return null;
 
-        return (
-            <View style={styles.summaryContainer}>
-                <View style={styles.summaryRow}>
-                    <Text style={styles.summaryLabel}>Subtotal</Text>
-                    <Text style={styles.summaryValue}>₹{totalAmount.toFixed(2)}</Text>
-                </View>
-                <View style={styles.summaryRow}>
-                    <Text style={styles.summaryLabel}>Delivery Fee</Text>
-                    <Text style={styles.summaryValue}>₹40.00</Text>
-                </View>
-                <View style={styles.divider} />
-                <View style={styles.summaryRow}>
-                    <Text style={styles.totalLabel}>Total</Text>
-                    <Text style={styles.totalValue}>₹{(totalAmount + 40).toFixed(2)}</Text>
-                </View>
-            </View>
-        );
-    };
+    //     return (
+    //         <View style={styles.summaryContainer}>
+    //             <View style={styles.summaryRow}>
+    //                 <Text style={styles.summaryLabel}>Subtotal</Text>
+    //                 <Text style={styles.summaryValue}>₹{totalAmount.toFixed(2)}</Text>
+    //             </View>
+    //             <View style={styles.summaryRow}>
+    //                 <Text style={styles.summaryLabel}>Delivery Fee</Text>
+    //                 <Text style={styles.summaryValue}>₹40.00</Text>
+    //             </View>
+    //             <View style={styles.divider} />
+    //             <View style={styles.summaryRow}>
+    //                 <Text style={styles.totalLabel}>Total</Text>
+    //                 <Text style={styles.totalValue}>₹{(totalAmount + 40).toFixed(2)}</Text>
+    //             </View>
+    //         </View>
+    //     );
+    // };
 
     return (
         <SafeAreaView style={styles.container} edges={['top']}>
@@ -213,7 +213,7 @@ function CartContent() {
                 keyExtractor={(item) => item.productId}
                 ListHeaderComponent={renderHeader}
                 ListEmptyComponent={renderEmpty}
-                ListFooterComponent={renderFooter}
+                // ListFooterComponent={renderFooter}
                 contentContainerStyle={items.length === 0 ? styles.emptyList : styles.listContent}
                 showsVerticalScrollIndicator={false}
             />
@@ -263,8 +263,8 @@ const styles = StyleSheet.create({
         borderBottomColor: '#e2e8f0',
     },
     title: {
-        fontSize: 24,
-        fontWeight: '700',
+        fontSize: 18,
+        fontWeight: '600',
         color: COLORS.text,
         marginBottom: 4,
     },
