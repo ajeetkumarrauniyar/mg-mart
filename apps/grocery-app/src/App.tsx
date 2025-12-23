@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { View, Text, ActivityIndicator } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AppNavigator } from './navigation';
 import { useAppInitialization } from './hooks';
@@ -46,53 +47,67 @@ export default function App() {
 
   // Show splash screen
   if (showSplash) {
-    return <SplashScreen onFinish={() => setShowSplash(false)} />;
+    return (
+      <SafeAreaProvider>
+        <SplashScreen onFinish={() => setShowSplash(false)} />
+      </SafeAreaProvider>
+    );
   }
 
   // Show onboarding if not completed
   if (showOnboarding === null) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
-        <ActivityIndicator size="large" color="#48bb78" />
-      </View>
+      <SafeAreaProvider>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
+          <ActivityIndicator size="large" color="#48bb78" />
+        </View>
+      </SafeAreaProvider>
     );
   }
 
   if (showOnboarding) {
-    return <OnboardingScreen onComplete={handleOnboardingComplete} />;
+    return (
+      <SafeAreaProvider>
+        <OnboardingScreen onComplete={handleOnboardingComplete} />
+      </SafeAreaProvider>
+    );
   }
 
   // Show loading screen while app is initializing
   if (!isInitialized) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
-        <ActivityIndicator size="large" color="#48bb78" />
-        <Text style={{ marginTop: 16, fontSize: 16, color: '#4a5568' }}>
-          Loading MG-MART...
-        </Text>
-      </View>
+      <SafeAreaProvider>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
+          <ActivityIndicator size="large" color="#48bb78" />
+          <Text style={{ marginTop: 16, fontSize: 16, color: '#4a5568' }}>
+            Loading MG-MART...
+          </Text>
+        </View>
+      </SafeAreaProvider>
     );
   }
 
   // Show error screen if initialization failed
   if (initError) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff', padding: 20 }}>
-        <Text style={{ fontSize: 18, color: '#e53e3e', textAlign: 'center', marginBottom: 16 }}>
-          Failed to initialize app
-        </Text>
-        <Text style={{ fontSize: 14, color: '#4a5568', textAlign: 'center' }}>
-          {initError}
-        </Text>
-      </View>
+      <SafeAreaProvider>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff', padding: 20 }}>
+          <Text style={{ fontSize: 18, color: '#e53e3e', textAlign: 'center', marginBottom: 16 }}>
+            Failed to initialize app
+          </Text>
+          <Text style={{ fontSize: 14, color: '#4a5568', textAlign: 'center' }}>
+            {initError}
+          </Text>
+        </View>
+      </SafeAreaProvider>
     );
   }
 
   // Navigation handles auth flow now
   return (
-    <>
+    <SafeAreaProvider>
       <AppNavigator />
       <StatusBar style="auto" />
-    </>
+    </SafeAreaProvider>
   );
 }
