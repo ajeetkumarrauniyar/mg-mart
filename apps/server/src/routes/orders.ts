@@ -29,5 +29,3 @@ router.put("/:orderId/status", requireAdmin, orderController.updateOrderStatus);
 
 export default router;
 
-export default router;
-
