@@ -9,6 +9,7 @@ export { default as CheckoutScreen } from "./CheckoutScreen";
 export { default as OrderHistoryScreen } from "./OrderHistoryScreen";
 export { default as OrderDetailScreen } from "./OrderDetailScreen";
 export { default as EditProfileScreen } from "./EditProfileScreen";
+export { default as LocationSelectionScreen } from "./LocationSelectionScreen";
 export { SplashScreen } from "./SplashScreen";
 export { OnboardingScreen } from "./OnboardingScreen";
 export { AuthScreen } from "./AuthScreen";
