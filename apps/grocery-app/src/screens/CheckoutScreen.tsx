@@ -159,7 +159,7 @@ export default function CheckoutScreen() {
 
             Alert.alert(
                 'Order Placed Successfully!',
-                `Your order #${order.id} has been placed and will be delivered soon.`,
+                `Your order #${order.orderId} has been placed and will be delivered soon.`,
                 [
                     {
                         text: 'OK',
