@@ -180,40 +180,57 @@ export class OrderController {
         throw new ApiError("Offset must be a non-negative number", 400);
       }
 
-      // Get all orders and filter manually to avoid Firestore composite index requirement
-      const allOrders = await this.orderRepository.list({});
-      let orders = allOrders.filter((order) => order.userId === userId);
+      // Get orders filtered by userId directly from the repository
+      let orders = await this.orderRepository.list({
+        userId: userId,
+        limit: limitNum,
+        offset: offsetNum
+      });
 
-      // Filter by status if provided
+      // Filter by status if provided (need to get all user orders first if status filter is needed)
       if (status) {
         const validStatuses: OrderStatus[] = [
           "pending",
           "processing",
           "shipped",
           "delivered",
-          "delivered",
           "cancelled",
         ];
         if (!validStatuses.includes(status as OrderStatus)) {
           throw new ApiError("Invalid order status", 400);
         }
-        orders = orders.filter((order) => order.status === status);
+
+        // Get all user orders and filter by status manually since we can't use composite index
+        const allUserOrders = await this.orderRepository.list({ userId: userId });
+        orders = allUserOrders.filter((order) => order.status === status);
+
+        // Apply pagination manually for status-filtered results
+        const total = orders.length;
+        orders = orders.slice(offsetNum, offsetNum + limitNum);
+
+        res.json({
+          success: true,
+          data: {
+            orders,
+            pagination: {
+              total,
+              limit: limitNum,
+              offset: offsetNum,
+              hasMore: offsetNum + limitNum < total,
+            },
+          },
+        });
+        return;
       }
 
-      // Sort by creation date (newest first)
-      orders.sort(
-        (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-      );
-
-      // Apply pagination
-      const total = orders.length;
-      const paginatedOrders = orders.slice(offsetNum, offsetNum + limitNum);
+      // For non-status filtered requests, get total count for pagination
+      const allUserOrders = await this.orderRepository.list({ userId: userId });
+      const total = allUserOrders.length;
 
       res.json({
         success: true,
         data: {
-          orders: paginatedOrders,
+          orders,
           pagination: {
             total,
             limit: limitNum,
@@ -496,7 +513,7 @@ export class OrderController {
         averageOrderValue:
           orders.length > 0
             ? orders.reduce((sum, order) => sum + order.totalAmount, 0) /
-              orders.length
+            orders.length
             : 0,
       };
 
