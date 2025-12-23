@@ -84,6 +84,8 @@ function CartContent() {
             Alert.alert('Empty Cart', 'Please add items to your cart before checkout');
             return;
         }
+
+        // Navigate to the new checkout screen with location validation
         navigation.navigate('Checkout');
     };
 
