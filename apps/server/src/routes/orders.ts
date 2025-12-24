@@ -19,7 +19,7 @@ router.use(authenticateToken);
 
 // Order routes
 router.post("/", orderController.createOrder);
-router.get("/", orderController.getAllOrders);
+router.get("/", orderController.getOrderHistory);
 router.get("/:orderId", orderController.getOrderById);
 router.put("/:orderId/status", orderController.updateOrderStatus);
 
