@@ -9,14 +9,16 @@ import {
     Dimensions,
     StatusBar,
     Alert,
-    Modal
+    Modal,
+    ActivityIndicator
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SIZES, SHADOWS } from '../constants';
-import { useAuthStore, useProductStore } from '../stores';
+import { isDevelopment } from '../config/environment';
+import { useAuthStore, useProductStore, useLocationStore } from '../stores';
 import { Product } from '@mg-mart/types';
 import { OptimizedImage } from '../components';
 import { RootStackParamList } from '../navigation/AppNavigator';
@@ -29,13 +31,15 @@ export default function HomeScreen() {
     const navigation = useNavigation<NavigationProp>();
     const { user, logout } = useAuthStore();
     const { featuredProducts, fetchFeaturedProducts, isLoading } = useProductStore();
+    const { locationName, isLoading: locationLoading, initializeLocation, refreshLocation, getCurrentLocationName, currentLocation, error } = useLocationStore();
     const [searchQuery, setSearchQuery] = useState('');
     const [showProfileMenu, setShowProfileMenu] = useState(false);
     const insets = useSafeAreaInsets();
 
     useEffect(() => {
         fetchFeaturedProducts();
-    }, [fetchFeaturedProducts]);
+        initializeLocation(); // Initialize location on component mount
+    }, [fetchFeaturedProducts, initializeLocation]);
 
     const categories = [
         { id: 1, name: 'Fresh Vegetables', icon: '🥬', color: '#4CAF50' },
@@ -66,11 +70,20 @@ export default function HomeScreen() {
     const renderHeader = () => (
         <View style={styles.header}>
             <View style={styles.headerTop}>
-                <View style={styles.locationContainer}>
+                <TouchableOpacity
+                    style={styles.locationContainer}
+                    onPress={() => navigation.navigate('LocationSelection')}
+                >
                     <Ionicons name="location" size={16} color={COLORS.primary} />
-                    <Text style={styles.locationText}>Sulur, Coimbatore</Text>
-                    <Ionicons name="chevron-down" size={16} color={COLORS.textSecondary} />
-                </View>
+                    <Text style={styles.locationText} numberOfLines={1}>
+                        {locationLoading ? 'Getting location...' : locationName}
+                    </Text>
+                    {locationLoading ? (
+                        <ActivityIndicator size="small" color={COLORS.primary} />
+                    ) : (
+                        <Ionicons name="chevron-down" size={16} color={COLORS.textSecondary} />
+                    )}
+                </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.profileButton}
                     onPress={() => setShowProfileMenu(true)}
@@ -218,6 +231,26 @@ export default function HomeScreen() {
                         style={styles.menuItem}
                         onPress={() => {
                             setShowProfileMenu(false);
+                            getCurrentLocationName();
+                        }}
+                    >
+                        <Ionicons name="locate-outline" size={20} color={COLORS.text} />
+                        <Text style={styles.menuText}>Get Current Location</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.menuItem}
+                        onPress={() => {
+                            setShowProfileMenu(false);
+                            refreshLocation();
+                        }}
+                    >
+                        <Ionicons name="refresh-outline" size={20} color={COLORS.text} />
+                        <Text style={styles.menuText}>Refresh Location</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.menuItem}
+                        onPress={() => {
+                            setShowProfileMenu(false);
                             navigation.navigate('LocationSelection');
                         }}
                     >
@@ -244,6 +277,24 @@ export default function HomeScreen() {
                 {renderOffers()}
                 {renderCategories()}
                 {renderFeaturedProducts()}
+                {isDevelopment && (
+                    <View style={styles.debugSection}>
+                        <Text style={styles.debugTitle}>🔧 Debug Info</Text>
+                        <Text style={styles.debugText}>Location: {locationName}</Text>
+                        {currentLocation && (
+                            <Text style={styles.debugText}>
+                                Coordinates: {currentLocation.latitude.toFixed(6)}, {currentLocation.longitude.toFixed(6)}
+                            </Text>
+                        )}
+                        {error && <Text style={styles.debugError}>Error: {error}</Text>}
+                        <TouchableOpacity
+                            style={styles.debugButton}
+                            onPress={getCurrentLocationName}
+                        >
+                            <Text style={styles.debugButtonText}>Force Location Update</Text>
+                        </TouchableOpacity>
+                    </View>
+                )}
                 <View style={[styles.bottomSpacing, { height: 100 + insets.bottom }]} />
             </ScrollView>
             {renderProfileMenu()}
@@ -274,13 +325,19 @@ const styles = StyleSheet.create({
     locationContainer: {
         flexDirection: 'row',
         alignItems: 'center',
+        backgroundColor: COLORS.backgroundDark,
+        paddingHorizontal: 12,
+        paddingVertical: 8,
+        borderRadius: SIZES.borderRadius,
+        maxWidth: '70%',
     },
     locationText: {
-        fontSize: SIZES.fontSize.medium,
+        fontSize: SIZES.fontSize.small,
         fontWeight: SIZES.fontWeight.medium,
         color: COLORS.text,
         marginLeft: 4,
         marginRight: 4,
+        flex: 1,
     },
     profileButton: {
         padding: 4,
@@ -474,5 +531,44 @@ const styles = StyleSheet.create({
     },
     logoutText: {
         color: COLORS.error,
+    },
+    debugSection: {
+        backgroundColor: COLORS.backgroundDark,
+        margin: SIZES.padding,
+        padding: SIZES.padding,
+        borderRadius: SIZES.borderRadius,
+        borderWidth: 1,
+        borderColor: COLORS.border,
+    },
+    debugTitle: {
+        fontSize: SIZES.fontSize.medium,
+        fontWeight: SIZES.fontWeight.bold,
+        color: COLORS.text,
+        marginBottom: 8,
+    },
+    debugText: {
+        fontSize: SIZES.fontSize.small,
+        color: COLORS.textSecondary,
+        marginBottom: 4,
+        fontFamily: 'monospace',
+    },
+    debugError: {
+        fontSize: SIZES.fontSize.small,
+        color: COLORS.error,
+        marginBottom: 8,
+        fontFamily: 'monospace',
+    },
+    debugButton: {
+        backgroundColor: COLORS.primary,
+        paddingHorizontal: 12,
+        paddingVertical: 8,
+        borderRadius: SIZES.borderRadius,
+        marginTop: 8,
+    },
+    debugButtonText: {
+        color: COLORS.white,
+        fontSize: SIZES.fontSize.small,
+        fontWeight: SIZES.fontWeight.medium,
+        textAlign: 'center',
     },
 });

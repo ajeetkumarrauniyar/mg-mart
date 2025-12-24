@@ -120,6 +120,19 @@ export class LocationService implements ILocationService {
     }
 
     /**
+     * Gets stored location data
+     * @returns Stored location data or null if not found
+     */
+    async getStoredLocation(): Promise<LocationData | null> {
+        try {
+            return await this.locationStorage.getStoredLocation();
+        } catch (error) {
+            console.error('Failed to get stored location:', error);
+            return null;
+        }
+    }
+
+    /**
      * Updates delivery location coordinates
      * @param coordinates New delivery coordinates
      */

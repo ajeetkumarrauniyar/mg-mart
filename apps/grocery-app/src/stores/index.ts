@@ -3,6 +3,7 @@ export { useAuthStore } from "./authStore";
 export { useProductStore } from "./productStore";
 export { useCartStore } from "./cartStore";
 export { useWishlistStore } from "./wishlistStore";
+export { useLocationStore } from "./locationStore";
 
 // Export store types
 export type { AuthStore } from "./authStore";
