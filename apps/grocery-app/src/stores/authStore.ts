@@ -128,7 +128,7 @@ export const useAuthStore = create<AuthStore>()(
         // Clear cart on logout
         try {
           const { useCartStore } = require('./cartStore');
-          useCartStore.getState().clearCart();
+          useCartStore.getState().clearCart(true); // Skip API call
         } catch (error) {
           console.warn('Failed to clear cart on logout:', error);
         }

@@ -6,7 +6,6 @@ import {
     FlatList,
     TouchableOpacity,
     ActivityIndicator,
-    Alert,
     RefreshControl,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -145,18 +144,6 @@ function OrderHistoryContent() {
     const handleOrderPress = (order: Order) => {
         // Navigate to order detail screen
         navigation.navigate('OrderDetail', { orderId: order.orderId });
-    };
-
-    const handleTrackOrder = async (orderId: string) => {
-        try {
-            const trackingInfo = await orderService.trackOrder(orderId);
-            Alert.alert(
-                'Order Tracking',
-                `Status: ${trackingInfo.order.status}\n${trackingInfo.tracking.statusHistory[0]?.message || 'Order is being processed'}`
-            );
-        } catch (error: any) {
-            Alert.alert('Error', 'Failed to track order');
-        }
     };
 
     const renderEmpty = () => {

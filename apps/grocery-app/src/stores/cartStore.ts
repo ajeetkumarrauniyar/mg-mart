@@ -29,7 +29,7 @@ export interface CartStore {
   addItem: (productId: string, quantity: number) => Promise<void>;
   updateItem: (productId: string, quantity: number) => Promise<void>;
   removeItem: (productId: string) => Promise<void>;
-  clearCart: () => Promise<void>;
+  clearCart: (skipApiCall?: boolean) => Promise<void>;
   syncWithServer: () => Promise<void>;
   loadPersistedCart: () => void;
   calculateTotals: () => void;
@@ -198,7 +198,7 @@ export const useCartStore = create<CartStore>()(
         }
       },
 
-      clearCart: async () => {
+      clearCart: async (skipApiCall = false) => {
         try {
           // Update local state immediately
           set({
@@ -210,11 +210,22 @@ export const useCartStore = create<CartStore>()(
             error: null,
           });
 
-          // Sync with API in background
-          cartService.clearCart()
-            .catch((error) => {
-              console.warn("⚠️ API sync failed:", error);
-            });
+          // Only sync with API if we have a valid token and not skipping
+          if (!skipApiCall) {
+            try {
+              const { useAuthStore } = await import('./authStore');
+              const { token, isAuthenticated } = useAuthStore.getState();
+
+              if (token && isAuthenticated) {
+                cartService.clearCart()
+                  .catch((error) => {
+                    console.warn("⚠️ API sync failed:", error);
+                  });
+              }
+            } catch (error) {
+              console.warn("⚠️ Could not check auth state for cart clear:", error);
+            }
+          }
         } catch (error: any) {
           set({
             isLoading: false,
