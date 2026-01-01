@@ -57,4 +57,11 @@ yarn-error.log*
 
 # IDEs and editors
 .vscode/
-**/key.json
+apps/grocery-app/src/stores/cartStore.ts
+apps/find-price.js
+.gitignore
+apps/peek.js
+apps/sampler.js
+apps/peek-columns.js
+g
+apps/value-hunter.js
