@@ -36,6 +36,5 @@ export type {
 export type {
     User,
     UserListResponse,
-    UserFilters,
     UpdateUserData
 } from "./userService";
