@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: mg-mart-admin-panel
+    buildCommand: cd apps/admin-panel && pnpm install && pnpm run build
+    staticPublishPath: apps/admin-panel/dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_BASE_URL
+        value: https://mg-mart-server.onrender.com/api/v1
+      - key: VITE_TOKEN_KEY
+        value: admin_JyFvcGFYRaQSZQeMFMqc6PTtMJtJYGQqp6VTqp38tOa3TycHs00HJp9PFSQA0THc
+      - key: VITE_APP_NAME
+        value: MG Mart Admin Panel
+      - key: VITE_ENVIRONMENT
+        value: production
+      - key: VITE_ENABLE_API_LOGGING
+        value: "false"
+      - key: VITE_ENABLE_DEBUG_MODE
+        value: "false"
+      - key: NODE_VERSION
+        value: "18"
