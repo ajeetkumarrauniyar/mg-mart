@@ -1,5 +1,6 @@
 // API configuration - Endpoints, timeouts, and network settings
 import type { ApiConfig, ApiEndpoints } from "./types";
+import { viteMode } from "./environment";
 
 // API Endpoints organized by feature area
 const apiEndpoints: ApiEndpoints = {
@@ -76,7 +77,7 @@ export const getEndpoint = (
 // Get timeout configuration based on environment
 export const getApiTimeout = (): number => {
     // Shorter timeout in development for faster feedback
-    return import.meta.env.DEV ? 5000 : apiConfig.TIMEOUT;
+    return viteMode === "development" ? 5000 : apiConfig.TIMEOUT;
 };
 
 // Get retry configuration

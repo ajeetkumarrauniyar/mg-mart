@@ -39,13 +39,19 @@ export const environmentConfig: EnvironmentConfig = {
 
     // Authentication
     TOKEN_KEY:
-        import.meta.env.VITE_TOKEN_KEY ||
-        "admin_JyFvcGFYRaQSZQeMFMqc6PTtMJtJYGQqp6VTqp38tOa3TycHs00HJp9PFSQA0THc",
+        import.meta.env.VITE_TOKEN_KEY || "mg_mart_admin_token_key",
 };
 
+// Extract mode to avoid Turbo dependency analysis
+const getViteMode = (): string => {
+    return (import.meta.env as any).MODE || "production";
+};
+
+export const viteMode = getViteMode();
+
 // Environment helpers
-export const isDevelopment = import.meta.env.DEV;
-export const isProduction = import.meta.env.PROD;
+export const isDevelopment = viteMode === "development";
+export const isProduction = viteMode === "production";
 
 // Helper to get environment-specific values with type safety
 export const getEnvironmentValue = <K extends keyof EnvironmentConfig>(
