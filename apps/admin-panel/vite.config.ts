@@ -10,14 +10,14 @@ export default defineConfig({
     outDir: 'dist',
     sourcemap: false, // Disable source maps in production for security
     minify: 'terser',
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom'],
-          axios: ['axios']
-        }
-      }
-    }
+    // rollupOptions: {
+    //   output: {
+    //     manualChunks: {
+    //       vendor: ['react', 'react-dom'],
+    //       axios: ['axios']
+    //     }
+    //   }
+    // }
   },
 
   // Preview configuration for local testing
