@@ -1,7 +1,7 @@
 const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
-const { uploadProductsToFirestore, testFirebaseConnection, getProductCount } = require('./firebase-config');
+const admin = require('firebase-admin');
 
 // Configuration
 const dbPath = 'C:\\BusyWin\\Data\\COMP0001\\db12025.bds';
@@ -15,6 +15,92 @@ const log = {
     warn: (msg) => console.warn(`[${new Date().toISOString()}] ⚠️  ${msg}`),
     error: (msg) => console.error(`[${new Date().toISOString()}] ❌ ${msg}`)
 };
+
+let db = null;
+
+/**
+ * Initialize Firebase Admin SDK
+ */
+function initializeFirebase() {
+    try {
+        // Check if already initialized
+        if (admin.apps.length > 0) {
+            db = admin.firestore();
+            return db;
+        }
+
+        // Look for service account key file
+        const serviceAccountPath = path.join(__dirname, 'firebase-service-account.json');
+        
+        if (!fs.existsSync(serviceAccountPath)) {
+            log.warn("Firebase service account key not found!");
+            log.info("Please add 'firebase-service-account.json' to this directory");
+            return null;
+        }
+
+        // Initialize Firebase Admin
+        const serviceAccount = require(serviceAccountPath);
+        
+        admin.initializeApp({
+            credential: admin.credential.cert(serviceAccount)
+        });
+
+        db = admin.firestore();
+        log.success("Firebase Admin SDK initialized successfully");
+        return db;
+
+    } catch (error) {
+        log.error(`Firebase initialization failed: ${error.message}`);
+        return null;
+    }
+}
+
+/**
+ * Test Firebase connection
+ */
+async function testFirebaseConnection() {
+    try {
+        const firestore = initializeFirebase();
+        if (!firestore) {
+            return false;
+        }
+
+        // Try to read from a test collection
+        const testRef = firestore.collection('_test').doc('connection');
+        await testRef.set({ 
+            timestamp: admin.firestore.FieldValue.serverTimestamp(),
+            test: true 
+        });
+        
+        await testRef.delete(); // Clean up
+        
+        log.success("Firebase connection test passed");
+        return true;
+        
+    } catch (error) {
+        log.error(`Firebase connection test failed: ${error.message}`);
+        return false;
+    }
+}
+
+/**
+ * Get product count from Firestore
+ */
+async function getProductCount(collection = 'products') {
+    try {
+        const firestore = initializeFirebase();
+        if (!firestore) {
+            return 0;
+        }
+
+        const snapshot = await firestore.collection(collection).count().get();
+        return snapshot.data().count;
+        
+    } catch (error) {
+        log.error(`Failed to get product count: ${error.message}`);
+        return 0;
+    }
+}
 
 /**
  * Test database connection (simple version)
@@ -173,7 +259,7 @@ async function uploadToFirebase(products, options = {}) {
         const currentCount = await getProductCount();
         log.info(`📊 Current products in Firebase: ${currentCount}`);
 
-        // Upload products
+        // Upload products using integrated function
         const results = await uploadProductsToFirestore(products, {
             batchSize: 500,
             collection: 'products',
@@ -197,6 +283,203 @@ async function uploadToFirebase(products, options = {}) {
     } catch (error) {
         log.error(`Firebase upload failed: ${error.message}`);
         return false;
+    }
+}
+
+/**
+ * Upload products to Firestore in batches (integrated function)
+ */
+async function uploadProductsToFirestore(products, options = {}) {
+    const {
+        batchSize = 500,
+        collection = 'products',
+        merge = true,
+        dryRun = false
+    } = options;
+
+    const firestore = initializeFirebase();
+    if (!firestore) {
+        throw new Error("Firebase not initialized");
+    }
+
+    log.info(`🔥 Starting Firebase upload of ${products.length} products...`);
+    
+    if (dryRun) {
+        log.warn("DRY RUN MODE - No actual data will be uploaded");
+    }
+
+    // Split products into batches
+    const batches = [];
+    for (let i = 0; i < products.length; i += batchSize) {
+        batches.push(products.slice(i, i + batchSize));
+    }
+
+    log.info(`📦 Created ${batches.length} batches (max ${batchSize} items each)`);
+
+    const results = {
+        totalProducts: products.length,
+        totalBatches: batches.length,
+        successfulBatches: 0,
+        failedBatches: 0,
+        errors: []
+    };
+
+    // Process each batch
+    for (let batchIndex = 0; batchIndex < batches.length; batchIndex++) {
+        const batch = batches[batchIndex];
+        const batchNumber = batchIndex + 1;
+        
+        try {
+            log.info(`📤 Processing batch ${batchNumber}/${batches.length} (${batch.length} products)...`);
+            
+            if (!dryRun) {
+                // Create Firestore batch
+                const firestoreBatch = firestore.batch();
+                
+                // Add each product to the batch
+                batch.forEach(product => {
+                    const docRef = firestore.collection(collection).doc(product.productId);
+                    
+                    // Fix timestamp fields - convert ISO strings to Firestore timestamps
+                    const productData = { ...product };
+                    if (productData.createdAt && typeof productData.createdAt === 'string') {
+                        productData.createdAt = admin.firestore.Timestamp.fromDate(new Date(productData.createdAt));
+                    }
+                    if (productData.updatedAt && typeof productData.updatedAt === 'string') {
+                        productData.updatedAt = admin.firestore.Timestamp.fromDate(new Date(productData.updatedAt));
+                    }
+                    if (productData.lastUpdated && typeof productData.lastUpdated === 'string') {
+                        productData.lastUpdated = admin.firestore.Timestamp.fromDate(new Date(productData.lastUpdated));
+                    }
+                    
+                    if (merge) {
+                        // Merge to preserve existing fields like imageUrl, description
+                        firestoreBatch.set(docRef, productData, { merge: true });
+                    } else {
+                        // Overwrite completely
+                        firestoreBatch.set(docRef, productData);
+                    }
+                });
+                
+                // Commit the batch
+                await firestoreBatch.commit();
+            }
+            
+            results.successfulBatches++;
+            log.success(`✅ Batch ${batchNumber} uploaded successfully (${batch.length} products)`);
+            
+            // Small delay between batches to avoid rate limits
+            if (batchIndex < batches.length - 1) {
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+            
+        } catch (error) {
+            results.failedBatches++;
+            results.errors.push({
+                batch: batchNumber,
+                error: error.message,
+                products: batch.length
+            });
+            
+            log.error(`❌ Batch ${batchNumber} failed: ${error.message}`);
+        }
+    }
+
+    // Summary
+    log.info('\n' + '='.repeat(60));
+    log.info('🎯 FIREBASE UPLOAD SUMMARY');
+    log.info('='.repeat(60));
+    log.info(`📊 Total Products: ${results.totalProducts}`);
+    log.info(`📦 Total Batches: ${results.totalBatches}`);
+    log.success(`✅ Successful Batches: ${results.successfulBatches}`);
+    
+    if (results.failedBatches > 0) {
+        log.error(`❌ Failed Batches: ${results.failedBatches}`);
+        results.errors.forEach(error => {
+            log.error(`   Batch ${error.batch}: ${error.error} (${error.products} products)`);
+        });
+    }
+    
+    const successRate = ((results.successfulBatches / results.totalBatches) * 100).toFixed(1);
+    log.info(`📈 Success Rate: ${successRate}%`);
+    
+    if (results.successfulBatches === results.totalBatches) {
+        log.success('🎉 All products uploaded successfully!');
+    }
+
+    return results;
+}
+
+/**
+ * Analyze schema differences between manual and BUSY products
+ */
+async function analyzeSchemaConsistency() {
+    try {
+        log.info("🔍 Analyzing Product Schema Consistency");
+        log.info("=".repeat(50));
+        
+        const firestore = initializeFirebase();
+        if (!firestore) {
+            log.error("❌ Firebase not initialized");
+            return;
+        }
+        
+        const productsRef = firestore.collection('products');
+        const snapshot = await productsRef.get();
+        
+        if (snapshot.empty) {
+            log.warn("⚠️  No products found");
+            return;
+        }
+        
+        const manualProducts = [];
+        const busyProducts = [];
+        const allFields = new Set();
+        
+        // Categorize products and collect all fields
+        snapshot.forEach(doc => {
+            const product = doc.data();
+            
+            // Collect all field names
+            Object.keys(product).forEach(field => allFields.add(field));
+            
+            // Categorize by source
+            if (product.source === 'BUSY_ERP') {
+                busyProducts.push(product);
+            } else {
+                manualProducts.push(product);
+            }
+        });
+        
+        log.info(`📊 Found ${manualProducts.length} manual products and ${busyProducts.length} BUSY products`);
+        log.info(`📋 Total unique fields: ${allFields.size}`);
+        
+        // Show sample products
+        if (manualProducts.length > 0) {
+            log.info("\n🏪 Sample Manual Product:");
+            const sample = manualProducts[0];
+            Object.entries(sample).slice(0, 5).forEach(([key, value]) => {
+                log.info(`   ${key}: ${typeof value === 'string' ? `"${value}"` : value}`);
+            });
+        }
+        
+        if (busyProducts.length > 0) {
+            log.info("\n🔄 Sample BUSY Product:");
+            const sample = busyProducts[0];
+            Object.entries(sample).slice(0, 5).forEach(([key, value]) => {
+                log.info(`   ${key}: ${typeof value === 'string' ? `"${value}"` : value}`);
+            });
+        }
+        
+        return {
+            totalProducts: snapshot.size,
+            manualProducts: manualProducts.length,
+            busyProducts: busyProducts.length,
+            allFields: Array.from(allFields)
+        };
+        
+    } catch (error) {
+        log.error(`Schema analysis failed: ${error.message}`);
     }
 }
 async function getProductsWithPrices() {
@@ -309,6 +592,12 @@ try {
                 category: mappedCategory,
                 unit: "piece", // Default unit since Unit column causes issues
                 inStock: true,
+                stock: 0, // TODO: Extract from BUSY stock fields
+                description: "", // Empty - can be filled via admin panel
+                imageUrl: "", // Empty - can be filled via admin panel
+                isFeatured: false, // Default to false
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
                 lastUpdated: new Date().toISOString(),
                 source: 'BUSY_ERP'
             };
@@ -385,10 +674,34 @@ function mapUnit(unit) {
 }
 
 /**
- * Main execution
+ * Main execution with integrated commands
  */
 async function main() {
     try {
+        const args = process.argv.slice(2);
+        
+        // Handle different commands
+        if (args.includes('--analyze-schema')) {
+            await analyzeSchemaConsistency();
+            return;
+        }
+        
+        if (args.includes('--test-firebase')) {
+            log.info("🧪 Testing Firebase Integration");
+            const connectionOk = await testFirebaseConnection();
+            if (connectionOk) {
+                const count = await getProductCount();
+                log.info(`📊 Current products in Firebase: ${count}`);
+                log.success("✅ Firebase test completed successfully!");
+            }
+            return;
+        }
+        
+        if (args.includes('--dry-run')) {
+            log.warn("🏃 DRY RUN MODE - No data will be uploaded to Firebase");
+        }
+        
+        // Main sync process
         log.info("🚀 Starting Working BUSY Sync...");
         
         // Test connection
@@ -410,12 +723,15 @@ async function main() {
         log.info("💰 Getting products...");
         const products = await getProductsWithPrices();
         
-        // Upload to Firebase
-        const uploadSuccess = await uploadToFirebase(products, { dryRun: false });
+        // Upload to Firebase (unless dry run)
+        const isDryRun = args.includes('--dry-run');
+        const uploadSuccess = await uploadToFirebase(products, { dryRun: isDryRun });
         
         if (uploadSuccess) {
             log.success(`🎉 Sync completed! Processed and uploaded ${products.length} products to Firebase`);
             log.info("🔗 Products are now live in your admin panel!");
+        } else if (isDryRun) {
+            log.info(`🏃 Dry run completed! ${products.length} products processed (not uploaded)`);
         } else {
             log.warn(`⚠️  Sync completed with issues. ${products.length} products processed but Firebase upload had problems`);
         }
@@ -433,4 +749,12 @@ if (require.main === module) {
     main();
 }
 
-module.exports = { testConnection, getSampleData, getProductsWithPrices, uploadToFirebase };
+module.exports = { 
+    testConnection, 
+    getSampleData, 
+    getProductsWithPrices, 
+    uploadToFirebase,
+    analyzeSchemaConsistency,
+    testFirebaseConnection,
+    getProductCount
+};
