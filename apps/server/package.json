@@ -18,7 +18,10 @@
     "test-all": "tsx src/run-controller-tests.ts all",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test-image-management": "tsx src/test-image-management.ts"
+    "test-image-management": "tsx src/test-image-management.ts",
+    "test-real-config": "tsx src/test-real-config.ts",
+    "setup-firebase": "tsx src/setup-firebase.ts",
+    "test-api": "tsx src/test-api-endpoints.ts"
   },
   "keywords": [],
   "author": "",

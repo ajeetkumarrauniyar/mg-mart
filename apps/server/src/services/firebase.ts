@@ -12,8 +12,8 @@
 import { initializeApp, cert, getApps } from "firebase-admin/app";
 import { getFirestore, Firestore, Timestamp } from "firebase-admin/firestore";
 import { getAuth as getAuthService } from "firebase-admin/auth";
-import fs from "fs";
-import path from "path";
+import { readFileSync, existsSync } from "fs";
+import { join } from "path";
 import { fileURLToPath } from "url";
 
 // Global Firestore database instance
@@ -30,24 +30,51 @@ let db: Firestore;
 export const initializeFirebase = () => {
   // Check if Firebase is already initialized to prevent duplicate initialization
   if (getApps().length === 0) {
-    // Load service account credentials from environment or local file
-    const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT_KEY
-      ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY)
-      : {}; // Fallback to empty object if no credentials
+    let serviceAccount: any = {};
+
+    // Try to load service account from environment variable first
+    if (process.env.FIREBASE_SERVICE_ACCOUNT_KEY) {
+      try {
+        serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
+        console.log('Firebase: Using service account from environment variable');
+      } catch (error) {
+        console.error('Firebase: Invalid FIREBASE_SERVICE_ACCOUNT_KEY format');
+        throw new Error('Invalid FIREBASE_SERVICE_ACCOUNT_KEY format');
+      }
+    } else {
+      // Try to load from file
+      try {
+        const keyPath = join(process.cwd(), 'firebase-service-account.json');
+        if (existsSync(keyPath)) {
+          const keyContent = readFileSync(keyPath, 'utf8');
+          serviceAccount = JSON.parse(keyContent);
+          console.log('Firebase: Using service account from file');
+        } else {
+          console.warn('Firebase: No service account key found (environment or file)');
+        }
+      } catch (error) {
+        console.warn('Firebase: Could not load service account from file');
+      }
+    }
 
     // Validate required environment variables
-    const projectId =
-      process.env.FIREBASE_PROJECT_ID || serviceAccount.project_id;
+    const projectId = process.env.FIREBASE_PROJECT_ID || serviceAccount.project_id;
 
     if (!projectId) {
       throw new Error("FIREBASE_PROJECT_ID environment variable is required");
     }
 
     // Initialize Firebase Admin SDK with credentials
-    initializeApp({
-      credential: cert(serviceAccount),
-      projectId,
-    });
+    const initConfig: any = { projectId };
+
+    // Only add credentials if we have a valid service account
+    if (serviceAccount.private_key && serviceAccount.client_email) {
+      initConfig.credential = cert(serviceAccount);
+    } else {
+      console.warn('Firebase: No valid service account credentials found, using default credentials');
+    }
+
+    initializeApp(initConfig);
   }
 
   // Initialize and cache Firestore database instance
