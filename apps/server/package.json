@@ -31,7 +31,10 @@
     "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
     "tsx": "^4.7.0",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "fast-check": "^3.15.1",
+    "jest": "^29.7.0",
+    "@types/jest": "^29.5.11"
   },
   "dependencies": {
     "@mg-mart/types": "workspace:*",
@@ -40,6 +43,9 @@
     "dotenv": "^17.2.2",
     "firebase-admin": "^13.5.0",
     "bcrypt": "^5.1.1",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "sharp": "^0.33.2",
+    "cloudinary": "^2.0.1",
+    "axios": "^1.6.7"
   }
 }
