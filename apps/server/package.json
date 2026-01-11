@@ -21,7 +21,9 @@
     "test-image-management": "tsx src/test-image-management.ts",
     "test-real-config": "tsx src/test-real-config.ts",
     "setup-firebase": "tsx src/setup-firebase.ts",
-    "test-api": "tsx src/test-api-endpoints.ts"
+    "test-api": "tsx src/test-api-endpoints.ts",
+    "test-direct": "tsx src/test-direct-services.ts",
+    "test-workflow": "tsx src/test-complete-workflow.ts"
   },
   "keywords": [],
   "author": "",

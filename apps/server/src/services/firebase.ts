@@ -44,11 +44,16 @@ export const initializeFirebase = () => {
     } else {
       // Try to load from file
       try {
-        const keyPath = join(process.cwd(), 'firebase-service-account.json');
+        let keyPath = join(process.cwd(), 'firebase-service-account.json');
+        if (!existsSync(keyPath)) {
+          // Try alternative filename
+          keyPath = join(process.cwd(), 'key.json');
+        }
+
         if (existsSync(keyPath)) {
           const keyContent = readFileSync(keyPath, 'utf8');
           serviceAccount = JSON.parse(keyContent);
-          console.log('Firebase: Using service account from file');
+          console.log(`Firebase: Using service account from file: ${keyPath}`);
         } else {
           console.warn('Firebase: No service account key found (environment or file)');
         }

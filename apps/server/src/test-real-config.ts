@@ -4,7 +4,7 @@
  */
 
 import dotenv from 'dotenv';
-import { readFileSync } from 'fs';
+import { readFileSync, existsSync } from 'fs';
 import { join } from 'path';
 
 // Load environment variables
@@ -48,13 +48,26 @@ async function testRealConfiguration() {
             console.log(`   📋 Project ID: ${serviceAccount.project_id}`);
         } else {
             // Try to load from file
-            const keyPath = join(process.cwd(), 'firebase-service-account.json');
-            try {
-                const serviceAccount = JSON.parse(readFileSync(keyPath, 'utf8'));
-                console.log('   ✅ Service account key loaded from file');
-                console.log(`   📋 Project ID: ${serviceAccount.project_id}`);
-            } catch (fileError) {
-                console.log('   ❌ No service account key found (environment or file)');
+            const keyPaths = ['firebase-service-account.json', 'key.json'];
+            let keyFound = false;
+
+            for (const keyPath of keyPaths) {
+                const fullPath = join(process.cwd(), keyPath);
+                try {
+                    if (existsSync(fullPath)) {
+                        const serviceAccount = JSON.parse(readFileSync(fullPath, 'utf8'));
+                        console.log(`   ✅ Service account key loaded from file: ${keyPath}`);
+                        console.log(`   📋 Project ID: ${serviceAccount.project_id}`);
+                        keyFound = true;
+                        break;
+                    }
+                } catch (fileError) {
+                    console.log(`   ❌ Error reading ${keyPath}: Invalid JSON format`);
+                }
+            }
+
+            if (!keyFound) {
+                console.log('   ❌ No service account key found (firebase-service-account.json or key.json)');
                 console.log('   💡 Create firebase-service-account.json or set FIREBASE_SERVICE_ACCOUNT_KEY');
             }
         }
