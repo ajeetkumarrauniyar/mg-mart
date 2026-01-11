@@ -44,7 +44,7 @@ export class ImageRepository {
                 .orderBy('displayOrder', 'asc')
                 .get();
 
-            return snapshot.docs.map(doc => ProductImage.fromFirestoreDocument(doc.id, doc.data()));
+            return snapshot.docs.map((doc: any) => ProductImage.fromFirestoreDocument(doc.id, doc.data()));
         } catch (error) {
             console.error('Error getting product images by product ID:', error);
             throw new Error(`Failed to get product images: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -140,6 +140,9 @@ export class ImageRepository {
             }
 
             const doc = snapshot.docs[0];
+            if (!doc) {
+                return null;
+            }
             return ImageProcessingJob.fromFirestoreDocument(doc.id, doc.data());
         } catch (error) {
             console.error('Error getting processing job by product ID:', error);
@@ -191,7 +194,7 @@ export class ImageRepository {
                 .orderBy('createdAt', 'asc')
                 .get();
 
-            return snapshot.docs.map(doc => ImageProcessingJob.fromFirestoreDocument(doc.id, doc.data()));
+            return snapshot.docs.map((doc: any) => ImageProcessingJob.fromFirestoreDocument(doc.id, doc.data()));
         } catch (error) {
             console.error('Error getting processing jobs by status:', error);
             throw new Error(`Failed to get processing jobs by status: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -209,7 +212,7 @@ export class ImageRepository {
                 .get();
 
             const batch = db.batch();
-            snapshot.docs.forEach(doc => {
+            snapshot.docs.forEach((doc: any) => {
                 batch.delete(doc.ref);
             });
 

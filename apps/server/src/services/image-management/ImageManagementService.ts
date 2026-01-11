@@ -75,7 +75,12 @@ export class ImageManagementService implements IImageManagementService {
             }
 
             // Rank and filter images
-            const rankedImages = this.discoveryService.rankImagesByRelevance(discoveredImages, productIdentifiers[0]);
+            const rankedImages = this.discoveryService.rankImagesByRelevance(discoveredImages, productIdentifiers[0] || {
+                productName: `Product ${productId}`,
+                displayName: `Display Product ${productId}`,
+                category: 'general',
+                brand: 'MG Mart'
+            });
             processingStatus.discoveredImages = rankedImages.slice(0, 5); // Limit to top 5
             processingStatus.timestamps.discoveryCompleted = new Date();
             processingStatus.stage = ProcessingStage.APPROVAL_PENDING;

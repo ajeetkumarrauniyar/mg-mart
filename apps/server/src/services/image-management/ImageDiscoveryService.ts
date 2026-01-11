@@ -405,7 +405,7 @@ export class ImageDiscoveryService implements IImageDiscoveryService {
         if (!contentSize) return 0;
 
         const match = contentSize.match(/(\d+)/);
-        return match ? parseInt(match[1]) : 0;
+        return match && match[1] ? parseInt(match[1], 10) : 0;
     }
 
     private removeDuplicateImages(images: DiscoveredImage[]): DiscoveredImage[] {

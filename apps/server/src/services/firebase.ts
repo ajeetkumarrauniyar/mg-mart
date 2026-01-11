@@ -33,7 +33,7 @@ export const initializeFirebase = () => {
     // Load service account credentials from environment or local file
     const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT_KEY
       ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY)
-      : firebaseKeyCredentials;
+      : {}; // Fallback to empty object if no credentials
 
     // Validate required environment variables
     const projectId =
@@ -54,6 +54,12 @@ export const initializeFirebase = () => {
   db = getFirestore();
   return db;
 };
+
+// Initialize Firebase immediately when this module is loaded
+initializeFirebase();
+
+// Export the db instance for direct access
+export { db };
 
 // Initialize Firebase immediately when this module is loaded
 initializeFirebase();

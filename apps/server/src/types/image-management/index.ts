@@ -184,7 +184,7 @@ export interface CloudStorageService {
 
 export interface ImageManagementService {
     processProductImages(productId: string): Promise<ProcessingStatus>;
-    getProcessingStatus(productId: string): Promise<ProcessingStatus>;
+    getProcessingStatus(productId: string): Promise<ProcessingStatus | null>;
     retryFailedProcessing(productId: string): Promise<ProcessingStatus>;
     cleanupTemporaryImages(productId: string): Promise<void>;
 }
