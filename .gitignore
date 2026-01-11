@@ -54,3 +54,4 @@ apps/sampler.js
 apps/peek-columns.js
 g
 apps/value-hunter.js
+apps/server/key.json
