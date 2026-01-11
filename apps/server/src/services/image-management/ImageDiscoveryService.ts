@@ -62,7 +62,7 @@ export class ImageDiscoveryService implements IImageDiscoveryService {
                 const searchQueries = this.generateSearchQueries(identifier);
 
                 for (const query of searchQueries) {
-                    // Try Google first, then Bing as fallback
+                    // Try Bing first, then Google as fallback
                     let images: DiscoveredImage[] = [];
 
                     if (this.googleApiKey && this.googleSearchEngineId) {
