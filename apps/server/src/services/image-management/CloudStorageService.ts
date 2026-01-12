@@ -44,15 +44,13 @@ export class CloudStorageService implements ICloudStorageService {
                 public_id: publicId,
                 folder: this.folderPrefix,
                 resource_type: 'image',
-                format: 'auto',
                 quality: 'auto:good',
-                fetch_format: 'auto',
                 flags: 'progressive',
                 transformation: [
                     { width: 800, height: 800, crop: 'limit' },
-                    { quality: 'auto:good' },
-                    { fetch_format: 'auto' }
+                    { quality: 'auto:good' }
                 ]
+                // Removed format and fetch_format auto transformations to fix Cloudinary error
             });
 
             // Generate optimized URLs for different sizes
@@ -101,29 +99,25 @@ export class CloudStorageService implements ICloudStorageService {
                     width: 200,
                     height: 200,
                     crop: 'fill',
-                    quality: 'auto:good',
-                    fetch_format: 'auto'
+                    quality: 'auto:good'
                 }),
                 small: cloudinary.url(publicId, {
                     width: 400,
                     height: 400,
                     crop: 'limit',
-                    quality: 'auto:good',
-                    fetch_format: 'auto'
+                    quality: 'auto:good'
                 }),
                 medium: cloudinary.url(publicId, {
                     width: 800,
                     height: 800,
                     crop: 'limit',
-                    quality: 'auto:good',
-                    fetch_format: 'auto'
+                    quality: 'auto:good'
                 }),
                 large: cloudinary.url(publicId, {
                     width: 1200,
                     height: 1200,
                     crop: 'limit',
-                    quality: 'auto:good',
-                    fetch_format: 'auto'
+                    quality: 'auto:good'
                 })
             };
 
@@ -161,9 +155,9 @@ export class CloudStorageService implements ICloudStorageService {
                 public_id: backupPublicId,
                 folder: this.backupFolder,
                 resource_type: 'image',
-                format: 'auto',
                 quality: 'auto:best', // Keep original quality for backup
                 tags: ['backup', 'original']
+                // Removed format: 'auto' as it's causing issues with some Cloudinary accounts
             });
 
             return {

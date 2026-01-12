@@ -1,11 +1,13 @@
-import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
+
+// Load environment variables FIRST, before any other imports
+dotenv.config();
+
+import express, { Express, Request, Response } from "express";
 import cors from "cors";
 import { initializeFirebase } from "./services/firebase.js";
 import { errorHandler } from "./utils/errorHandler.js";
 import apiRoutes from "./routes/index.js";
-
-dotenv.config();
 
 initializeFirebase();
 

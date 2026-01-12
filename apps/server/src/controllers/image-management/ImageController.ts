@@ -4,12 +4,25 @@ import { ImageRepository } from '../../repositories/image-management/ImageReposi
 import { ProcessingStatusType, ProcessingStage } from '../../types/image-management/index.js';
 
 export class ImageController {
-    private readonly imageManagementService: ImageManagementService;
-    private readonly imageRepository: ImageRepository;
+    private _imageManagementService?: ImageManagementService;
+    private _imageRepository?: ImageRepository;
 
     constructor() {
-        this.imageManagementService = new ImageManagementService();
-        this.imageRepository = new ImageRepository();
+        // Services will be initialized lazily when first accessed
+    }
+
+    private get imageManagementService(): ImageManagementService {
+        if (!this._imageManagementService) {
+            this._imageManagementService = new ImageManagementService();
+        }
+        return this._imageManagementService;
+    }
+
+    private get imageRepository(): ImageRepository {
+        if (!this._imageRepository) {
+            this._imageRepository = new ImageRepository();
+        }
+        return this._imageRepository;
     }
 
     // POST /api/products/:id/discover-images
