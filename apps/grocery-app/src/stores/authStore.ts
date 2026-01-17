@@ -44,6 +44,15 @@ export const useAuthStore = create<AuthStore>()(
       login: async (credentials: LoginRequest) => {
         console.log('🔐 Starting login process...');
         set({ isLoading: true, error: null });
+
+        // Reset logout state when logging in
+        try {
+          const { setLogoutState } = require('../services/apiService');
+          setLogoutState(false);
+        } catch (error) {
+          console.warn('Failed to reset logout state in API service:', error);
+        }
+
         try {
           console.log('📡 Calling auth service...');
           const response = await authService.login(credentials);
@@ -125,6 +134,16 @@ export const useAuthStore = create<AuthStore>()(
       },
 
       logout: () => {
+        console.log('🚪 User logged out, redirecting to Auth screen');
+
+        // Set logout state in API service to prevent further API calls
+        try {
+          const { setLogoutState } = require('../services/apiService');
+          setLogoutState(true);
+        } catch (error) {
+          console.warn('Failed to set logout state in API service:', error);
+        }
+
         // Clear cart on logout
         try {
           const { useCartStore } = require('./cartStore');
@@ -204,6 +223,15 @@ export const useAuthStore = create<AuthStore>()(
 
         if (token && user) {
           console.log('✅ Found stored auth data, setting authenticated state');
+
+          // Reset logout state when loading stored auth
+          try {
+            const { setLogoutState } = require('../services/apiService');
+            setLogoutState(false);
+          } catch (error) {
+            console.warn('Failed to reset logout state in API service:', error);
+          }
+
           // We have stored auth data, set as authenticated immediately
           set({ isAuthenticated: true, isLoading: false });
 
