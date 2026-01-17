@@ -24,9 +24,15 @@ export const useAppInitialization = () => {
                 cartStore.loadPersistedCart();
 
                 // If user is authenticated, sync cart with server
-                if (authStore.isAuthenticated) {
+                if (authStore.isAuthenticated && authStore.token) {
                     try {
-                        await cartStore.syncWithServer();
+                        // Add a small delay to ensure auth state is fully settled
+                        await new Promise(resolve => setTimeout(resolve, 100));
+
+                        // Double-check authentication before syncing
+                        if (authStore.isAuthenticated) {
+                            await cartStore.syncWithServer();
+                        }
                     } catch (error) {
                         console.warn('Failed to sync cart with server:', error);
                         // Don't fail initialization if cart sync fails
