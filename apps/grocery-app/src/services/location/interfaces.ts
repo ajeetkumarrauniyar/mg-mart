@@ -14,7 +14,7 @@ import type {
 export interface LocationService {
     validateOrderLocation(): Promise<LocationValidationResult>;
     requestLocationPermission(): Promise<PermissionStatus>;
-    getCurrentLocation(): Promise<LocationCoordinates>;
+    getCurrentLocation(requireHighAccuracy?: boolean): Promise<LocationCoordinates>;
     updateDeliveryLocation(coordinates: LocationCoordinates): Promise<void>;
     refreshLocation(): Promise<LocationCoordinates>;
 }
@@ -32,6 +32,9 @@ export interface GPSCoordinator {
     fetchLocation(options: LocationOptions): Promise<LocationCoordinates>;
     validateAccuracy(coordinates: LocationCoordinates): boolean;
     retryLocationFetch(maxRetries: number): Promise<LocationCoordinates>;
+    fetchHighAccuracyLocation(): Promise<LocationCoordinates>;
+    fetchUltraPreciseLocation(): Promise<LocationCoordinates>;
+    fetchLocationQuick(): Promise<LocationCoordinates | null>;
 }
 
 // Distance calculation interface
