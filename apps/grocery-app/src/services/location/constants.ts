@@ -2,15 +2,16 @@
 
 // Distance thresholds (in kilometers)
 export const DISTANCE_THRESHOLDS = {
-    APPROVED: 3,      // Orders approved within 3km (tightened from 5km)
-    WARNING: 5,       // Warning zone between 3-5km (tightened from 5-7km)
-    BLOCKED: 5,       // Orders blocked beyond 5km (tightened from 7km)
+    APPROVED: 3,      // Orders approved within 3km
+    WARNING: 5,       // Warning zone between 3-5km  
+    BLOCKED: 5.1,     // Orders blocked beyond 5km (fixed: was 5, now 5.1 to avoid threshold collision)
 } as const;
 
 // GPS accuracy thresholds (in meters)
 export const ACCURACY_THRESHOLDS = {
     EXCELLENT: 5,     // Excellent accuracy 
     GOOD: 20,         // Good accuracy  
+    ACCEPTABLE: 100,  // Acceptable accuracy for validation
     POOR: 100,        // Poor accuracy 
     UNACCEPTABLE: 200, // Unacceptable accuracy 
 } as const;
