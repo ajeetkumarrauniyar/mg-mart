@@ -7,7 +7,7 @@ import { GPSCoordinator } from './GPSCoordinator';
 import { ValidationEngine } from './ValidationEngine';
 import { LocationStorage } from './LocationStorage';
 import { MessageService } from './MessageService';
-import { LOCATION_TIMEOUTS, ACCURACY_THRESHOLDS } from './constants';
+import { LOCATION_TIMEOUTS, ACCURACY_THRESHOLDS, RETRY_SETTINGS } from './constants';
 import { createTimestamp, generateLocationId } from './utils';
 
 /**
@@ -30,6 +30,7 @@ export class LocationService implements ILocationService {
 
     /**
      * Main method to validate user location for order placement
+     * Uses high-precision location fetching for accurate validation
      * @returns Complete validation result
      */
     async validateOrderLocation(): Promise<LocationValidationResult> {
@@ -40,32 +41,51 @@ export class LocationService implements ILocationService {
                 throw new Error(this.messageService.getPermissionMessage(permissionStatus));
             }
 
-            // Step 2: Get current location
-            const currentLocation = await this.getCurrentLocation();
+            // Step 2: Get current location with high accuracy requirement
+            console.log('Starting order location validation with high precision...');
+            const currentLocation = await this.getCurrentLocation(true); // High accuracy mode
 
-            // Step 3: Get saved delivery location
-            const savedLocationData = await this.locationStorage.getStoredLocation();
-            if (!savedLocationData) {
-                // First time user - save current location as delivery location
-                await this.saveFirstTimeLocation(currentLocation);
-                return {
-                    isValid: true,
-                    distance: 0,
-                    validationType: 'APPROVED' as any,
-                    message: 'Location saved successfully. You can now place orders.',
-                    suggestedActions: []
-                };
-            }
+            console.log(`Location obtained: accuracy ${currentLocation.accuracy.toFixed(1)}m`);
 
-            // Step 4: Validate current location against saved location
-            const validationResult = this.validationEngine.validateLocationWithAccuracyBuffer(
+            // Step 3: Get shop coordinates for delivery radius validation
+            // Import shop coordinates from utils (this is the correct approach for delivery validation)
+            const { SHOP_COORDINATES } = await import('../../utils/location');
+
+            // Convert shop coordinates to LocationCoordinates format
+            const shopLocation: LocationCoordinates = {
+                latitude: SHOP_COORDINATES.latitude,
+                longitude: SHOP_COORDINATES.longitude,
+                accuracy: 0, // Shop location is exact
+                timestamp: Date.now()
+            };
+
+            console.log('🏪 Using shop coordinates for delivery validation:', {
+                lat: shopLocation.latitude,
+                lon: shopLocation.longitude
+            });
+
+            // Step 4: Validate current location against shop location (not saved delivery location)
+            const validationResult = this.validationEngine.validateLocation(
                 currentLocation,
-                savedLocationData.coordinates,
-                Math.max(currentLocation.accuracy, 100) // Use GPS accuracy as buffer
+                shopLocation
             );
 
-            // Step 5: Cache validation result
-            await this.cacheValidationResult(validationResult, currentLocation, savedLocationData.coordinates);
+            console.log(`Validation result: ${validationResult.validationType}, distance: ${validationResult.distance.toFixed(2)}km`);
+
+            // Step 5: Save user location for future reference (but don't use it for validation)
+            try {
+                const savedLocationData = await this.locationStorage.getStoredLocation();
+                if (!savedLocationData) {
+                    // First time user - save current location as delivery location for reference
+                    await this.saveFirstTimeLocation(currentLocation);
+                }
+            } catch (error) {
+                console.warn('Failed to save location data:', error);
+                // Don't fail validation if we can't save location
+            }
+
+            // Step 6: Cache validation result
+            await this.cacheValidationResult(validationResult, currentLocation, shopLocation);
 
             return validationResult;
 
@@ -91,19 +111,27 @@ export class LocationService implements ILocationService {
     }
 
     /**
-     * Gets current GPS location with retry logic
+     * Gets current GPS location with retry logic and precision optimization
+     * @param requireHighAccuracy Whether to require high accuracy (for order validation)
      * @returns Current location coordinates
      */
-    async getCurrentLocation(): Promise<LocationCoordinates> {
+    async getCurrentLocation(requireHighAccuracy: boolean = false): Promise<LocationCoordinates> {
         try {
-            // First try quick location fetch
+            // For order validation, use ultra-precise location
+            if (requireHighAccuracy) {
+                console.log('Fetching ultra-precise location for order validation...');
+                return await this.gpsCoordinator.fetchUltraPreciseLocation();
+            }
+
+            // First try quick location fetch for general use
             const quickLocation = await this.gpsCoordinator.fetchLocationQuick();
             if (quickLocation && this.gpsCoordinator.validateAccuracy(quickLocation)) {
                 return quickLocation;
             }
 
-            // If quick fetch failed or accuracy is poor, use retry logic
-            return await this.gpsCoordinator.retryLocationFetch(3);
+            // If quick fetch failed or accuracy is poor, use retry logic with high accuracy
+            console.log('Quick location insufficient, fetching high-accuracy location...');
+            return await this.gpsCoordinator.retryLocationFetch(RETRY_SETTINGS.MAX_LOCATION_RETRIES);
 
         } catch (error) {
             console.error('Failed to get current location:', error);
@@ -135,14 +163,16 @@ export class LocationService implements ILocationService {
 
     /**
      * Refreshes current location and re-validates
+     * Uses ultra-precise location for best accuracy
      * @returns Fresh location coordinates
      */
     async refreshLocation(): Promise<LocationCoordinates> {
         try {
-            // Force fresh location fetch with high accuracy
-            const freshLocation = await this.gpsCoordinator.fetchHighAccuracyLocation();
+            // Force fresh location fetch with ultra-high accuracy
+            console.log('Refreshing location with ultra-precise mode...');
+            const freshLocation = await this.gpsCoordinator.fetchUltraPreciseLocation();
 
-            console.log('Location refreshed successfully');
+            console.log(`Location refreshed: accuracy ${freshLocation.accuracy.toFixed(1)}m`);
             return freshLocation;
 
         } catch (error) {
