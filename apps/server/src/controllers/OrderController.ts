@@ -422,14 +422,29 @@ export class OrderController {
     try {
       const {
         limit = "20",
-        offset = "0",
+        offset,
+        page,
         status,
         userId: filterUserId,
       } = req.query;
 
       // Parse pagination parameters
       const limitNum = parseInt(limit as string, 10);
-      const offsetNum = parseInt(offset as string, 10);
+      
+      // Support both 'page' and 'offset' parameters
+      // If 'page' is provided, convert it to 'offset'
+      let offsetNum: number;
+      if (page !== undefined) {
+        const pageNum = parseInt(page as string, 10);
+        if (isNaN(pageNum) || pageNum < 1) {
+          throw new ApiError("Page must be a positive number", 400);
+        }
+        offsetNum = (pageNum - 1) * limitNum;
+      } else if (offset !== undefined) {
+        offsetNum = parseInt(offset as string, 10);
+      } else {
+        offsetNum = 0; // Default to first page
+      }
 
       if (isNaN(limitNum) || limitNum < 1 || limitNum > 100) {
         throw new ApiError("Limit must be between 1 and 100", 400);

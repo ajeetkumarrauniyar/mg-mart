@@ -9,7 +9,7 @@
 
 import { Router } from "express";
 import { OrderController } from "../controllers/index.js";
-import { authenticateToken } from "../middleware/auth.js";
+import { authenticateToken, requireAdmin } from "../middleware/auth.js";
 
 const router: Router = Router();
 const orderController = new OrderController();
@@ -19,9 +19,14 @@ router.use(authenticateToken);
 
 // Order routes
 router.post("/", orderController.createOrder);
-router.get("/", orderController.getOrderHistory);
+router.get("/history", orderController.getOrderHistory);
 router.get("/:orderId", orderController.getOrderById);
-router.put("/:orderId/status", orderController.updateOrderStatus);
+router.put("/:orderId/cancel", orderController.cancelOrder);
+
+// Admin-only routes
+router.get("/", requireAdmin, orderController.getAllOrders);
+router.get("/stats", requireAdmin, orderController.getOrderStats);
+router.put("/:orderId/status", requireAdmin, orderController.updateOrderStatus);
 
 export default router;
 
