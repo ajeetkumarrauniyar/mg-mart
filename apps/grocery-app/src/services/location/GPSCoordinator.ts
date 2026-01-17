@@ -53,12 +53,14 @@ export class GPSCoordinator implements IGPSCoordinator {
 
     /**
      * Fetches location with retry logic for poor accuracy
+     * Enhanced with progressive accuracy improvement
      * @param maxRetries Maximum number of retry attempts
      * @returns Location coordinates with acceptable accuracy
      */
     async retryLocationFetch(maxRetries: number = RETRY_SETTINGS.MAX_LOCATION_RETRIES): Promise<LocationCoordinates> {
         let lastError: Error | null = null;
         let bestLocation: LocationCoordinates | null = null;
+        const locationReadings: LocationCoordinates[] = [];
 
         for (let attempt = 0; attempt < maxRetries; attempt++) {
             try {
