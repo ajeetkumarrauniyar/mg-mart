@@ -20,6 +20,10 @@ export class LocationService implements ILocationService {
     private locationStorage: LocationStorage;
     private messageService: MessageService;
 
+    // Add request queuing to prevent concurrent permission requests
+    private locationRequestQueue: Promise<LocationCoordinates> | null = null;
+    private permissionRequestQueue: Promise<PermissionStatus> | null = null;
+
     constructor() {
         this.permissionManager = new PermissionManager();
         this.gpsCoordinator = new GPSCoordinator();
@@ -82,6 +86,27 @@ export class LocationService implements ILocationService {
      * @returns Permission status after request
      */
     async requestLocationPermission(): Promise<PermissionStatus> {
+        // If there's already a permission request in progress, wait for it
+        if (this.permissionRequestQueue) {
+            try {
+                return await this.permissionRequestQueue;
+            } catch (error) {
+                // If the queued request failed, continue with a new request
+            }
+        }
+
+        // Create new permission request
+        this.permissionRequestQueue = this.performPermissionRequest();
+
+        try {
+            const result = await this.permissionRequestQueue;
+            return result;
+        } finally {
+            this.permissionRequestQueue = null;
+        }
+    }
+
+    private async performPermissionRequest(): Promise<PermissionStatus> {
         try {
             return await this.permissionManager.requestPermissionWithRetry(2);
         } catch (error) {
@@ -95,6 +120,27 @@ export class LocationService implements ILocationService {
      * @returns Current location coordinates
      */
     async getCurrentLocation(): Promise<LocationCoordinates> {
+        // If there's already a location request in progress, wait for it
+        if (this.locationRequestQueue) {
+            try {
+                return await this.locationRequestQueue;
+            } catch (error) {
+                // If the queued request failed, continue with a new request
+            }
+        }
+
+        // Create new location request
+        this.locationRequestQueue = this.performLocationRequest();
+
+        try {
+            const result = await this.locationRequestQueue;
+            return result;
+        } finally {
+            this.locationRequestQueue = null;
+        }
+    }
+
+    private async performLocationRequest(): Promise<LocationCoordinates> {
         try {
             // First try quick location fetch
             const quickLocation = await this.gpsCoordinator.fetchLocationQuick();

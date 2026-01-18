@@ -43,12 +43,17 @@ export const orderService = {
     // Create a new order from user's cart with location validation
     createOrder: async (orderData: CreateOrderRequest): Promise<Order> => {
         try {
-            // Validate location before creating order
-            const locationValidation = await orderService.validateLocationForOrder();
+            // If location validation is already provided (from checkout screen), use it
+            let locationValidation = orderData.locationValidation;
 
-            // If location validation fails, throw error
-            if (!locationValidation.isValid) {
-                throw new Error(`Order cannot be placed: ${locationValidation.message}`);
+            // Only validate location if not already provided
+            if (!locationValidation) {
+                locationValidation = await orderService.validateLocationForOrder();
+
+                // If location validation fails, throw error
+                if (!locationValidation.isValid) {
+                    throw new Error(`Order cannot be placed: ${locationValidation.message}`);
+                }
             }
 
             // Include location validation in order data

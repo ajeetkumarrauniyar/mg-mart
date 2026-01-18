@@ -47,6 +47,7 @@ export const ProductCard: React.FC<ProductCardProps> = memo(({ product, onPress 
     }, [onPress, product]);
 
     const isWishlisted = isInWishlist(product.productId);
+    const stockPercentage = product.stock > 0 ? Math.min((product.stock / 100) * 100, 100) : 0;
 
     return (
         <TouchableOpacity style={styles.card} onPress={handlePress} activeOpacity={0.7}>

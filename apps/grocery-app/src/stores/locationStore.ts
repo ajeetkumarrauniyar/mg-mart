@@ -115,18 +115,21 @@ export const useLocationStore = create<LocationState>((set, get) => ({
         set({ isLoading: true });
 
         try {
-            // First try to get saved location
+            // First try to get saved location (no permission needed)
             await get().getSavedLocation();
 
-            // If no saved location, try to get current location
             const { savedLocation } = get();
-            if (!savedLocation) {
-                console.log('No saved location, getting current location...');
-                await get().getCurrentLocation();
-            } else {
+            if (savedLocation) {
                 console.log('Found saved location, reverse geocoding...');
                 // If we have saved location, reverse geocode it to get current name
                 await get().reverseGeocode(savedLocation.coordinates);
+                set({ isLoading: false });
+            } else {
+                console.log('No saved location found');
+                set({
+                    isLoading: false,
+                    locationName: 'Select Location'
+                });
             }
         } catch (error) {
             console.error('Failed to initialize location:', error);
