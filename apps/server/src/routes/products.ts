@@ -15,6 +15,8 @@ const router: Router = Router();
 const productController = new ProductController();
 
 // Public routes
+router.get("/featured", productController.getFeaturedProducts);
+router.get("/category/:category", productController.getProductsByCategory);
 router.get("/", productController.getAllProducts);
 router.get("/:productId", productController.getProductById);
 
@@ -36,6 +38,12 @@ router.delete(
   authenticateToken,
   requireAdmin,
   productController.deleteProduct
+);
+router.put(
+  "/:productId/stock",
+  authenticateToken,
+  requireAdmin,
+  productController.updateStock
 );
 
 export default router;

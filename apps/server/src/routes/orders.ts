@@ -20,12 +20,14 @@ router.use(authenticateToken);
 // Order routes
 router.post("/", orderController.createOrder);
 router.get("/history", orderController.getOrderHistory);
-router.get("/:orderId", orderController.getOrderById);
-router.put("/:orderId/cancel", orderController.cancelOrder);
 
-// Admin-only routes
+// Admin-only routes 
 router.get("/", requireAdmin, orderController.getAllOrders);
 router.get("/stats", requireAdmin, orderController.getOrderStats);
+
+// Order by ID routes - must come after specific routes
+router.get("/:orderId", orderController.getOrderById);
+router.put("/:orderId/cancel", orderController.cancelOrder);
 router.put("/:orderId/status", requireAdmin, orderController.updateOrderStatus);
 
 export default router;
