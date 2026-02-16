@@ -158,7 +158,7 @@ const MGSupermartLanding = () => {
             <div style={{ fontSize: '22px', color: '#999' }}>→</div>
           </a>
 
-          {/* Instagram */}
+          {/* Instagram Page*/}
           <a 
             href="https://www.instagram.com/mgsupermart.pipra?igsh=MWI2dzZiOW1sZTF0bw==" 
             target="_blank" 
