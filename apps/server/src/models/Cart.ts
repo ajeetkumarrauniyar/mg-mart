@@ -1,83 +1,83 @@
 /**
- * Cart model for MG Mart
+ * Cart model for MG Mart grocery application
  * 
- * Cart is user-specific with optimistic updates.
- * Stock validation happens at checkout, not at cart add.
+ * Extended with price tracking for checkout validation.
+ * Cart uses subcollection under users for efficient access.
+ * 
+ * @author MG Mart Development Team
+ * @version 2.0.0
  */
 
 import { Timestamp } from "firebase-admin/firestore";
 
 /**
- * Cart item stored in Firestore
+ * Cart item stored in Firestore subcollection
+ * Extended with price tracking fields
  */
 export interface CartItem {
   productId: string;
-  sku: string;
-  name: string;
-  imageUrl: string;
-  unit: string;
   quantity: number;
-  priceAtAdd: number;         // Price when added
-  currentPrice: number;       // Latest price (updated on fetch)
   addedAt: Timestamp;
-  updatedAt: Timestamp;
+  // NEW: Price tracking for checkout validation
+  priceAtAdd?: number;             // Price when item was added
+  sku?: string;                    // Product SKU for quick reference
 }
 
 /**
- * Cart document in Firestore
- * Collection: carts/{userId}
+ * Cart item with product details (for API responses)
  */
-export interface Cart {
-  userId: string;
-  items: CartItem[];
-  itemCount: number;
-  totalQty: number;
-  subtotal: number;
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
-  lastActivityAt: Timestamp;
-}
-
-/**
- * Cart item with validation info (for API response)
- */
-export interface CartItemWithValidation {
+export interface CartItemWithProduct {
   productId: string;
-  sku: string;
   name: string;
+  price: number;
   imageUrl: string;
   unit: string;
   quantity: number;
-  priceAtAdd: number;
-  currentPrice: number;
-  subtotal: number;
-  addedAt: string;
-  updatedAt: string;
-  validation: {
-    isAvailable: boolean;
-    hasStockIssue: boolean;
-    hasPriceChange: boolean;
-    availableQty: number;
-    message?: string;
-  };
+  addedAt: Timestamp;
+  // NEW: Price comparison fields
+  priceAtAdd?: number;
+  currentPrice?: number;
+  sku?: string;
 }
 
-/**
- * Cart validation issue
- */
-export interface CartValidationIssue {
+export interface AddToCartInput {
   productId: string;
-  productName: string;
-  type: 'out_of_stock' | 'insufficient_stock' | 'price_changed' | 'product_unavailable';
-  message: string;
-  suggestedQty?: number;
-  priceDifference?: number;
+  quantity: number;
+}
+
+export interface UpdateCartItemInput {
+  quantity: number;
+}
+
+export interface CartItemResponse {
+  productId: string;
+  name: string;
+  price: number;
+  imageUrl: string;
+  unit: string;
+  quantity: number;
+  addedAt: string;
+  // NEW: Validation fields
+  sku?: string;
+  priceAtAdd?: number;
+  currentPrice?: number;
+  priceChanged?: boolean;
+  subtotal?: number;
 }
 
 /**
- * Cart response (API)
+ * Cart response (original format maintained)
  */
 export interface CartResponse {
+  items: CartItemResponse[];
+  totalItems: number;
+  totalAmount: number;
+}
+
+/**
+ * NEW: Enhanced cart response with validation
+ */
+export interface CartResponseWithValidation {
   items: CartItemWithValidation[];
   summary: {
     itemCount: number;
@@ -93,16 +93,72 @@ export interface CartResponse {
 }
 
 /**
- * Add to cart input
+ * NEW: Cart item with validation info
  */
-export interface AddToCartInput {
+export interface CartItemWithValidation {
   productId: string;
+  sku?: string;
+  name: string;
+  imageUrl: string;
+  unit: string;
   quantity: number;
+  price: number;
+  priceAtAdd?: number;
+  subtotal: number;
+  addedAt: string;
+  validation: {
+    isAvailable: boolean;
+    hasStockIssue: boolean;
+    hasPriceChange: boolean;
+    availableQty: number;
+    message?: string;
+  };
 }
 
 /**
- * Update cart item input
+ * NEW: Cart validation issue
  */
-export interface UpdateCartItemInput {
-  quantity: number;
+export interface CartValidationIssue {
+  productId: string;
+  productName: string;
+  type: 'out_of_stock' | 'insufficient_stock' | 'price_changed' | 'product_unavailable';
+  message: string;
+  suggestedQty?: number;
+  priceDifference?: number;
+}
+
+/**
+ * NEW: Checkout validation request
+ */
+export interface ValidateCartForCheckoutRequest {
+  deliveryAddress: {
+    coordinates?: {
+      latitude: number;
+      longitude: number;
+    };
+    pincode: string;
+  };
+}
+
+/**
+ * NEW: Checkout validation response
+ */
+export interface ValidateCartForCheckoutResponse {
+  isValid: boolean;
+  cart: CartResponseWithValidation;
+  delivery: {
+    isServiceable: boolean;
+    distance?: number;
+    estimatedTime?: string;
+    deliveryFee: number;
+    message?: string;
+  };
+  pricing: {
+    subtotal: number;
+    deliveryFee: number;
+    packagingFee: number;
+    discount: number;
+    total: number;
+  };
+  issues: CartValidationIssue[];
 }

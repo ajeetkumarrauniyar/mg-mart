@@ -6,26 +6,3 @@ export * from "./Cart.js";
 export * from "./Order.js";
 export * from "./StoreConfig.js";
 export * from "./ERPSync.js";
-
-// Common API types
-export interface ApiResponse<T> {
-  success: boolean;
-  data?: T;
-  message?: string;
-  error?: string;
-}
-
-export interface PaginationParams {
-  page?: number;
-  limit?: number;
-}
-
-export interface PaginatedResponse<T> {
-  data: T[];
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-  };
-}

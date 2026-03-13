@@ -1,8 +1,11 @@
 /**
- * Product model for MG Mart (ERP-centric)
+ * Product model for MG Mart grocery application
  * 
- * Stock and pricing are synced from BUSY ERP.
- * App/backend must NEVER modify stock directly.
+ * Extended for ERP-centric design while maintaining backward compatibility.
+ * Stock and pricing are synced from BUSY ERP - READ-ONLY by app.
+ * 
+ * @author MG Mart Development Team
+ * @version 2.0.0
  */
 
 import { Timestamp } from "firebase-admin/firestore";
@@ -29,111 +32,124 @@ export type ProductUnit =
   | "pack";
 
 /**
- * Product document in Firestore (ERP-synced)
+ * Product document in Firestore
+ * Extended with ERP fields while keeping original fields
  */
 export interface Product {
   productId: string;
-  sku: string;                    // ERP SKU
   name: string;
   description: string;
   
-  // Pricing (from ERP)
-  mrp: number;
-  sellingPrice: number;
-  discountPercent?: number;
+  // Original pricing field (kept for backward compatibility)
+  price: number;
   
-  // Inventory (READ-ONLY - synced from ERP)
-  stockQty: number;
-  unit: ProductUnit;
-  minOrderQty: number;
-  maxOrderQty: number;
+  // NEW: ERP pricing fields
+  sku?: string;                    // ERP Stock Keeping Unit
+  mrp?: number;                    // Maximum Retail Price
+  sellingPrice?: number;           // Actual selling price (defaults to price)
+  discountPercent?: number;        // Calculated discount
   
-  // Classification
   category: ProductCategory;
+  imageUrl: string;
+  images?: string[];               // NEW: Additional images
+  
+  // Original stock field (kept for backward compatibility)
+  stock: number;
+  
+  // NEW: Enhanced inventory fields
+  stockQty?: number;               // Alias for stock (ERP terminology)
+  minOrderQty?: number;            // Minimum order quantity (default: 1)
+  maxOrderQty?: number;            // Maximum order quantity (default: 10)
+  
+  unit: ProductUnit;
+  isFeatured: boolean;
+  
+  // NEW: Status fields
+  isActive?: boolean;              // Available for ordering (default: true)
+  isAvailable?: boolean;           // In stock (stock > 0)
+  
+  // NEW: Classification
   subcategory?: string;
   brand?: string;
   tags?: string[];
   
-  // Media
-  imageUrl: string;
-  images?: string[];
+  // NEW: ERP Sync Metadata
+  erpItemCode?: string;            // ERP internal item code
+  erpLastSyncAt?: Timestamp;       // Last sync from ERP
   
-  // Status
-  isActive: boolean;
-  isAvailable: boolean;           // stockQty > 0
-  isFeatured: boolean;
-  
-  // ERP Sync Metadata
-  erpLastSyncAt?: Timestamp;
-  erpItemCode?: string;
-  
-  // Timestamps
   createdAt: Timestamp;
   updatedAt: Timestamp;
 }
 
 export interface CreateProductInput {
-  sku: string;
   name: string;
   description: string;
-  mrp: number;
-  sellingPrice: number;
-  stockQty: number;
+  price: number;
+  category: ProductCategory;
+  imageUrl: string;
+  stock: number;
   unit: ProductUnit;
+  isFeatured?: boolean;
+  // NEW optional fields
+  sku?: string;
+  mrp?: number;
+  sellingPrice?: number;
   minOrderQty?: number;
   maxOrderQty?: number;
-  category: ProductCategory;
+  isActive?: boolean;
   subcategory?: string;
   brand?: string;
   tags?: string[];
-  imageUrl: string;
   images?: string[];
-  isActive?: boolean;
-  isFeatured?: boolean;
   erpItemCode?: string;
 }
 
 export interface UpdateProductInput {
   name?: string;
   description?: string;
+  price?: number;
+  category?: ProductCategory;
+  imageUrl?: string;
+  stock?: number;
+  unit?: ProductUnit;
+  isFeatured?: boolean;
+  // NEW optional fields
+  sku?: string;
   mrp?: number;
   sellingPrice?: number;
-  stockQty?: number;
-  unit?: ProductUnit;
   minOrderQty?: number;
   maxOrderQty?: number;
-  category?: ProductCategory;
+  isActive?: boolean;
   subcategory?: string;
   brand?: string;
   tags?: string[];
-  imageUrl?: string;
   images?: string[];
-  isActive?: boolean;
-  isFeatured?: boolean;
 }
 
 export interface ProductResponse {
   productId: string;
-  sku: string;
   name: string;
   description: string;
-  mrp: number;
-  sellingPrice: number;
-  discountPercent?: number;
-  stockQty: number;
-  unit: ProductUnit;
-  minOrderQty: number;
-  maxOrderQty: number;
+  price: number;
   category: ProductCategory;
+  imageUrl: string;
+  stock: number;
+  unit: ProductUnit;
+  isFeatured: boolean;
+  createdAt: string;
+  updatedAt: string;
+  // NEW optional fields in response
+  sku?: string;
+  mrp?: number;
+  sellingPrice?: number;
+  discountPercent?: number;
+  minOrderQty?: number;
+  maxOrderQty?: number;
+  isActive?: boolean;
+  isAvailable?: boolean;
   subcategory?: string;
   brand?: string;
   tags?: string[];
-  imageUrl: string;
   images?: string[];
-  isActive: boolean;
-  isAvailable: boolean;
-  isFeatured: boolean;
   erpItemCode?: string;
-  createdAt: string;
-  updatedAt: string;
 }

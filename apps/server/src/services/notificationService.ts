@@ -5,7 +5,7 @@
  */
 
 import { getMessaging, MulticastMessage } from "firebase-admin/messaging";
-import { db } from "./firebase.js";
+import { getDb, COLLECTIONS } from "./firebase.js";
 import { Timestamp } from "firebase-admin/firestore";
 import { Order, NotificationLogEntry } from "../models/Order.js";
 
@@ -52,7 +52,8 @@ export class NotificationService {
     deviceId: string,
     platform: "ios" | "android" | "web"
   ): Promise<void> {
-    const tokenRef = db.collection("userTokens").doc(userId);
+    const db = getDb();
+    const tokenRef = db.collection(COLLECTIONS.USER_TOKENS).doc(userId);
     const doc = await tokenRef.get();
     
     const now = Timestamp.now();
@@ -89,7 +90,8 @@ export class NotificationService {
    * Remove FCM token for a device
    */
   async removeToken(userId: string, deviceId: string): Promise<void> {
-    const tokenRef = db.collection("userTokens").doc(userId);
+    const db = getDb();
+    const tokenRef = db.collection(COLLECTIONS.USER_TOKENS).doc(userId);
     const doc = await tokenRef.get();
 
     if (!doc.exists) return;
@@ -115,7 +117,8 @@ export class NotificationService {
     notification: NotificationPayload
   ): Promise<{ success: boolean; error?: string }> {
     try {
-      const tokenDoc = await db.collection("userTokens").doc(userId).get();
+      const db = getDb();
+      const tokenDoc = await db.collection(COLLECTIONS.USER_TOKENS).doc(userId).get();
       
       if (!tokenDoc.exists) {
         return { success: false, error: "No FCM tokens registered for user" };
@@ -202,7 +205,8 @@ export class NotificationService {
     });
 
     if (failedTokens.length > 0) {
-      const tokenRef = db.collection("userTokens").doc(userId);
+      const db = getDb();
+      const tokenRef = db.collection(COLLECTIONS.USER_TOKENS).doc(userId);
       const doc = await tokenRef.get();
       
       if (doc.exists) {
@@ -239,8 +243,9 @@ export class NotificationService {
       error,
     };
 
+    const db = getDb();
     await db
-      .collection("orders")
+      .collection(COLLECTIONS.ORDERS)
       .doc(orderId)
       .update({
         notificationsSent: Timestamp.now(), // Use FieldValue.arrayUnion in actual impl

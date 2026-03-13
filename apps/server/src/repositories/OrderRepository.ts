@@ -1,12 +1,11 @@
 /**
  * Order Repository for MG Mart grocery application
  *
- * This repository handles all database operations related to order management
- * including order creation, status tracking, order history, and analytics.
- * Supports order lifecycle management from placement to delivery.
+ * Extended for ERP sync, status history, and hyper-local delivery.
+ * Stock is READ-ONLY - NO stock modifications in this repository.
  *
  * @author MG Mart Development Team
- * @version 1.0.0
+ * @version 2.0.0
  */
 
 import {
@@ -21,60 +20,93 @@ import {
   UpdateOrderInput,
   OrderResponse,
   OrderStatus,
+  StatusHistoryEntry,
+  generateOrderNumber,
+  ORDER_STATUS_TRANSITIONS,
 } from "../models/Order.js";
+import { Timestamp } from "firebase-admin/firestore";
 
 /**
  * Repository class for order management operations
- * Provides methods for order processing, tracking, and analytics
  */
 export class OrderRepository {
-  /** Firestore database instance */
   private db = getDb();
-  /** Reference to the orders collection */
   private collection = this.db.collection(COLLECTIONS.ORDERS);
 
   /**
    * Creates a new order in the system
-   * Calculates total amount from order items and sets initial status
-   *
-   * @param orderData - Order data for creation
-   * @returns Promise resolving to the created order response
-   * @throws Error if order creation fails
+   * IMPORTANT: Does NOT modify product stock (ERP controls inventory)
    */
   async create(orderData: CreateOrderInput): Promise<OrderResponse> {
-    // Generate unique order ID
     const orderId = this.collection.doc().id;
     const now = createTimestamp();
 
     // Calculate total amount from order items
     const totalAmount = orderData.items.reduce(
-      (sum, item) => sum + item.price * item.quantity,
+      (sum, item) => sum + (item.price || item.unitPrice || 0) * item.quantity,
       0
     );
 
-    // Create order document with all required fields
+    // Generate human-readable order number
+    const orderNumber = generateOrderNumber();
+
+    // Initialize status history
+    const statusHistory: StatusHistoryEntry[] = [
+      {
+        status: "pending",
+        timestamp: now,
+        updatedBy: orderData.userId,
+        note: "Order placed",
+      },
+    ];
+
+    // Build order document with extended fields
     const order: Order = {
       orderId,
+      orderNumber,
       userId: orderData.userId,
-      items: orderData.items,
+      items: orderData.items.map((item) => ({
+        ...item,
+        unitPrice: item.price || item.unitPrice,
+        totalPrice: (item.price || item.unitPrice || 0) * item.quantity,
+      })),
       totalAmount,
-      status: "pending", // All orders start as pending
+      subtotal: totalAmount,
+      status: "pending",
       shippingAddress: orderData.shippingAddress,
-      paymentDetails: orderData.paymentDetails,
+      paymentDetails: {
+        ...orderData.paymentDetails,
+        paymentStatus: orderData.paymentDetails.paymentMethod === "COD" ? "pending" : "pending",
+      },
       createdAt: now,
       updatedAt: now,
+      // Extended fields
+      customerName: orderData.customerName,
+      customerPhone: orderData.customerPhone,
+      customerEmail: orderData.customerEmail,
+      deliveryAddress: orderData.deliveryAddress,
+      deliverySlot: orderData.deliverySlot,
+      deliveryInstructions: orderData.deliveryInstructions,
+      deliveryDistance: orderData.deliveryDistance,
+      deliveryFee: orderData.deliveryFee || 0,
+      packagingFee: orderData.packagingFee || 0,
+      discount: orderData.discount || 0,
+      couponCode: orderData.couponCode,
+      fcmToken: orderData.fcmToken,
+      idempotencyKey: orderData.idempotencyKey,
+      statusHistory,
+      // ERP sync defaults
+      erpSyncStatus: "pending",
+      erpSyncAttempts: 0,
+      notificationsSent: [],
     };
 
-    // Save order to Firestore
     await this.collection.doc(orderId).set(order);
     return this.toResponse(order);
   }
 
   /**
-   * Retrieves an order by its unique ID
-   *
-   * @param orderId - Unique identifier for the order
-   * @returns Promise resolving to order response or null if not found
+   * Find order by ID
    */
   async findById(orderId: string): Promise<OrderResponse | null> {
     const doc = await this.collection.doc(orderId).get();
@@ -85,37 +117,23 @@ export class OrderRepository {
   }
 
   /**
-   * Retrieves all orders for a specific user
-   * Ordered by creation date (newest first) with pagination support
-   *
-   * @param userId - ID of the user whose orders to retrieve
-   * @param limit - Maximum number of orders to return (default: 10)
-   * @param offset - Number of orders to skip (default: 0)
-   * @returns Promise resolving to array of user's order responses
+   * Find order by idempotency key (for duplicate prevention)
    */
-  //TODO: Fix add a composite index for queries to filter on multiple fields userId and createdAt
-  // async findByUserId(
-  //   userId: string,
-  //   limit: number = 10,
-  //   offset: number = 0
-  // ): Promise<OrderResponse[]> {
-  //   const snapshot = await this.collection
-  //     .where("userId", "==", userId)
-  //     .orderBy("createdAt", "desc")
-  //     .limit(limit)
-  //     .offset(offset)
-  //     .get();
+  async findByIdempotencyKey(idempotencyKey: string): Promise<OrderResponse | null> {
+    const snapshot = await this.collection
+      .where("idempotencyKey", "==", idempotencyKey)
+      .limit(1)
+      .get();
 
-  //   return snapshot.docs.map((doc) => this.toResponse(doc.data() as Order));
-  // }
+    if (snapshot.empty) {
+      return null;
+    }
+
+    return this.toResponse(snapshot.docs[0].data() as Order);
+  }
 
   /**
-   * Updates an existing order's information
-   * Typically used for status updates and payment confirmation
-   *
-   * @param orderId - ID of the order to update
-   * @param updateData - Partial order data to update
-   * @returns Promise resolving to updated order response or null if order not found
+   * Update order
    */
   async update(
     orderId: string,
@@ -128,41 +146,121 @@ export class OrderRepository {
       return null;
     }
 
-    // Prepare update data with timestamp
     const updatedData = {
       ...updateData,
       updatedAt: createTimestamp(),
     };
 
-    // Apply updates to the document
     await orderRef.update(updatedData);
-
-    // Return updated order data
     const updatedDoc = await orderRef.get();
     return this.toResponse(updatedDoc.data() as Order);
   }
 
   /**
-   * Updates the status of an order
-   * Convenience method for order status tracking
-   *
-   * @param orderId - ID of the order to update
-   * @param status - New status for the order
-   * @returns Promise resolving to updated order response or null if order not found
+   * Update order status with history tracking
    */
   async updateStatus(
     orderId: string,
-    status: OrderStatus
+    status: OrderStatus,
+    updatedBy: string = "system",
+    note?: string
   ): Promise<OrderResponse | null> {
-    return this.update(orderId, { status });
+    const orderRef = this.collection.doc(orderId);
+    const doc = await orderRef.get();
+
+    if (!doc.exists) {
+      return null;
+    }
+
+    const order = doc.data() as Order;
+    const now = createTimestamp();
+
+    // Build status history entry
+    const historyEntry: StatusHistoryEntry = {
+      status,
+      timestamp: now,
+      updatedBy,
+      note,
+    };
+
+    // Prepare update with timestamps
+    const updateData: any = {
+      status,
+      updatedAt: now,
+      statusHistory: [...(order.statusHistory || []), historyEntry],
+    };
+
+    // Add timestamp for specific status changes
+    switch (status) {
+      case "confirmed":
+        updateData.confirmedAt = now;
+        break;
+      case "out_for_delivery":
+      case "shipped":
+        updateData.dispatchedAt = now;
+        break;
+      case "delivered":
+        updateData.deliveredAt = now;
+        break;
+      case "cancelled":
+        updateData.cancelledAt = now;
+        break;
+    }
+
+    await orderRef.update(updateData);
+    const updatedDoc = await orderRef.get();
+    return this.toResponse(updatedDoc.data() as Order);
   }
 
   /**
-   * Retrieves a filtered and paginated list of orders
-   * Supports filtering by status and user ID
-   *
-   * @param options - Filtering and pagination options
-   * @returns Promise resolving to array of order responses
+   * Validate status transition
+   */
+  isValidStatusTransition(currentStatus: OrderStatus, newStatus: OrderStatus): boolean {
+    const validTransitions = ORDER_STATUS_TRANSITIONS[currentStatus] || [];
+    return validTransitions.includes(newStatus);
+  }
+
+  /**
+   * Update ERP sync status
+   */
+  async updateERPSyncStatus(
+    orderId: string,
+    syncStatus: "pending" | "syncing" | "synced" | "failed" | "manual",
+    details?: {
+      erpOrderId?: string;
+      erpInvoiceNumber?: string;
+      error?: string;
+    }
+  ): Promise<void> {
+    const updateData: any = {
+      erpSyncStatus: syncStatus,
+      erpLastSyncAt: createTimestamp(),
+      updatedAt: createTimestamp(),
+    };
+
+    if (details?.erpOrderId) {
+      updateData.erpOrderId = details.erpOrderId;
+    }
+    if (details?.erpInvoiceNumber) {
+      updateData.erpInvoiceNumber = details.erpInvoiceNumber;
+    }
+    if (details?.error) {
+      updateData.erpSyncError = details.error;
+    }
+    if (syncStatus === "failed") {
+      // Increment attempt counter would need FieldValue.increment
+      const doc = await this.collection.doc(orderId).get();
+      if (doc.exists) {
+        const order = doc.data() as Order;
+        updateData.erpSyncAttempts = (order.erpSyncAttempts || 0) + 1;
+      }
+    }
+
+    await this.collection.doc(orderId).update(updateData);
+  }
+
+  /**
+   * List orders with filtering and pagination
    */
   async list(
     options: {
@@ -170,21 +268,23 @@ export class OrderRepository {
       offset?: number;
       status?: OrderStatus;
       userId?: string;
+      erpSyncStatus?: string;
     } = {}
   ): Promise<OrderResponse[]> {
     let query = this.collection.orderBy("createdAt", "desc");
 
-    // Apply status filter
     if (options.status) {
       query = query.where("status", "==", options.status);
     }
 
-    // Apply user filter
     if (options.userId) {
       query = query.where("userId", "==", options.userId);
     }
 
-    // Apply pagination
+    if (options.erpSyncStatus) {
+      query = query.where("erpSyncStatus", "==", options.erpSyncStatus);
+    }
+
     if (options.limit) {
       query = query.limit(options.limit);
     }
@@ -198,112 +298,81 @@ export class OrderRepository {
   }
 
   /**
-   * Retrieves orders filtered by status
-   * Useful for order management and fulfillment workflows
-   *
-   * @param status - Order status to filter by
-   * @param limit - Maximum number of orders to return (default: 50)
-   * @returns Promise resolving to array of orders with the specified status
+   * Get orders pending ERP sync
    */
-  //TODO: Fix add a index for queries for status and ordering by createdAt
+  async getOrdersPendingSync(limit: number = 10): Promise<OrderResponse[]> {
+    const snapshot = await this.collection
+      .where("erpSyncStatus", "in", ["pending", "failed"])
+      .where("status", "in", ["confirmed", "processing", "ready", "out_for_delivery", "delivered"])
+      .orderBy("createdAt", "asc")
+      .limit(limit)
+      .get();
 
-  // async getOrdersByStatus(
-  //   status: OrderStatus,
-  //   limit: number = 50
-  // ): Promise<OrderResponse[]> {
-  //   const snapshot = await this.collection
-  //     .where("status", "==", status)
-  //     .orderBy("createdAt", "desc")
-  //     .limit(limit)
-  //     .get();
-
-  //   return snapshot.docs.map((doc) => this.toResponse(doc.data() as Order));
-  // }
+    return snapshot.docs.map((doc) => this.toResponse(doc.data() as Order));
+  }
 
   /**
-   * Generates order statistics and analytics
-   * Provides counts for each order status, optionally filtered by user
-   *
-   * @param userId - Optional user ID to filter statistics (for user-specific stats)
-   * @returns Promise resolving to order statistics object
+   * Get order statistics
    */
   async getOrderStats(userId?: string): Promise<{
     total: number;
     pending: number;
+    confirmed: number;
     processing: number;
+    ready: number;
+    outForDelivery: number;
     shipped: number;
     delivered: number;
     cancelled: number;
+    totalRevenue: number;
   }> {
-    // Execute queries based on whether userId filter is provided
+    let baseQuery = this.collection;
+    
     if (userId) {
-      // Get statistics for a specific user
-      const [total, pending, processing, shipped, delivered, cancelled] =
-        await Promise.all([
-          this.collection.where("userId", "==", userId).get(),
-          this.collection
-            .where("userId", "==", userId)
-            .where("status", "==", "pending")
-            .get(),
-          this.collection
-            .where("userId", "==", userId)
-            .where("status", "==", "processing")
-            .get(),
-          this.collection
-            .where("userId", "==", userId)
-            .where("status", "==", "shipped")
-            .get(),
-          this.collection
-            .where("userId", "==", userId)
-            .where("status", "==", "delivered")
-            .get(),
-          this.collection
-            .where("userId", "==", userId)
-            .where("status", "==", "cancelled")
-            .get(),
-        ]);
-
-      return {
-        total: total.size,
-        pending: pending.size,
-        processing: processing.size,
-        shipped: shipped.size,
-        delivered: delivered.size,
-        cancelled: cancelled.size,
-      };
+      baseQuery = baseQuery.where("userId", "==", userId) as any;
     }
 
-    // Get statistics for all orders
-    const [total, pending, processing, shipped, delivered, cancelled] =
+    const [total, pending, confirmed, processing, ready, outForDelivery, shipped, delivered, cancelled] =
       await Promise.all([
-        this.collection.get(),
+        userId ? baseQuery.get() : this.collection.get(),
         this.collection.where("status", "==", "pending").get(),
+        this.collection.where("status", "==", "confirmed").get(),
         this.collection.where("status", "==", "processing").get(),
+        this.collection.where("status", "==", "ready").get(),
+        this.collection.where("status", "==", "out_for_delivery").get(),
         this.collection.where("status", "==", "shipped").get(),
         this.collection.where("status", "==", "delivered").get(),
         this.collection.where("status", "==", "cancelled").get(),
       ]);
 
+    // Calculate total revenue from delivered orders
+    let totalRevenue = 0;
+    delivered.docs.forEach((doc) => {
+      const order = doc.data() as Order;
+      totalRevenue += order.totalAmount || 0;
+    });
+
     return {
       total: total.size,
       pending: pending.size,
+      confirmed: confirmed.size,
       processing: processing.size,
+      ready: ready.size,
+      outForDelivery: outForDelivery.size,
       shipped: shipped.size,
       delivered: delivered.size,
       cancelled: cancelled.size,
+      totalRevenue,
     };
   }
 
   /**
-   * Converts internal Order model to OrderResponse for API responses
-   * Converts timestamps to strings for JSON serialization
-   *
-   * @param order - Internal order model
-   * @returns Order response object safe for API responses
+   * Convert internal Order to OrderResponse
    */
   private toResponse(order: Order): OrderResponse {
     return {
       orderId: order.orderId,
+      orderNumber: order.orderNumber,
       userId: order.userId,
       items: order.items,
       totalAmount: order.totalAmount,
@@ -312,18 +381,32 @@ export class OrderRepository {
       paymentDetails: order.paymentDetails,
       createdAt: timestampToString(order.createdAt),
       updatedAt: timestampToString(order.updatedAt),
+      // Extended fields
+      customerName: order.customerName,
+      customerPhone: order.customerPhone,
+      subtotal: order.subtotal,
+      deliveryFee: order.deliveryFee,
+      packagingFee: order.packagingFee,
+      discount: order.discount,
+      deliveryAddress: order.deliveryAddress,
+      deliverySlot: order.deliverySlot,
+      deliveryDistance: order.deliveryDistance,
+      erpSyncStatus: order.erpSyncStatus,
+      erpOrderId: order.erpOrderId,
+      statusHistory: order.statusHistory?.map((h) => ({
+        status: h.status,
+        timestamp: timestampToString(h.timestamp),
+        updatedBy: h.updatedBy,
+        note: h.note,
+      })),
     };
   }
 
   /**
-   * Checks the health of the repository by attempting to get a sample document
-   * Used for monitoring and debugging purposes
-   *
-   * @returns Promise resolving to true if health check succeeds, false otherwise
+   * Health check
    */
   async healthCheck(userId: string): Promise<boolean> {
     try {
-      // For UserRepository
       await this.collection.where("userId", "==", userId).limit(1).get();
       return true;
     } catch (error) {

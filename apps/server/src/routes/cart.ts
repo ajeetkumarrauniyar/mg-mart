@@ -1,10 +1,10 @@
 /**
  * Cart routes for MG Mart grocery application
  *
- * Handles shopping cart operations
+ * Extended with checkout validation endpoint.
  *
  * @author MG Mart Development Team
- * @version 1.0.0
+ * @version 2.0.0
  */
 
 import { Router } from "express";
@@ -18,6 +18,9 @@ const cartController = new CartController();
 router.use(authenticateToken);
 
 // Cart routes
+router.get("/count", cartController.getCartItemCount);
+router.get("/validate", cartController.validateCart);
+router.post("/validate-checkout", cartController.validateCartForCheckout);  // NEW
 router.get("/", cartController.getCart);
 router.post("/add", cartController.addItem);
 router.put("/update/:productId", cartController.updateItem);

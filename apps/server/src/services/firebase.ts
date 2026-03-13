@@ -125,9 +125,22 @@ export const stringToTimestamp = (dateString: string): Timestamp => {
  * Using const assertion to ensure type safety and prevent typos
  * These names correspond to the Firestore collections in the database
  */
+/**
+ * Centralized collection names for consistent database structure
+ * Using const assertion to ensure type safety and prevent typos
+ * These names correspond to the Firestore collections in the database
+ */
 export const COLLECTIONS = {
   USERS: "users",
   PRODUCTS: "products",
   ORDERS: "orders",
   CART: "cart",
+  STORE_CONFIG: "storeConfig",
+  ERP_SYNC_QUEUE: "erpSyncQueue",
+  USER_TOKENS: "userTokens",
 } as const;
+
+/**
+ * Export the db instance for services that need direct access
+ */
+export { db };

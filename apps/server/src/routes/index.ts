@@ -13,6 +13,8 @@ import userRoutes from "./users.js";
 import productRoutes from "./products.js";
 import cartRoutes from "./cart.js";
 import orderRoutes from "./orders.js";
+import storeRoutes from "./store.js";
+import notificationRoutes from "./notifications.js";
 
 const router: Router = Router();
 
@@ -22,5 +24,7 @@ router.use("/v1/users", userRoutes);
 router.use("/v1/products", productRoutes);
 router.use("/v1/cart", cartRoutes);
 router.use("/v1/orders", orderRoutes);
+router.use("/v1/store", storeRoutes);
+router.use("/v1/notifications", notificationRoutes);
 
 export default router;

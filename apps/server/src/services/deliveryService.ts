@@ -4,7 +4,7 @@
  * Handles delivery zone validation using Haversine formula.
  */
 
-import { db } from "./firebase.js";
+import { getDb, COLLECTIONS } from "./firebase.js";
 import { 
   StoreConfig, 
   DeliveryValidation, 
@@ -29,7 +29,8 @@ export class DeliveryService {
       return this.storeConfigCache;
     }
 
-    const doc = await db.collection("storeConfig").doc(DEFAULT_STORE_ID).get();
+    const db = getDb();
+    const doc = await db.collection(COLLECTIONS.STORE_CONFIG).doc(DEFAULT_STORE_ID).get();
     
     if (!doc.exists) {
       // Return default config if not set up yet

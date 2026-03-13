@@ -1,10 +1,10 @@
 /**
  * Order routes for MG Mart grocery application
  *
- * Handles order management operations
+ * Extended with ERP sync trigger endpoint.
  *
  * @author MG Mart Development Team
- * @version 1.0.0
+ * @version 2.0.0
  */
 
 import { Router } from "express";
@@ -17,15 +17,18 @@ const orderController = new OrderController();
 // All order routes require authentication
 router.use(authenticateToken);
 
-// User order routes
+// Customer order routes
 router.post("/", orderController.createOrder);
-router.get("/", orderController.getOrderHistory); // Fixed: Use getOrderHistory for user's orders
-router.get("/:orderId", orderController.getOrderById);
+router.get("/history", orderController.getOrderHistory);
 
-// Admin-only routes
-router.get("/admin/all", requireAdmin, orderController.getAllOrders); // Admin: Get all orders
-router.get("/admin/stats", requireAdmin, orderController.getOrderStats); // Admin: Get order statistics
-router.put("/:orderId/status", requireAdmin, orderController.updateOrderStatus); // Admin: Update order status
+// Admin-only routes 
+router.get("/", requireAdmin, orderController.getAllOrders);
+router.get("/stats", requireAdmin, orderController.getOrderStats);
+
+// Order by ID routes - must come after specific routes
+router.get("/:orderId", orderController.getOrderById);
+router.put("/:orderId/cancel", orderController.cancelOrder);
+router.put("/:orderId/status", requireAdmin, orderController.updateOrderStatus);
+router.post("/:orderId/sync", requireAdmin, orderController.triggerERPSync);  // NEW
 
 export default router;
-

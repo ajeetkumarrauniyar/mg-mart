@@ -5,7 +5,7 @@
  * Actual sync will be done by Busy Sync Bridge (separate service).
  */
 
-import { db } from "./firebase.js";
+import { getDb, COLLECTIONS } from "./firebase.js";
 import { Timestamp, FieldValue } from "firebase-admin/firestore";
 import { 
   ERPSyncQueueItem, 
@@ -18,12 +18,12 @@ import { Order, DeliveryAddress } from "../models/Order.js";
 
 export class ERPSyncService {
   private readonly MAX_ATTEMPTS = 5;
-  private readonly COLLECTION = "erpSyncQueue";
 
   /**
    * Queue an order for ERP sync
    */
   async queueOrderForSync(orderId: string, priority: number = 1): Promise<string> {
+    const db = getDb();
     const queueId = `order-${orderId}-${Date.now()}`;
     const now = Timestamp.now();
 
@@ -38,7 +38,7 @@ export class ERPSyncService {
       scheduledAt: now,
     } as any;
 
-    await db.collection(this.COLLECTION).doc(queueId).set({
+    await db.collection(COLLECTIONS.ERP_SYNC_QUEUE).doc(queueId).set({
       ...queueItem,
       queueId,
     });
@@ -107,6 +107,7 @@ export class ERPSyncService {
       error?: string;
     }
   ): Promise<void> {
+    const db = getDb();
     const updateData: any = {
       erpSyncStatus: status,
       erpLastSyncAt: Timestamp.now(),
@@ -123,15 +124,16 @@ export class ERPSyncService {
       updateData.erpSyncAttempts = FieldValue.increment(1);
     }
 
-    await db.collection("orders").doc(orderId).update(updateData);
+    await db.collection(COLLECTIONS.ORDERS).doc(orderId).update(updateData);
   }
 
   /**
    * Get pending sync items (for Sync Bridge to process)
    */
   async getPendingSyncItems(limit: number = 10): Promise<ERPSyncQueueItem[]> {
+    const db = getDb();
     const snapshot = await db
-      .collection(this.COLLECTION)
+      .collection(COLLECTIONS.ERP_SYNC_QUEUE)
       .where("status", "==", "pending")
       .where("scheduledAt", "<=", Timestamp.now())
       .orderBy("scheduledAt")
@@ -146,7 +148,8 @@ export class ERPSyncService {
    * Mark queue item as processing
    */
   async markAsProcessing(queueId: string): Promise<void> {
-    await db.collection(this.COLLECTION).doc(queueId).update({
+    const db = getDb();
+    await db.collection(COLLECTIONS.ERP_SYNC_QUEUE).doc(queueId).update({
       status: "processing",
     });
   }
@@ -155,7 +158,8 @@ export class ERPSyncService {
    * Mark queue item as completed
    */
   async markAsCompleted(queueId: string): Promise<void> {
-    await db.collection(this.COLLECTION).doc(queueId).update({
+    const db = getDb();
+    await db.collection(COLLECTIONS.ERP_SYNC_QUEUE).doc(queueId).update({
       status: "completed",
       processedAt: Timestamp.now(),
     });
@@ -168,7 +172,8 @@ export class ERPSyncService {
     queueId: string,
     error: string
   ): Promise<void> {
-    const doc = await db.collection(this.COLLECTION).doc(queueId).get();
+    const db = getDb();
+    const doc = await db.collection(COLLECTIONS.ERP_SYNC_QUEUE).doc(queueId).get();
     
     if (!doc.exists) return;
 
@@ -177,7 +182,7 @@ export class ERPSyncService {
 
     if (attempts >= this.MAX_ATTEMPTS) {
       // Mark as failed, requires manual intervention
-      await db.collection(this.COLLECTION).doc(queueId).update({
+      await db.collection(COLLECTIONS.ERP_SYNC_QUEUE).doc(queueId).update({
         status: "failed",
         attempts,
         lastError: error,
@@ -196,7 +201,7 @@ export class ERPSyncService {
       const nextRetryDelay = this.getRetryDelay(attempts);
       const nextRetryAt = new Date(Date.now() + nextRetryDelay);
 
-      await db.collection(this.COLLECTION).doc(queueId).update({
+      await db.collection(COLLECTIONS.ERP_SYNC_QUEUE).doc(queueId).update({
         status: "pending",
         attempts,
         lastError: error,
@@ -224,8 +229,9 @@ export class ERPSyncService {
    * Prioritize a specific order in the queue
    */
   async prioritizeOrder(orderId: string): Promise<void> {
+    const db = getDb();
     const snapshot = await db
-      .collection(this.COLLECTION)
+      .collection(COLLECTIONS.ERP_SYNC_QUEUE)
       .where("orderId", "==", orderId)
       .where("status", "in", ["pending", "failed"])
       .limit(1)
@@ -249,11 +255,12 @@ export class ERPSyncService {
     failed: number;
     completed: number;
   }> {
+    const db = getDb();
     const [pending, processing, failed, completed] = await Promise.all([
-      db.collection(this.COLLECTION).where("status", "==", "pending").count().get(),
-      db.collection(this.COLLECTION).where("status", "==", "processing").count().get(),
-      db.collection(this.COLLECTION).where("status", "==", "failed").count().get(),
-      db.collection(this.COLLECTION).where("status", "==", "completed").count().get(),
+      db.collection(COLLECTIONS.ERP_SYNC_QUEUE).where("status", "==", "pending").count().get(),
+      db.collection(COLLECTIONS.ERP_SYNC_QUEUE).where("status", "==", "processing").count().get(),
+      db.collection(COLLECTIONS.ERP_SYNC_QUEUE).where("status", "==", "failed").count().get(),
+      db.collection(COLLECTIONS.ERP_SYNC_QUEUE).where("status", "==", "completed").count().get(),
     ]);
 
     return {
