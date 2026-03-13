@@ -1,121 +1,387 @@
 /**
  * Shared order types for MG Mart grocery application
  * 
- * This module defines client-side order types used across all frontend applications
- * for order placement, tracking, and management. These types represent the order
- * data structure as received from API responses.
+ * Orders are prepared for ERP sync. Stock is validated at checkout
+ * but never modified by the app (ERP controls inventory).
  * 
  * @author MG Mart Development Team
- * @version 1.0.0
+ * @version 2.0.0
  */
 
 import { Address } from './user.js';
 
 /**
- * Order status enumeration for tracking order lifecycle
- * Used for displaying order progress and status updates to users
+ * Order status for tracking order lifecycle
  */
 export type OrderStatus =
-    | 'pending'      // Order placed, awaiting processing
-    | 'processing'   // Order being prepared/packed
-    | 'shipped'      // Order dispatched for delivery
-    | 'delivered'    // Order successfully delivered
-    | 'cancelled';   // Order cancelled by customer or admin
+    | 'pending'           // Order placed, awaiting confirmation
+    | 'confirmed'         // Order confirmed by store
+    | 'processing'        // Order being packed
+    | 'ready'             // Ready for dispatch
+    | 'out_for_delivery'  // With delivery person
+    | 'delivered'         // Successfully delivered
+    | 'cancelled'         // Cancelled
+    | 'failed';           // System error
 
 /**
- * Payment method enumeration for supported payment options
- * Used in checkout flow and order display
+ * Payment method options
  */
-export type PaymentMethod =
-    | 'COD'          // Cash on Delivery
-    | 'Online';      // Online payment (credit card, digital wallet, etc.)
+export type PaymentMethod = 'COD' | 'UPI' | 'CARD' | 'WALLET' | 'NETBANKING';
 
 /**
- * Individual item within an order
- * Contains product information snapshot at the time of order placement
+ * Payment status
+ */
+export type PaymentStatus = 'pending' | 'paid' | 'failed' | 'refunded';
+
+/**
+ * ERP sync status for order
+ */
+export type ERPSyncStatus = 'pending' | 'syncing' | 'synced' | 'failed' | 'manual';
+
+/**
+ * Notification type for order updates
+ */
+export type OrderNotificationType =
+    | 'order_placed'
+    | 'order_confirmed'
+    | 'order_processing'
+    | 'order_ready'
+    | 'order_out_for_delivery'
+    | 'order_delivered'
+    | 'order_cancelled';
+
+/**
+ * Individual item in an order (snapshot at order time)
  */
 export interface OrderItem {
-    /** Reference to the product ID */
+    /** Product ID reference */
     productId: string;
-    /** Product name (snapshot at time of order) */
+    
+    /** ERP SKU */
+    sku: string;
+    
+    /** Product name (snapshot) */
     name: string;
-    /** Product price (snapshot at time of order) */
-    price: number;
+    
+    /** Product image URL (snapshot) */
+    imageUrl: string;
+    
+    /** Product unit */
+    unit: string;
+    
     /** Quantity ordered */
     quantity: number;
+    
+    /** Unit price at order time */
+    unitPrice: number;
+    
+    /** Line item total (quantity * unitPrice) */
+    totalPrice: number;
+    
+    /** ERP item code (for sync) */
+    erpItemCode?: string;
 }
 
 /**
- * Payment details for the order
- * Contains payment method and transaction information
+ * Delivery address for order
+ */
+export interface DeliveryAddress {
+    /** Reference to saved address (optional) */
+    addressId?: string;
+    
+    /** Recipient full name */
+    fullName: string;
+    
+    /** Contact phone */
+    phone: string;
+    
+    /** Address line 1 */
+    addressLine1: string;
+    
+    /** Address line 2 (optional) */
+    addressLine2?: string;
+    
+    /** Landmark */
+    landmark?: string;
+    
+    /** City */
+    city: string;
+    
+    /** State */
+    state: string;
+    
+    /** Pincode */
+    pincode: string;
+    
+    /** GPS coordinates */
+    coordinates?: {
+        latitude: number;
+        longitude: number;
+    };
+}
+
+/**
+ * Delivery slot selection
+ */
+export interface DeliverySlot {
+    /** Slot ID */
+    id: string;
+    
+    /** Date in YYYY-MM-DD format */
+    date: string;
+    
+    /** Start time HH:mm */
+    startTime: string;
+    
+    /** End time HH:mm */
+    endTime: string;
+    
+    /** Display label (e.g., "10 AM - 12 PM") */
+    label: string;
+}
+
+/**
+ * Payment details for order
  */
 export interface PaymentDetails {
-    /** Method used for payment */
+    /** Payment method used */
     paymentMethod: PaymentMethod;
-    /** Transaction ID for online payments (optional for COD) */
+    
+    /** Payment status */
+    paymentStatus: PaymentStatus;
+    
+    /** Transaction ID for online payments */
     transactionId?: string;
+    
+    /** Payment gateway name */
+    paymentGateway?: string;
+    
+    /** Payment timestamp */
+    paidAt?: string;
+    
+    /** Refund timestamp (if refunded) */
+    refundedAt?: string;
+    
+    /** Refund amount */
+    refundAmount?: number;
 }
 
 /**
- * Order data structure as received from API responses
- * Contains complete order information for display in client applications
+ * Status history entry for audit trail
+ */
+export interface StatusHistoryEntry {
+    /** New status */
+    status: OrderStatus;
+    
+    /** Timestamp of change */
+    timestamp: string;
+    
+    /** User who made the change (userId or 'system') */
+    updatedBy: string;
+    
+    /** Optional note */
+    note?: string;
+}
+
+/**
+ * Notification log entry
+ */
+export interface NotificationLogEntry {
+    /** Notification type */
+    type: OrderNotificationType;
+    
+    /** Sent timestamp */
+    sentAt: string;
+    
+    /** Whether notification was successful */
+    success: boolean;
+    
+    /** Error message if failed */
+    error?: string;
+}
+
+/**
+ * Complete Order data structure
+ * 
+ * Firestore Collection: orders/{orderId}
  */
 export interface Order {
-    /** Unique identifier for the order */
+    /** Unique order ID (Firestore doc ID) */
     orderId: string;
-    /** ID of the user who placed the order */
+    
+    /** Human-readable order number (e.g., "MG-20260115-0001") */
+    orderNumber: string;
+    
+    // Customer info
+    /** User ID who placed the order */
     userId: string;
-    /** Array of items in the order */
+    
+    /** Customer name */
+    customerName: string;
+    
+    /** Customer phone */
+    customerPhone: string;
+    
+    /** Customer email (optional) */
+    customerEmail?: string;
+    
+    // Order items (snapshot)
+    /** Array of order items */
     items: OrderItem[];
-    /** Total amount for the order */
+    
+    // Pricing
+    /** Subtotal (sum of item totals) */
+    subtotal: number;
+    
+    /** Delivery fee */
+    deliveryFee: number;
+    
+    /** Packaging fee (if any) */
+    packagingFee?: number;
+    
+    /** Discount amount */
+    discount?: number;
+    
+    /** Coupon code used */
+    couponCode?: string;
+    
+    /** Final total amount */
     totalAmount: number;
-    /** Current status of the order */
-    status: OrderStatus;
-    /** Delivery address for the order */
-    shippingAddress: Address;
-    /** Payment information for the order */
+    
+    // Delivery
+    /** Delivery address */
+    deliveryAddress: DeliveryAddress;
+    
+    /** Selected delivery slot */
+    deliverySlot?: DeliverySlot;
+    
+    /** Delivery instructions */
+    deliveryInstructions?: string;
+    
+    /** Distance from store (km) */
+    deliveryDistance?: number;
+    
+    // Payment
+    /** Payment details */
     paymentDetails: PaymentDetails;
-    /** Order creation timestamp as ISO string */
+    
+    // Order lifecycle
+    /** Current order status */
+    status: OrderStatus;
+    
+    /** Status change history */
+    statusHistory: StatusHistoryEntry[];
+    
+    // ERP Sync
+    /** ERP sync status */
+    erpSyncStatus: ERPSyncStatus;
+    
+    /** ERP order/invoice ID after sync */
+    erpOrderId?: string;
+    
+    /** ERP invoice number */
+    erpInvoiceNumber?: string;
+    
+    /** Number of sync attempts */
+    erpSyncAttempts: number;
+    
+    /** Last sync attempt timestamp */
+    erpLastSyncAt?: string;
+    
+    /** Last sync error message */
+    erpSyncError?: string;
+    
+    // Notifications
+    /** Customer's FCM token for notifications */
+    fcmToken?: string;
+    
+    /** Notification history */
+    notificationsSent: NotificationLogEntry[];
+    
+    // Idempotency
+    /** Client-generated key for duplicate prevention */
+    idempotencyKey?: string;
+    
+    // Timestamps
     createdAt: string;
-    /** Last update timestamp as ISO string */
     updatedAt: string;
+    confirmedAt?: string;
+    dispatchedAt?: string;
+    deliveredAt?: string;
+    cancelledAt?: string;
+}
+
+/**
+ * Order list item (reduced payload for listings)
+ */
+export interface OrderListItem {
+    orderId: string;
+    orderNumber: string;
+    status: OrderStatus;
+    totalAmount: number;
+    itemCount: number;
+    createdAt: string;
+    deliveryAddress: {
+        city: string;
+        pincode: string;
+    };
 }
 
 /**
  * Request payload for creating new orders
- * Contains all required information for order placement
  */
 export interface CreateOrderRequest {
-    /** Array of items to order */
-    items: OrderItem[];
     /** Delivery address */
-    shippingAddress: Address;
-    /** Payment information */
-    paymentDetails: PaymentDetails;
+    deliveryAddress: DeliveryAddress;
+    
+    /** Selected delivery slot (optional) */
+    deliverySlot?: DeliverySlot;
+    
+    /** Delivery instructions */
+    deliveryInstructions?: string;
+    
+    /** Payment method */
+    paymentMethod: PaymentMethod;
+    
+    /** Coupon code (optional) */
+    couponCode?: string;
+    
+    /** Client-generated UUID for duplicate prevention */
+    idempotencyKey: string;
 }
 
 /**
- * Request payload for updating existing orders (admin only)
- * Typically used for status updates and payment confirmation
+ * Request payload for updating order status (admin)
  */
-export interface UpdateOrderRequest {
-    /** Updated order status */
-    status?: OrderStatus;
-    /** Updated payment details (for payment confirmation) */
-    paymentDetails?: PaymentDetails;
+export interface UpdateOrderStatusRequest {
+    status: OrderStatus;
+    note?: string;
 }
 
 /**
- * Filter parameters for order listing and search
- * Used in order history and admin order management pages
+ * Filter parameters for order listing
  */
 export interface OrderFilters {
-    /** Filter by order status */
     status?: OrderStatus;
-    /** Filter by user ID (admin only) */
     userId?: string;
-    /** Filter by start date (ISO string) */
     startDate?: string;
-    /** Filter by end date (ISO string) */
     endDate?: string;
+    erpSyncStatus?: ERPSyncStatus;
+}
+
+/**
+ * Order statistics (for admin dashboard)
+ */
+export interface OrderStats {
+    total: number;
+    pending: number;
+    confirmed: number;
+    processing: number;
+    ready: number;
+    outForDelivery: number;
+    delivered: number;
+    cancelled: number;
+    totalRevenue: number;
+    todayOrders: number;
+    todayRevenue: number;
 }

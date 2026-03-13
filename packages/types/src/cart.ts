@@ -1,64 +1,184 @@
 /**
  * Shared cart types for MG Mart grocery application
  * 
- * This module defines client-side cart types used across all frontend applications
- * for shopping cart management, display, and operations. These types represent
- * the cart data structure as received from API responses.
+ * Cart is user-specific and supports fast operations with
+ * optimistic updates. Stock validation happens at checkout.
  * 
  * @author MG Mart Development Team
- * @version 1.0.0
+ * @version 2.0.0
  */
 
 /**
- * Cart item data structure as received from API responses
- * Contains product information and cart-specific metadata
+ * Cart item with product snapshot
+ * 
+ * Price is captured at add time for comparison during checkout
  */
 export interface CartItem {
-    /** Reference to the product ID */
+    /** Reference to product ID */
     productId: string;
-    /** Product display name */
+    
+    /** ERP SKU for quick reference */
+    sku: string;
+    
+    /** Product name (cached for display) */
     name: string;
-    /** Current product price */
-    price: number;
-    /** URL to the product image */
+    
+    /** Product image URL (cached) */
     imageUrl: string;
-    /** Product unit of measurement */
+    
+    /** Product unit (cached) */
     unit: string;
-    /** Quantity of the product in cart */
+    
+    /** Quantity in cart */
     quantity: number;
-    /** Timestamp when item was added as ISO string */
+    
+    /** Selling price when added to cart */
+    priceAtAdd: number;
+    
+    /** Current selling price (updated on cart fetch) */
+    currentPrice: number;
+    
+    /** Timestamp when added (ISO string) */
     addedAt: string;
+    
+    /** Last update timestamp (ISO string) */
+    updatedAt: string;
 }
 
 /**
- * Complete cart data structure as received from API responses
- * Contains all cart items with calculated totals for display
+ * Cart item with validation info (returned from cart fetch)
+ */
+export interface CartItemWithValidation extends CartItem {
+    /** Line item subtotal (quantity * currentPrice) */
+    subtotal: number;
+    
+    /** Validation status */
+    validation: {
+        /** Product is still available */
+        isAvailable: boolean;
+        
+        /** Stock issue detected */
+        hasStockIssue: boolean;
+        
+        /** Price changed since added */
+        hasPriceChange: boolean;
+        
+        /** Available quantity in stock */
+        availableQty: number;
+        
+        /** Validation message if any */
+        message?: string;
+    };
+}
+
+/**
+ * Complete cart data structure
+ * 
+ * Firestore Collection: carts/{userId}
  */
 export interface Cart {
-    /** Array of cart items with product details */
+    /** User ID (same as document ID) */
+    userId: string;
+    
+    /** Cart items */
     items: CartItem[];
-    /** Total number of items in cart (sum of all quantities) */
-    totalItems: number;
-    /** Total monetary amount for all items in cart */
-    totalAmount: number;
+    
+    /** Total number of distinct items */
+    itemCount: number;
+    
+    /** Sum of all quantities */
+    totalQty: number;
+    
+    /** Subtotal (sum of sellingPrice * qty) */
+    subtotal: number;
+    
+    /** Cart creation timestamp */
+    createdAt: string;
+    
+    /** Last update timestamp */
+    updatedAt: string;
+    
+    /** Last activity timestamp (for abandonment tracking) */
+    lastActivityAt: string;
+}
+
+/**
+ * Cart response with validation (returned from API)
+ */
+export interface CartResponse {
+    items: CartItemWithValidation[];
+    summary: {
+        itemCount: number;
+        totalQty: number;
+        subtotal: number;
+        deliveryFee: number;
+        total: number;
+    };
+    validation: {
+        isValid: boolean;
+        issues: CartValidationIssue[];
+    };
+}
+
+/**
+ * Cart validation issue
+ */
+export interface CartValidationIssue {
+    productId: string;
+    productName: string;
+    type: 'out_of_stock' | 'insufficient_stock' | 'price_changed' | 'product_unavailable';
+    message: string;
+    suggestedQty?: number;
+    priceDifference?: number;
 }
 
 /**
  * Request payload for adding items to cart
- * Contains the minimum required information for cart operations
  */
 export interface AddToCartRequest {
-    /** ID of the product to add */
     productId: string;
-    /** Quantity to add to cart */
     quantity: number;
 }
 
 /**
- * Request payload for updating cart item quantities
- * Used for modifying existing cart items (0 quantity removes item)
+ * Request payload for updating cart item
  */
 export interface UpdateCartItemRequest {
-    /** New quantity for the cart item */
     quantity: number;
+}
+
+/**
+ * Cart validation request (pre-checkout)
+ */
+export interface ValidateCartRequest {
+    deliveryAddress: {
+        coordinates: {
+            latitude: number;
+            longitude: number;
+        };
+        pincode: string;
+    };
+}
+
+/**
+ * Cart validation response (pre-checkout)
+ */
+export interface ValidateCartResponse {
+    isValid: boolean;
+    cart: CartResponse;
+    delivery: {
+        isServiceable: boolean;
+        distance?: number;
+        estimatedTime?: string;
+        deliveryFee: number;
+        message?: string;
+    };
+    pricing: {
+        subtotal: number;
+        deliveryFee: number;
+        packagingFee: number;
+        discount: number;
+        total: number;
+    };
+    issues: CartValidationIssue[];
 }

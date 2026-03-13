@@ -1,25 +1,35 @@
 /**
  * Shared TypeScript types for MG Mart grocery application
  * 
- * This package provides consistent type definitions that are shared across
- * the entire monorepo including mobile app, web app, admin panel, and backend.
- * Ensures type safety and consistency in API contracts and data structures.
+ * This package provides consistent type definitions shared across
+ * the entire monorepo including mobile app, admin panel, and backend.
+ * 
+ * ERP-centric design: BUSY ERP is the source of truth for inventory.
  * 
  * @author MG Mart Development Team
- * @version 1.0.0
+ * @version 2.0.0
  */
 
-// User management types for authentication and profiles
+// User management types
 export * from './user.js';
 
-// Product catalog types for inventory and shopping
+// Product catalog types (ERP-synced)
 export * from './product.js';
 
-// Order processing types for e-commerce functionality
-export * from './order.js';
-
-// Shopping cart types for cart management
+// Shopping cart types
 export * from './cart.js';
 
-// Common API types for request/response patterns
+// Order processing types
+export * from './order.js';
+
+// Store configuration and delivery types
+export * from './store.js';
+
+// Notification types (FCM)
+export * from './notification.js';
+
+// ERP sync types
+export * from './erp-sync.js';
+
+// Common API types
 export * from './api.js';
