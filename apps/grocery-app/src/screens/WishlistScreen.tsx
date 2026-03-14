@@ -13,131 +13,107 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Product } from '@mg-mart/types';
 import { useWishlistStore, useCartStore } from '../stores';
-import { COLORS, SIZES } from '../constants';
+import { COLORS, SIZES, SHADOWS } from '../constants';
 import { OptimizedImage, AuthGuard } from '../components';
 import { RootStackParamList } from '../navigation/AppNavigator';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
-interface WishlistItemProps {
+interface WishlistCardProps {
     product: Product;
-    onProductPress: (productId: string) => void;
+    onRemove: () => void;
+    onAddToCart: () => void;
+    onPress: () => void;
 }
 
-const WishlistItem: React.FC<WishlistItemProps> = ({ product, onProductPress }) => {
+const WishlistCard: React.FC<WishlistCardProps> = ({ product, onRemove, onAddToCart, onPress }) => {
     return (
-        <TouchableOpacity
-            style={styles.itemContainer}
-            onPress={() => onProductPress(product.productId)}
-            activeOpacity={0.7}
-        >
+        <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.8}>
             <View style={styles.imageContainer}>
                 <OptimizedImage
-                    source={{ uri: product.imageUrl || 'https://via.placeholder.com/60' }}
-                    style={styles.itemImage}
+                    source={{ uri: product.imageUrl || 'https://via.placeholder.com/100' }}
+                    style={styles.image}
                     resizeMode="cover"
                 />
-                {product.stock <= 0 && (
-                    <View style={styles.outOfStockOverlay}>
-                        <Text style={styles.outOfStockText}>Out of Stock</Text>
+            </View>
+
+            <View style={styles.content}>
+                <View style={styles.cardHeader}>
+                    <View style={styles.nameContainer}>
+                        <Text style={styles.name} numberOfLines={1}>{product.name}</Text>
+                        <Text style={styles.unit}>{product.unit}</Text>
                     </View>
-                )}
-            </View>
+                    <TouchableOpacity onPress={onRemove} style={styles.removeBtn}>
+                        <Ionicons name="trash-outline" size={20} color="#EF4444" />
+                    </TouchableOpacity>
+                </View>
 
-            <View style={styles.itemInfo}>
-                <Text style={styles.itemName} numberOfLines={1}>
-                    {product.name}
-                </Text>
-                <Text style={styles.itemDetails} numberOfLines={1}>
-                    {product.unit}, Price
-                </Text>
+                <View style={styles.cardFooter}>
+                    <Text style={styles.price}>₹{product.price.toFixed(0)}</Text>
+                    <TouchableOpacity
+                        style={[styles.addBtn, product.stock <= 0 && styles.disabledBtn]}
+                        onPress={onAddToCart}
+                        disabled={product.stock <= 0}
+                    >
+                        <Text style={styles.addBtnText}>{product.stock > 0 ? 'Add to Cart' : 'Out of Stock'}</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
-
-            <View style={styles.priceContainer}>
-                <Text style={styles.itemPrice}>₹{product.price.toFixed(2)}</Text>
-            </View>
-
-            <TouchableOpacity
-                style={styles.arrowButton}
-                onPress={() => onProductPress(product.productId)}
-                activeOpacity={0.7}
-            >
-                <Ionicons name="chevron-forward" size={20} color="#666" />
-            </TouchableOpacity>
         </TouchableOpacity>
     );
 };
 
 const WishlistContent: React.FC = () => {
     const navigation = useNavigation<NavigationProp>();
-    const { wishlistItems } = useWishlistStore();
+    const { wishlistItems, removeFromWishlist } = useWishlistStore();
     const { addItem } = useCartStore();
 
-    const handleProductPress = (productId: string) => {
-        navigation.navigate('ProductDetail', { productId });
+    const handleAddToCart = (product: Product) => {
+        addItem(product.productId, 1);
+        Alert.alert('Success', 'Item added to cart');
     };
 
     const renderEmptyState = () => (
         <View style={styles.emptyContainer}>
-            <Ionicons name="heart-outline" size={80} color="#cbd5e0" />
-            <Text style={styles.emptyTitle}>Your wishlist is empty</Text>
+            <View style={styles.emptyIconCircle}>
+                <Ionicons name="heart-dislike-outline" size={60} color={COLORS.primary} />
+            </View>
+            <Text style={styles.emptyTitle}>Nothing here yet!</Text>
             <Text style={styles.emptySubtitle}>
-                Add items you love to your wishlist and shop them later
+                Looks like you haven't added any items to your favourites.
             </Text>
+            <TouchableOpacity
+                style={styles.shopBtn}
+                onPress={() => navigation.navigate('MainTabs', { screen: 'Products' })}
+            >
+                <Text style={styles.shopBtnText}>Start Shopping</Text>
+            </TouchableOpacity>
         </View>
-    );
-
-    const renderWishlistItem = ({ item }: { item: Product }) => (
-        <WishlistItem
-            product={item}
-            onProductPress={handleProductPress}
-        />
     );
 
     return (
         <SafeAreaView style={styles.container} edges={['top']}>
-            {/* Fixed Header */}
             <View style={styles.header}>
-                <Text style={styles.headerTitle}>Favourite</Text>
+                <Text style={styles.headerTitle}>My Favourites</Text>
             </View>
 
             {wishlistItems.length === 0 ? (
                 renderEmptyState()
             ) : (
-                <>
-                    <View style={styles.itemCount}>
-                        <Text style={styles.itemCountText}>
-                            {wishlistItems.length} {wishlistItems.length === 1 ? 'item' : 'items'}
-                        </Text>
-                    </View>
-
-                    <FlatList
-                        data={wishlistItems}
-                        renderItem={renderWishlistItem}
-                        keyExtractor={(item) => item.productId}
-                        showsVerticalScrollIndicator={false}
-                        contentContainerStyle={styles.listContainer}
-                        ItemSeparatorComponent={() => <View style={styles.separator} />}
-                    />
-
-                    {/* Add All To Cart Button */}
-                    <View style={styles.bottomButtonContainer}>
-                        <TouchableOpacity
-                            style={styles.addAllButton}
-                            onPress={() => {
-                                wishlistItems.forEach(product => {
-                                    if (product.stock > 0) {
-                                        addItem(product.productId, 1);
-                                    }
-                                });
-                                Alert.alert('Added to Cart', 'All available items have been added to your cart');
-                            }}
-                            activeOpacity={0.8}
-                        >
-                            <Text style={styles.addAllButtonText}>Add All To Cart</Text>
-                        </TouchableOpacity>
-                    </View>
-                </>
+                <FlatList
+                    data={wishlistItems}
+                    keyExtractor={(item) => item.productId}
+                    renderItem={({ item }) => (
+                        <WishlistCard
+                            product={item}
+                            onRemove={() => removeFromWishlist(item.productId)}
+                            onAddToCart={() => handleAddToCart(item)}
+                            onPress={() => navigation.navigate('ProductDetail', { productId: item.productId })}
+                        />
+                    )}
+                    contentContainerStyle={styles.list}
+                    showsVerticalScrollIndicator={false}
+                />
             )}
         </SafeAreaView>
     );
@@ -146,158 +122,138 @@ const WishlistContent: React.FC = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: COLORS.background,
+        backgroundColor: '#F7FAFC',
     },
     header: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingHorizontal: SIZES.padding,
-        paddingVertical: 16,
+        paddingHorizontal: 20,
+        paddingVertical: 15,
         backgroundColor: COLORS.white,
         borderBottomWidth: 1,
-        borderBottomColor: '#e2e8f0',
+        borderBottomColor: '#EDF2F7',
     },
     headerTitle: {
-        fontSize: 18,
-        fontWeight: '600',
+        fontSize: 20,
+        fontWeight: '900',
         color: COLORS.text,
     },
-    itemCount: {
-        paddingHorizontal: SIZES.padding,
-        paddingVertical: 12,
-        backgroundColor: COLORS.white,
+    list: {
+        padding: 16,
     },
-    itemCountText: {
-        fontSize: 14,
-        color: '#718096',
-    },
-    listContainer: {
-        paddingHorizontal: SIZES.padding,
-        paddingBottom: 100, // Space for bottom button
-    },
-    separator: {
-        height: 1,
-        backgroundColor: '#f0f0f0',
-        marginLeft: 80, // Align with text content
-    },
-    itemContainer: {
+    card: {
         flexDirection: 'row',
-        alignItems: 'center',
         backgroundColor: COLORS.white,
-        paddingVertical: 16,
-        paddingHorizontal: SIZES.padding,
+        borderRadius: 16,
+        marginBottom: 16,
+        padding: 12,
+        ...SHADOWS.small,
     },
     imageContainer: {
-        position: 'relative',
-        width: 60,
-        height: 60,
-        backgroundColor: '#f8f9fa',
-        borderRadius: 8,
-        marginRight: 16,
+        width: 100,
+        height: 100,
+        borderRadius: 12,
+        backgroundColor: '#F8FAFC',
         overflow: 'hidden',
     },
-    itemImage: {
+    image: {
         width: '100%',
         height: '100%',
     },
-    outOfStockOverlay: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(255, 255, 255, 0.85)',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    outOfStockText: {
-        color: '#e53e3e',
-        fontSize: 10,
-        fontWeight: '700',
-        textTransform: 'uppercase',
-        letterSpacing: 0.5,
-    },
-    itemInfo: {
+    content: {
         flex: 1,
-        marginRight: 12,
+        marginLeft: 16,
+        justifyContent: 'space-between',
     },
-    itemName: {
-        fontSize: 16,
-        fontWeight: '600',
+    cardHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+    },
+    nameContainer: {
+        flex: 1,
+    },
+    name: {
+        fontSize: 15,
+        fontWeight: 'bold',
         color: COLORS.text,
-        marginBottom: 4,
+        marginBottom: 2,
     },
-    itemDetails: {
-        fontSize: 14,
-        color: '#718096',
+    unit: {
+        fontSize: 12,
+        color: COLORS.textSecondary,
     },
-    priceContainer: {
-        marginRight: 12,
-    },
-    itemPrice: {
-        fontSize: 16,
-        fontWeight: '600',
-        color: COLORS.text,
-    },
-    arrowButton: {
+    removeBtn: {
         padding: 4,
     },
-    bottomButtonContainer: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        backgroundColor: COLORS.white,
-        paddingHorizontal: SIZES.padding,
-        paddingVertical: 20,
-        paddingBottom: 34, // Safe area padding
-        borderTopWidth: 1,
-        borderTopColor: '#e2e8f0',
-    },
-    addAllButton: {
-        backgroundColor: '#4CAF50',
-        paddingVertical: 16,
-        borderRadius: 12,
+    cardFooter: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         alignItems: 'center',
-        elevation: 2,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
     },
-    addAllButtonText: {
+    price: {
+        fontSize: 18,
+        fontWeight: '900',
+        color: COLORS.text,
+    },
+    addBtn: {
+        backgroundColor: COLORS.primary,
+        paddingHorizontal: 16,
+        paddingVertical: 8,
+        borderRadius: 8,
+    },
+    addBtnText: {
         color: COLORS.white,
-        fontSize: 16,
-        fontWeight: '600',
+        fontSize: 12,
+        fontWeight: 'bold',
+    },
+    disabledBtn: {
+        backgroundColor: '#CBD5E1',
     },
     emptyContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        paddingHorizontal: SIZES.padding,
+        paddingHorizontal: 40,
+    },
+    emptyIconCircle: {
+        width: 120,
+        height: 120,
+        borderRadius: 60,
+        backgroundColor: COLORS.primary + '10',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 24,
     },
     emptyTitle: {
-        fontSize: SIZES.fontSize.large,
-        fontWeight: '600',
+        fontSize: 22,
+        fontWeight: '900',
         color: COLORS.text,
-        marginTop: 16,
         marginBottom: 8,
     },
     emptySubtitle: {
-        fontSize: SIZES.fontSize.medium,
+        fontSize: 14,
         color: COLORS.textSecondary,
         textAlign: 'center',
-        lineHeight: 22,
+        lineHeight: 20,
+        marginBottom: 32,
+    },
+    shopBtn: {
+        backgroundColor: COLORS.primary,
+        paddingHorizontal: 32,
+        paddingVertical: 16,
+        borderRadius: 14,
+        ...SHADOWS.medium,
+    },
+    shopBtnText: {
+        color: COLORS.white,
+        fontSize: 16,
+        fontWeight: 'bold',
     },
 });
 
-const WishlistScreen: React.FC = () => {
+export default function WishlistScreen() {
     return (
-        <AuthGuard fallbackMessage="Please login to view your favorite items">
+        <AuthGuard>
             <WishlistContent />
         </AuthGuard>
     );
-};
-
-export default WishlistScreen;
+}
