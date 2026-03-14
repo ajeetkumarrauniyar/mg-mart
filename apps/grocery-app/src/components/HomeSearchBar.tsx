@@ -26,9 +26,9 @@ export const HomeSearchBar: React.FC<HomeSearchBarProps> = ({
                     placeholderTextColor={COLORS.textLight}
                 />
                 <View style={styles.divider} />
-                <TouchableOpacity style={styles.micButton}>
+                {/* <TouchableOpacity style={styles.micButton}>
                     <Ionicons name="mic-outline" size={20} color={COLORS.primary} />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
         </View>
     );

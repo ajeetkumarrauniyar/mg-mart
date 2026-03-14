@@ -14,3 +14,4 @@ export { BannerCarousel } from './BannerCarousel';
 export { CategoryGrid } from './CategoryGrid';
 export { QuickAddProductCard } from './QuickAddProductCard';
 export { HomeSearchBar } from './HomeSearchBar';
+export { ProductSkeleton, ProductsGridSkeleton } from './ProductSkeleton';
