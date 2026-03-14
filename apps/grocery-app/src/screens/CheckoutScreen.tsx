@@ -1,5 +1,5 @@
 // Enhanced checkout screen with location-based ordering integration
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
     View,
     Text,
@@ -8,13 +8,14 @@ import {
     ScrollView,
     Alert,
     ActivityIndicator,
+    TextInput,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { COLORS, SIZES } from '../constants';
-import { useCartStore } from '../stores/cartStore';
+import { COLORS, SIZES, SHADOWS } from '../constants';
+import { useCartStore, useLocationStore } from '../stores';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { LocationPermissionModal, LocationValidationModal } from '../components/location';
 import {
@@ -27,9 +28,31 @@ import { orderService } from '../services';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
+const DELIVERY_FEE = 40;
+const HANDLING_FEE = 5;
+
+const SLOTS = [
+    { id: '1', time: 'ASAP (15-20 mins)', description: 'Express Delivery' },
+    { id: '2', time: '6 PM - 8 PM', description: 'Evening Slot' },
+    { id: '3', time: '8 PM - 10 PM', description: 'Late Night' },
+    { id: '4', time: 'Tomorrow 7 AM - 9 AM', description: 'Morning Fresh' },
+];
+
+const PAYMENT_METHODS = [
+    { id: 'COD', title: 'Cash on Delivery', sub: 'Pay at your doorstep', icon: 'cash-outline' },
+    { id: 'UPI', title: 'UPI / Google Pay / PhonePe', sub: 'Instant & Secure', icon: 'flash-outline' },
+    { id: 'Wallet', title: 'MG Wallet', sub: 'Balance: ₹150.00', icon: 'wallet-outline' },
+];
+
 export default function CheckoutScreen() {
     const navigation = useNavigation<NavigationProp>();
     const { items, totalAmount, clearCart } = useCartStore();
+    const { locationName } = useLocationStore();
+
+    // UI state
+    const [selectedSlot, setSelectedSlot] = useState(SLOTS[0].id);
+    const [selectedPayment, setSelectedPayment] = useState(PAYMENT_METHODS[0].id);
+    const [deliveryNotes, setDeliveryNotes] = useState('');
 
     // Location state
     const [showPermissionModal, setShowPermissionModal] = useState(false);
@@ -39,12 +62,9 @@ export default function CheckoutScreen() {
     const [isPlacingOrder, setIsPlacingOrder] = useState(false);
     const [locationStatus, setLocationStatus] = useState<'unknown' | 'checking' | 'valid' | 'invalid'>('unknown');
 
-    // Order details
-    const deliveryFee = 40;
-    const totalWithDelivery = totalAmount + deliveryFee;
+    const grandTotal = useMemo(() => totalAmount + DELIVERY_FEE + HANDLING_FEE, [totalAmount]);
 
     useEffect(() => {
-        // Check location status when screen loads
         checkLocationStatus();
     }, []);
 
@@ -52,42 +72,29 @@ export default function CheckoutScreen() {
         setLocationStatus('checking');
         try {
             const serviceStatus = await locationService.getServiceStatus();
-
             if (serviceStatus.serviceHealth === 'healthy' && serviceStatus.hasStoredLocation) {
                 setLocationStatus('valid');
             } else {
                 setLocationStatus('invalid');
             }
         } catch (error) {
-            console.error('Error checking location status:', error);
             setLocationStatus('invalid');
         }
     };
 
     const handleLocationValidation = async () => {
         setIsValidatingLocation(true);
-
         try {
-            // First check if we need permission
             const serviceStatus = await locationService.getServiceStatus();
-
             if (serviceStatus.permissionStatus !== PermissionStatus.GRANTED) {
                 setShowPermissionModal(true);
-                setIsValidatingLocation(false);
                 return;
             }
-
-            // Validate location for order
             const result = await locationService.validateOrderLocation();
             setValidationResult(result);
-
             if (result.isValid) {
                 setLocationStatus('valid');
-                if (result.validationType === ValidationType.APPROVED) {
-                    // Auto-proceed for approved locations
-                    proceedToOrderPlacement();
-                } else {
-                    // Show validation modal for warning cases
+                if (result.validationType !== ValidationType.APPROVED) {
                     setShowValidationModal(true);
                 }
             } else {
@@ -95,250 +102,204 @@ export default function CheckoutScreen() {
                 setShowValidationModal(true);
             }
         } catch (error) {
-            console.error('Location validation failed:', error);
-            Alert.alert(
-                'Location Error',
-                'Unable to validate your location. Please check your GPS settings and try again.',
-                [{ text: 'OK' }]
-            );
-            setLocationStatus('invalid');
+            Alert.alert('Location Error', 'Unable to validate location.');
         } finally {
             setIsValidatingLocation(false);
         }
     };
 
-    const handlePermissionGranted = () => {
-        setShowPermissionModal(false);
-        // Retry location validation after permission granted
-        setTimeout(() => {
-            handleLocationValidation();
-        }, 500);
-    };
-
-    const handlePermissionDenied = () => {
-        setShowPermissionModal(false);
-        setLocationStatus('invalid');
-        Alert.alert(
-            'Location Required',
-            'Location access is required to place orders. Please enable location services to continue.',
-            [{ text: 'OK' }]
-        );
-    };
-
-    const handleValidationSuccess = () => {
-        setShowValidationModal(false);
-        setLocationStatus('valid');
-        proceedToOrderPlacement();
-    };
-
-    const handleValidationFailure = () => {
-        setShowValidationModal(false);
-        setLocationStatus('invalid');
-    };
-
     const proceedToOrderPlacement = async () => {
-        setIsPlacingOrder(true);
+        if (locationStatus !== 'valid') {
+            await handleLocationValidation();
+            return;
+        }
 
+        setIsPlacingOrder(true);
         try {
-            // Create order with location validation
             const orderData = {
-                paymentMethod: 'COD' as const,
+                paymentMethod: selectedPayment as any,
                 shippingAddress: {
-                    street: 'Current Location', // This would be filled from actual address
+                    street: locationName || 'Current Location',
                     city: 'Jahingara',
                     state: 'Bihar',
                     zipCode: '000000'
                 },
-                notes: 'Order placed with location validation'
+                notes: `${deliveryNotes} | Slot: ${SLOTS.find(s => s.id === selectedSlot)?.time}`
             };
 
             const order = await orderService.createOrder(orderData);
-
-            // Clear cart after successful order
             await clearCart();
 
             Alert.alert(
-                'Order Placed Successfully!',
-                `Your order #${order.orderId} has been placed and will be delivered soon.`,
-                [
-                    {
-                        text: 'OK',
-                        onPress: () => navigation.navigate('MainTabs', { screen: 'Home' })
-                    }
-                ]
+                'Order Placed!',
+                `Order #${order.orderId} will reach you in 20 mins.`,
+                [{ text: 'Great!', onPress: () => navigation.navigate('OrderTracking', { orderId: order.orderId }) }]
             );
         } catch (error) {
-            console.error('Order placement failed:', error);
-            Alert.alert(
-                'Order Failed',
-                error instanceof Error ? error.message : 'Failed to place order. Please try again.',
-                [{ text: 'OK' }]
-            );
+            Alert.alert('Order Failed', 'Failed to place order. Please try again.');
         } finally {
             setIsPlacingOrder(false);
         }
     };
 
-    const renderLocationStatus = () => {
-        switch (locationStatus) {
-            case 'checking':
-                return (
-                    <View style={styles.locationStatus}>
-                        <ActivityIndicator size="small" color={COLORS.primary} />
-                        <Text style={styles.locationStatusText}>Checking location...</Text>
-                    </View>
-                );
-
-            case 'valid':
-                return (
-                    <View style={[styles.locationStatus, styles.locationValid]}>
-                        <Ionicons name="checkmark-circle" size={20} color="#48bb78" />
-                        <Text style={[styles.locationStatusText, { color: '#48bb78' }]}>
-                            Location verified
-                        </Text>
-                    </View>
-                );
-
-            case 'invalid':
-                return (
-                    <View style={[styles.locationStatus, styles.locationInvalid]}>
-                        <Ionicons name="alert-circle" size={20} color="#f56565" />
-                        <Text style={[styles.locationStatusText, { color: '#f56565' }]}>
-                            Location verification required
-                        </Text>
-                    </View>
-                );
-
-            default:
-                return null;
-        }
-    };
+    const renderHeader = () => (
+        <View style={styles.header}>
+            <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+                <Ionicons name="arrow-back" size={24} color={COLORS.text} />
+            </TouchableOpacity>
+            <Text style={styles.headerTitle}>Review Order</Text>
+            <View style={{ width: 40 }} />
+        </View>
+    );
 
     return (
         <SafeAreaView style={styles.container} edges={['top']}>
-            {/* Header */}
-            <View style={styles.header}>
-                <TouchableOpacity
-                    onPress={() => navigation.goBack()}
-                    style={styles.backButton}
-                >
-                    <Ionicons name="chevron-back" size={24} color={COLORS.text} />
-                </TouchableOpacity>
-                <Text style={styles.headerTitle}>Checkout</Text>
-                <View style={styles.placeholder} />
-            </View>
+            {renderHeader()}
 
             <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-                {/* Order Summary */}
+                {/* Delivery Address */}
                 <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>Order Summary</Text>
-                    <View style={styles.summaryRow}>
-                        <Text style={styles.summaryLabel}>Items ({items.length})</Text>
-                        <Text style={styles.summaryValue}>₹{totalAmount.toFixed(2)}</Text>
+                    <View style={styles.sectionHeader}>
+                        <View style={styles.row}>
+                            <Ionicons name="location" size={20} color={COLORS.primary} />
+                            <Text style={styles.sectionTitle}>Delivery Address</Text>
+                        </View>
+                        <TouchableOpacity onPress={() => navigation.navigate('LocationSelection')}>
+                            <Text style={styles.changeBtn}>CHANGE</Text>
+                        </TouchableOpacity>
                     </View>
-                    <View style={styles.summaryRow}>
-                        <Text style={styles.summaryLabel}>Delivery Fee</Text>
-                        <Text style={styles.summaryValue}>₹{deliveryFee.toFixed(2)}</Text>
-                    </View>
-                    <View style={styles.divider} />
-                    <View style={styles.summaryRow}>
-                        <Text style={styles.totalLabel}>Total Amount</Text>
-                        <Text style={styles.totalValue}>₹{totalWithDelivery.toFixed(2)}</Text>
-                    </View>
-                </View>
-
-                {/* Location Verification */}
-                <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>Delivery Location</Text>
-                    <Text style={styles.sectionSubtitle}>
-                        We need to verify your location to ensure delivery within our service area
-                    </Text>
-
-                    {renderLocationStatus()}
+                    <Text style={styles.addressText} numberOfLines={2}>{locationName}</Text>
 
                     {locationStatus !== 'valid' && (
                         <TouchableOpacity
-                            style={styles.verifyLocationButton}
+                            style={styles.verifyBtn}
                             onPress={handleLocationValidation}
                             disabled={isValidatingLocation}
                         >
                             {isValidatingLocation ? (
-                                <ActivityIndicator size="small" color={COLORS.white} />
+                                <ActivityIndicator size="small" color={COLORS.primary} />
                             ) : (
-                                <Ionicons name="location" size={20} color={COLORS.white} />
+                                <>
+                                    <Ionicons name="navigate-outline" size={16} color={COLORS.primary} />
+                                    <Text style={styles.verifyBtnText}>Verify delivery location</Text>
+                                </>
                             )}
-                            <Text style={styles.verifyLocationButtonText}>
-                                {isValidatingLocation ? 'Verifying...' : 'Verify Location'}
-                            </Text>
                         </TouchableOpacity>
                     )}
                 </View>
 
-                {/* Payment Method */}
+                {/* Delivery Slots */}
+                <View style={styles.section}>
+                    <Text style={styles.sectionTitle}>Select Delivery Slot</Text>
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.slotScroll}>
+                        {SLOTS.map((slot) => (
+                            <TouchableOpacity
+                                key={slot.id}
+                                style={[styles.slotCard, selectedSlot === slot.id && styles.activeSlot]}
+                                onPress={() => setSelectedSlot(slot.id)}
+                            >
+                                <Text style={[styles.slotTime, selectedSlot === slot.id && styles.activeText]}>
+                                    {slot.time}
+                                </Text>
+                                <Text style={[styles.slotDesc, selectedSlot === slot.id && styles.activeSubText]}>
+                                    {slot.description}
+                                </Text>
+                            </TouchableOpacity>
+                        ))}
+                    </ScrollView>
+                </View>
+
+                {/* Payment Methods */}
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Payment Method</Text>
-                    <View style={styles.paymentOption}>
-                        <View style={styles.paymentOptionContent}>
-                            <Ionicons name="cash" size={24} color={COLORS.primary} />
-                            <View style={styles.paymentOptionText}>
-                                <Text style={styles.paymentOptionTitle}>Cash on Delivery</Text>
-                                <Text style={styles.paymentOptionSubtitle}>Pay when you receive your order</Text>
+                    {PAYMENT_METHODS.map((method) => (
+                        <TouchableOpacity
+                            key={method.id}
+                            style={[styles.paymentCard, selectedPayment === method.id && styles.activePayment]}
+                            onPress={() => setSelectedPayment(method.id)}
+                        >
+                            <Ionicons name={method.icon as any} size={24} color={selectedPayment === method.id ? COLORS.primary : COLORS.textLight} />
+                            <View style={styles.paymentInfo}>
+                                <Text style={styles.paymentTitle}>{method.title}</Text>
+                                <Text style={styles.paymentSub}>{method.sub}</Text>
                             </View>
-                        </View>
-                        <Ionicons name="checkmark-circle" size={24} color={COLORS.primary} />
+                            <View style={styles.radio}>
+                                {selectedPayment === method.id && <View style={styles.radioInner} />}
+                            </View>
+                        </TouchableOpacity>
+                    ))}
+                </View>
+
+                {/* Extra Instructions */}
+                <View style={styles.section}>
+                    <Text style={styles.sectionTitle}>Delivery Instructions</Text>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="e.g. Ring the bell, Gate code 123..."
+                        value={deliveryNotes}
+                        onChangeText={setDeliveryNotes}
+                        multiline
+                    />
+                </View>
+
+                {/* Bill Summary */}
+                <View style={[styles.section, styles.billSection]}>
+                    <View style={styles.billRow}>
+                        <Text style={styles.billLabel}>Item Total</Text>
+                        <Text style={styles.billValue}>₹{totalAmount.toFixed(0)}</Text>
+                    </View>
+                    <View style={styles.billRow}>
+                        <Text style={styles.billLabel}>Delivery Fee</Text>
+                        <Text style={[styles.billValue, { color: COLORS.success }]}>FREE</Text>
+                    </View>
+                    <View style={styles.billRow}>
+                        <Text style={styles.billLabel}>Handling Fee</Text>
+                        <Text style={styles.billValue}>₹{HANDLING_FEE}</Text>
+                    </View>
+                    <View style={styles.divider} />
+                    <View style={styles.billRow}>
+                        <Text style={styles.totalLabel}>Grand Total</Text>
+                        <Text style={styles.totalValue}>₹{grandTotal.toFixed(0)}</Text>
                     </View>
                 </View>
 
-                {/* Delivery Info */}
-                <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>Delivery Information</Text>
-                    <View style={styles.infoRow}>
-                        <Ionicons name="time" size={20} color="#718096" />
-                        <Text style={styles.infoText}>Estimated delivery: 30-45 minutes</Text>
-                    </View>
-                    <View style={styles.infoRow}>
-                        <Ionicons name="location" size={20} color="#718096" />
-                        <Text style={styles.infoText}>Delivery within 5km radius</Text>
-                    </View>
-                </View>
+                <View style={{ height: 100 }} />
             </ScrollView>
 
-            {/* Place Order Button */}
+            {/* Footer */}
             <View style={styles.footer}>
+                <View style={styles.totalBox}>
+                    <Text style={styles.footerPrice}>₹{grandTotal.toFixed(0)}</Text>
+                    <Text style={styles.totalItems}>{items.length} Items</Text>
+                </View>
                 <TouchableOpacity
-                    style={[
-                        styles.placeOrderButton,
-                        (locationStatus !== 'valid' || isPlacingOrder) && styles.placeOrderButtonDisabled
-                    ]}
+                    style={[styles.placeBtn, isPlacingOrder && styles.disabledBtn]}
                     onPress={proceedToOrderPlacement}
-                    disabled={locationStatus !== 'valid' || isPlacingOrder}
+                    disabled={isPlacingOrder}
                 >
                     {isPlacingOrder ? (
                         <ActivityIndicator size="small" color={COLORS.white} />
                     ) : (
                         <>
-                            <Text style={styles.placeOrderButtonText}>
-                                Place Order • ₹{totalWithDelivery.toFixed(2)}
-                            </Text>
+                            <Text style={styles.placeBtnText}>Place Order</Text>
                             <Ionicons name="arrow-forward" size={20} color={COLORS.white} />
                         </>
                     )}
                 </TouchableOpacity>
             </View>
 
-            {/* Location Modals */}
             <LocationPermissionModal
                 visible={showPermissionModal}
-                onPermissionGranted={handlePermissionGranted}
-                onPermissionDenied={handlePermissionDenied}
+                onPermissionGranted={() => setShowPermissionModal(false)}
+                onPermissionDenied={() => setShowPermissionModal(false)}
                 onClose={() => setShowPermissionModal(false)}
             />
 
             <LocationValidationModal
                 visible={showValidationModal}
                 validationResult={validationResult}
-                onValidationSuccess={handleValidationSuccess}
-                onValidationFailure={handleValidationFailure}
+                onValidationSuccess={() => setShowValidationModal(false)}
+                onValidationFailure={() => setShowValidationModal(false)}
                 onClose={() => setShowValidationModal(false)}
             />
         </SafeAreaView>
@@ -348,185 +309,226 @@ export default function CheckoutScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: COLORS.background,
+        backgroundColor: '#F3F4F6',
     },
     header: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingHorizontal: SIZES.padding,
-        paddingVertical: 16,
+        paddingVertical: 12,
         backgroundColor: COLORS.white,
-        borderBottomWidth: 1,
-        borderBottomColor: '#e2e8f0',
     },
     backButton: {
-        width: 40,
-        height: 40,
-        justifyContent: 'center',
-        alignItems: 'center',
+        padding: 4,
     },
     headerTitle: {
-        fontSize: 18,
-        fontWeight: '600',
+        fontSize: 16,
+        fontWeight: 'bold',
         color: COLORS.text,
-    },
-    placeholder: {
-        width: 40,
     },
     content: {
         flex: 1,
     },
     section: {
         backgroundColor: COLORS.white,
-        marginHorizontal: SIZES.padding,
-        marginTop: 16,
-        padding: SIZES.padding,
-        borderRadius: 12,
-        borderWidth: 1,
-        borderColor: '#e2e8f0',
-    },
-    sectionTitle: {
-        fontSize: 18,
-        fontWeight: '600',
-        color: COLORS.text,
+        padding: 16,
         marginBottom: 8,
     },
-    sectionSubtitle: {
-        fontSize: 14,
-        color: '#718096',
-        marginBottom: 16,
-        lineHeight: 20,
-    },
-    summaryRow: {
+    sectionHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         marginBottom: 12,
     },
-    summaryLabel: {
-        fontSize: 14,
-        color: '#718096',
+    row: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
     },
-    summaryValue: {
+    sectionTitle: {
         fontSize: 14,
+        fontWeight: 'bold',
+        color: COLORS.text,
+        marginBottom: 12,
+    },
+    changeBtn: {
+        fontSize: 12,
+        fontWeight: 'bold',
+        color: COLORS.primary,
+    },
+    addressText: {
+        fontSize: 14,
+        color: COLORS.textSecondary,
+        lineHeight: 20,
+    },
+    verifyBtn: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 6,
+        marginTop: 12,
+        padding: 8,
+        backgroundColor: COLORS.primary + '15',
+        borderRadius: 6,
+        alignSelf: 'flex-start',
+    },
+    verifyBtnText: {
+        fontSize: 12,
+        fontWeight: 'bold',
+        color: COLORS.primary,
+    },
+    slotScroll: {
+        marginHorizontal: -16,
+        paddingHorizontal: 16,
+    },
+    slotCard: {
+        width: 150,
+        padding: 12,
+        borderRadius: 10,
+        backgroundColor: '#F9FAFB',
+        borderWidth: 1,
+        borderColor: '#E5E7EB',
+        marginRight: 12,
+    },
+    activeSlot: {
+        backgroundColor: COLORS.primary + '10',
+        borderColor: COLORS.primary,
+    },
+    slotTime: {
+        fontSize: 13,
+        fontWeight: 'bold',
+        color: COLORS.text,
+        marginBottom: 2,
+    },
+    slotDesc: {
+        fontSize: 11,
+        color: COLORS.textSecondary,
+    },
+    paymentCard: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 12,
+        borderRadius: 10,
+        backgroundColor: '#F9FAFB',
+        borderWidth: 1,
+        borderColor: '#E5E7EB',
+        marginBottom: 10,
+    },
+    activePayment: {
+        backgroundColor: COLORS.primary + '05',
+        borderColor: COLORS.primary,
+    },
+    paymentInfo: {
+        flex: 1,
+        marginLeft: 12,
+    },
+    paymentTitle: {
+        fontSize: 14,
+        fontWeight: '600',
+        color: COLORS.text,
+    },
+    paymentSub: {
+        fontSize: 11,
+        color: COLORS.textSecondary,
+    },
+    radio: {
+        width: 18,
+        height: 18,
+        borderRadius: 9,
+        borderWidth: 2,
+        borderColor: COLORS.border,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    radioInner: {
+        width: 10,
+        height: 10,
+        borderRadius: 5,
+        backgroundColor: COLORS.primary,
+    },
+    input: {
+        backgroundColor: '#F9FAFB',
+        borderRadius: 8,
+        padding: 12,
+        height: 60,
+        fontSize: 14,
+        textAlignVertical: 'top',
+    },
+    billSection: {
+        backgroundColor: 'transparent',
+    },
+    billRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 8,
+    },
+    billLabel: {
+        fontSize: 13,
+        color: COLORS.textSecondary,
+    },
+    billValue: {
+        fontSize: 13,
         fontWeight: '600',
         color: COLORS.text,
     },
     divider: {
         height: 1,
-        backgroundColor: '#e2e8f0',
+        backgroundColor: '#D1D5DB',
         marginVertical: 12,
     },
     totalLabel: {
         fontSize: 16,
-        fontWeight: '700',
+        fontWeight: 'bold',
         color: COLORS.text,
     },
     totalValue: {
-        fontSize: 18,
-        fontWeight: '700',
-        color: COLORS.primary,
-    },
-    locationStatus: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        padding: 12,
-        borderRadius: 8,
-        backgroundColor: '#f7fafc',
-        marginBottom: 16,
-    },
-    locationValid: {
-        backgroundColor: '#f0fff4',
-        borderWidth: 1,
-        borderColor: '#9ae6b4',
-    },
-    locationInvalid: {
-        backgroundColor: '#fed7d7',
-        borderWidth: 1,
-        borderColor: '#feb2b2',
-    },
-    locationStatusText: {
-        fontSize: 14,
-        fontWeight: '500',
-        marginLeft: 8,
-        color: COLORS.text,
-    },
-    verifyLocationButton: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: COLORS.primary,
-        paddingVertical: 12,
-        borderRadius: 8,
-        gap: 8,
-    },
-    verifyLocationButtonText: {
-        color: COLORS.white,
         fontSize: 16,
-        fontWeight: '600',
-    },
-    paymentOption: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: 16,
-        backgroundColor: '#f7fafc',
-        borderRadius: 8,
-        borderWidth: 1,
-        borderColor: '#e2e8f0',
-    },
-    paymentOptionContent: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        flex: 1,
-    },
-    paymentOptionText: {
-        marginLeft: 12,
-        flex: 1,
-    },
-    paymentOptionTitle: {
-        fontSize: 16,
-        fontWeight: '600',
+        fontWeight: 'bold',
         color: COLORS.text,
-        marginBottom: 2,
-    },
-    paymentOptionSubtitle: {
-        fontSize: 14,
-        color: '#718096',
-    },
-    infoRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 12,
-    },
-    infoText: {
-        fontSize: 14,
-        color: '#718096',
-        marginLeft: 12,
     },
     footer: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
         backgroundColor: COLORS.white,
-        paddingHorizontal: SIZES.padding,
-        paddingVertical: 16,
-        borderTopWidth: 1,
-        borderTopColor: '#e2e8f0',
-    },
-    placeOrderButton: {
+        paddingHorizontal: 20,
+        paddingTop: 12,
+        paddingBottom: 24,
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
+        ...SHADOWS.large,
+    },
+    totalBox: {
+        flex: 1,
+    },
+    footerPrice: {
+        fontSize: 20,
+        fontWeight: '900',
+        color: COLORS.text,
+    },
+    totalItems: {
+        fontSize: 11,
+        color: COLORS.textSecondary,
+        fontWeight: 'bold',
+    },
+    placeBtn: {
         backgroundColor: COLORS.primary,
-        paddingVertical: 16,
+        paddingHorizontal: 24,
+        paddingVertical: 14,
         borderRadius: 12,
+        flexDirection: 'row',
+        alignItems: 'center',
         gap: 8,
     },
-    placeOrderButtonDisabled: {
-        backgroundColor: '#cbd5e0',
-    },
-    placeOrderButtonText: {
+    placeBtnText: {
         color: COLORS.white,
-        fontSize: 16,
-        fontWeight: '700',
+        fontSize: 15,
+        fontWeight: 'bold',
     },
+    disabledBtn: {
+        backgroundColor: '#D1D5DB',
+    },
+    activeText: { color: COLORS.primary },
+    activeSubText: { color: COLORS.primary + 'CC' },
 });
