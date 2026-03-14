@@ -41,6 +41,7 @@
   },
   "devDependencies": {
     "@babel/runtime": "^7.28.4",
+    "babel-preset-expo": "~13.0.0",
     "@mg-mart/eslint-config": "workspace:*",
     "@mg-mart/typescript-config": "workspace:*",
     "@types/jest": "^29.5.12",

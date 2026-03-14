@@ -9,3 +9,8 @@ export { SearchBar } from './SearchBar';
 export { FilterModal } from './FilterModal';
 export { CategoryFilter } from './CategoryFilter';
 export { ActiveFilters } from './ActiveFilters';
+export { LocationHeader } from './LocationHeader';
+export { BannerCarousel } from './BannerCarousel';
+export { CategoryGrid } from './CategoryGrid';
+export { QuickAddProductCard } from './QuickAddProductCard';
+export { HomeSearchBar } from './HomeSearchBar';

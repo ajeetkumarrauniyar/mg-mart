@@ -1,0 +1,153 @@
+import React from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ViewStyle } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { Product } from '@mg-mart/types';
+import { COLORS, SIZES, SHADOWS } from '../constants';
+import OptimizedImage from './OptimizedImage';
+
+interface QuickAddProductCardProps {
+    product: Product;
+    onPress: () => void;
+    onAddPress: () => void;
+    style?: ViewStyle;
+}
+
+export const QuickAddProductCard: React.FC<QuickAddProductCardProps> = ({
+    product,
+    onPress,
+    onAddPress,
+    style,
+}) => {
+    return (
+        <TouchableOpacity
+            style={[styles.container, style]}
+            onPress={onPress}
+            activeOpacity={0.8}
+        >
+            <View style={styles.imageContainer}>
+                <OptimizedImage
+                    source={{ uri: product.imageUrl || 'https://via.placeholder.com/120' }}
+                    style={styles.image}
+                    resizeMode="cover"
+                />
+                <View style={styles.timeBadge}>
+                    <Ionicons name="time-outline" size={10} color={COLORS.textSecondary} />
+                    <Text style={styles.timeText}>10 MINS</Text>
+                </View>
+            </View>
+
+            <View style={styles.content}>
+                <Text style={styles.name} numberOfLines={2}>
+                    {product.name}
+                </Text>
+                <Text style={styles.unit}>{product.unit}</Text>
+
+                <View style={styles.footer}>
+                    <Text style={styles.price}>₹{product.price.toFixed(0)}</Text>
+
+                    <TouchableOpacity
+                        style={styles.addButton}
+                        onPress={(e) => {
+                            e.stopPropagation();
+                            onAddPress();
+                        }}
+                    >
+                        <Text style={styles.addButtonText}>ADD</Text>
+                        <View style={styles.plusIcon}>
+                            <Ionicons name="add" size={12} color={COLORS.primary} />
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        </TouchableOpacity>
+    );
+};
+
+const styles = StyleSheet.create({
+    container: {
+        width: 140,
+        backgroundColor: COLORS.white,
+        borderRadius: 12,
+        marginRight: 12,
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
+        overflow: 'hidden',
+    },
+    imageContainer: {
+        width: '100%',
+        height: 120,
+        backgroundColor: COLORS.backgroundDark,
+        position: 'relative',
+    },
+    image: {
+        width: '100%',
+        height: '100%',
+    },
+    timeBadge: {
+        position: 'absolute',
+        bottom: 6,
+        left: 6,
+        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+        paddingHorizontal: 6,
+        paddingVertical: 2,
+        borderRadius: 4,
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 2,
+    },
+    timeText: {
+        fontSize: 8,
+        fontWeight: 'bold',
+        color: COLORS.text,
+    },
+    content: {
+        padding: 8,
+    },
+    name: {
+        fontSize: 12,
+        fontWeight: '600',
+        color: COLORS.text,
+        height: 32,
+        marginBottom: 2,
+    },
+    unit: {
+        fontSize: 10,
+        color: COLORS.textSecondary,
+        marginBottom: 8,
+    },
+    footer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    price: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: COLORS.text,
+    },
+    addButton: {
+        borderWidth: 1,
+        borderColor: COLORS.primary,
+        borderRadius: 4,
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: COLORS.white,
+    },
+    addButtonText: {
+        fontSize: 10,
+        fontWeight: 'bold',
+        color: COLORS.primary,
+        marginRight: 2,
+    },
+    plusIcon: {
+        position: 'absolute',
+        top: -4,
+        right: -4,
+        backgroundColor: COLORS.white,
+        borderRadius: 10,
+    },
+});
+
+export default QuickAddProductCard;
