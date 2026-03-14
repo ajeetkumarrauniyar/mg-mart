@@ -70,7 +70,7 @@ function AccountContent() {
                         <Text style={styles.gridLabel}>Wishlist</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.gridItem} onPress={() => Alert.alert('Payments', 'Coming soon!')}>
+                    <TouchableOpacity style={styles.gridItem} onPress={() => navigation.navigate('PaymentMethods')}>
                         <View style={[styles.gridIcon, { backgroundColor: '#FAF5FF' }]}>
                             <Ionicons name="card" size={24} color="#9F7AEA" />
                         </View>
