@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import {
     View,
     Text,
@@ -12,381 +12,259 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { COLORS, SIZES } from '../constants';
-import { orderService } from '../services';
+import { COLORS, SIZES, SHADOWS } from '../constants';
+import { useOrderStore } from '../stores';
 import type { Order } from '@mg-mart/types';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { AuthGuard } from '../components';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
-interface OrderItemProps {
-    order: Order;
-    onPress: () => void;
-}
-
-const OrderItem: React.FC<OrderItemProps> = ({ order, onPress }) => {
-    const getStatusColor = (status: string) => {
+const OrderCard: React.FC<{ order: Order; onPress: () => void }> = ({ order, onPress }) => {
+    const getStatusStyle = (status: string) => {
         switch (status.toLowerCase()) {
-            case 'pending':
-                return '#f59e0b';
-            case 'confirmed':
-                return '#3b82f6';
-            case 'preparing':
-                return '#8b5cf6';
-            case 'out_for_delivery':
-                return '#06b6d4';
-            case 'delivered':
-                return '#10b981';
-            case 'cancelled':
-                return '#e53e3e';
-            default:
-                return '#6b7280';
+            case 'delivered': return { bg: '#F0FFF4', color: '#48BB78', label: 'Delivered' };
+            case 'cancelled': return { bg: '#FFF5F5', color: '#F56565', label: 'Cancelled' };
+            case 'processing': return { bg: '#EBF8FF', color: '#4299E1', label: 'Processing' };
+            case 'pending': return { bg: '#FFFBEB', color: '#D69E2E', label: 'Placed' };
+            default: return { bg: '#F7FAFC', color: '#4A5568', label: status };
         }
     };
 
-    const getStatusIcon = (status: string) => {
-        switch (status.toLowerCase()) {
-            case 'pending':
-                return 'time-outline';
-            case 'confirmed':
-                return 'checkmark-circle-outline';
-            case 'preparing':
-                return 'restaurant-outline';
-            case 'out_for_delivery':
-                return 'car-outline';
-            case 'delivered':
-                return 'checkmark-done-circle';
-            case 'cancelled':
-                return 'close-circle-outline';
-            default:
-                return 'help-circle-outline';
-        }
-    };
-
-    const formatDate = (dateString: string) => {
-        const date = new Date(dateString);
-        return date.toLocaleDateString('en-IN', {
-            day: 'numeric',
-            month: 'short',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-        });
-    };
-
-    const statusColor = getStatusColor(order.status);
-    const statusIcon = getStatusIcon(order.status);
+    const statusStyle = getStatusStyle(order.status);
+    const date = new Date(order.createdAt).toLocaleDateString('en-IN', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric'
+    });
 
     return (
-        <TouchableOpacity style={styles.orderItem} onPress={onPress} activeOpacity={0.7}>
-            <View style={styles.orderHeader}>
-                <View style={styles.orderInfo}>
-                    <Text style={styles.orderId}>Order #{order.orderId}</Text>
-                    <Text style={styles.orderDate}>{formatDate(order.createdAt)}</Text>
+        <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.9}>
+            <View style={styles.cardTop}>
+                <View>
+                    <Text style={styles.orderId}>Order #{order.orderId.slice(-8).toUpperCase()}</Text>
+                    <Text style={styles.orderDate}>{date}</Text>
                 </View>
-                <View style={[styles.statusBadge, { backgroundColor: `${statusColor}20` }]}>
-                    <Ionicons name={statusIcon as any} size={14} color={statusColor} />
-                    <Text style={[styles.statusText, { color: statusColor }]}>
-                        {order.status.replace('_', ' ').toUpperCase()}
+                <View style={[styles.statusBadge, { backgroundColor: statusStyle.bg }]}>
+                    <Text style={[styles.statusText, { color: statusStyle.color }]}>{statusStyle.label}</Text>
+                </View>
+            </View>
+
+            <View style={styles.cardMiddle}>
+                <View style={styles.itemsSummary}>
+                    <Ionicons name="cart-outline" size={16} color={COLORS.textSecondary} />
+                    <Text style={styles.itemsText}>
+                        {order.items.length} {order.items.length === 1 ? 'Item' : 'Items'} • ₹{order.totalAmount}
                     </Text>
                 </View>
             </View>
 
-            <View style={styles.orderDetails}>
-                <Text style={styles.itemCount}>
-                    {order.items.length} {order.items.length === 1 ? 'item' : 'items'}
-                </Text>
-                <Text style={styles.orderTotal}>₹{order.totalAmount.toFixed(2)}</Text>
-            </View>
-
-            <View style={styles.orderFooter}>
-                <Text style={styles.deliveryAddress} numberOfLines={1}>
-                    📍 {order.shippingAddress.street}, {order.shippingAddress.city}
-                </Text>
-                <Ionicons name="chevron-forward" size={16} color="#cbd5e0" />
+            <View style={styles.cardBottom}>
+                <Text style={styles.viewDetailText}>View Details</Text>
+                <Ionicons name="arrow-forward" size={16} color={COLORS.primary} />
             </View>
         </TouchableOpacity>
     );
 };
 
-function OrderHistoryContent() {
+const OrderHistoryContent: React.FC = () => {
     const navigation = useNavigation<NavigationProp>();
-    const [orders, setOrders] = useState<Order[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [isRefreshing, setIsRefreshing] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    const { orders, isLoading, fetchOrders } = useOrderStore();
 
     useEffect(() => {
-        loadOrders();
+        fetchOrders();
     }, []);
 
-    const loadOrders = async (refresh = false) => {
-        if (refresh) {
-            setIsRefreshing(true);
-        } else {
-            setIsLoading(true);
-        }
-        setError(null);
-
-        try {
-            const response = await orderService.getOrders();
-            setOrders(response.orders);
-        } catch (err: any) {
-            setError(err.message || 'Failed to load orders');
-            console.error('Failed to load orders:', err);
-        } finally {
-            setIsLoading(false);
-            setIsRefreshing(false);
-        }
-    };
-
-    const handleOrderPress = (order: Order) => {
-        // Navigate to order detail screen
-        navigation.navigate('OrderDetail', { orderId: order.orderId });
-    };
-
-    const renderEmpty = () => {
-        if (isLoading) {
-            return (
-                <View style={styles.emptyContainer}>
-                    <ActivityIndicator size="large" color={COLORS.primary} />
-                    <Text style={styles.emptyText}>Loading orders...</Text>
-                </View>
-            );
-        }
-
-        if (error) {
-            return (
-                <View style={styles.emptyContainer}>
-                    <Ionicons name="alert-circle-outline" size={64} color="#e53e3e" />
-                    <Text style={styles.errorText}>❌ {error}</Text>
-                    <TouchableOpacity style={styles.retryButton} onPress={() => loadOrders()}>
-                        <Text style={styles.retryButtonText}>Retry</Text>
-                    </TouchableOpacity>
-                </View>
-            );
-        }
-
-        return (
-            <View style={styles.emptyContainer}>
-                <Ionicons name="receipt-outline" size={64} color="#cbd5e0" />
-                <Text style={styles.emptyTitle}>No Orders Yet</Text>
-                <Text style={styles.emptySubtitle}>Start shopping to see your orders here</Text>
-                <TouchableOpacity
-                    style={styles.shopButton}
-                    onPress={() => navigation.navigate('MainTabs', { screen: 'Products' })}
-                >
-                    <Text style={styles.shopButtonText}>Start Shopping</Text>
-                </TouchableOpacity>
+    const renderEmptyState = () => (
+        <View style={styles.emptyContainer}>
+            <View style={styles.emptyIconCircle}>
+                <Ionicons name="receipt-outline" size={60} color={COLORS.primary} />
             </View>
-        );
-    };
-
-    const renderHeader = () => (
-        <View style={styles.header}>
+            <Text style={styles.emptyTitle}>No orders yet!</Text>
+            <Text style={styles.emptySubtitle}>
+                When you place an order, it will appear here for you to track.
+            </Text>
             <TouchableOpacity
-                onPress={() => navigation.goBack()}
-                style={styles.backButton}
+                style={styles.shopBtn}
+                onPress={() => navigation.navigate('MainTabs', { screen: 'Products' })}
             >
-                <Ionicons name="arrow-back" size={24} color={COLORS.text} />
+                <Text style={styles.shopBtnText}>Browse Products</Text>
             </TouchableOpacity>
-            <Text style={styles.headerTitle}>My Orders</Text>
-            <View style={styles.backButton} />
         </View>
     );
 
     return (
         <SafeAreaView style={styles.container} edges={['top']}>
-            {renderHeader()}
-            <FlatList
-                data={orders}
-                renderItem={({ item }) => (
-                    <OrderItem order={item} onPress={() => handleOrderPress(item)} />
-                )}
-                keyExtractor={(item) => item.orderId}
-                ListEmptyComponent={renderEmpty}
-                contentContainerStyle={orders.length === 0 ? styles.emptyList : styles.listContent}
-                refreshControl={
-                    <RefreshControl
-                        refreshing={isRefreshing}
-                        onRefresh={() => loadOrders(true)}
-                        colors={[COLORS.primary]}
-                    />
-                }
-                showsVerticalScrollIndicator={false}
-            />
+            <View style={styles.header}>
+                <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
+                    <Ionicons name="arrow-back" size={24} color={COLORS.text} />
+                </TouchableOpacity>
+                <Text style={styles.headerTitle}>Order History</Text>
+                <View style={{ width: 40 }} />
+            </View>
+
+            {isLoading && orders.length === 0 ? (
+                <View style={styles.loadingContainer}>
+                    <ActivityIndicator size="large" color={COLORS.primary} />
+                </View>
+            ) : (
+                <FlatList
+                    data={orders}
+                    keyExtractor={(item) => item.orderId}
+                    renderItem={({ item }) => (
+                        <OrderCard
+                            order={item}
+                            onPress={() => navigation.navigate('OrderDetail', { orderId: item.orderId })}
+                        />
+                    )}
+                    contentContainerStyle={styles.list}
+                    showsVerticalScrollIndicator={false}
+                    ListEmptyComponent={renderEmptyState}
+                    refreshControl={
+                        <RefreshControl refreshing={isLoading} onRefresh={fetchOrders} colors={[COLORS.primary]} />
+                    }
+                />
+            )}
         </SafeAreaView>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: COLORS.background,
+        backgroundColor: '#F7FAFC',
     },
     header: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        paddingHorizontal: SIZES.padding,
-        paddingVertical: 16,
+        paddingHorizontal: 20,
+        paddingVertical: 15,
         backgroundColor: COLORS.white,
         borderBottomWidth: 1,
-        borderBottomColor: '#e2e8f0',
+        borderBottomColor: '#EDF2F7',
     },
-    backButton: {
-        width: 40,
-        height: 40,
+    backBtn: {
+        padding: 4,
+    },
+    headerTitle: {
+        fontSize: 20,
+        fontWeight: '900',
+        color: COLORS.text,
+    },
+    loadingContainer: {
+        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
     },
-    headerTitle: {
-        fontSize: 18,
-        fontWeight: '700',
-        color: COLORS.text,
-    },
-    listContent: {
-        padding: SIZES.padding,
-    },
-    emptyList: {
-        flexGrow: 1,
-    },
-    orderItem: {
-        backgroundColor: COLORS.white,
-        borderRadius: 12,
+    list: {
         padding: 16,
-        marginBottom: 12,
-        borderWidth: 1,
-        borderColor: '#e2e8f0',
-        elevation: 1,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.05,
-        shadowRadius: 2,
+        paddingBottom: 40,
     },
-    orderHeader: {
+    card: {
+        backgroundColor: COLORS.white,
+        borderRadius: 16,
+        padding: 16,
+        marginBottom: 16,
+        ...SHADOWS.small,
+        borderWidth: 1,
+        borderColor: '#F1F5F9',
+    },
+    cardTop: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
+        borderBottomWidth: 1,
+        borderBottomColor: '#F1F5F9',
+        paddingBottom: 12,
         marginBottom: 12,
     },
-    orderInfo: {
-        flex: 1,
-    },
     orderId: {
-        fontSize: 16,
-        fontWeight: '700',
+        fontSize: 15,
+        fontWeight: 'bold',
         color: COLORS.text,
-        marginBottom: 4,
+        marginBottom: 2,
     },
     orderDate: {
         fontSize: 12,
-        color: '#718096',
+        color: COLORS.textSecondary,
     },
     statusBadge: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingHorizontal: 8,
+        paddingHorizontal: 10,
         paddingVertical: 4,
         borderRadius: 6,
-        gap: 4,
     },
     statusText: {
-        fontSize: 10,
-        fontWeight: '700',
-        textTransform: 'uppercase',
-        letterSpacing: 0.5,
+        fontSize: 11,
+        fontWeight: 'bold',
     },
-    orderDetails: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
+    cardMiddle: {
         marginBottom: 12,
     },
-    itemCount: {
-        fontSize: 14,
-        color: '#718096',
-    },
-    orderTotal: {
-        fontSize: 18,
-        fontWeight: '700',
-        color: COLORS.text,
-    },
-    orderFooter: {
+    itemsSummary: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center',
+        gap: 6,
     },
-    deliveryAddress: {
-        fontSize: 12,
-        color: '#718096',
-        flex: 1,
-        marginRight: 8,
+    itemsText: {
+        fontSize: 14,
+        color: COLORS.text,
+        fontWeight: '500',
+    },
+    cardBottom: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        gap: 4,
+    },
+    viewDetailText: {
+        fontSize: 13,
+        fontWeight: 'bold',
+        color: COLORS.primary,
     },
     emptyContainer: {
-        flex: 1,
+        marginTop: 100,
+        alignItems: 'center',
+        paddingHorizontal: 40,
+    },
+    emptyIconCircle: {
+        width: 120,
+        height: 120,
+        borderRadius: 60,
+        backgroundColor: COLORS.primary + '10',
         justifyContent: 'center',
         alignItems: 'center',
-        paddingVertical: 60,
-        paddingHorizontal: SIZES.padding,
+        marginBottom: 24,
     },
     emptyTitle: {
-        fontSize: 20,
-        fontWeight: '700',
+        fontSize: 22,
+        fontWeight: '900',
         color: COLORS.text,
-        marginTop: 16,
         marginBottom: 8,
     },
     emptySubtitle: {
         fontSize: 14,
-        color: '#718096',
-        textAlign: 'center',
-        marginBottom: 24,
-    },
-    emptyText: {
-        fontSize: 16,
         color: COLORS.textSecondary,
-        marginTop: 16,
-    },
-    errorText: {
-        fontSize: 16,
-        color: '#e53e3e',
-        marginTop: 16,
-        marginBottom: 24,
         textAlign: 'center',
+        lineHeight: 20,
+        marginBottom: 32,
     },
-    retryButton: {
-        backgroundColor: COLORS.primary,
-        paddingHorizontal: 24,
-        paddingVertical: 12,
-        borderRadius: 8,
-    },
-    retryButtonText: {
-        color: COLORS.white,
-        fontSize: 14,
-        fontWeight: '600',
-    },
-    shopButton: {
+    shopBtn: {
         backgroundColor: COLORS.primary,
         paddingHorizontal: 32,
-        paddingVertical: 14,
-        borderRadius: 12,
-        elevation: 2,
-        shadowColor: COLORS.primary,
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.3,
-        shadowRadius: 4,
+        paddingVertical: 16,
+        borderRadius: 14,
     },
-    shopButtonText: {
+    shopBtnText: {
         color: COLORS.white,
         fontSize: 16,
-        fontWeight: '700',
+        fontWeight: 'bold',
     },
 });
+
 export default function OrderHistoryScreen() {
     return (
-        <AuthGuard fallbackMessage="Please login to view your order history">
+        <AuthGuard>
             <OrderHistoryContent />
         </AuthGuard>
     );

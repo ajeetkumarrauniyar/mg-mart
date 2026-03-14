@@ -15,6 +15,7 @@ import CheckoutScreen from '@/screens/CheckoutScreen';
 import EditProfileScreen from '@/screens/EditProfileScreen';
 import OrderHistoryScreen from '@/screens/OrderHistoryScreen';
 import OrderDetailScreen from '@/screens/OrderDetailScreen';
+import AddressBookScreen from '@/screens/AddressBookScreen';
 import LocationSelectionScreen from '@/screens/LocationSelectionScreen';
 import { AuthScreen } from '@/screens/AuthScreen';
 import { useCartStore, useWishlistStore, useAuthStore } from '@/stores';
@@ -37,6 +38,7 @@ export type RootStackParamList = {
     EditProfile: undefined;
     OrderHistory: undefined;
     OrderDetail: { orderId: string };
+    AddressBook: undefined;
     LocationSelection: undefined;
 };
 
@@ -232,6 +234,11 @@ export default function AppNavigator() {
                 <Stack.Screen
                     name="OrderDetail"
                     component={OrderDetailScreen}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="AddressBook"
+                    component={AddressBookScreen}
                     options={{ headerShown: false }}
                 />
                 <Stack.Screen

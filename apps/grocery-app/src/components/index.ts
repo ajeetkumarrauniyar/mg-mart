@@ -19,3 +19,4 @@ export * from './QuantityStepper';
 export * from './ProfileHeader';
 export * from './AccountItem';
 export * from './AccountSection';
+export * from './AddressCard';

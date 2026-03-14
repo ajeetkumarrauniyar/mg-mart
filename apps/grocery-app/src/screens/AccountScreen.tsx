@@ -56,7 +56,7 @@ function AccountContent() {
                         <Text style={styles.gridLabel}>Orders</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.gridItem} onPress={() => Alert.alert('Addresses', 'Coming soon!')}>
+                    <TouchableOpacity style={styles.gridItem} onPress={() => navigation.navigate('AddressBook')}>
                         <View style={[styles.gridIcon, { backgroundColor: '#F0FFF4' }]}>
                             <Ionicons name="location" size={24} color="#48BB78" />
                         </View>
