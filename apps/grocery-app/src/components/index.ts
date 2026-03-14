@@ -15,3 +15,4 @@ export { CategoryGrid } from './CategoryGrid';
 export { QuickAddProductCard } from './QuickAddProductCard';
 export { HomeSearchBar } from './HomeSearchBar';
 export { ProductSkeleton, ProductsGridSkeleton } from './ProductSkeleton';
+export { QuantityStepper } from './QuantityStepper';
