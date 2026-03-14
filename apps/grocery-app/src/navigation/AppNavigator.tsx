@@ -8,7 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import HomeScreen from '@/screens/HomeScreen';
 import ProductsScreen from '@/screens/ProductsScreen';
 import CartScreen from '@/screens/CartScreen';
-import ProfileScreen from '@/screens/ProfileScreen';
+import AccountScreen from '@/screens/AccountScreen';
 import WishlistScreen from '@/screens/WishlistScreen';
 import ProductDetailScreen from '@/screens/ProductDetailScreen';
 import CheckoutScreen from '@/screens/CheckoutScreen';
@@ -123,7 +123,7 @@ function TabNavigator() {
             />
             <Tab.Screen
                 name="Profile"
-                component={ProfileScreen}
+                component={AccountScreen}
                 options={{
                     tabBarLabel: 'Account',
                     tabBarIcon: ({ color, size }) => (

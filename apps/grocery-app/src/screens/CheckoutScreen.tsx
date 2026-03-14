@@ -133,7 +133,7 @@ export default function CheckoutScreen() {
             Alert.alert(
                 'Order Placed!',
                 `Order #${order.orderId} will reach you in 20 mins.`,
-                [{ text: 'Great!', onPress: () => navigation.navigate('OrderTracking', { orderId: order.orderId }) }]
+                [{ text: 'Great!', onPress: () => navigation.navigate('OrderHistory') }]
             );
         } catch (error) {
             Alert.alert('Order Failed', 'Failed to place order. Please try again.');
