@@ -104,13 +104,13 @@ function AccountContent() {
                     <AccountItem
                         icon="shield-checkmark-outline"
                         title="Privacy Policy"
-                        onPress={() => Alert.alert('Privacy', 'Privacy Policy content')}
+                        onPress={() => navigation.navigate('PrivacyPolicy')}
                     />
                     <View style={styles.divider} />
                     <AccountItem
                         icon="document-text-outline"
                         title="Terms & Conditions"
-                        onPress={() => Alert.alert('Terms', 'Terms and conditions content')}
+                        onPress={() => navigation.navigate('TermsAndConditions')}
                     />
                 </AccountSection>
 

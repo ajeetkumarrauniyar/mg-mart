@@ -17,6 +17,8 @@ import OrderHistoryScreen from '@/screens/OrderHistoryScreen';
 import OrderDetailScreen from '@/screens/OrderDetailScreen';
 import AddressBookScreen from '@/screens/AddressBookScreen';
 import PaymentMethodsScreen from '@/screens/PaymentMethodsScreen';
+import PrivacyPolicyScreen from '@/screens/PrivacyPolicyScreen';
+import TermsAndConditionsScreen from '@/screens/TermsAndConditionsScreen';
 import LocationSelectionScreen from '@/screens/LocationSelectionScreen';
 import { AuthScreen } from '@/screens/AuthScreen';
 import { useCartStore, useWishlistStore, useAuthStore } from '@/stores';
@@ -41,6 +43,8 @@ export type RootStackParamList = {
     OrderDetail: { orderId: string };
     AddressBook: undefined;
     PaymentMethods: undefined;
+    PrivacyPolicy: undefined;
+    TermsAndConditions: undefined;
     LocationSelection: undefined;
 };
 
@@ -66,7 +70,7 @@ function TabNavigator() {
                 component={HomeScreen}
                 options={{
                     tabBarLabel: 'Shop',
-                    tabBarIcon: ({ color, size }) => (
+                    tabBarIcon: ({ color, size }: { color: string; size: number }) => (
                         <Ionicons name="storefront-outline" size={size} color={color} />
                     ),
                 }}
@@ -76,7 +80,7 @@ function TabNavigator() {
                 component={ProductsScreen}
                 options={{
                     tabBarLabel: 'Explore',
-                    tabBarIcon: ({ color, size }) => (
+                    tabBarIcon: ({ color, size }: { color: string; size: number }) => (
                         <Ionicons name="compass-outline" size={size} color={color} />
                     ),
                 }}
@@ -86,7 +90,7 @@ function TabNavigator() {
                 component={CartScreen}
                 options={{
                     tabBarLabel: 'Cart',
-                    tabBarIcon: ({ color, size }) => {
+                    tabBarIcon: ({ color, size }: { color: string; size: number }) => {
                         const { totalItems } = useCartStore();
                         return (
                             <View>
@@ -108,7 +112,7 @@ function TabNavigator() {
                 component={WishlistScreen}
                 options={{
                     tabBarLabel: 'Favourite',
-                    tabBarIcon: ({ color, size }) => {
+                    tabBarIcon: ({ color, size }: { color: string; size: number }) => {
                         const { wishlistItems } = useWishlistStore();
                         return (
                             <View>
@@ -130,7 +134,7 @@ function TabNavigator() {
                 component={AccountScreen}
                 options={{
                     tabBarLabel: 'Account',
-                    tabBarIcon: ({ color, size }) => (
+                    tabBarIcon: ({ color, size }: { color: string; size: number }) => (
                         <Ionicons name="person-outline" size={size} color={color} />
                     ),
                 }}
@@ -246,6 +250,16 @@ export default function AppNavigator() {
                 <Stack.Screen
                     name="PaymentMethods"
                     component={PaymentMethodsScreen}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="PrivacyPolicy"
+                    component={PrivacyPolicyScreen}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="TermsAndConditions"
+                    component={TermsAndConditionsScreen}
                     options={{ headerShown: false }}
                 />
                 <Stack.Screen
