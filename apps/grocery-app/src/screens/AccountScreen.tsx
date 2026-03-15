@@ -6,12 +6,13 @@ import {
     ScrollView,
     TouchableOpacity,
     Alert,
+    Linking,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { COLORS, SIZES, SHADOWS } from '../constants';
+import { COLORS, SIZES, SHADOWS, STORE_CONTACT } from '../constants';
 import { useAuthStore } from '../stores';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import {
@@ -26,6 +27,23 @@ type NavigationProp = StackNavigationProp<RootStackParamList>;
 function AccountContent() {
     const navigation = useNavigation<NavigationProp>();
     const { user, logout } = useAuthStore();
+
+    const handleContactStore = async () => {
+        const phoneNumber = STORE_CONTACT.PHONE_NUMBER.replace('+', ''); // Remove + for WhatsApp URL
+        const url = `https://wa.me/${phoneNumber}`;
+
+        try {
+            const supported = await Linking.canOpenURL(url);
+            if (supported) {
+                await Linking.openURL(url);
+            } else {
+                // Fallback to browser is handled by wa.me link itself if opened via openURL
+                await Linking.openURL(url);
+            }
+        } catch (error) {
+            Alert.alert('Error', 'Could not open WhatsApp. Please try again later.');
+        }
+    };
 
     const handleLogout = () => {
         Alert.alert('Logout', 'Are you sure?', [
@@ -89,7 +107,7 @@ function AccountContent() {
                     <AccountItem
                         icon="call-outline"
                         title="Contact Store"
-                        onPress={() => Alert.alert('Contact', 'Calling store...')}
+                        onPress={handleContactStore}
                         color="#4A5568"
                     />
                 </AccountSection>
@@ -98,7 +116,7 @@ function AccountContent() {
                     <AccountItem
                         icon="notifications-outline"
                         title="Notifications"
-                        onPress={() => Alert.alert('Settings', 'Notification settings')}
+                        onPress={() => navigation.navigate('Notifications')}
                     />
                     <View style={styles.divider} />
                     <AccountItem

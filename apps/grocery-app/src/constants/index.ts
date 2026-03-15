@@ -143,3 +143,8 @@ export const ANIMATIONS = {
     easeInOut: 'ease-in-out',
   },
 } as const;
+
+export const STORE_CONTACT = {
+  PHONE_NUMBER: '+918409652834',
+  WHATSAPP_URL: 'https://wa.me/918409652834',
+};
