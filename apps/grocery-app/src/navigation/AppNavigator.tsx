@@ -19,6 +19,7 @@ import AddressBookScreen from '@/screens/AddressBookScreen';
 import PaymentMethodsScreen from '@/screens/PaymentMethodsScreen';
 import PrivacyPolicyScreen from '@/screens/PrivacyPolicyScreen';
 import TermsAndConditionsScreen from '@/screens/TermsAndConditionsScreen';
+import NotificationsScreen from '@/screens/NotificationsScreen';
 import LocationSelectionScreen from '@/screens/LocationSelectionScreen';
 import { AuthScreen } from '@/screens/AuthScreen';
 import { useCartStore, useWishlistStore, useAuthStore } from '@/stores';
@@ -45,6 +46,7 @@ export type RootStackParamList = {
     PaymentMethods: undefined;
     PrivacyPolicy: undefined;
     TermsAndConditions: undefined;
+    Notifications: undefined;
     LocationSelection: undefined;
 };
 
@@ -260,6 +262,11 @@ export default function AppNavigator() {
                 <Stack.Screen
                     name="TermsAndConditions"
                     component={TermsAndConditionsScreen}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="Notifications"
+                    component={NotificationsScreen}
                     options={{ headerShown: false }}
                 />
                 <Stack.Screen

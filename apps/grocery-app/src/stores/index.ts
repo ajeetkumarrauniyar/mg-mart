@@ -6,6 +6,7 @@ export { useWishlistStore } from "./wishlistStore";
 export { useLocationStore } from "./locationStore";
 export { useOrderStore } from "./orderStore";
 export { useAddressStore } from "./addressStore";
+export { useNotificationStore } from "./notificationStore";
 
 // Export store types
 export type { AuthStore } from "./authStore";
