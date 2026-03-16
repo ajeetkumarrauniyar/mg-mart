@@ -147,4 +147,6 @@ export const ANIMATIONS = {
 export const STORE_CONTACT = {
   PHONE_NUMBER: '+918409652834',
   WHATSAPP_URL: 'https://wa.me/918409652834',
+  SUPPORT_MESSAGE: 'Hello MG Mart Support, I need help with my order/account.',
+  INQUIRY_MESSAGE: "Hi MG Mart, I'd like to inquire about...",
 };

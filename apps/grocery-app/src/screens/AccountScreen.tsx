@@ -29,17 +29,24 @@ function AccountContent() {
     const { user, logout } = useAuthStore();
 
     const handleContactStore = async () => {
-        const phoneNumber = STORE_CONTACT.PHONE_NUMBER.replace('+', ''); // Remove + for WhatsApp URL
-        const url = `https://wa.me/${phoneNumber}`;
+        const phoneNumber = STORE_CONTACT.PHONE_NUMBER.replace('+', '');
+        const message = encodeURIComponent(STORE_CONTACT.INQUIRY_MESSAGE);
+        const url = `https://wa.me/${phoneNumber}?text=${message}`;
 
         try {
-            const supported = await Linking.canOpenURL(url);
-            if (supported) {
-                await Linking.openURL(url);
-            } else {
-                // Fallback to browser is handled by wa.me link itself if opened via openURL
-                await Linking.openURL(url);
-            }
+            await Linking.openURL(url);
+        } catch (error) {
+            Alert.alert('Error', 'Could not open WhatsApp. Please try again later.');
+        }
+    };
+
+    const handleHelpSupport = async () => {
+        const phoneNumber = STORE_CONTACT.PHONE_NUMBER.replace('+', '');
+        const message = encodeURIComponent(STORE_CONTACT.SUPPORT_MESSAGE);
+        const url = `https://wa.me/${phoneNumber}?text=${message}`;
+
+        try {
+            await Linking.openURL(url);
         } catch (error) {
             Alert.alert('Error', 'Could not open WhatsApp. Please try again later.');
         }
@@ -100,7 +107,7 @@ function AccountContent() {
                     <AccountItem
                         icon="help-buoy-outline"
                         title="Help & Support"
-                        onPress={() => Alert.alert('Support', 'Contacting support...')}
+                        onPress={handleHelpSupport}
                         color="#4A5568"
                     />
                     <View style={styles.divider} />
