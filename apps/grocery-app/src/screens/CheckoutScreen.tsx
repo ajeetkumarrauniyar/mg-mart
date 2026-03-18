@@ -1,5 +1,5 @@
 // Enhanced checkout screen with location-based ordering integration
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -28,8 +28,6 @@ import {
 } from "../services/location";
 import { orderService } from "../services";
 import {
-  DELIVERY_FEE,
-  HANDLING_FEE,
   SLOTS,
   PAYMENT_METHODS,
 } from "../constants";
@@ -38,7 +36,7 @@ type NavigationProp = StackNavigationProp<RootStackParamList>;
 
 export default function CheckoutScreen() {
   const navigation = useNavigation<NavigationProp>();
-  const { items, totalAmount, clearCart } = useCartStore();
+  const { items, totalAmount, totalItems, deliveryFee, handlingFee, grandTotal, clearCart } = useCartStore();
   const { locationName } = useLocationStore();
 
   // UI state
@@ -55,11 +53,6 @@ export default function CheckoutScreen() {
   const [locationStatus, setLocationStatus] = useState<
     "unknown" | "checking" | "valid" | "invalid"
   >("unknown");
-
-  const grandTotal = useMemo(
-    () => totalAmount + DELIVERY_FEE + HANDLING_FEE,
-    [totalAmount],
-  );
 
   useEffect(() => {
     checkLocationStatus();
@@ -296,11 +289,11 @@ export default function CheckoutScreen() {
         </View>
         <View style={styles.billRow}>
           <Text style={styles.billLabel}>Delivery Fee</Text>
-          <Text style={styles.billValue}>₹{DELIVERY_FEE}</Text>
+          <Text style={styles.billValue}>₹{deliveryFee}</Text>
         </View>
         <View style={styles.billRow}>
           <Text style={styles.billLabel}>Handling Fee</Text>
-          <Text style={styles.billValue}>₹{HANDLING_FEE}</Text>
+          <Text style={styles.billValue}>₹{handlingFee}</Text>
         </View>
         <View style={styles.divider} />
         <View style={styles.billRow}>

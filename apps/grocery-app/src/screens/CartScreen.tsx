@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import {
     View,
     Text,
@@ -10,7 +10,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { COLORS, SIZES, SHADOWS, DELIVERY_FEE, HANDLING_FEE } from '../constants';
+import { COLORS, SIZES, SHADOWS } from '../constants';
 import { useCartStore, CartItemWithProduct } from '@/stores/cartStore';
 import { RootStackParamList } from '@/navigation/AppNavigator';
 import { AuthGuard, OptimizedImage, QuantityStepper, ScreenContainer, AppHeader } from '@/components';
@@ -19,12 +19,8 @@ type NavigationProp = StackNavigationProp<RootStackParamList>;
 
 function CartContent() {
     const navigation = useNavigation<NavigationProp>();
-    const { items, totalAmount, isLoading, updateItem, removeItem, clearCart } =
+    const { items, totalAmount, totalItems, deliveryFee, handlingFee, grandTotal, isLoading, updateItem, removeItem, clearCart } =
         useCartStore();
-
-    const grandTotal = useMemo(() => {
-        return totalAmount > 0 ? totalAmount + DELIVERY_FEE + HANDLING_FEE : 0;
-    }, [totalAmount]);
 
     const handleQuantityChange = async (item: CartItemWithProduct, delta: number) => {
         const newQuantity = item.quantity + delta;
@@ -154,7 +150,7 @@ function CartContent() {
                         <Ionicons name="bicycle-outline" size={16} color={COLORS.textLight} />
                         <Text style={styles.billRowLabel}>Delivery Fee</Text>
                     </View>
-                    <Text style={[styles.billRowValue, { color: COLORS.success }]}>₹{DELIVERY_FEE}</Text>
+                    <Text style={[styles.billRowValue, { color: COLORS.success }]}>₹{deliveryFee}</Text>
                 </View>
 
                 <View style={styles.billRow}>
@@ -162,7 +158,7 @@ function CartContent() {
                         <Ionicons name="shield-checkmark-outline" size={16} color={COLORS.textLight} />
                         <Text style={styles.billRowLabel}>Handling Fee</Text>
                     </View>
-                    <Text style={styles.billRowValue}>₹{HANDLING_FEE}</Text>
+                    <Text style={styles.billRowValue}>₹{handlingFee}</Text>
                 </View>
 
                 <View style={styles.divider} />

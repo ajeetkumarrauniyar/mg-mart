@@ -4,6 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CartItem, Product } from "@mg-mart/types";
 import { cartService } from "../services";
 import { useProductStore } from "./productStore";
+import { DELIVERY_FEE, HANDLING_FEE } from "../constants";
 
 export interface CartItemWithProduct extends CartItem {
   productId: string;
@@ -19,8 +20,11 @@ export interface CartItemWithProduct extends CartItem {
 export interface CartStore {
   // State
   items: CartItemWithProduct[];
-  totalAmount: number;
+  totalAmount: number;    // subtotal (items only)
   totalItems: number;
+  deliveryFee: number;    // 0 if cart empty, else DELIVERY_FEE
+  handlingFee: number;    // 0 if cart empty, else HANDLING_FEE
+  grandTotal: number;     // totalAmount + deliveryFee + handlingFee
   isLoading: boolean;
   error: string | null;
   lastSyncTime: number | null;
@@ -43,6 +47,9 @@ export const useCartStore = create<CartStore>()(
       items: [],
       totalAmount: 0,
       totalItems: 0,
+      deliveryFee: 0,
+      handlingFee: 0,
+      grandTotal: 0,
       isLoading: false,
       error: null,
       lastSyncTime: null,
@@ -271,8 +278,12 @@ export const useCartStore = create<CartStore>()(
         const { items } = get();
         const totalAmount = items.reduce((sum, item) => sum + item.subtotal, 0);
         const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
+        const hasItems = totalItems > 0;
+        const deliveryFee = hasItems ? DELIVERY_FEE : 0;
+        const handlingFee = hasItems ? HANDLING_FEE : 0;
+        const grandTotal = totalAmount + deliveryFee + handlingFee;
 
-        set({ totalAmount, totalItems });
+        set({ totalAmount, totalItems, deliveryFee, handlingFee, grandTotal });
       },
 
       clearError: () => {
@@ -286,6 +297,9 @@ export const useCartStore = create<CartStore>()(
         items: state.items,
         totalAmount: state.totalAmount,
         totalItems: state.totalItems,
+        deliveryFee: state.deliveryFee,
+        handlingFee: state.handlingFee,
+        grandTotal: state.grandTotal,
         lastSyncTime: state.lastSyncTime,
       }),
       onRehydrateStorage: () => (state) => {
