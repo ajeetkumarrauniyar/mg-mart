@@ -16,7 +16,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { Product } from "@mg-mart/types";
 import { useWishlistStore, useCartStore } from "../stores";
 import { COLORS, SHADOWS } from "../constants";
-import { OptimizedImage, AuthGuard, ScreenContainer } from "../components";
+import { OptimizedImage, AuthGuard, ScreenContainer, AppHeader } from "../components";
 import { RootStackParamList } from "../navigation/AppNavigator";
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
@@ -112,11 +112,7 @@ const WishlistContent: React.FC = () => {
   return (
     <>
       <ScreenContainer
-        header={
-          <View style={styles.header}>
-            <Text style={styles.headerTitle}>My Favourites</Text>
-          </View>
-        }
+        header={<AppHeader title="My Favourites" showBackButton={false} />}
         scrollable={false}
         bottomTabOffset
       >

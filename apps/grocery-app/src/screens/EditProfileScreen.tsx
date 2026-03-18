@@ -15,7 +15,7 @@ import { COLORS, SHADOWS } from '../constants';
 import { useAuthStore } from '../stores';
 import { userService } from '../services';
 import { RootStackParamList } from '../navigation/AppNavigator';
-import { AuthGuard, ScreenContainer } from '../components';
+import { AuthGuard, ScreenContainer, AppHeader } from '../components';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -58,15 +58,7 @@ function EditProfileContent() {
 
     return (
         <ScreenContainer
-            header={
-                <View style={styles.header}>
-                    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
-                        <Ionicons name="arrow-back" size={24} color={COLORS.text} />
-                    </TouchableOpacity>
-                    <Text style={styles.headerTitle}>Edit Profile</Text>
-                    <View style={{ width: 40 }} />
-                </View>
-            }
+            header={<AppHeader title="Edit Profile" />}
             footer={
                 <View style={styles.footer}>
                     <TouchableOpacity
@@ -161,23 +153,9 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#F7FAFC',
     },
-    header: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingHorizontal: 20,
-        paddingVertical: 15,
-        backgroundColor: COLORS.white,
-        borderBottomWidth: 1,
-        borderBottomColor: '#EDF2F7',
-    },
     backBtn: {
         padding: 4,
-    },
-    headerTitle: {
-        fontSize: 20,
-        fontWeight: '900',
-        color: COLORS.text,
+        marginLeft: -4,
     },
     content: {
         flex: 1,

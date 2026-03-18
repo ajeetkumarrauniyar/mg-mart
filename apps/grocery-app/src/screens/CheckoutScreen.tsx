@@ -12,10 +12,10 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { COLORS, SIZES, SHADOWS, ZIP_CODE } from "../constants";
+import { COLORS, SHADOWS, ZIP_CODE } from "../constants";
 import { useCartStore, useLocationStore } from "../stores";
 import { RootStackParamList } from "../navigation/AppNavigator";
-import { ScreenContainer } from "../components";
+import { ScreenContainer, AppHeader } from "../components";
 import {
   LocationPermissionModal,
   LocationValidationModal,
@@ -147,22 +147,10 @@ export default function CheckoutScreen() {
     }
   };
 
-  const renderHeader = () => (
-    <View style={styles.header}>
-      <TouchableOpacity
-        onPress={() => navigation.goBack()}
-        style={styles.backButton}
-      >
-        <Ionicons name="arrow-back" size={24} color={COLORS.text} />
-      </TouchableOpacity>
-      <Text style={styles.headerTitle}>Review Order</Text>
-      <View style={{ width: 40 }} />
-    </View>
-  );
 
   return (
     <ScreenContainer
-      header={renderHeader()}
+      header={<AppHeader title="Review Order" />}
       footer={
         <View style={styles.footer}>
           <View style={styles.totalBox}>
@@ -343,22 +331,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#F3F4F6",
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: SIZES.padding,
-    paddingVertical: 12,
-    backgroundColor: COLORS.white,
-  },
-  backButton: {
-    padding: 4,
-  },
-  headerTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: COLORS.text,
   },
   content: {
     flex: 1,

@@ -14,7 +14,7 @@ import { COLORS, SHADOWS } from '../constants';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { orderService } from '../services';
 import type { Order, OrderItem } from '@mg-mart/types';
-import { AuthGuard, ScreenContainer } from '../components';
+import { ScreenContainer, AppHeader, AuthGuard } from '../components';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 type RouteProps = NavigationRouteProp<RootStackParamList, 'OrderDetail'>;
@@ -121,15 +121,7 @@ function OrderDetailContent() {
 
     return (
         <ScreenContainer
-            header={
-                <View style={styles.header}>
-                    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
-                        <Ionicons name="arrow-back" size={24} color={COLORS.text} />
-                    </TouchableOpacity>
-                    <Text style={styles.headerTitle}>Order Details</Text>
-                    <View style={{ width: 40 }} />
-                </View>
-            }
+            header={<AppHeader title="Order Details" />}
             footer={
                 <View style={styles.footer}>
                     <View style={styles.supportBox}>
@@ -219,23 +211,9 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#F7FAFC',
     },
-    header: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingHorizontal: 20,
-        paddingVertical: 15,
-        backgroundColor: COLORS.white,
-        borderBottomWidth: 1,
-        borderBottomColor: '#EDF2F7',
-    },
     backBtn: {
         padding: 4,
-    },
-    headerTitle: {
-        fontSize: 20,
-        fontWeight: '900',
-        color: COLORS.text,
+        marginLeft: -4,
     },
     loadingContainer: {
         flex: 1,

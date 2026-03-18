@@ -9,12 +9,11 @@ import {
     Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Product, ProductCategory, ProductFilters } from '@mg-mart/types';
-import { COLORS, SIZES, SHADOWS } from '@/constants';
-import { useProductStore, useCartStore, useWishlistStore } from '@/stores';
+import { COLORS, SIZES } from '@/constants';
+import { useProductStore, useCartStore } from '@/stores';
 import { useDebounce, useRequireAuth } from '@/hooks';
 import { RootStackParamList } from '@/navigation/AppNavigator';
 import {
@@ -22,9 +21,9 @@ import {
     FilterModal,
     CategoryFilter,
     ActiveFilters,
-    ProductsGridSkeleton,
     QuickAddProductCard,
-    ScreenContainer
+    ScreenContainer,
+    AppHeader
 } from '@/components';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
@@ -40,7 +39,7 @@ export default function ProductsScreen() {
         fetchProducts,
         loadMoreProducts,
     } = useProductStore();
-    const { addItem } = useCartStore();
+    const { addItem, totalItems } = useCartStore();
     const { requireAuth } = useRequireAuth();
 
     const [searchQuery, setSearchQuery] = useState('');
@@ -179,13 +178,33 @@ export default function ProductsScreen() {
     return (
         <ScreenContainer
             header={
-                <View style={styles.searchHeader}>
-                    <SearchBar
-                        value={searchQuery}
-                        onChangeText={setSearchQuery}
-                        onFilterPress={() => setShowFilterModal(true)}
-                        style={styles.searchBar}
+                <View>
+                    <AppHeader
+                        title="MG Mart Store"
+                        showBackButton={false}
+                        rightAction={
+                            <TouchableOpacity onPress={() => navigation.navigate('MainTabs', { screen: 'Cart' })}>
+                                <View style={styles.cartIconContainer}>
+                                    <Ionicons name="cart-outline" size={SIZES.icon.large || 24} color={COLORS.text} />
+                                    {totalItems > 0 && (
+                                        <View style={styles.badge}>
+                                            <Text style={styles.badgeText}>
+                                                {totalItems > 99 ? '99+' : totalItems}
+                                            </Text>
+                                        </View>
+                                    )}
+                                </View>
+                            </TouchableOpacity>
+                        }
                     />
+                    <View style={styles.searchHeader}>
+                        <SearchBar
+                            value={searchQuery}
+                            onChangeText={setSearchQuery}
+                            onFilterPress={() => setShowFilterModal(true)}
+                            style={styles.searchBar}
+                        />
+                    </View>
                 </View>
             }
             scrollable={false}
@@ -279,7 +298,30 @@ const styles = StyleSheet.create({
         borderRadius: 8,
     },
     clearButtonText: {
+        color: COLORS.primary,
+        fontWeight: 'bold',
+        fontSize: 14,
+    },
+    cartIconContainer: {
+        padding: 4,
+    },
+    badge: {
+        position: 'absolute',
+        right: -8,
+        top: -4,
+        backgroundColor: COLORS.error || '#e53e3e',
+        borderRadius: 10,
+        minWidth: 18,
+        height: 18,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 4,
+        borderWidth: 1.5,
+        borderColor: COLORS.white,
+    },
+    badgeText: {
         color: COLORS.white,
+        fontSize: 10,
         fontWeight: 'bold',
     },
 });

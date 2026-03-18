@@ -3,17 +3,15 @@ import {
     View,
     Text,
     StyleSheet,
-    ScrollView,
     TouchableOpacity,
     ActivityIndicator,
     Alert,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from '@/navigation/AppNavigator';
 import { COLORS, SIZES } from '@/constants';
-import { OptimizedImage, ScreenContainer } from '@/components';
+import { OptimizedImage, ScreenContainer, AppHeader } from '@/components';
 import { useProductStore, useCartStore, useWishlistStore } from '@/stores';
 import { useRequireAuth } from '@/hooks';
 
@@ -96,21 +94,18 @@ export default function ProductDetailScreen({ route, navigation }: Props) {
     return (
         <ScreenContainer
             header={
-                <View style={styles.header}>
-                    <TouchableOpacity
-                        style={styles.headerButton}
-                        onPress={() => navigation.goBack()}
-                    >
-                        <Ionicons name="arrow-back" size={24} color={COLORS.text} />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.headerButton} onPress={toggleFavorite}>
-                        <Ionicons
-                            name={isWishlisted ? 'heart' : 'heart-outline'}
-                            size={24}
-                            color={isWishlisted ? '#e53e3e' : COLORS.text}
-                        />
-                    </TouchableOpacity>
-                </View>
+                <AppHeader 
+                    title={product?.name || "Product Details"} 
+                    rightAction={
+                        <TouchableOpacity onPress={toggleFavorite} style={{ padding: 4 }}>
+                            <Ionicons
+                                name={isWishlisted ? 'heart' : 'heart-outline'}
+                                size={24}
+                                color={isWishlisted ? '#e53e3e' : COLORS.text}
+                            />
+                        </TouchableOpacity>
+                    }
+                />
             }
             footer={
                 <View style={styles.bottomBar}>
@@ -229,28 +224,10 @@ export default function ProductDetailScreen({ route, navigation }: Props) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: COLORS.background,
+        backgroundColor: COLORS.white,
     },
     loadingContainer: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    header: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingHorizontal: SIZES.padding,
-        paddingVertical: 12,
-        backgroundColor: COLORS.white,
-        borderBottomWidth: 1,
-        borderBottomColor: '#e2e8f0',
-    },
-    headerButton: {
-        width: 40,
-        height: 40,
-        borderRadius: 20,
-        backgroundColor: '#f7fafc',
         justifyContent: 'center',
         alignItems: 'center',
     },

@@ -1,42 +1,32 @@
 import React from 'react';
 import {
-    View,
     Text,
     StyleSheet,
     FlatList,
     TouchableOpacity,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { COLORS, SIZES } from '../constants';
+import { COLORS } from '../constants';
 import { useNotificationStore } from '../stores';
-import { NotificationItem, EmptyState, ScreenContainer } from '../components';
-import { RootStackParamList } from '../navigation/AppNavigator';
+import { ScreenContainer, NotificationItem, EmptyState, AppHeader } from '../components';
 
-type NavigationProp = StackNavigationProp<RootStackParamList>;
 
 const NotificationsScreen: React.FC = () => {
-    const navigation = useNavigation<NavigationProp>();
     const { notifications, markAsRead, markAllAsRead, clearAll } = useNotificationStore();
 
     return (
         <ScreenContainer
             header={
-                <View style={styles.header}>
-                    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
-                        <Ionicons name="arrow-back" size={24} color={COLORS.text} />
-                    </TouchableOpacity>
-                    <Text style={styles.headerTitle}>Notifications</Text>
-                    {notifications.length > 0 ? (
-                        <TouchableOpacity onPress={markAllAsRead}>
-                            <Text style={styles.readAll}>Mark all read</Text>
-                        </TouchableOpacity>
-                    ) : (
-                        <View style={{ width: 40 }} />
-                    )}
-                </View>
+                <AppHeader
+                    title="Notifications"
+                    rightAction={
+                        notifications.length > 0 && (
+                            <TouchableOpacity onPress={markAllAsRead}>
+                                <Text style={styles.readAll}>Mark all read</Text>
+                            </TouchableOpacity>
+                        )
+                    }
+                />
             }
             scrollable={false}
             footer={

@@ -6,29 +6,15 @@ import {
     TouchableOpacity,
     Linking,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from "@react-navigation/stack";
 import { COLORS } from '../constants';
-import { RootStackParamList } from "../navigation/AppNavigator";
-import { ScreenContainer } from '../components';
+import { ScreenContainer, AppHeader } from '../components';
 
-type NavigationProp = StackNavigationProp<RootStackParamList>;
 
 const PrivacyPolicyScreen: React.FC = () => {
-    const navigation = useNavigation<NavigationProp>();
 
     return (
         <ScreenContainer
-            header={
-                <View style={styles.header}>
-                    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
-                        <Ionicons name="arrow-back" size={24} color={COLORS.text} />
-                    </TouchableOpacity>
-                    <Text style={styles.headerTitle}>Privacy Policy</Text>
-                    <View style={{ width: 40 }} />
-                </View>
-            }
+            header={<AppHeader title="Privacy Policy" />}
             bottomTabOffset
         >
             <View style={styles.content}>
@@ -111,6 +97,7 @@ const styles = StyleSheet.create({
     },
     backBtn: {
         padding: 4,
+        marginLeft: -4,
     },
     headerTitle: {
         fontSize: 20,

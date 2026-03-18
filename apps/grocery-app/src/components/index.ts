@@ -22,3 +22,4 @@ export * from './AccountItem';
 export * from './AccountSection';
 export * from './AddressCard';
 export * from './NotificationItem';
+export { AppHeader } from './AppHeader';

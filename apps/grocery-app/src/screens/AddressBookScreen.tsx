@@ -7,19 +7,13 @@ import {
     TouchableOpacity,
     Alert,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { COLORS, SIZES, SHADOWS } from '../constants';
+import { COLORS, SHADOWS } from '../constants';
 import { useAddressStore } from '../stores';
-import { RootStackParamList } from '../navigation/AppNavigator';
-import { AuthGuard, AddressCard, ScreenContainer } from '../components';
+import { AuthGuard, AddressCard, ScreenContainer, AppHeader } from '../components';
 
-type NavigationProp = StackNavigationProp<RootStackParamList>;
 
 const AddressBookContent: React.FC = () => {
-    const navigation = useNavigation<NavigationProp>();
     const { addresses, removeAddress } = useAddressStore();
 
     const handleAddAddress = () => {
@@ -57,17 +51,7 @@ const AddressBookContent: React.FC = () => {
 
     return (
         <ScreenContainer
-            header={
-                <View style={styles.header}>
-                    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
-                        <Ionicons name="arrow-back" size={24} color={COLORS.text} />
-                    </TouchableOpacity>
-                    <Text style={styles.headerTitle}>Address Book</Text>
-                    <TouchableOpacity onPress={handleAddAddress} style={styles.addIconBtn}>
-                        <Ionicons name="add" size={26} color={COLORS.primary} />
-                    </TouchableOpacity>
-                </View>
-            }
+            header={<AppHeader title="Address Book" />}
             scrollable={false}
             footer={
                 addresses.length > 0 ? (

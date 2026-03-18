@@ -7,21 +7,19 @@ import {
     TouchableOpacity,
     Alert,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { COLORS, SIZES, SHADOWS } from '@/constants';
+import { COLORS, SIZES, SHADOWS, DELIVERY_FEE, HANDLING_FEE } from '../constants';
 import { useCartStore, CartItemWithProduct } from '@/stores/cartStore';
 import { RootStackParamList } from '@/navigation/AppNavigator';
-import { AuthGuard, OptimizedImage, QuantityStepper, ScreenContainer } from '@/components';
-import { DELIVERY_FEE, HANDLING_FEE } from '@/constants';
+import { AuthGuard, OptimizedImage, QuantityStepper, ScreenContainer, AppHeader } from '@/components';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
 function CartContent() {
     const navigation = useNavigation<NavigationProp>();
-    const { items, totalAmount, totalItems, isLoading, updateItem, removeItem, clearCart } =
+    const { items, totalAmount, isLoading, updateItem, removeItem, clearCart } =
         useCartStore();
 
     const grandTotal = useMemo(() => {
@@ -135,26 +133,6 @@ function CartContent() {
         </View>
     );
 
-    const renderHeader = () => (
-        <View style={styles.header}>
-            <View>
-                <Text style={styles.title}>My Cart</Text>
-                <Text style={styles.subtitle}>
-                    {totalItems} {totalItems === 1 ? 'item' : 'items'}
-                </Text>
-            </View>
-            {items.length > 0 && (
-                <TouchableOpacity
-                    style={styles.clearBadge}
-                    onPress={handleClearCart}
-                    disabled={isLoading}
-                >
-                    <Ionicons name="trash-outline" size={14} color={COLORS.error} />
-                    <Text style={styles.clearText}>Clear All</Text>
-                </TouchableOpacity>
-            )}
-        </View>
-    );
 
     const renderFooter = () => {
         if (items.length === 0) return null;
@@ -208,7 +186,7 @@ function CartContent() {
                 <Ionicons name="cart-outline" size={80} color={COLORS.border} />
             </View>
             <Text style={styles.emptyTitle}>Cart is empty</Text>
-            <Text style={styles.emptySubtitle}>You haven't added anything yet</Text>
+            <Text style={styles.emptySubtitle}>You haven&apos;t added anything yet</Text>
             <TouchableOpacity
                 style={styles.shopButton}
                 onPress={() => navigation.navigate('MainTabs', { screen: 'Products' })}
@@ -220,6 +198,19 @@ function CartContent() {
 
     return (
         <ScreenContainer
+            header={
+                <AppHeader
+                    title="My Cart"
+                    showBackButton={false}
+                    rightAction={
+                        items.length > 0 && (
+                            <TouchableOpacity onPress={handleClearCart}>
+                                <Ionicons name="trash-outline" size={24} color={COLORS.error} />
+                            </TouchableOpacity>
+                        )
+                    }
+                />
+            }
             scrollable={false}
             bottomTabOffset
             footer={
@@ -246,7 +237,6 @@ function CartContent() {
                 data={items}
                 renderItem={renderCartItem}
                 keyExtractor={(item) => item.productId}
-                ListHeaderComponent={renderHeader}
                 ListEmptyComponent={renderEmpty}
                 ListFooterComponent={renderFooter}
                 contentContainerStyle={items.length === 0 ? styles.emptyList : styles.listContent}

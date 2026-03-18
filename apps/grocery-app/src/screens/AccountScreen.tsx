@@ -3,16 +3,14 @@ import {
     View,
     Text,
     StyleSheet,
-    ScrollView,
     TouchableOpacity,
     Alert,
     Linking,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { COLORS, SIZES, SHADOWS, STORE_CONTACT } from '../constants';
+import { COLORS, SHADOWS, STORE_CONTACT } from '../constants';
 import { useAuthStore } from '../stores';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import {
@@ -20,7 +18,8 @@ import {
     ProfileHeader,
     AccountItem,
     AccountSection,
-    ScreenContainer
+    ScreenContainer,
+    AppHeader
 } from '../components';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
@@ -62,11 +61,7 @@ function AccountContent() {
 
     return (
         <ScreenContainer
-            header={
-                <View style={styles.header}>
-                    <Text style={styles.headerTitle}>My Account</Text>
-                </View>
-            }
+            header={<AppHeader title="Account" showBackButton={false} />}
             bottomTabOffset
         >
             <ProfileHeader
