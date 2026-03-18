@@ -16,7 +16,7 @@ import { COLORS, SIZES, SHADOWS } from '../constants';
 import { useOrderStore } from '../stores';
 import type { Order } from '@mg-mart/types';
 import { RootStackParamList } from '../navigation/AppNavigator';
-import { AuthGuard } from '../components';
+import { AuthGuard, ScreenContainer } from '../components';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -94,15 +94,18 @@ const OrderHistoryContent: React.FC = () => {
     );
 
     return (
-        <SafeAreaView style={styles.container} edges={['top']}>
-            <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
-                    <Ionicons name="arrow-back" size={24} color={COLORS.text} />
-                </TouchableOpacity>
-                <Text style={styles.headerTitle}>Order History</Text>
-                <View style={{ width: 40 }} />
-            </View>
-
+        <ScreenContainer
+            header={
+                <View style={styles.header}>
+                    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
+                        <Ionicons name="arrow-back" size={24} color={COLORS.text} />
+                    </TouchableOpacity>
+                    <Text style={styles.headerTitle}>Order History</Text>
+                    <View style={{ width: 40 }} />
+                </View>
+            }
+            scrollable={false}
+        >
             {isLoading && orders.length === 0 ? (
                 <View style={styles.loadingContainer}>
                     <ActivityIndicator size="large" color={COLORS.primary} />
@@ -125,7 +128,7 @@ const OrderHistoryContent: React.FC = () => {
                     }
                 />
             )}
-        </SafeAreaView>
+        </ScreenContainer>
     );
 };
 
@@ -159,7 +162,7 @@ const styles = StyleSheet.create({
     },
     list: {
         padding: 16,
-        paddingBottom: 40,
+        paddingBottom: 100,
     },
     card: {
         backgroundColor: COLORS.white,

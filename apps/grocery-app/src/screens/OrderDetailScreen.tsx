@@ -3,20 +3,18 @@ import {
     View,
     Text,
     StyleSheet,
-    ScrollView,
     TouchableOpacity,
     ActivityIndicator,
     Alert,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useRoute, RouteProp as NavigationRouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { COLORS, SIZES, SHADOWS } from '../constants';
+import { COLORS, SHADOWS } from '../constants';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { orderService } from '../services';
 import type { Order, OrderItem } from '@mg-mart/types';
-import { AuthGuard } from '../components';
+import { AuthGuard, ScreenContainer } from '../components';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 type RouteProps = NavigationRouteProp<RootStackParamList, 'OrderDetail'>;
@@ -122,97 +120,97 @@ function OrderDetailContent() {
     });
 
     return (
-        <SafeAreaView style={styles.container} edges={['top']}>
-            <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
-                    <Ionicons name="arrow-back" size={24} color={COLORS.text} />
-                </TouchableOpacity>
-                <Text style={styles.headerTitle}>Order Details</Text>
-                <View style={{ width: 40 }} />
+        <ScreenContainer
+            header={
+                <View style={styles.header}>
+                    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
+                        <Ionicons name="arrow-back" size={24} color={COLORS.text} />
+                    </TouchableOpacity>
+                    <Text style={styles.headerTitle}>Order Details</Text>
+                    <View style={{ width: 40 }} />
+                </View>
+            }
+            footer={
+                <View style={styles.footer}>
+                    <View style={styles.supportBox}>
+                        <TouchableOpacity style={styles.supportBtn} onPress={() => Alert.alert('Support', 'Connecting to support...')}>
+                            <Ionicons name="chatbubble-ellipses-outline" size={20} color={COLORS.primary} />
+                            <Text style={styles.supportBtnText}>Need Help?</Text>
+                        </TouchableOpacity>
+
+                        {['pending', 'processing'].includes(order.status.toLowerCase()) && (
+                            <TouchableOpacity
+                                style={[styles.supportBtn, styles.cancelBtn]}
+                                onPress={handleCancelOrder}
+                                disabled={isCancelling}
+                            >
+                                {isCancelling ? (
+                                    <ActivityIndicator size="small" color="#E53E3E" />
+                                ) : (
+                                    <>
+                                        <Ionicons name="close-circle-outline" size={20} color="#E53E3E" />
+                                        <Text style={[styles.supportBtnText, { color: '#E53E3E' }]}>Cancel Order</Text>
+                                    </>
+                                )}
+                            </TouchableOpacity>
+                        )}
+                    </View>
+                </View>
+            }
+            contentContainerStyle={{ paddingBottom: 100 }}
+        >
+            <View style={[styles.statusHero, { backgroundColor: status.bg }]}>
+                <View style={styles.statusHeroInfo}>
+                    <Text style={[styles.statusHeroLabel, { color: status.color }]}>{status.label}</Text>
+                    <Text style={styles.statusHeroId}>#{order.orderId.toUpperCase()}</Text>
+                    <Text style={styles.statusHeroDate}>{date}</Text>
+                </View>
+                <Ionicons name={status.icon as any} size={60} color={status.color} opacity={0.2} />
             </View>
 
-            <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-                {/* Status Hero */}
-                <View style={[styles.statusHero, { backgroundColor: status.bg }]}>
-                    <View style={styles.statusHeroInfo}>
-                        <Text style={[styles.statusHeroLabel, { color: status.color }]}>{status.label}</Text>
-                        <Text style={styles.statusHeroId}>#{order.orderId.toUpperCase()}</Text>
-                        <Text style={styles.statusHeroDate}>{date}</Text>
+            {/* Items Section */}
+            <DetailSection title="Items Summary" icon="list-outline">
+                {order.items.map((item, idx) => (
+                    <View key={idx}>
+                        <OrderItemRow item={item} />
+                        {idx < order.items.length - 1 && <View style={styles.divider} />}
                     </View>
-                    <Ionicons name={status.icon as any} size={60} color={status.color} opacity={0.2} />
+                ))}
+                <View style={styles.billDivider} />
+                <View style={styles.billRow}>
+                    <Text style={styles.billLabel}>Item Total</Text>
+                    <Text style={styles.billValue}>₹{order.totalAmount}</Text>
                 </View>
-
-                {/* Items Section */}
-                <DetailSection title="Items Summary" icon="list-outline">
-                    {order.items.map((item, idx) => (
-                        <View key={idx}>
-                            <OrderItemRow item={item} />
-                            {idx < order.items.length - 1 && <View style={styles.divider} />}
-                        </View>
-                    ))}
-                    <View style={styles.billDivider} />
-                    <View style={styles.billRow}>
-                        <Text style={styles.billLabel}>Item Total</Text>
-                        <Text style={styles.billValue}>₹{order.totalAmount}</Text>
-                    </View>
-                    <View style={styles.billRow}>
-                        <Text style={styles.billLabel}>Delivery Fee</Text>
-                        <Text style={[styles.billValue, { color: '#48BB78' }]}>FREE</Text>
-                    </View>
-                    <View style={[styles.billRow, { marginTop: 8 }]}>
-                        <Text style={styles.totalLabel}>Grand Total</Text>
-                        <Text style={styles.totalValue}>₹{order.totalAmount}</Text>
-                    </View>
-                </DetailSection>
-
-                {/* Delivery details */}
-                <DetailSection title="Delivery Address" icon="location-outline">
-                    <Text style={styles.addressName}>Home</Text>
-                    <Text style={styles.addressText}>
-                        {order.shippingAddress.street}, {order.shippingAddress.city}, {'\n'}
-                        {order.shippingAddress.state} - {order.shippingAddress.zipCode}
-                    </Text>
-                </DetailSection>
-
-                {/* Payment details */}
-                <DetailSection title="Payment Information" icon="card-outline">
-                    <View style={styles.paymentBox}>
-                        <Ionicons name="cash-outline" size={20} color={COLORS.text} />
-                        <View>
-                            <Text style={styles.paymentMethod}>{order.paymentDetails.paymentMethod}</Text>
-                            <Text style={styles.paymentStatus}>Transaction Successful</Text>
-                        </View>
-                    </View>
-                </DetailSection>
-
-                {/* Support Actions */}
-                <View style={styles.supportBox}>
-                    <TouchableOpacity style={styles.supportBtn} onPress={() => Alert.alert('Support', 'Connecting to support...')}>
-                        <Ionicons name="chatbubble-ellipses-outline" size={20} color={COLORS.primary} />
-                        <Text style={styles.supportBtnText}>Need Help?</Text>
-                    </TouchableOpacity>
-
-                    {['pending', 'processing'].includes(order.status.toLowerCase()) && (
-                        <TouchableOpacity
-                            style={[styles.supportBtn, styles.cancelBtn]}
-                            onPress={handleCancelOrder}
-                            disabled={isCancelling}
-                        >
-                            {isCancelling ? (
-                                <ActivityIndicator size="small" color="#E53E3E" />
-                            ) : (
-                                <>
-                                    <Ionicons name="close-circle-outline" size={20} color="#E53E3E" />
-                                    <Text style={[styles.supportBtnText, { color: '#E53E3E' }]}>Cancel Order</Text>
-                                </>
-                            )}
-                        </TouchableOpacity>
-                    )}
+                <View style={styles.billRow}>
+                    <Text style={styles.billLabel}>Delivery Fee</Text>
+                    <Text style={[styles.billValue, { color: '#48BB78' }]}>FREE</Text>
                 </View>
+                <View style={[styles.billRow, { marginTop: 8 }]}>
+                    <Text style={styles.totalLabel}>Grand Total</Text>
+                    <Text style={styles.totalValue}>₹{order.totalAmount}</Text>
+                </View>
+            </DetailSection>
 
-                <View style={{ height: 40 }} />
-            </ScrollView>
-        </SafeAreaView>
+            {/* Delivery details */}
+            <DetailSection title="Delivery Address" icon="location-outline">
+                <Text style={styles.addressName}>Home</Text>
+                <Text style={styles.addressText}>
+                    {order.shippingAddress.street}, {order.shippingAddress.city}, {'\n'}
+                    {order.shippingAddress.state} - {order.shippingAddress.zipCode}
+                </Text>
+            </DetailSection>
+
+            {/* Payment details */}
+            <DetailSection title="Payment Information" icon="card-outline">
+                <View style={styles.paymentBox}>
+                    <Ionicons name="cash-outline" size={20} color={COLORS.text} />
+                    <View>
+                        <Text style={styles.paymentMethod}>{order.paymentDetails.paymentMethod}</Text>
+                        <Text style={styles.paymentStatus}>Transaction Successful</Text>
+                    </View>
+                </View>
+            </DetailSection>
+        </ScreenContainer>
     );
 }
 
@@ -397,10 +395,15 @@ const styles = StyleSheet.create({
         color: '#48BB78',
         fontWeight: '600',
     },
+    footer: {
+        paddingBottom: 32,
+        backgroundColor: '#F7FAFC',
+    },
     supportBox: {
         flexDirection: 'row',
         paddingHorizontal: 16,
         gap: 12,
+        backgroundColor: '#F7FAFC',
     },
     supportBtn: {
         flex: 1,
@@ -413,6 +416,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: COLORS.primary + '30',
         gap: 8,
+        ...SHADOWS.small,
     },
     supportBtnText: {
         fontSize: 14,

@@ -3,15 +3,14 @@ import {
     View,
     Text,
     StyleSheet,
-    ScrollView,
     TouchableOpacity,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { COLORS } from '../constants';
 import { RootStackParamList } from '../navigation/AppNavigator';
+import { ScreenContainer } from '../components';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -19,22 +18,25 @@ const TermsAndConditionsScreen: React.FC = () => {
     const navigation = useNavigation<NavigationProp>();
 
     return (
-        <SafeAreaView style={styles.container} edges={['top']}>
-            <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
-                    <Ionicons name="arrow-back" size={24} color={COLORS.text} />
-                </TouchableOpacity>
-                <Text style={styles.headerTitle}>Terms & Conditions</Text>
-                <View style={{ width: 40 }} />
-            </View>
-
-            <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+        <ScreenContainer
+            header={
+                <View style={styles.header}>
+                    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
+                        <Ionicons name="arrow-back" size={24} color={COLORS.text} />
+                    </TouchableOpacity>
+                    <Text style={styles.headerTitle}>Terms & Conditions</Text>
+                    <View style={{ width: 40 }} />
+                </View>
+            }
+            bottomTabOffset
+        >
+            <View style={styles.content}>
                 <View style={styles.card}>
                     <Text style={styles.lastUpdated}>Last Updated: March 14, 2026</Text>
 
                     <Text style={styles.sectionTitle}>1. Acceptance of Terms</Text>
                     <Text style={styles.text}>
-                        By accessing and using MG Mart (the "App"), you agree to be bound by these Terms & Conditions. If you do not agree to these terms, please do not use the App.
+                        By accessing and using MG Mart (the &quot;App&quot;), you agree to be bound by these Terms & Conditions. If you do not agree to these terms, please do not use the App.
                     </Text>
 
                     <Text style={styles.sectionTitle}>2. Use of the App</Text>
@@ -56,7 +58,7 @@ const TermsAndConditionsScreen: React.FC = () => {
 
                     <Text style={styles.sectionTitle}>5. Cancellations and Refunds</Text>
                     <Text style={styles.text}>
-                        Orders can be cancelled before they are "Out for Delivery". Selection of items for return or refund is subject to our quality check and return policy guidelines.
+                        Orders can be cancelled before they are &quot;Out for Delivery&quot;. Selection of items for return or refund is subject to our quality check and return policy guidelines.
                     </Text>
 
                     <Text style={styles.sectionTitle}>6. Intellectual Property</Text>
@@ -80,9 +82,8 @@ const TermsAndConditionsScreen: React.FC = () => {
                         </Text>
                     </View>
                 </View>
-                <View style={{ height: 40 }} />
-            </ScrollView>
-        </SafeAreaView>
+            </View>
+        </ScreenContainer>
     );
 };
 

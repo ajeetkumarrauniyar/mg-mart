@@ -3,23 +3,19 @@ import {
     View,
     Text,
     StyleSheet,
-    ScrollView,
     TouchableOpacity,
     TextInput,
     Alert,
     ActivityIndicator,
-    KeyboardAvoidingView,
-    Platform,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { COLORS, SIZES, SHADOWS } from '../constants';
+import { COLORS, SHADOWS } from '../constants';
 import { useAuthStore } from '../stores';
 import { userService } from '../services';
-import { AuthGuard } from '../components';
 import { RootStackParamList } from '../navigation/AppNavigator';
+import { AuthGuard, ScreenContainer } from '../components';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -61,105 +57,102 @@ function EditProfileContent() {
     };
 
     return (
-        <SafeAreaView style={styles.container} edges={['top']}>
-            <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
-                    <Ionicons name="arrow-back" size={24} color={COLORS.text} />
-                </TouchableOpacity>
-                <Text style={styles.headerTitle}>Edit Profile</Text>
-                <View style={{ width: 40 }} />
+        <ScreenContainer
+            header={
+                <View style={styles.header}>
+                    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
+                        <Ionicons name="arrow-back" size={24} color={COLORS.text} />
+                    </TouchableOpacity>
+                    <Text style={styles.headerTitle}>Edit Profile</Text>
+                    <View style={{ width: 40 }} />
+                </View>
+            }
+            footer={
+                <View style={styles.footer}>
+                    <TouchableOpacity
+                        style={[styles.saveBtn, isLoading && { opacity: 0.7 }]}
+                        onPress={handleSave}
+                        disabled={isLoading}
+                    >
+                        {isLoading ? (
+                            <ActivityIndicator color={COLORS.white} />
+                        ) : (
+                            <Text style={styles.saveBtnText}>Save Changes</Text>
+                        )}
+                    </TouchableOpacity>
+                </View>
+            }
+            contentContainerStyle={{ paddingBottom: 100 }}
+        >
+            {/* Avatar Preview */}
+            <View style={styles.avatarSection}>
+                <View style={styles.avatarCircle}>
+                    <Text style={styles.avatarLabel}>
+                        {(firstName[0] || '').toUpperCase()}{(lastName[0] || '').toUpperCase()}
+                    </Text>
+                </View>
+                <Text style={styles.changeLabel}>Personal Information</Text>
             </View>
 
-            <KeyboardAvoidingView
-                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                style={{ flex: 1 }}
-            >
-                <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-                    {/* Avatar Preview */}
-                    <View style={styles.avatarSection}>
-                        <View style={styles.avatarCircle}>
-                            <Text style={styles.avatarLabel}>
-                                {(firstName[0] || '').toUpperCase()}{(lastName[0] || '').toUpperCase()}
-                            </Text>
-                        </View>
-                        <Text style={styles.changeLabel}>Personal Information</Text>
+            {/* Inputs */}
+            <View style={styles.formCard}>
+                <View style={styles.inputGroup}>
+                    <Text style={styles.inputLabel}>First Name</Text>
+                    <View style={styles.inputWrapper}>
+                        <Ionicons name="person-outline" size={20} color={COLORS.textSecondary} style={styles.inputIcon} />
+                        <TextInput
+                            style={styles.input}
+                            value={firstName}
+                            onChangeText={setFirstName}
+                            placeholder="Enter first name"
+                            placeholderTextColor={COLORS.textMuted}
+                        />
                     </View>
+                </View>
 
-                    {/* Inputs */}
-                    <View style={styles.formCard}>
-                        <View style={styles.inputGroup}>
-                            <Text style={styles.inputLabel}>First Name</Text>
-                            <View style={styles.inputWrapper}>
-                                <Ionicons name="person-outline" size={20} color={COLORS.textSecondary} style={styles.inputIcon} />
-                                <TextInput
-                                    style={styles.input}
-                                    value={firstName}
-                                    onChangeText={setFirstName}
-                                    placeholder="Enter first name"
-                                    placeholderTextColor={COLORS.textMuted}
-                                />
-                            </View>
-                        </View>
-
-                        <View style={styles.inputGroup}>
-                            <Text style={styles.inputLabel}>Last Name</Text>
-                            <View style={styles.inputWrapper}>
-                                <Ionicons name="person-outline" size={20} color={COLORS.textSecondary} style={styles.inputIcon} />
-                                <TextInput
-                                    style={styles.input}
-                                    value={lastName}
-                                    onChangeText={setLastName}
-                                    placeholder="Enter last name"
-                                    placeholderTextColor={COLORS.textMuted}
-                                />
-                            </View>
-                        </View>
-
-                        <View style={styles.inputGroup}>
-                            <Text style={styles.inputLabel}>Email Address</Text>
-                            <View style={[styles.inputWrapper, styles.disabledWrapper]}>
-                                <Ionicons name="mail-outline" size={20} color={COLORS.textMuted} style={styles.inputIcon} />
-                                <TextInput
-                                    style={[styles.input, { color: COLORS.textMuted }]}
-                                    value={user?.email}
-                                    editable={false}
-                                />
-                            </View>
-                            <Text style={styles.helperText}>Email cannot be changed</Text>
-                        </View>
-
-                        <View style={styles.inputGroup}>
-                            <Text style={styles.inputLabel}>Phone Number</Text>
-                            <View style={styles.inputWrapper}>
-                                <Ionicons name="call-outline" size={20} color={COLORS.textSecondary} style={styles.inputIcon} />
-                                <TextInput
-                                    style={styles.input}
-                                    value={phone}
-                                    onChangeText={(t) => setPhone(t.replace(/[^0-9]/g, '').slice(0, 10))}
-                                    placeholder="10 digit mobile number"
-                                    keyboardType="phone-pad"
-                                    placeholderTextColor={COLORS.textMuted}
-                                />
-                            </View>
-                        </View>
+                <View style={styles.inputGroup}>
+                    <Text style={styles.inputLabel}>Last Name</Text>
+                    <View style={styles.inputWrapper}>
+                        <Ionicons name="person-outline" size={20} color={COLORS.textSecondary} style={styles.inputIcon} />
+                        <TextInput
+                            style={styles.input}
+                            value={lastName}
+                            onChangeText={setLastName}
+                            placeholder="Enter last name"
+                            placeholderTextColor={COLORS.textMuted}
+                        />
                     </View>
-                </ScrollView>
-            </KeyboardAvoidingView>
+                </View>
 
-            <View style={styles.footer}>
-                <TouchableOpacity
-                    style={[styles.saveBtn, isLoading && { opacity: 0.7 }]}
-                    onPress={handleSave}
-                    disabled={isLoading}
-                >
-                    {isLoading ? (
-                        <ActivityIndicator color={COLORS.white} />
-                    ) : (
-                        <Text style={styles.saveBtnText}>Save Changes</Text>
-                    )}
-                </TouchableOpacity>
+                <View style={styles.inputGroup}>
+                    <Text style={styles.inputLabel}>Email Address</Text>
+                    <View style={[styles.inputWrapper, styles.disabledWrapper]}>
+                        <Ionicons name="mail-outline" size={20} color={COLORS.textMuted} style={styles.inputIcon} />
+                        <TextInput
+                            style={[styles.input, { color: COLORS.textMuted }]}
+                            value={user?.email}
+                            editable={false}
+                        />
+                    </View>
+                    <Text style={styles.helperText}>Email cannot be changed</Text>
+                </View>
+
+                <View style={styles.inputGroup}>
+                    <Text style={styles.inputLabel}>Phone Number</Text>
+                    <View style={styles.inputWrapper}>
+                        <Ionicons name="call-outline" size={20} color={COLORS.textSecondary} style={styles.inputIcon} />
+                        <TextInput
+                            style={styles.input}
+                            value={phone}
+                            onChangeText={(t) => setPhone(t.replace(/[^0-9]/g, '').slice(0, 10))}
+                            placeholder="10 digit mobile number"
+                            keyboardType="phone-pad"
+                            placeholderTextColor={COLORS.textMuted}
+                        />
+                    </View>
+                </View>
             </View>
-        </SafeAreaView>
+        </ScreenContainer>
     );
 }
 
@@ -221,7 +214,7 @@ const styles = StyleSheet.create({
         ...SHADOWS.small,
         borderWidth: 1,
         borderColor: '#F1F5F9',
-        marginBottom: 100,
+        marginBottom: 20,
     },
     inputGroup: {
         marginBottom: 20,
@@ -268,7 +261,7 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.white,
         borderTopWidth: 1,
         borderTopColor: '#EDF2F7',
-        paddingBottom: Platform.OS === 'ios' ? 40 : 20,
+        paddingBottom: 40,
     },
     saveBtn: {
         backgroundColor: COLORS.primary,

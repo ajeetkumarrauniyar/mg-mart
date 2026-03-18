@@ -14,7 +14,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { COLORS, SIZES, SHADOWS } from '../constants';
 import { useAddressStore } from '../stores';
 import { RootStackParamList } from '../navigation/AppNavigator';
-import { AuthGuard, AddressCard } from '../components';
+import { AuthGuard, AddressCard, ScreenContainer } from '../components';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -56,43 +56,47 @@ const AddressBookContent: React.FC = () => {
     );
 
     return (
-        <SafeAreaView style={styles.container} edges={['top']}>
-            <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
-                    <Ionicons name="arrow-back" size={24} color={COLORS.text} />
-                </TouchableOpacity>
-                <Text style={styles.headerTitle}>Address Book</Text>
-                <TouchableOpacity onPress={handleAddAddress} style={styles.addIconBtn}>
-                    <Ionicons name="add" size={26} color={COLORS.primary} />
-                </TouchableOpacity>
-            </View>
-
-            {addresses.length === 0 ? (
-                renderEmptyState()
-            ) : (
-                <View style={{ flex: 1 }}>
-                    <FlatList
-                        data={addresses}
-                        keyExtractor={(item) => item.id}
-                        renderItem={({ item }) => (
-                            <AddressCard
-                                address={item}
-                                onEdit={handleEditAddress}
-                                onDelete={() => handleDeleteAddress(item.id)}
-                            />
-                        )}
-                        contentContainerStyle={styles.list}
-                        showsVerticalScrollIndicator={false}
-                    />
-
+        <ScreenContainer
+            header={
+                <View style={styles.header}>
+                    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
+                        <Ionicons name="arrow-back" size={24} color={COLORS.text} />
+                    </TouchableOpacity>
+                    <Text style={styles.headerTitle}>Address Book</Text>
+                    <TouchableOpacity onPress={handleAddAddress} style={styles.addIconBtn}>
+                        <Ionicons name="add" size={26} color={COLORS.primary} />
+                    </TouchableOpacity>
+                </View>
+            }
+            scrollable={false}
+            footer={
+                addresses.length > 0 ? (
                     <View style={styles.footer}>
                         <TouchableOpacity style={styles.addBtnFixed} onPress={handleAddAddress}>
                             <Text style={styles.addBtnTextLarge}>Add New Address</Text>
                         </TouchableOpacity>
                     </View>
-                </View>
+                ) : undefined
+            }
+        >
+            {addresses.length === 0 ? (
+                renderEmptyState()
+            ) : (
+                <FlatList
+                    data={addresses}
+                    keyExtractor={(item) => item.id}
+                    renderItem={({ item }) => (
+                        <AddressCard
+                            address={item}
+                            onEdit={handleEditAddress}
+                            onDelete={() => handleDeleteAddress(item.id)}
+                        />
+                    )}
+                    contentContainerStyle={styles.list}
+                    showsVerticalScrollIndicator={false}
+                />
             )}
-        </SafeAreaView>
+        </ScreenContainer>
     );
 };
 
@@ -167,10 +171,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     footer: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
         padding: 16,
         paddingBottom: 32,
         backgroundColor: COLORS.white,

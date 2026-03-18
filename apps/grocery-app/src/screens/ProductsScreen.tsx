@@ -18,13 +18,13 @@ import { useProductStore, useCartStore, useWishlistStore } from '@/stores';
 import { useDebounce, useRequireAuth } from '@/hooks';
 import { RootStackParamList } from '@/navigation/AppNavigator';
 import {
-    OptimizedImage,
     SearchBar,
     FilterModal,
     CategoryFilter,
     ActiveFilters,
     ProductsGridSkeleton,
-    QuickAddProductCard
+    QuickAddProductCard,
+    ScreenContainer
 } from '@/components';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
@@ -176,9 +176,9 @@ export default function ProductsScreen() {
         );
     };
 
-    if (isFirstLoad && isLoading) {
-        return (
-            <SafeAreaView style={styles.container} edges={['top']}>
+    return (
+        <ScreenContainer
+            header={
                 <View style={styles.searchHeader}>
                     <SearchBar
                         value={searchQuery}
@@ -187,22 +187,10 @@ export default function ProductsScreen() {
                         style={styles.searchBar}
                     />
                 </View>
-                <ProductsGridSkeleton />
-            </SafeAreaView>
-        );
-    }
-
-    return (
-        <SafeAreaView style={styles.container} edges={['top']}>
-            <View style={styles.searchHeader}>
-                <SearchBar
-                    value={searchQuery}
-                    onChangeText={setSearchQuery}
-                    onFilterPress={() => setShowFilterModal(true)}
-                    style={styles.searchBar}
-                />
-            </View>
-
+            }
+            scrollable={false}
+            bottomTabOffset
+        >
             <FlatList
                 data={products}
                 renderItem={renderProductCard}
@@ -229,7 +217,7 @@ export default function ProductsScreen() {
                 onApplyFilters={handleApplyFilters}
                 availableCategories={availableCategories}
             />
-        </SafeAreaView>
+        </ScreenContainer>
     );
 }
 
@@ -252,7 +240,7 @@ const styles = StyleSheet.create({
         paddingTop: 8,
     },
     listContent: {
-        paddingBottom: 20,
+        paddingBottom: 100,
     },
     row: {
         justifyContent: 'space-between',

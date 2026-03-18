@@ -12,7 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { COLORS, SHADOWS } from '../constants';
 import { RootStackParamList } from '../navigation/AppNavigator';
-import { AuthGuard } from '../components';
+import { AuthGuard, ScreenContainer } from '../components';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -58,56 +58,57 @@ const PaymentMethodsContent: React.FC = () => {
     const navigation = useNavigation<NavigationProp>();
 
     return (
-        <SafeAreaView style={styles.container} edges={['top']}>
-            <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
-                    <Ionicons name="arrow-back" size={24} color={COLORS.text} />
-                </TouchableOpacity>
-                <Text style={styles.headerTitle}>Payment Methods</Text>
-                <View style={{ width: 40 }} />
+        <ScreenContainer
+            header={
+                <View style={styles.header}>
+                    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
+                        <Ionicons name="arrow-back" size={24} color={COLORS.text} />
+                    </TouchableOpacity>
+                    <Text style={styles.headerTitle}>Payment Methods</Text>
+                    <View style={{ width: 40 }} />
+                </View>
+            }
+            bottomTabOffset
+        >
+            <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Available Methods</Text>
+                <PaymentOption
+                    icon="cash-outline"
+                    title="Cash on Delivery"
+                    description="Pay when you receive your order"
+                    isActive={true}
+                />
             </View>
 
-            <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-                <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>Available Methods</Text>
-                    <PaymentOption
-                        icon="cash-outline"
-                        title="Cash on Delivery"
-                        description="Pay when you receive your order"
-                        isActive={true}
-                    />
-                </View>
+            <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Upcoming Methods</Text>
+                <PaymentOption
+                    icon="phone-portrait-outline"
+                    title="UPI"
+                    description="PhonePe, Google Pay, Paytm"
+                    isComingSoon={true}
+                />
+                <PaymentOption
+                    icon="card-outline"
+                    title="Credit / Debit Cards"
+                    description="Visa, Mastercard, RuPay"
+                    isComingSoon={true}
+                />
+                <PaymentOption
+                    icon="wallet-outline"
+                    title="Wallets"
+                    description="Paytm, Amazon Pay"
+                    isComingSoon={true}
+                />
+            </View>
 
-                <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>Upcoming Methods</Text>
-                    <PaymentOption
-                        icon="phone-portrait-outline"
-                        title="UPI"
-                        description="PhonePe, Google Pay, Paytm"
-                        isComingSoon={true}
-                    />
-                    <PaymentOption
-                        icon="card-outline"
-                        title="Credit / Debit Cards"
-                        description="Visa, Mastercard, RuPay"
-                        isComingSoon={true}
-                    />
-                    <PaymentOption
-                        icon="wallet-outline"
-                        title="Wallets"
-                        description="Paytm, Amazon Pay"
-                        isComingSoon={true}
-                    />
-                </View>
-
-                <View style={styles.infoCard}>
-                    <Ionicons name="shield-checkmark-outline" size={24} color={COLORS.primary} />
-                    <Text style={styles.infoText}>
-                        Your payments are secure with MG Mart. We use industry-standard encryption.
-                    </Text>
-                </View>
-            </ScrollView>
-        </SafeAreaView>
+            <View style={styles.infoCard}>
+                <Ionicons name="shield-checkmark-outline" size={24} color={COLORS.primary} />
+                <Text style={styles.infoText}>
+                    Your payments are secure with MG Mart. We use industry-standard encryption.
+                </Text>
+            </View>
+        </ScreenContainer>
     );
 };
 

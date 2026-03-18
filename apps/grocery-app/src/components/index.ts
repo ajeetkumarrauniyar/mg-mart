@@ -1,4 +1,5 @@
 export { ProductCard } from './ProductCard';
+export { ScreenContainer } from './ScreenContainer';
 export { default as OptimizedImage } from './OptimizedImage';
 export { default as LazyImage } from './LazyImage';
 export { default as Button } from './Button';

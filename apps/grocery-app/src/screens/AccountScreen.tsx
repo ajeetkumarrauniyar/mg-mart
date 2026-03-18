@@ -19,7 +19,8 @@ import {
     AuthGuard,
     ProfileHeader,
     AccountItem,
-    AccountSection
+    AccountSection,
+    ScreenContainer
 } from '../components';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
@@ -60,98 +61,97 @@ function AccountContent() {
     };
 
     return (
-        <SafeAreaView style={styles.container} edges={['top']}>
-            <View style={styles.header}>
-                <Text style={styles.headerTitle}>My Account</Text>
-            </View>
-
-            <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-                <ProfileHeader
-                    name={user?.name || 'Guest'}
-                    phone={user?.phoneNumber || user?.email || 'No phone added'}
-                    onEdit={() => navigation.navigate('EditProfile')}
-                />
-
-                {/* Quick Actions Grid */}
-                <View style={styles.grid}>
-                    <TouchableOpacity style={styles.gridItem} onPress={() => navigation.navigate('OrderHistory')}>
-                        <View style={[styles.gridIcon, { backgroundColor: '#FFF5F5' }]}>
-                            <Ionicons name="receipt" size={24} color="#F56565" />
-                        </View>
-                        <Text style={styles.gridLabel}>Orders</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.gridItem} onPress={() => navigation.navigate('AddressBook')}>
-                        <View style={[styles.gridIcon, { backgroundColor: '#F0FFF4' }]}>
-                            <Ionicons name="location" size={24} color="#48BB78" />
-                        </View>
-                        <Text style={styles.gridLabel}>Addresses</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.gridItem} onPress={() => navigation.navigate('MainTabs', { screen: 'Wishlist' })}>
-                        <View style={[styles.gridIcon, { backgroundColor: '#EBF8FF' }]}>
-                            <Ionicons name="heart" size={24} color="#4299E1" />
-                        </View>
-                        <Text style={styles.gridLabel}>Wishlist</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.gridItem} onPress={() => navigation.navigate('PaymentMethods')}>
-                        <View style={[styles.gridIcon, { backgroundColor: '#FAF5FF' }]}>
-                            <Ionicons name="card" size={24} color="#9F7AEA" />
-                        </View>
-                        <Text style={styles.gridLabel}>Payments</Text>
-                    </TouchableOpacity>
+        <ScreenContainer
+            header={
+                <View style={styles.header}>
+                    <Text style={styles.headerTitle}>My Account</Text>
                 </View>
+            }
+            bottomTabOffset
+        >
+            <ProfileHeader
+                name={user?.name || 'Guest'}
+                phone={user?.phoneNumber || user?.email || 'No phone added'}
+                onEdit={() => navigation.navigate('EditProfile')}
+            />
 
-                <AccountSection title="Support">
-                    <AccountItem
-                        icon="help-buoy-outline"
-                        title="Help & Support"
-                        onPress={handleHelpSupport}
-                        color="#4A5568"
-                    />
-                    <View style={styles.divider} />
-                    <AccountItem
-                        icon="call-outline"
-                        title="Contact Store"
-                        onPress={handleContactStore}
-                        color="#4A5568"
-                    />
-                </AccountSection>
-
-                <AccountSection title="App Settings">
-                    <AccountItem
-                        icon="notifications-outline"
-                        title="Notifications"
-                        onPress={() => navigation.navigate('Notifications')}
-                    />
-                    <View style={styles.divider} />
-                    <AccountItem
-                        icon="shield-checkmark-outline"
-                        title="Privacy Policy"
-                        onPress={() => navigation.navigate('PrivacyPolicy')}
-                    />
-                    <View style={styles.divider} />
-                    <AccountItem
-                        icon="document-text-outline"
-                        title="Terms & Conditions"
-                        onPress={() => navigation.navigate('TermsAndConditions')}
-                    />
-                </AccountSection>
-
-                <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout}>
-                    <Ionicons name="log-out-outline" size={20} color="#E53E3E" />
-                    <Text style={styles.logoutText}>Logout</Text>
+            {/* Quick Actions Grid */}
+            <View style={styles.grid}>
+                <TouchableOpacity style={styles.gridItem} onPress={() => navigation.navigate('OrderHistory')}>
+                    <View style={[styles.gridIcon, { backgroundColor: '#FFF5F5' }]}>
+                        <Ionicons name="receipt" size={24} color="#F56565" />
+                    </View>
+                    <Text style={styles.gridLabel}>Orders</Text>
                 </TouchableOpacity>
 
-                <View style={styles.footer}>
-                    <Text style={styles.version}>MG Mart v1.2.0</Text>
-                    <Text style={styles.credit}>Made with ❤️ in India</Text>
-                </View>
+                <TouchableOpacity style={styles.gridItem} onPress={() => navigation.navigate('AddressBook')}>
+                    <View style={[styles.gridIcon, { backgroundColor: '#F0FFF4' }]}>
+                        <Ionicons name="location" size={24} color="#48BB78" />
+                    </View>
+                    <Text style={styles.gridLabel}>Addresses</Text>
+                </TouchableOpacity>
 
-                <View style={{ height: 40 }} />
-            </ScrollView>
-        </SafeAreaView>
+                <TouchableOpacity style={styles.gridItem} onPress={() => navigation.navigate('MainTabs', { screen: 'Wishlist' })}>
+                    <View style={[styles.gridIcon, { backgroundColor: '#EBF8FF' }]}>
+                        <Ionicons name="heart" size={24} color="#4299E1" />
+                    </View>
+                    <Text style={styles.gridLabel}>Wishlist</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.gridItem} onPress={() => navigation.navigate('PaymentMethods')}>
+                    <View style={[styles.gridIcon, { backgroundColor: '#FAF5FF' }]}>
+                        <Ionicons name="card" size={24} color="#9F7AEA" />
+                    </View>
+                    <Text style={styles.gridLabel}>Payments</Text>
+                </TouchableOpacity>
+            </View>
+
+            <AccountSection title="Support">
+                <AccountItem
+                    icon="help-buoy-outline"
+                    title="Help & Support"
+                    onPress={handleHelpSupport}
+                    color="#4A5568"
+                />
+                <View style={styles.divider} />
+                <AccountItem
+                    icon="call-outline"
+                    title="Contact Store"
+                    onPress={handleContactStore}
+                    color="#4A5568"
+                />
+            </AccountSection>
+
+            <AccountSection title="App Settings">
+                <AccountItem
+                    icon="notifications-outline"
+                    title="Notifications"
+                    onPress={() => navigation.navigate('Notifications')}
+                />
+                <View style={styles.divider} />
+                <AccountItem
+                    icon="shield-checkmark-outline"
+                    title="Privacy Policy"
+                    onPress={() => navigation.navigate('PrivacyPolicy')}
+                />
+                <View style={styles.divider} />
+                <AccountItem
+                    icon="document-text-outline"
+                    title="Terms & Conditions"
+                    onPress={() => navigation.navigate('TermsAndConditions')}
+                />
+            </AccountSection>
+
+            <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout}>
+                <Ionicons name="log-out-outline" size={20} color="#E53E3E" />
+                <Text style={styles.logoutText}>Logout</Text>
+            </TouchableOpacity>
+
+            <View style={styles.footer}>
+                <Text style={styles.version}>MG Mart v1.2.0</Text>
+                <Text style={styles.credit}>Made with ❤️ in India</Text>
+            </View>
+        </ScreenContainer>
     );
 }
 

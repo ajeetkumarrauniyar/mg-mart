@@ -3,16 +3,15 @@ import {
     View,
     Text,
     StyleSheet,
-    ScrollView,
     TouchableOpacity,
     Linking,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from "@react-navigation/stack";
 import { COLORS } from '../constants';
 import { RootStackParamList } from "../navigation/AppNavigator";
+import { ScreenContainer } from '../components';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -20,16 +19,19 @@ const PrivacyPolicyScreen: React.FC = () => {
     const navigation = useNavigation<NavigationProp>();
 
     return (
-        <SafeAreaView style={styles.container} edges={['top']}>
-            <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
-                    <Ionicons name="arrow-back" size={24} color={COLORS.text} />
-                </TouchableOpacity>
-                <Text style={styles.headerTitle}>Privacy Policy</Text>
-                <View style={{ width: 40 }} />
-            </View>
-
-            <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+        <ScreenContainer
+            header={
+                <View style={styles.header}>
+                    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
+                        <Ionicons name="arrow-back" size={24} color={COLORS.text} />
+                    </TouchableOpacity>
+                    <Text style={styles.headerTitle}>Privacy Policy</Text>
+                    <View style={{ width: 40 }} />
+                </View>
+            }
+            bottomTabOffset
+        >
+            <View style={styles.content}>
                 <View style={styles.card}>
                     <Text style={styles.lastUpdated}>Last Updated: March 14, 2026</Text>
 
@@ -81,15 +83,14 @@ const PrivacyPolicyScreen: React.FC = () => {
                             If you have any questions about this Privacy Policy, please contact us at{' '}
                         </Text>
                         <TouchableOpacity onPress={() => Linking.openURL('mailto:support@mgmart.com')}>
-                            <Text style={{ color: '#007AFF', textDecorationLine: 'underline' }}>
+                            <Text style={{ color: '#007AFF', textDecorationLine: 'underline', textAlign: 'center' }}>
                                 support@mgsupermart.com
                             </Text>
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={{ height: 40 }} />
-            </ScrollView>
-        </SafeAreaView>
+            </View>
+        </ScreenContainer>
     );
 };
 

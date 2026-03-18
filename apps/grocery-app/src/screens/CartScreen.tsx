@@ -14,12 +14,10 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { COLORS, SIZES, SHADOWS } from '@/constants';
 import { useCartStore, CartItemWithProduct } from '@/stores/cartStore';
 import { RootStackParamList } from '@/navigation/AppNavigator';
-import { AuthGuard, OptimizedImage, QuantityStepper } from '@/components';
+import { AuthGuard, OptimizedImage, QuantityStepper, ScreenContainer } from '@/components';
+import { DELIVERY_FEE, HANDLING_FEE } from '@/constants';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
-
-const DELIVERY_FEE = 40;
-const HANDLING_FEE = 5;
 
 function CartContent() {
     const navigation = useNavigation<NavigationProp>();
@@ -221,7 +219,29 @@ function CartContent() {
     );
 
     return (
-        <SafeAreaView style={styles.container} edges={['top']}>
+        <ScreenContainer
+            scrollable={false}
+            bottomTabOffset
+            footer={
+                items.length > 0 ? (
+                    <View style={styles.bottomBar}>
+                        <View style={styles.totalContainer}>
+                            <Text style={styles.totalPrice}>₹{grandTotal.toFixed(0)}</Text>
+                            <Text style={styles.totalSubtext}>VIEW DETAILED BILL</Text>
+                        </View>
+                        <TouchableOpacity
+                            style={styles.checkoutBtn}
+                            onPress={handleCheckout}
+                            disabled={isLoading}
+                            activeOpacity={0.9}
+                        >
+                            <Text style={styles.checkoutBtnText}>Proceed to Checkout</Text>
+                            <Ionicons name="chevron-forward" size={18} color={COLORS.white} />
+                        </TouchableOpacity>
+                    </View>
+                ) : undefined
+            }
+        >
             <FlatList
                 data={items}
                 renderItem={renderCartItem}
@@ -232,25 +252,7 @@ function CartContent() {
                 contentContainerStyle={items.length === 0 ? styles.emptyList : styles.listContent}
                 showsVerticalScrollIndicator={false}
             />
-
-            {items.length > 0 && (
-                <View style={styles.bottomBar}>
-                    <View style={styles.totalContainer}>
-                        <Text style={styles.totalPrice}>₹{grandTotal.toFixed(0)}</Text>
-                        <Text style={styles.totalSubtext}>VIEW DETAILED BILL</Text>
-                    </View>
-                    <TouchableOpacity
-                        style={styles.checkoutBtn}
-                        onPress={handleCheckout}
-                        disabled={isLoading}
-                        activeOpacity={0.9}
-                    >
-                        <Text style={styles.checkoutBtnText}>Proceed to Checkout</Text>
-                        <Ionicons name="chevron-forward" size={18} color={COLORS.white} />
-                    </TouchableOpacity>
-                </View>
-            )}
-        </SafeAreaView>
+        </ScreenContainer>
     );
 }
 
@@ -443,10 +445,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     bottomBar: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
         backgroundColor: COLORS.white,
         paddingHorizontal: SIZES.padding,
         paddingTop: 12,

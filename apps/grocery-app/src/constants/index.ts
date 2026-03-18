@@ -150,3 +150,22 @@ export const STORE_CONTACT = {
   SUPPORT_MESSAGE: 'Hello MG Mart Support, I need help with my order/account.',
   INQUIRY_MESSAGE: "Hi MG Mart, I'd like to inquire about...",
 };
+
+export const DELIVERY_FEE = 40;
+export const HANDLING_FEE = 5;
+export const ZIP_CODE = '845416';
+
+
+export const SLOTS = [
+  { id: '1', time: '7:00 AM - 10:00 AM', description: 'Morning Fresh Delivery' },
+  { id: '2', time: '1:00 PM - 4:00 PM', description: 'Standard Afternoon' },
+  { id: '3', time: '6:00 PM - 9:00 PM', description: 'Evening Delivery' },
+  { id: '4', time: 'Tomorrow 7:00 AM - 10:00 AM', description: 'Next Day Slot' },
+] as const;
+
+
+export const PAYMENT_METHODS = [
+  { id: 'COD', title: 'Cash on Delivery', sub: 'Pay at your doorstep', icon: 'cash-outline', selected: true, visible: true },
+  { id: 'UPI', title: 'UPI / Google Pay / PhonePe', sub: 'Instant & Secure', icon: 'flash-outline', selected: false, visible: false },
+  { id: 'Wallet', title: 'MG Wallet', sub: 'Balance: ₹150.00', icon: 'wallet-outline', selected: false, visible: false },
+] as const;

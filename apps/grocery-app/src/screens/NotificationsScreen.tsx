@@ -12,7 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { COLORS, SIZES } from '../constants';
 import { useNotificationStore } from '../stores';
-import { NotificationItem, EmptyState } from '../components';
+import { NotificationItem, EmptyState, ScreenContainer } from '../components';
 import { RootStackParamList } from '../navigation/AppNavigator';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
@@ -22,21 +22,32 @@ const NotificationsScreen: React.FC = () => {
     const { notifications, markAsRead, markAllAsRead, clearAll } = useNotificationStore();
 
     return (
-        <SafeAreaView style={styles.container} edges={['top']}>
-            <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
-                    <Ionicons name="arrow-back" size={24} color={COLORS.text} />
-                </TouchableOpacity>
-                <Text style={styles.headerTitle}>Notifications</Text>
-                {notifications.length > 0 ? (
-                    <TouchableOpacity onPress={markAllAsRead}>
-                        <Text style={styles.readAll}>Mark all read</Text>
+        <ScreenContainer
+            header={
+                <View style={styles.header}>
+                    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
+                        <Ionicons name="arrow-back" size={24} color={COLORS.text} />
                     </TouchableOpacity>
-                ) : (
-                    <View style={{ width: 40 }} />
-                )}
-            </View>
-
+                    <Text style={styles.headerTitle}>Notifications</Text>
+                    {notifications.length > 0 ? (
+                        <TouchableOpacity onPress={markAllAsRead}>
+                            <Text style={styles.readAll}>Mark all read</Text>
+                        </TouchableOpacity>
+                    ) : (
+                        <View style={{ width: 40 }} />
+                    )}
+                </View>
+            }
+            scrollable={false}
+            footer={
+                notifications.length > 0 ? (
+                    <TouchableOpacity style={styles.clearBtn} onPress={clearAll}>
+                        <Ionicons name="trash-outline" size={18} color={COLORS.textSecondary} />
+                        <Text style={styles.clearText}>Clear All</Text>
+                    </TouchableOpacity>
+                ) : undefined
+            }
+        >
             <FlatList
                 data={notifications}
                 keyExtractor={(item) => item.id}
@@ -59,14 +70,7 @@ const NotificationsScreen: React.FC = () => {
                 }
                 showsVerticalScrollIndicator={false}
             />
-
-            {notifications.length > 0 && (
-                <TouchableOpacity style={styles.clearBtn} onPress={clearAll}>
-                    <Ionicons name="trash-outline" size={18} color={COLORS.textSecondary} />
-                    <Text style={styles.clearText}>Clear All</Text>
-                </TouchableOpacity>
-            )}
-        </SafeAreaView>
+        </ScreenContainer>
     );
 };
 
@@ -99,13 +103,14 @@ const styles = StyleSheet.create({
         color: COLORS.primary,
     },
     list: {
-        paddingBottom: 80,
+        paddingBottom: 100,
     },
     clearBtn: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 12,
+        padding: 16,
+        paddingBottom: 32,
         backgroundColor: COLORS.white,
         borderTopWidth: 1,
         borderTopColor: '#EDF2F7',
