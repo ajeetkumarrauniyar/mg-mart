@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { COLORS } from '../constants';
+import { COLORS, SIZES } from '../constants';
 
 interface AppHeaderProps {
     title: string;
@@ -55,11 +55,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        paddingHorizontal: 16,
-        paddingVertical: 12,
+        paddingHorizontal: SIZES.padding,
+        paddingVertical: SIZES.paddingSmall,
         backgroundColor: COLORS.white,
         borderBottomWidth: 1,
-        borderBottomColor: '#F1F5F9',
+        borderBottomColor: COLORS.borderLight,
     },
     leftContainer: {
         minWidth: 40,
@@ -74,8 +74,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     title: {
-        fontSize: 18,
-        fontWeight: 'bold',
+        fontSize: SIZES.fontSize.large,
+        fontWeight: SIZES.fontWeight.bold,
         color: COLORS.text,
     },
     rightContainer: {

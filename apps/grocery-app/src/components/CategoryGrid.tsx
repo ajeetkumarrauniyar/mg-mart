@@ -48,21 +48,21 @@ export const CategoryGrid: React.FC<CategoryGridProps> = ({ categories, onCatego
 const styles = StyleSheet.create({
     container: {
         paddingHorizontal: SIZES.padding,
-        marginBottom: 24,
+        marginBottom: SIZES.marginLarge,
     },
     header: {
-        marginBottom: 16,
+        marginBottom: SIZES.margin,
     },
     title: {
         fontSize: SIZES.fontSize.large,
-        fontWeight: 'bold',
+        fontWeight: SIZES.fontWeight.bold,
         color: COLORS.text,
     },
     grid: {
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'flex-start',
-        gap: 15,
+        gap: 12,
     },
     categoryItem: {
         width: ITEM_WIDTH,
@@ -71,20 +71,19 @@ const styles = StyleSheet.create({
     iconContainer: {
         width: ITEM_WIDTH,
         height: ITEM_WIDTH,
-        borderRadius: 16,
+        borderRadius: SIZES.borderRadiusLarge,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: COLORS.backgroundDark,
-        marginBottom: 8,
+        marginBottom: SIZES.marginSmall,
     },
     emoji: {
-        fontSize: ITEM_WIDTH * 0.5,
+        fontSize: ITEM_WIDTH * 0.44,
     },
     categoryName: {
-        fontSize: 11,
+        fontSize: SIZES.fontSize.tiny,
         color: COLORS.text,
         textAlign: 'center',
-        fontWeight: '600',
+        fontWeight: SIZES.fontWeight.semibold,
         lineHeight: 14,
     },
 });

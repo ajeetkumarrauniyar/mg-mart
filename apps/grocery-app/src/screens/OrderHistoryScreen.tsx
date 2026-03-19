@@ -11,7 +11,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { COLORS, SHADOWS } from '../constants';
+import { COLORS, SIZES, SHADOWS } from '../constants';
 import { useOrderStore } from '../stores';
 import type { Order } from '@mg-mart/types';
 import { RootStackParamList } from '../navigation/AppNavigator';
@@ -138,48 +138,48 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     list: {
-        padding: 16,
-        paddingBottom: 100,
+        padding: SIZES.margin,
+        paddingBottom: 120,
     },
     card: {
         backgroundColor: COLORS.white,
-        borderRadius: 16,
-        padding: 16,
-        marginBottom: 16,
+        borderRadius: SIZES.borderRadiusXLarge,
+        padding: SIZES.margin,
+        marginBottom: SIZES.margin,
         ...SHADOWS.small,
         borderWidth: 1,
-        borderColor: '#F1F5F9',
+        borderColor: COLORS.borderLight,
     },
     cardTop: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
         borderBottomWidth: 1,
-        borderBottomColor: '#F1F5F9',
-        paddingBottom: 12,
-        marginBottom: 12,
+        borderBottomColor: COLORS.borderLight,
+        paddingBottom: SIZES.paddingSmall,
+        marginBottom: SIZES.paddingSmall,
     },
     orderId: {
-        fontSize: 15,
-        fontWeight: 'bold',
+        fontSize: SIZES.fontSize.regular,
+        fontWeight: SIZES.fontWeight.bold,
         color: COLORS.text,
         marginBottom: 2,
     },
     orderDate: {
-        fontSize: 12,
+        fontSize: SIZES.fontSize.small,
         color: COLORS.textSecondary,
     },
     statusBadge: {
-        paddingHorizontal: 10,
+        paddingHorizontal: SIZES.paddingSmall,
         paddingVertical: 4,
-        borderRadius: 6,
+        borderRadius: SIZES.borderRadius,
     },
     statusText: {
-        fontSize: 11,
-        fontWeight: 'bold',
+        fontSize: SIZES.fontSize.tiny,
+        fontWeight: SIZES.fontWeight.bold,
     },
     cardMiddle: {
-        marginBottom: 12,
+        marginBottom: SIZES.paddingSmall,
     },
     itemsSummary: {
         flexDirection: 'row',
@@ -187,9 +187,9 @@ const styles = StyleSheet.create({
         gap: 6,
     },
     itemsText: {
-        fontSize: 14,
+        fontSize: SIZES.fontSize.medium,
         color: COLORS.text,
-        fontWeight: '500',
+        fontWeight: SIZES.fontWeight.medium,
     },
     cardBottom: {
         flexDirection: 'row',
@@ -198,47 +198,49 @@ const styles = StyleSheet.create({
         gap: 4,
     },
     viewDetailText: {
-        fontSize: 13,
-        fontWeight: 'bold',
+        fontSize: SIZES.fontSize.medium,
+        fontWeight: SIZES.fontWeight.bold,
         color: COLORS.primary,
     },
     emptyContainer: {
-        marginTop: 100,
+        marginTop: 80,
         alignItems: 'center',
-        paddingHorizontal: 40,
+        paddingHorizontal: SIZES.paddingLarge,
     },
     emptyIconCircle: {
         width: 120,
         height: 120,
         borderRadius: 60,
-        backgroundColor: COLORS.primary + '10',
+        backgroundColor: COLORS.primary + '12',
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 24,
+        marginBottom: SIZES.marginLarge,
     },
     emptyTitle: {
-        fontSize: 22,
-        fontWeight: '900',
+        fontSize: SIZES.fontSize.xlarge,
+        fontWeight: SIZES.fontWeight.extrabold,
         color: COLORS.text,
-        marginBottom: 8,
+        marginBottom: SIZES.marginSmall,
     },
     emptySubtitle: {
-        fontSize: 14,
+        fontSize: SIZES.fontSize.medium,
         color: COLORS.textSecondary,
         textAlign: 'center',
-        lineHeight: 20,
-        marginBottom: 32,
+        lineHeight: 22,
+        marginBottom: SIZES.marginLarge,
     },
     shopBtn: {
         backgroundColor: COLORS.primary,
-        paddingHorizontal: 32,
-        paddingVertical: 16,
-        borderRadius: 14,
+        paddingHorizontal: SIZES.paddingLarge,
+        paddingVertical: SIZES.paddingSmall,
+        borderRadius: SIZES.borderRadiusLarge,
+        minHeight: SIZES.button.large,
+        justifyContent: 'center',
     },
     shopBtnText: {
         color: COLORS.white,
-        fontSize: 16,
-        fontWeight: 'bold',
+        fontSize: SIZES.fontSize.regular,
+        fontWeight: SIZES.fontWeight.bold,
     },
 });
 

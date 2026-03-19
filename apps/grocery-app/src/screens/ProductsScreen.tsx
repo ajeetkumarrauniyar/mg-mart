@@ -259,12 +259,13 @@ const styles = StyleSheet.create({
         paddingTop: 8,
     },
     listContent: {
-        paddingBottom: 100,
+        paddingBottom: 120,
+        paddingTop: SIZES.marginSmall,
     },
     row: {
         justifyContent: 'space-between',
         paddingHorizontal: SIZES.padding,
-        marginTop: 16,
+        marginTop: SIZES.margin,
     },
     cardContainer: {
         width: '48%',
@@ -286,21 +287,22 @@ const styles = StyleSheet.create({
         paddingHorizontal: SIZES.padding,
     },
     emptyText: {
-        fontSize: 16,
+        fontSize: SIZES.fontSize.regular,
         color: COLORS.textSecondary,
-        marginTop: 16,
-        marginBottom: 20,
+        marginTop: SIZES.margin,
+        marginBottom: SIZES.margin,
+        textAlign: 'center',
     },
     clearButton: {
         backgroundColor: COLORS.primary,
-        paddingHorizontal: 20,
-        paddingVertical: 10,
-        borderRadius: 8,
+        paddingHorizontal: SIZES.padding,
+        paddingVertical: SIZES.paddingSmall,
+        borderRadius: SIZES.borderRadius,
     },
     clearButtonText: {
-        color: COLORS.primary,
-        fontWeight: 'bold',
-        fontSize: 14,
+        color: COLORS.white,
+        fontWeight: SIZES.fontWeight.bold,
+        fontSize: SIZES.fontSize.medium,
     },
     cartIconContainer: {
         padding: 4,

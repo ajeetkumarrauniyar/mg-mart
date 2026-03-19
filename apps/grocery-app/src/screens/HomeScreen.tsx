@@ -200,20 +200,20 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: SIZES.padding,
-    marginBottom: 16,
+    marginBottom: SIZES.margin,
   },
   sectionTitle: {
     fontSize: SIZES.fontSize.large,
-    fontWeight: "bold",
+    fontWeight: SIZES.fontWeight.bold,
     color: COLORS.text,
   },
   seeAllText: {
     fontSize: SIZES.fontSize.medium,
     color: COLORS.primary,
-    fontWeight: "bold",
+    fontWeight: SIZES.fontWeight.bold,
   },
   featuredSection: {
-    marginBottom: 24,
+    marginBottom: SIZES.marginLarge,
   },
   featuredList: {
     paddingLeft: SIZES.padding,
@@ -221,29 +221,29 @@ const styles = StyleSheet.create({
   },
   promoSection: {
     paddingHorizontal: SIZES.padding,
-    marginBottom: 24,
+    marginBottom: SIZES.marginLarge,
   },
   promoCard: {
-    backgroundColor: "#F3F4F6",
-    borderRadius: 12,
-    padding: 16,
+    backgroundColor: COLORS.backgroundDark,
+    borderRadius: SIZES.borderRadiusLarge,
+    padding: SIZES.margin,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: COLORS.border,
   },
   promoTextContainer: {
     flex: 1,
   },
   promoTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
+    fontSize: SIZES.fontSize.regular,
+    fontWeight: SIZES.fontWeight.bold,
     color: COLORS.text,
     marginBottom: 2,
   },
   promoSubtitle: {
-    fontSize: 12,
+    fontSize: SIZES.fontSize.small,
     color: COLORS.textSecondary,
   },
 });

@@ -1,5 +1,5 @@
 import React, { memo, useCallback } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Product } from '@mg-mart/types';
 import { COLORS, SIZES, SHADOWS, PRODUCT_IMAGE_HEIGHT } from '../constants';
@@ -8,7 +8,10 @@ import { useRequireAuth } from '../hooks';
 import { addToCartFeedback, selectionFeedback } from '../utils/haptics';
 import OptimizedImage from './OptimizedImage';
 
-
+const SCREEN_WIDTH = Dimensions.get('window').width;
+// Standard horizontal padding on the list (SIZES.padding = 20 on each side)
+const CARD_GUTTER = 12; // gap between 2 cards in same row
+const CARD_WIDTH = (SCREEN_WIDTH - (SIZES.padding * 2) - CARD_GUTTER) / 2;
 
 interface ProductCardProps {
     product: Product;
@@ -87,9 +90,9 @@ export const ProductCard: React.FC<ProductCardProps> = memo(({ product, onPress 
                 </Text>
                 <View style={styles.footer}>
                     <View>
-                        <Text style={styles.price}>₹{product.price.toFixed(2)}</Text>
+                        <Text style={styles.price}>₹{product.price.toFixed(0)}</Text>
                         <Text style={styles.stockText}>
-                            {product.stock > 0 ? `${product.stock} ${product.unit} left` : 'Out of stock'}
+                            {product.stock > 0 ? `${product.stock} ${product.unit}` : 'Out of stock'}
                         </Text>
                     </View>
                     <TouchableOpacity
@@ -109,12 +112,12 @@ export const ProductCard: React.FC<ProductCardProps> = memo(({ product, onPress 
 
 const styles = StyleSheet.create({
     card: {
-        width: '48%',
+        width: CARD_WIDTH,
         backgroundColor: COLORS.cardBackground,
         borderRadius: SIZES.borderRadiusLarge,
         marginBottom: SIZES.margin,
         overflow: 'hidden',
-        ...SHADOWS.medium,
+        ...SHADOWS.small,
         borderWidth: 1,
         borderColor: COLORS.borderLight,
     },
@@ -128,8 +131,8 @@ const styles = StyleSheet.create({
         right: SIZES.marginSmall,
         backgroundColor: 'rgba(255, 255, 255, 0.95)',
         borderRadius: SIZES.borderRadiusXLarge,
-        width: 36,
-        height: 36,
+        width: 34,
+        height: 34,
         justifyContent: 'center',
         alignItems: 'center',
         ...SHADOWS.small,
@@ -169,20 +172,23 @@ const styles = StyleSheet.create({
         fontSize: SIZES.fontSize.medium,
         fontWeight: SIZES.fontWeight.semibold,
         color: COLORS.text,
-        marginBottom: 4,
+        marginBottom: 2,
+        lineHeight: 20,
     },
     description: {
         fontSize: SIZES.fontSize.small,
         color: COLORS.textSecondary,
         marginBottom: SIZES.marginSmall,
+        lineHeight: 16,
     },
     footer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        marginTop: 4,
     },
     price: {
-        fontSize: SIZES.fontSize.large,
+        fontSize: SIZES.fontSize.regular,
         fontWeight: SIZES.fontWeight.bold,
         color: COLORS.primary,
     },
@@ -193,10 +199,11 @@ const styles = StyleSheet.create({
     },
     addButton: {
         backgroundColor: COLORS.primary,
-        paddingHorizontal: SIZES.margin,
-        paddingVertical: SIZES.marginSmall,
+        paddingHorizontal: SIZES.paddingSmall,
+        paddingVertical: 6,
         borderRadius: SIZES.borderRadius,
-        ...SHADOWS.small,
+        minWidth: 64,
+        alignItems: 'center',
     },
     addButtonDisabled: {
         backgroundColor: COLORS.textMuted,
