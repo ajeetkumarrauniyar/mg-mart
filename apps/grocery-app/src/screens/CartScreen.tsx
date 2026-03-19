@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     View,
     Text,
@@ -6,14 +6,28 @@ import {
     FlatList,
     TouchableOpacity,
     Alert,
+    ActivityIndicator,
+    ScrollView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { COLORS, SIZES, SHADOWS } from '../constants';
-import { useCartStore, CartItemWithProduct } from '@/stores/cartStore';
+import { COLORS, SIZES, SHADOWS, SLOTS, PAYMENT_METHODS, ZIP_CODE } from '../constants';
+import { useCartStore, useLocationStore } from '@/stores';
+import type { CartItemWithProduct } from '@/stores/cartStore';
 import { RootStackParamList } from '@/navigation/AppNavigator';
 import { AuthGuard, OptimizedImage, QuantityStepper, ScreenContainer, AppHeader } from '@/components';
+import { orderService } from '@/services';
+import {
+    LocationPermissionModal,
+    LocationValidationModal,
+} from '../components/location';
+import {
+    locationService,
+    PermissionStatus,
+    ValidationType,
+    type LocationValidationResult,
+} from '@/services/location';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -21,6 +35,19 @@ function CartContent() {
     const navigation = useNavigation<NavigationProp>();
     const { items, totalAmount, totalItems, deliveryFee, handlingFee, grandTotal, isLoading, updateItem, removeItem, clearCart } =
         useCartStore();
+    const { locationName } = useLocationStore();
+
+    // Checkout state
+    const [selectedSlot, setSelectedSlot] = useState<string>(SLOTS[0].id);
+    const [selectedPayment, setSelectedPayment] = useState('COD');
+    const [isPlacingOrder, setIsPlacingOrder] = useState(false);
+
+    // Location state
+    const [showPermissionModal, setShowPermissionModal] = useState(false);
+    const [showValidationModal, setShowValidationModal] = useState(false);
+    const [validationResult, setValidationResult] = useState<LocationValidationResult | null>(null);
+    const [isValidatingLocation, setIsValidatingLocation] = useState(false);
+    const [locationStatus, setLocationStatus] = useState<'unknown' | 'checking' | 'valid' | 'invalid'>('unknown');
 
     const handleQuantityChange = async (item: CartItemWithProduct, delta: number) => {
         const newQuantity = item.quantity + delta;
@@ -77,12 +104,74 @@ function CartContent() {
         );
     };
 
-    const handleCheckout = () => {
+    const handleLocationValidation = async () => {
+        setIsValidatingLocation(true);
+        try {
+            const serviceStatus = await locationService.getServiceStatus();
+            if (serviceStatus.permissionStatus !== PermissionStatus.GRANTED) {
+                setShowPermissionModal(true);
+                return;
+            }
+            const result = await locationService.validateOrderLocation();
+            setValidationResult(result);
+            if (result.isValid) {
+                setLocationStatus('valid');
+                if (result.validationType !== ValidationType.APPROVED) {
+                    setShowValidationModal(true);
+                }
+            } else {
+                setLocationStatus('invalid');
+                setShowValidationModal(true);
+            }
+        } catch (error) {
+            Alert.alert('Location Error', 'Unable to validate location.');
+        } finally {
+            setIsValidatingLocation(false);
+        }
+    };
+
+    const handlePlaceOrder = async () => {
         if (items.length === 0) {
-            Alert.alert('Empty Cart', 'Please add items to your cart before checkout');
+            Alert.alert('Empty Cart', 'Please add items to your cart');
             return;
         }
-        navigation.navigate('Checkout');
+
+        if (locationStatus !== 'valid') {
+            await handleLocationValidation();
+            return;
+        }
+
+        setIsPlacingOrder(true);
+        try {
+            const orderData = {
+                paymentMethod: selectedPayment as any,
+                shippingAddress: {
+                    street: locationName || 'Current Location',
+                    city: 'Jahingara',
+                    state: 'Bihar',
+                    zipCode: ZIP_CODE,
+                },
+                notes: `Slot: ${SLOTS.find((s) => s.id === selectedSlot)?.time}`,
+            };
+
+            const order = await orderService.createOrder(orderData);
+            await clearCart();
+
+            Alert.alert(
+                'Order Placed!',
+                `Order #${order.orderId} will reach you shortly.`,
+                [
+                    {
+                        text: 'Great!',
+                        onPress: () => navigation.navigate('OrderHistory'),
+                    },
+                ],
+            );
+        } catch (error) {
+            Alert.alert('Order Failed', 'Failed to place order. Please try again.');
+        } finally {
+            setIsPlacingOrder(false);
+        }
     };
 
     const renderCartItem = ({ item }: { item: CartItemWithProduct }) => (
@@ -91,7 +180,7 @@ function CartContent() {
                 onPress={() => navigation.navigate('ProductDetail', { productId: item.productId })}
             >
                 <OptimizedImage
-                    source={{ uri: item.imageUrl || 'https://via.placeholder.com/80' }}
+                    source={{ uri: item.imageUrl || '' }}
                     style={styles.itemImage}
                     resizeMode="cover"
                 />
@@ -130,47 +219,128 @@ function CartContent() {
     );
 
 
-    const renderFooter = () => {
+    const renderCheckoutSections = () => {
         if (items.length === 0) return null;
 
         return (
-            <View style={styles.billSummary}>
-                <Text style={styles.billTitle}>Bill Summary</Text>
+            <View style={styles.checkoutContainer}>
+                {/* Bill Summary */}
+                <View style={styles.billSummary}>
+                    <Text style={styles.billTitle}>Bill Summary</Text>
 
-                <View style={styles.billRow}>
-                    <View style={styles.rowLabelGroup}>
-                        <Ionicons name="receipt-outline" size={16} color={COLORS.textLight} />
-                        <Text style={styles.billRowLabel}>Item Total</Text>
+                    <View style={styles.billRow}>
+                        <View style={styles.rowLabelGroup}>
+                            <Ionicons name="receipt-outline" size={16} color={COLORS.textLight} />
+                            <Text style={styles.billRowLabel}>Item Total</Text>
+                        </View>
+                        <Text style={styles.billRowValue}>₹{totalAmount.toFixed(0)}</Text>
                     </View>
-                    <Text style={styles.billRowValue}>₹{totalAmount.toFixed(0)}</Text>
-                </View>
 
-                <View style={styles.billRow}>
-                    <View style={styles.rowLabelGroup}>
-                        <Ionicons name="bicycle-outline" size={16} color={COLORS.textLight} />
-                        <Text style={styles.billRowLabel}>Delivery Fee</Text>
+                    <View style={styles.billRow}>
+                        <View style={styles.rowLabelGroup}>
+                            <Ionicons name="bicycle-outline" size={16} color={COLORS.textLight} />
+                            <Text style={styles.billRowLabel}>Delivery Fee</Text>
+                        </View>
+                        <Text style={[styles.billRowValue, { color: COLORS.success }]}>₹{deliveryFee}</Text>
                     </View>
-                    <Text style={[styles.billRowValue, { color: COLORS.success }]}>₹{deliveryFee}</Text>
-                </View>
 
-                <View style={styles.billRow}>
-                    <View style={styles.rowLabelGroup}>
-                        <Ionicons name="shield-checkmark-outline" size={16} color={COLORS.textLight} />
-                        <Text style={styles.billRowLabel}>Handling Fee</Text>
+                    <View style={styles.billRow}>
+                        <View style={styles.rowLabelGroup}>
+                            <Ionicons name="shield-checkmark-outline" size={16} color={COLORS.textLight} />
+                            <Text style={styles.billRowLabel}>Handling Fee</Text>
+                        </View>
+                        <Text style={styles.billRowValue}>₹{handlingFee}</Text>
                     </View>
-                    <Text style={styles.billRowValue}>₹{handlingFee}</Text>
+
+                    <View style={styles.divider} />
+
+                    <View style={styles.billRow}>
+                        <Text style={styles.grandTotalLabel}>Grand Total</Text>
+                        <Text style={styles.grandTotalValue}>₹{grandTotal.toFixed(0)}</Text>
+                    </View>
                 </View>
 
-                <View style={styles.divider} />
+                {/* Delivery Address */}
+                <View style={styles.section}>
+                    <View style={styles.sectionHeader}>
+                        <View style={styles.row}>
+                            <Ionicons name="location" size={20} color={COLORS.primary} />
+                            <Text style={styles.sectionTitle}>Delivery Address</Text>
+                        </View>
+                        <TouchableOpacity onPress={() => navigation.navigate('LocationSelection')}>
+                            <Text style={styles.changeBtn}>CHANGE</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <Text style={styles.addressText} numberOfLines={2}>
+                        {locationName}
+                    </Text>
 
-                <View style={styles.billRow}>
-                    <Text style={styles.grandTotalLabel}>Grand Total</Text>
-                    <Text style={styles.grandTotalValue}>₹{grandTotal.toFixed(0)}</Text>
+                    {locationStatus !== 'valid' && (
+                        <TouchableOpacity
+                            style={styles.verifyBtn}
+                            onPress={handleLocationValidation}
+                            disabled={isValidatingLocation}
+                        >
+                            {isValidatingLocation ? (
+                                <ActivityIndicator size="small" color={COLORS.primary} />
+                            ) : (
+                                <>
+                                    <Ionicons name="navigate-outline" size={16} color={COLORS.primary} />
+                                    <Text style={styles.verifyBtnText}>Verify delivery location</Text>
+                                </>
+                            )}
+                        </TouchableOpacity>
+                    )}
                 </View>
 
-                <View style={styles.savingsBox}>
-                    <Ionicons name="gift-outline" size={16} color={COLORS.success} />
-                    <Text style={styles.savingsText}>YAY! You saved ₹80 on this order</Text>
+                {/* Delivery Slots */}
+                <View style={styles.section}>
+                    <Text style={styles.sectionTitle}>Select Delivery Slot</Text>
+                    <ScrollView
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        style={styles.slotScroll}
+                    >
+                        {SLOTS.map((slot) => (
+                            <TouchableOpacity
+                                key={slot.id}
+                                style={[styles.slotCard, selectedSlot === slot.id && styles.activeSlot]}
+                                onPress={() => setSelectedSlot(slot.id)}
+                            >
+                                <Text style={[styles.slotTime, selectedSlot === slot.id && styles.activeText]}>
+                                    {slot.time}
+                                </Text>
+                                <Text style={[styles.slotDesc, selectedSlot === slot.id && styles.activeSubText]}>
+                                    {slot.description}
+                                </Text>
+                            </TouchableOpacity>
+                        ))}
+                    </ScrollView>
+                </View>
+
+                {/* Payment Methods */}
+                <View style={styles.section}>
+                    <Text style={styles.sectionTitle}>Payment Method</Text>
+                    {PAYMENT_METHODS.filter((m) => m.visible).map((method) => (
+                        <TouchableOpacity
+                            key={method.id}
+                            style={[styles.paymentCard, selectedPayment === method.id && styles.activePayment]}
+                            onPress={() => setSelectedPayment(method.id)}
+                        >
+                            <Ionicons
+                                name={method.icon as any}
+                                size={24}
+                                color={selectedPayment === method.id ? COLORS.primary : COLORS.textLight}
+                            />
+                            <View style={styles.paymentInfo}>
+                                <Text style={styles.paymentTitle}>{method.title}</Text>
+                                <Text style={styles.paymentSub}>{method.sub}</Text>
+                            </View>
+                            <View style={styles.radio}>
+                                {selectedPayment === method.id && <View style={styles.radioInner} />}
+                            </View>
+                        </TouchableOpacity>
+                    ))}
                 </View>
             </View>
         );
@@ -214,16 +384,22 @@ function CartContent() {
                     <View style={styles.bottomBar}>
                         <View style={styles.totalContainer}>
                             <Text style={styles.totalPrice}>₹{grandTotal.toFixed(0)}</Text>
-                            <Text style={styles.totalSubtext}>VIEW DETAILED BILL</Text>
+                            <Text style={styles.totalSubtext}>{totalItems} {totalItems === 1 ? 'item' : 'items'}</Text>
                         </View>
                         <TouchableOpacity
-                            style={styles.checkoutBtn}
-                            onPress={handleCheckout}
-                            disabled={isLoading}
+                            style={[styles.checkoutBtn, (isLoading || isPlacingOrder) && styles.disabledBtn]}
+                            onPress={handlePlaceOrder}
+                            disabled={isLoading || isPlacingOrder}
                             activeOpacity={0.9}
                         >
-                            <Text style={styles.checkoutBtnText}>Proceed to Checkout</Text>
-                            <Ionicons name="chevron-forward" size={18} color={COLORS.white} />
+                            {isPlacingOrder ? (
+                                <ActivityIndicator size="small" color={COLORS.white} />
+                            ) : (
+                                <>
+                                    <Text style={styles.checkoutBtnText}>Place Order</Text>
+                                    <Ionicons name="arrow-forward" size={18} color={COLORS.white} />
+                                </>
+                            )}
                         </TouchableOpacity>
                     </View>
                 ) : undefined
@@ -234,9 +410,24 @@ function CartContent() {
                 renderItem={renderCartItem}
                 keyExtractor={(item) => item.productId}
                 ListEmptyComponent={renderEmpty}
-                ListFooterComponent={renderFooter}
+                ListFooterComponent={renderCheckoutSections}
                 contentContainerStyle={items.length === 0 ? styles.emptyList : styles.listContent}
                 showsVerticalScrollIndicator={false}
+            />
+
+            <LocationPermissionModal
+                visible={showPermissionModal}
+                onPermissionGranted={() => setShowPermissionModal(false)}
+                onPermissionDenied={() => setShowPermissionModal(false)}
+                onClose={() => setShowPermissionModal(false)}
+            />
+
+            <LocationValidationModal
+                visible={showValidationModal}
+                validationResult={validationResult}
+                onValidationSuccess={() => setShowValidationModal(false)}
+                onValidationFailure={() => setShowValidationModal(false)}
+                onClose={() => setShowValidationModal(false)}
             />
         </ScreenContainer>
     );
@@ -332,12 +523,16 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: COLORS.text,
     },
+    checkoutContainer: {
+        marginTop: 8,
+    },
     billSummary: {
         backgroundColor: COLORS.backgroundDark + '50',
         marginHorizontal: SIZES.padding,
         marginTop: 8,
         borderRadius: 16,
         padding: 16,
+        marginBottom: 8,
     },
     billTitle: {
         fontSize: 14,
@@ -380,19 +575,123 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: COLORS.text,
     },
-    savingsBox: {
-        backgroundColor: COLORS.successLight,
+    section: {
+        backgroundColor: COLORS.white,
+        padding: 16,
+        marginBottom: 8,
+    },
+    sectionHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 12,
+    },
+    row: {
         flexDirection: 'row',
         alignItems: 'center',
         gap: 8,
-        padding: 8,
-        borderRadius: 8,
-        marginTop: 8,
     },
-    savingsText: {
-        fontSize: 11,
-        color: COLORS.success,
+    sectionTitle: {
+        fontSize: 14,
         fontWeight: 'bold',
+        color: COLORS.text,
+        marginBottom: 12,
+    },
+    changeBtn: {
+        fontSize: 12,
+        fontWeight: 'bold',
+        color: COLORS.primary,
+    },
+    addressText: {
+        fontSize: 14,
+        color: COLORS.textSecondary,
+        lineHeight: 20,
+    },
+    verifyBtn: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 6,
+        marginTop: 12,
+        padding: 8,
+        backgroundColor: COLORS.primary + '15',
+        borderRadius: 6,
+        alignSelf: 'flex-start',
+    },
+    verifyBtnText: {
+        fontSize: 12,
+        fontWeight: 'bold',
+        color: COLORS.primary,
+    },
+    slotScroll: {
+        marginHorizontal: -16,
+        paddingHorizontal: 16,
+    },
+    slotCard: {
+        width: 150,
+        padding: 12,
+        borderRadius: 10,
+        backgroundColor: '#F9FAFB',
+        borderWidth: 1,
+        borderColor: '#E5E7EB',
+        marginRight: 12,
+    },
+    activeSlot: {
+        backgroundColor: COLORS.primary + '10',
+        borderColor: COLORS.primary,
+    },
+    slotTime: {
+        fontSize: 13,
+        fontWeight: 'bold',
+        color: COLORS.text,
+        marginBottom: 2,
+    },
+    slotDesc: {
+        fontSize: 11,
+        color: COLORS.textSecondary,
+    },
+    activeText: { color: COLORS.primary },
+    activeSubText: { color: COLORS.primary + 'CC' },
+    paymentCard: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 12,
+        borderRadius: 10,
+        backgroundColor: '#F9FAFB',
+        borderWidth: 1,
+        borderColor: '#E5E7EB',
+        marginBottom: 10,
+    },
+    activePayment: {
+        backgroundColor: COLORS.primary + '05',
+        borderColor: COLORS.primary,
+    },
+    paymentInfo: {
+        flex: 1,
+        marginLeft: 12,
+    },
+    paymentTitle: {
+        fontSize: 14,
+        fontWeight: '600',
+        color: COLORS.text,
+    },
+    paymentSub: {
+        fontSize: 11,
+        color: COLORS.textSecondary,
+    },
+    radio: {
+        width: 18,
+        height: 18,
+        borderRadius: 9,
+        borderWidth: 2,
+        borderColor: COLORS.border,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    radioInner: {
+        width: 10,
+        height: 10,
+        borderRadius: 5,
+        backgroundColor: COLORS.primary,
     },
     emptyContainer: {
         flex: 1,
@@ -450,7 +749,7 @@ const styles = StyleSheet.create({
     },
     totalSubtext: {
         fontSize: 10,
-        color: COLORS.primary,
+        color: COLORS.textSecondary,
         fontWeight: 'bold',
     },
     checkoutBtn: {
@@ -467,6 +766,9 @@ const styles = StyleSheet.create({
         color: COLORS.white,
         fontWeight: 'bold',
         fontSize: 14,
+    },
+    disabledBtn: {
+        backgroundColor: '#D1D5DB',
     },
 });
 

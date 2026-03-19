@@ -60,7 +60,7 @@ export default function HomeScreen() {
         return;
       }
       addItem(product.productId, 1);
-      Alert.alert("Success", "Added to cart");
+      // Subtle feedback - cart badge updates automatically
     },
     [addItem],
   );
@@ -138,7 +138,7 @@ export default function HomeScreen() {
           <View style={styles.promoTextContainer}>
             <Text style={styles.promoTitle}>Super fast delivery</Text>
             <Text style={styles.promoSubtitle}>
-              Get your groceries in 10 mins
+              Get your groceries right at your doorstep.
             </Text>
           </View>
           <Ionicons name="flash" size={32} color="#FFD700" />

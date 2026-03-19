@@ -92,7 +92,7 @@ export default function ProductsScreen() {
         requireAuth(async () => {
             try {
                 await addItem(product.productId, 1);
-                Alert.alert('Success', 'Added to cart');
+                // Subtle feedback - cart badge updates automatically
             } catch (error) {
                 Alert.alert('Error', 'Failed to add item to cart');
             }

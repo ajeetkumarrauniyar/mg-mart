@@ -3,10 +3,11 @@ import { View, Text, StyleSheet, TouchableOpacity, Alert, Dimensions } from 'rea
 import { Ionicons } from '@expo/vector-icons';
 import { Product } from '@mg-mart/types';
 import { COLORS, SIZES, SHADOWS, PRODUCT_IMAGE_HEIGHT } from '../constants';
-import { useCartStore, useWishlistStore } from '../stores';
+import { useWishlistStore } from '../stores';
 import { useRequireAuth } from '../hooks';
-import { addToCartFeedback, selectionFeedback } from '../utils/haptics';
+import { selectionFeedback } from '../utils/haptics';
 import OptimizedImage from './OptimizedImage';
+import CartQuantityStepper from './CartQuantityStepper';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 // Standard horizontal padding on the list (SIZES.padding = 20 on each side)
@@ -19,22 +20,8 @@ interface ProductCardProps {
 }
 
 export const ProductCard: React.FC<ProductCardProps> = memo(({ product, onPress }) => {
-    const { addItem } = useCartStore();
     const { toggleWishlist, isInWishlist } = useWishlistStore();
     const { requireAuth } = useRequireAuth();
-
-    const handleAddToCart = useCallback(() => {
-        if (product.stock <= 0) {
-            Alert.alert('Out of Stock', 'This product is currently unavailable');
-            return;
-        }
-
-        requireAuth(() => {
-            addToCartFeedback(); // Haptic feedback
-            addItem(product.productId, 1);
-            Alert.alert('Added to Cart', `${product.name} has been added to your cart`);
-        });
-    }, [product.productId, product.stock, product.name, addItem, requireAuth]);
 
     const handleWishlistToggle = useCallback((e?: any) => {
         if (e) e.stopPropagation();
@@ -95,15 +82,11 @@ export const ProductCard: React.FC<ProductCardProps> = memo(({ product, onPress 
                             {product.stock > 0 ? `${product.stock} ${product.unit}` : 'Out of stock'}
                         </Text>
                     </View>
-                    <TouchableOpacity
-                        style={[styles.addButton, product.stock <= 0 && styles.addButtonDisabled]}
-                        onPress={handleAddToCart}
-                        disabled={product.stock <= 0}
-                    >
-                        <Text style={styles.addButtonText}>
-                            {product.stock > 0 ? '+ Add' : 'Unavailable'}
-                        </Text>
-                    </TouchableOpacity>
+                    <CartQuantityStepper
+                        productId={product.productId}
+                        stock={product.stock}
+                        compact
+                    />
                 </View>
             </View>
         </TouchableOpacity>
@@ -196,22 +179,6 @@ const styles = StyleSheet.create({
         fontSize: SIZES.fontSize.tiny,
         color: COLORS.textLight,
         marginTop: 2,
-    },
-    addButton: {
-        backgroundColor: COLORS.primary,
-        paddingHorizontal: SIZES.paddingSmall,
-        paddingVertical: 6,
-        borderRadius: SIZES.borderRadius,
-        minWidth: 64,
-        alignItems: 'center',
-    },
-    addButtonDisabled: {
-        backgroundColor: COLORS.textMuted,
-    },
-    addButtonText: {
-        color: COLORS.white,
-        fontSize: SIZES.fontSize.small,
-        fontWeight: SIZES.fontWeight.semibold,
     },
 });
 

@@ -63,14 +63,7 @@ export default function ProductDetailScreen({ route, navigation }: Props) {
             setIsAddingToCart(true);
             try {
                 await addItem(product.productId, quantity);
-                Alert.alert(
-                    'Added to Cart',
-                    `${quantity} x ${product.name} added to your cart`,
-                    [
-                        { text: 'Continue Shopping', style: 'cancel' },
-                        { text: 'View Cart', onPress: () => navigation.navigate('MainTabs', { screen: 'Cart' }) },
-                    ]
-                );
+                // Subtle feedback - navigate to cart
                 setQuantity(1); // Reset quantity after adding
             } catch (error) {
                 Alert.alert('Error', 'Failed to add item to cart. Please try again.');
