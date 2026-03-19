@@ -169,3 +169,10 @@ export const PAYMENT_METHODS = [
   { id: 'UPI', title: 'UPI / Google Pay / PhonePe', sub: 'Instant & Secure', icon: 'flash-outline', selected: false, visible: false },
   { id: 'Wallet', title: 'MG Wallet', sub: 'Balance: ₹150.00', icon: 'wallet-outline', selected: false, visible: false },
 ] as const;
+
+export const PRODUCT_IMAGE_HEIGHT = 140; // Standardized image height for product cards
+
+export const PLACEHOLDER_URI =
+  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAACWCAYAAAA8AXHiAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH6AcSCgcTGHRXmQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAZklEQVR42u3BMQEAAADCoPVP7WsIoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAMBxAABHgpUcAAAAABJRU5ErkJggg==';
+// Reliable inline placeholder — a grey box in data URI form
+

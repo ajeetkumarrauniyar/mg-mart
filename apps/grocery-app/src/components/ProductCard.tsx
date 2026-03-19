@@ -2,11 +2,13 @@ import React, { memo, useCallback } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Product } from '@mg-mart/types';
-import { COLORS, SIZES, SHADOWS } from '../constants';
-import { useCartStore, useWishlistStore, useAuthStore } from '../stores';
+import { COLORS, SIZES, SHADOWS, PRODUCT_IMAGE_HEIGHT } from '../constants';
+import { useCartStore, useWishlistStore } from '../stores';
 import { useRequireAuth } from '../hooks';
 import { addToCartFeedback, selectionFeedback } from '../utils/haptics';
 import OptimizedImage from './OptimizedImage';
+
+
 
 interface ProductCardProps {
     product: Product;
@@ -47,12 +49,11 @@ export const ProductCard: React.FC<ProductCardProps> = memo(({ product, onPress 
     }, [onPress, product]);
 
     const isWishlisted = isInWishlist(product.productId);
-    const stockPercentage = product.stock > 0 ? Math.min((product.stock / 100) * 100, 100) : 0;
 
     return (
         <TouchableOpacity style={styles.card} onPress={handlePress} activeOpacity={0.7}>
             <OptimizedImage
-                source={{ uri: product.imageUrl || 'https://via.placeholder.com/150' }}
+                source={{ uri: product.imageUrl || '' }}
                 style={styles.image}
                 resizeMode="cover"
             />
@@ -119,8 +120,7 @@ const styles = StyleSheet.create({
     },
     image: {
         width: '100%',
-        height: 150,
-        backgroundColor: COLORS.backgroundDark,
+        height: PRODUCT_IMAGE_HEIGHT,
     },
     wishlistButton: {
         position: 'absolute',

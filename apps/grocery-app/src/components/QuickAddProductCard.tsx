@@ -26,7 +26,7 @@ export const QuickAddProductCard: React.FC<QuickAddProductCardProps> = ({
         >
             <View style={styles.imageContainer}>
                 <OptimizedImage
-                    source={{ uri: product.imageUrl || 'https://via.placeholder.com/120' }}
+                    source={{ uri: product.imageUrl || '' }}
                     style={styles.image}
                     resizeMode="cover"
                 />
@@ -76,12 +76,12 @@ const styles = StyleSheet.create({
     imageContainer: {
         width: '100%',
         height: 120,
-        backgroundColor: COLORS.backgroundDark,
         position: 'relative',
+        overflow: 'hidden',
     },
     image: {
         width: '100%',
-        height: '100%',
+        height: 120,
     },
     timeBadge: {
         position: 'absolute',
