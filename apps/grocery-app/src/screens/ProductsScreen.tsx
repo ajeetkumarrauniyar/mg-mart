@@ -23,7 +23,8 @@ import {
     ActiveFilters,
     QuickAddProductCard,
     ScreenContainer,
-    AppHeader
+    AppHeader,
+    AnimatedCartBadge,
 } from '@/components';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
@@ -84,21 +85,6 @@ export default function ProductsScreen() {
         }
     }, [debouncedSearchQuery, selectedCategory]);
 
-    const handleAddToCart = useCallback((product: Product) => {
-        if (product.stock <= 0) {
-            Alert.alert('Out of Stock', 'This product is currently unavailable');
-            return;
-        }
-        requireAuth(async () => {
-            try {
-                await addItem(product.productId, 1);
-                // Subtle feedback - cart badge updates automatically
-            } catch (error) {
-                Alert.alert('Error', 'Failed to add item to cart');
-            }
-        });
-    }, [addItem, requireAuth]);
-
     const handleApplyFilters = (newFilters: ProductFilters) => {
         setFilters(newFilters);
         if (newFilters.category) {
@@ -128,7 +114,6 @@ export default function ProductsScreen() {
                 product={item}
                 style={styles.fullWidthCard}
                 onPress={() => navigation.navigate('ProductDetail', { productId: item.productId })}
-                onAddPress={() => handleAddToCart(item)}
             />
         </View>
     );
@@ -186,13 +171,7 @@ export default function ProductsScreen() {
                             <TouchableOpacity onPress={() => navigation.navigate('MainTabs', { screen: 'Cart' })}>
                                 <View style={styles.cartIconContainer}>
                                     <Ionicons name="cart-outline" size={SIZES.icon.large || 24} color={COLORS.text} />
-                                    {totalItems > 0 && (
-                                        <View style={styles.badge}>
-                                            <Text style={styles.badgeText}>
-                                                {totalItems > 99 ? '99+' : totalItems}
-                                            </Text>
-                                        </View>
-                                    )}
+                                    <AnimatedCartBadge count={totalItems} />
                                 </View>
                             </TouchableOpacity>
                         }
@@ -306,24 +285,5 @@ const styles = StyleSheet.create({
     },
     cartIconContainer: {
         padding: 4,
-    },
-    badge: {
-        position: 'absolute',
-        right: -8,
-        top: -4,
-        backgroundColor: COLORS.error || '#e53e3e',
-        borderRadius: 10,
-        minWidth: 18,
-        height: 18,
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingHorizontal: 4,
-        borderWidth: 1.5,
-        borderColor: COLORS.white,
-    },
-    badgeText: {
-        color: COLORS.white,
-        fontSize: 10,
-        fontWeight: 'bold',
     },
 });

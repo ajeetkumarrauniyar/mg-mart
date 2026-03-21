@@ -23,3 +23,4 @@ export * from './AccountSection';
 export * from './AddressCard';
 export * from './NotificationItem';
 export { AppHeader } from './AppHeader';
+export { AnimatedCartBadge } from './AnimatedCartBadge';

@@ -4,18 +4,17 @@ import { Ionicons } from '@expo/vector-icons';
 import { Product } from '@mg-mart/types';
 import { COLORS, SIZES, SHADOWS } from '../constants';
 import OptimizedImage from './OptimizedImage';
+import CartQuantityStepper from './CartQuantityStepper';
 
 interface QuickAddProductCardProps {
     product: Product;
     onPress: () => void;
-    onAddPress: () => void;
     style?: ViewStyle;
 }
 
 export const QuickAddProductCard: React.FC<QuickAddProductCardProps> = ({
     product,
     onPress,
-    onAddPress,
     style,
 }) => {
     return (
@@ -44,19 +43,11 @@ export const QuickAddProductCard: React.FC<QuickAddProductCardProps> = ({
 
                 <View style={styles.footer}>
                     <Text style={styles.price}>₹{product.price.toFixed(0)}</Text>
-
-                    <TouchableOpacity
-                        style={styles.addButton}
-                        onPress={(e) => {
-                            e.stopPropagation();
-                            onAddPress();
-                        }}
-                    >
-                        <Text style={styles.addButtonText}>ADD</Text>
-                        <View style={styles.plusIcon}>
-                            <Ionicons name="add" size={12} color={COLORS.primary} />
-                        </View>
-                    </TouchableOpacity>
+                    <CartQuantityStepper
+                        productId={product.productId}
+                        stock={product.stock}
+                        compact
+                    />
                 </View>
             </View>
         </TouchableOpacity>
@@ -124,29 +115,6 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: 'bold',
         color: COLORS.text,
-    },
-    addButton: {
-        borderWidth: 1,
-        borderColor: COLORS.primary,
-        borderRadius: 4,
-        paddingHorizontal: 8,
-        paddingVertical: 4,
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: COLORS.white,
-    },
-    addButtonText: {
-        fontSize: 10,
-        fontWeight: 'bold',
-        color: COLORS.primary,
-        marginRight: 2,
-    },
-    plusIcon: {
-        position: 'absolute',
-        top: -4,
-        right: -4,
-        backgroundColor: COLORS.white,
-        borderRadius: 10,
     },
 });
 

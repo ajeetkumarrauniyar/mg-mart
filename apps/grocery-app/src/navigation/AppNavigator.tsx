@@ -23,7 +23,7 @@ import NotificationsScreen from '@/screens/NotificationsScreen';
 import LocationSelectionScreen from '@/screens/LocationSelectionScreen';
 import { AuthScreen } from '@/screens/AuthScreen';
 import { useCartStore, useWishlistStore, useAuthStore } from '@/stores';
-import { Loading } from '@/components';
+import { Loading, AnimatedCartBadge } from '@/components';
 
 // Navigation types
 export type RootTabParamList = {
@@ -97,13 +97,7 @@ function TabNavigator() {
                         return (
                             <View>
                                 <Ionicons name="cart-outline" size={size} color={color} />
-                                {totalItems > 0 && (
-                                    <View style={styles.badge}>
-                                        <Text style={styles.badgeText}>
-                                            {totalItems > 99 ? '99+' : totalItems}
-                                        </Text>
-                                    </View>
-                                )}
+                                <AnimatedCartBadge count={totalItems} />
                             </View>
                         );
                     },
@@ -119,13 +113,7 @@ function TabNavigator() {
                         return (
                             <View>
                                 <Ionicons name="heart-outline" size={size} color={color} />
-                                {wishlistItems.length > 0 && (
-                                    <View style={styles.badge}>
-                                        <Text style={styles.badgeText}>
-                                            {wishlistItems.length > 99 ? '99+' : wishlistItems.length}
-                                        </Text>
-                                    </View>
-                                )}
+                                <AnimatedCartBadge count={wishlistItems.length} />
                             </View>
                         );
                     },

@@ -1,7 +1,7 @@
-import React, { memo, useCallback } from 'react';
+import React, { memo, useCallback, useEffect, useRef } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS, SIZES } from '../constants';
+import { COLORS } from '../constants';
 import { useCartStore } from '../stores';
 import { useRequireAuth } from '../hooks';
 import { addToCartFeedback } from '../utils/haptics';
@@ -29,6 +29,58 @@ export const CartQuantityStepper: React.FC<CartQuantityStepperProps> = memo(({
     const cartItem = items.find(item => item.productId === productId);
     const quantity = cartItem?.quantity || 0;
 
+    // Animation values
+    const scaleAnim = useRef(new Animated.Value(1)).current;
+    const widthAnim = useRef(new Animated.Value(0)).current;
+    const opacityAnim = useRef(new Animated.Value(quantity > 0 ? 1 : 0)).current;
+
+    // Animate when quantity changes from 0 to 1 (Add → Stepper)
+    useEffect(() => {
+        if (quantity === 1 && cartItem) {
+            // Bounce scale on first add
+            Animated.sequence([
+                Animated.timing(scaleAnim, {
+                    toValue: 0.95,
+                    duration: 100,
+                    useNativeDriver: true,
+                }),
+                Animated.timing(scaleAnim, {
+                    toValue: 1,
+                    duration: 100,
+                    useNativeDriver: true,
+                }),
+            ]).start();
+
+            // Expand stepper into view
+            Animated.parallel([
+                Animated.timing(widthAnim, {
+                    toValue: 1,
+                    duration: 250,
+                    useNativeDriver: false, // Width cannot use native driver
+                }),
+                Animated.timing(opacityAnim, {
+                    toValue: 1,
+                    duration: 200,
+                    useNativeDriver: false, // Must match widthAnim driver
+                }),
+            ]).start();
+        } else if (quantity === 0) {
+            // Collapse stepper back to ADD button
+            Animated.parallel([
+                Animated.timing(widthAnim, {
+                    toValue: 0,
+                    duration: 200,
+                    useNativeDriver: false, // Width cannot use native driver
+                }),
+                Animated.timing(opacityAnim, {
+                    toValue: 0,
+                    duration: 150,
+                    useNativeDriver: false, // Must match widthAnim driver
+                }),
+            ]).start();
+        }
+    }, [quantity, cartItem]);
+
     const handleAdd = useCallback(() => {
         if (stock <= 0) return;
         requireAuth(() => {
@@ -51,10 +103,13 @@ export const CartQuantityStepper: React.FC<CartQuantityStepperProps> = memo(({
         }
     }, [productId, quantity, updateItem, removeItem]);
 
+    // ─── Out of stock ────────────────────────────────────────────────────────────
     if (stock <= 0) {
         return (
-            <View style={[styles.unavailableButton, compact && styles.compactButton]}>
-                <Text style={styles.unavailableText}>Out of Stock</Text>
+            <View style={[styles.unavailableButton, compact && styles.compactUnavailable]}>
+                <Text style={[styles.unavailableText, compact && styles.compactText]}>
+                    Out of Stock
+                </Text>
             </View>
         );
     }
@@ -62,133 +117,214 @@ export const CartQuantityStepper: React.FC<CartQuantityStepperProps> = memo(({
     // Not in cart → show Add button
     if (quantity === 0) {
         return (
-            <TouchableOpacity
-                style={[styles.addButton, compact && styles.compactButton]}
-                onPress={handleAdd}
-                activeOpacity={0.7}
-            >
-                <Text style={styles.addButtonText}>ADD</Text>
-                <View style={styles.plusBadge}>
-                    <Ionicons name="add" size={10} color={COLORS.primary} />
-                </View>
-            </TouchableOpacity>
+
+            <View style={styles.addButtonWrapper}>
+                <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
+                    <TouchableOpacity
+                        style={[styles.addButton, compact && styles.compactAddButton]}
+                        onPress={handleAdd}
+                        activeOpacity={0.75}
+                    >
+                        <Ionicons
+                            name="add"
+                            size={compact ? 13 : 15}
+                            color={COLORS.primary}
+                            style={styles.addIcon}
+                        />
+                        <Text style={[styles.addButtonText, compact && styles.compactText]}>
+                            ADD
+                        </Text>
+                    </TouchableOpacity>
+                </Animated.View>
+            </View>
         );
     }
 
-    // In cart → show stepper
+    // In cart → show stepper with animation
+    const stepperWidth = widthAnim.interpolate({
+        inputRange: [0, 1],
+        outputRange: [compact ? 62 : 76, compact ? 78 : 96],
+    });
+
     return (
-        <View style={[styles.stepperContainer, compact && styles.compactButton]}>
-            <TouchableOpacity
-                style={styles.stepperButton}
-                onPress={handleDecrease}
-                activeOpacity={0.7}
+        <Animated.View
+            style={{
+                width: stepperWidth,
+                opacity: opacityAnim,
+            }}
+        >
+            <Animated.View
+                style={[
+                    styles.stepperContainer,
+                    compact && styles.compactStepper,
+                    { transform: [{ scale: scaleAnim }] },
+                ]}
             >
-                <Ionicons
-                    name={quantity <= 1 ? 'trash-outline' : 'remove'}
-                    size={compact ? 12 : 14}
-                    color={COLORS.white}
-                />
-            </TouchableOpacity>
+                {/* Decrease / Remove */}
+                <TouchableOpacity
+                    style={[styles.stepperButton, compact && styles.compactStepperButton]}
+                    onPress={handleDecrease}
+                    activeOpacity={0.7}
+                >
+                    <Ionicons
+                        name={quantity <= 1 ? 'trash-outline' : 'remove'}
+                        size={compact ? 13 : 15}
+                        color={COLORS.white}
+                    />
+                </TouchableOpacity>
 
-            <View style={styles.quantityDisplay}>
-                <Text style={[styles.quantityText, compact && styles.compactQuantityText]}>
-                    {quantity}
-                </Text>
-            </View>
+                {/* Separator */}
+                <View style={styles.separator} />
 
-            <TouchableOpacity
-                style={[styles.stepperButton, quantity >= stock && styles.stepperButtonDisabled]}
-                onPress={handleIncrease}
-                activeOpacity={0.7}
-                disabled={quantity >= stock}
-            >
-                <Ionicons name="add" size={compact ? 12 : 14} color={COLORS.white} />
-            </TouchableOpacity>
-        </View>
+                {/* Quantity */}
+                <View style={styles.quantityDisplay}>
+                    <Text style={[styles.quantityText, compact && styles.compactQuantityText]}>
+                        {quantity}
+                    </Text>
+                </View>
+
+                {/* Separator */}
+                <View style={styles.separator} />
+
+                {/* Increase */}
+                <TouchableOpacity
+                    style={[
+                        styles.stepperButton,
+                        compact && styles.compactStepperButton,
+                        quantity >= stock && styles.stepperButtonDisabled,
+                    ]}
+                    onPress={handleIncrease}
+                    activeOpacity={0.7}
+                    disabled={quantity >= stock}
+                >
+                    <Ionicons
+                        name="add"
+                        size={compact ? 13 : 15}
+                        color={COLORS.white}
+                    />
+                </TouchableOpacity>
+            </Animated.View>
+        </Animated.View>
     );
 });
 
 CartQuantityStepper.displayName = 'CartQuantityStepper';
 
 const styles = StyleSheet.create({
+
+    // overflow:'visible' ensures the Animated.View scale bounce isn't clipped
+    addButtonWrapper: {
+        overflow: 'visible',
+    },
     addButton: {
-        borderWidth: 1.5,
-        borderColor: COLORS.primary,
-        borderRadius: 6,
-        paddingHorizontal: 16,
-        paddingVertical: 6,
-        backgroundColor: COLORS.primary + '08',
+        flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        position: 'relative',
-        minWidth: 72,
+        borderWidth: 1.5,
+        borderColor: COLORS.primary,
+        borderRadius: 8,
+        paddingHorizontal: 14,
+        paddingVertical: 7,
+        backgroundColor: COLORS.white,
+        minWidth: 76,
+        shadowColor: COLORS.primary,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.18,
+        shadowRadius: 4,
+        elevation: 3,
     },
-    compactButton: {
+    compactAddButton: {
         paddingHorizontal: 10,
-        paddingVertical: 4,
-        minWidth: 60,
+        paddingVertical: 5,
+        minWidth: 62,
+        borderRadius: 6,
+    },
+    // Inline icon — no absolute positioning, never clips
+    addIcon: {
+        marginRight: 3,
     },
     addButtonText: {
         fontSize: 13,
-        fontWeight: '700',
+        fontWeight: '800',
         color: COLORS.primary,
-        letterSpacing: 0.5,
+        letterSpacing: 0.6,
     },
-    plusBadge: {
-        position: 'absolute',
-        top: -5,
-        right: -5,
-        backgroundColor: COLORS.white,
-        borderRadius: 10,
-        width: 16,
-        height: 16,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderWidth: 1,
-        borderColor: COLORS.primary,
-    },
+
+    // ─── OUT OF STOCK ────────────────────────────────────────────────────────────
+
     unavailableButton: {
         backgroundColor: COLORS.backgroundDark,
-        borderRadius: 6,
+        borderRadius: 8,
         paddingHorizontal: 12,
-        paddingVertical: 6,
+        paddingVertical: 7,
         alignItems: 'center',
-        minWidth: 72,
+        minWidth: 76,
+    },
+    compactUnavailable: {
+        paddingHorizontal: 8,
+        paddingVertical: 5,
+        minWidth: 62,
+        borderRadius: 6,
     },
     unavailableText: {
         fontSize: 10,
         fontWeight: '600',
         color: COLORS.textMuted,
     },
+
+    // ─── STEPPER ─────────────────────────────────────────────────────────────────
+
     stepperContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: COLORS.primary,
-        borderRadius: 6,
+        borderRadius: 8,
         overflow: 'hidden',
-        minWidth: 72,
+        minWidth: 96,
+        height: 34,
+        shadowColor: COLORS.primary,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.28,
+        shadowRadius: 4,
+        elevation: 3,
+    },
+    compactStepper: {
+        minWidth: 78,
+        height: 30,
+        borderRadius: 6,
     },
     stepperButton: {
-        width: 28,
-        height: 28,
+        width: 32,
+        height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
     },
-    stepperButtonDisabled: {
-        opacity: 0.5,
+    compactStepperButton: {
+        width: 26,
     },
+    stepperButtonDisabled: {
+        opacity: 0.4,
+        backgroundColor: 'rgba(0, 0, 0, 0.1)',
+    },
+
     quantityDisplay: {
-        minWidth: 20,
+        flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
     },
     quantityText: {
         fontSize: 14,
-        fontWeight: '700',
+        fontWeight: '800',
         color: COLORS.white,
+        letterSpacing: 0.3,
+    },
+
+    compactText: {
+        fontSize: 11,
     },
     compactQuantityText: {
         fontSize: 12,
+        fontWeight: '700',
     },
 });
 
