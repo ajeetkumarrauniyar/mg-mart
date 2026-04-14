@@ -302,6 +302,11 @@ const styles = StyleSheet.create({
     compactStepperButton: {
         width: 26,
     },
+    separator: {
+        width: 1,
+        height: '60%',
+        backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    },
     stepperButtonDisabled: {
         opacity: 0.4,
         backgroundColor: 'rgba(0, 0, 0, 0.1)',

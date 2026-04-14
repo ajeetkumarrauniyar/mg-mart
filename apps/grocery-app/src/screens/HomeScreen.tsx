@@ -10,7 +10,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Ionicons } from "@expo/vector-icons";
-import { COLORS, SIZES, SHADOWS } from "../constants";
+import { COLORS, SIZES, SHADOWS, banners, categories } from "../constants";
 import {
   useAuthStore,
   useProductStore,
@@ -27,8 +27,7 @@ import {
   ScreenContainer,
 } from "../components";
 import { RootStackParamList } from "../navigation/AppNavigator";
-import { banners } from "@/constants/HomeBanners";
-import { categories } from "@/constants/ProductCategories";
+
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -96,7 +95,6 @@ export default function HomeScreen() {
                   productId: product.productId,
                 })
               }
-              onAddPress={() => handleAddToCart(product)}
             />
           ))}
         </ScrollView>
@@ -168,7 +166,6 @@ export default function HomeScreen() {
                       productId: product.productId,
                     })
                   }
-                  onAddPress={() => handleAddToCart(product)}
                 />
               ))}
           </ScrollView>

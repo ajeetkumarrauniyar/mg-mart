@@ -2,7 +2,7 @@
 import * as Location from 'expo-location';
 import type { GPSCoordinator as IGPSCoordinator } from './interfaces';
 import type { LocationCoordinates, LocationOptions } from './types';
-import { ACCURACY_THRESHOLDS, LOCATION_TIMEOUTS, RETRY_SETTINGS } from './constants';
+import { ACCURACY_THRESHOLDS, LOCATION_TIMEOUTS, RETRY_SETTINGS } from '../../constants';
 import { validateCoordinates, createTimestamp } from './utils';
 
 /**

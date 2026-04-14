@@ -3,7 +3,7 @@ import type { ValidationEngine as IValidationEngine } from './interfaces';
 import type { LocationCoordinates, LocationValidationResult, LocationAction } from './types';
 import { ValidationType } from './types';
 import { DistanceCalculator } from './DistanceCalculator';
-import { DISTANCE_THRESHOLDS, USER_MESSAGES } from './constants';
+import { DISTANCE_THRESHOLDS, USER_MESSAGES } from '../../constants';
 import { validateCoordinates } from './utils';
 
 /**

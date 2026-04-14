@@ -2,6 +2,12 @@ import axios, { AxiosInstance, AxiosResponse, AxiosError } from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { config, getApiTimeout, getTokenKey, isFeatureEnabled } from "@/config";
 
+export type UnauthorizedCallback = () => void;
+let onUnauthorizedCallback: UnauthorizedCallback | null = null;
+export const setUnauthorizedCallback = (cb: UnauthorizedCallback) => {
+  onUnauthorizedCallback = cb;
+};
+
 // Request headers
 export const getDefaultHeaders = (token?: string) => ({
   "Content-Type": "application/json",
@@ -77,8 +83,9 @@ apiClient.interceptors.response.use(
 
         // Clear auth state in store
         try {
-          const { useAuthStore } = await import('../stores/authStore');
-          useAuthStore.getState().logout();
+          if (onUnauthorizedCallback) {
+            onUnauthorizedCallback();
+          }
           console.log('✅ Auth state cleared due to 401 error');
         } catch (storeError) {
           console.error('Error clearing auth store:', storeError);

@@ -71,7 +71,6 @@ const WishlistCard: React.FC<WishlistCardProps> = ({
           </TouchableOpacity>
         </View>
       </View>
-      hidden
     </TouchableOpacity>
   );
 };

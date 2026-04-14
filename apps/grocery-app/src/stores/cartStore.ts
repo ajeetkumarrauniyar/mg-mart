@@ -15,12 +15,14 @@ export interface CartItemWithProduct extends CartItem {
   quantity: number;
   addedAt: string;
   subtotal: number;
+  category?: string;
 }
 
 export interface CartStore {
   // State
   items: CartItemWithProduct[];
   totalAmount: number;    // subtotal (items only)
+  qualifyingAmount: number; // excluding oil/sugar
   totalItems: number;
   deliveryFee: number;    // 0 if cart empty, else DELIVERY_FEE
   handlingFee: number;    // 0 if cart empty, else HANDLING_FEE
@@ -46,6 +48,7 @@ export const useCartStore = create<CartStore>()(
       // Initial state
       items: [],
       totalAmount: 0,
+      qualifyingAmount: 0,
       totalItems: 0,
       deliveryFee: 0,
       handlingFee: 0,
@@ -277,13 +280,21 @@ export const useCartStore = create<CartStore>()(
       calculateTotals: () => {
         const { items } = get();
         const totalAmount = items.reduce((sum, item) => sum + item.subtotal, 0);
+
+        const qualifyingAmount = items.reduce((sum, item) => {
+          const cat = (item.category || '').toLowerCase();
+          const name = (item.name || '').toLowerCase();
+          const isExcluded = cat.includes('oil') || cat.includes('sugar') || name.includes('oil') || name.includes('sugar');
+          return sum + (isExcluded ? 0 : item.subtotal);
+        }, 0);
+
         const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
         const hasItems = totalItems > 0;
         const deliveryFee = hasItems ? DELIVERY_FEE : 0;
         const handlingFee = hasItems ? HANDLING_FEE : 0;
         const grandTotal = totalAmount + deliveryFee + handlingFee;
 
-        set({ totalAmount, totalItems, deliveryFee, handlingFee, grandTotal });
+        set({ totalAmount, qualifyingAmount, totalItems, deliveryFee, handlingFee, grandTotal });
       },
 
       clearError: () => {
@@ -296,6 +307,7 @@ export const useCartStore = create<CartStore>()(
       partialize: (state) => ({
         items: state.items,
         totalAmount: state.totalAmount,
+        qualifyingAmount: state.qualifyingAmount,
         totalItems: state.totalItems,
         deliveryFee: state.deliveryFee,
         handlingFee: state.handlingFee,

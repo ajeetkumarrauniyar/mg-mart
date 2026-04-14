@@ -154,6 +154,7 @@ export const STORE_CONTACT = {
 export const DELIVERY_FEE = 40;
 export const HANDLING_FEE = 5;
 export const ZIP_CODE = '845416';
+export const MIN_ORDER_VALUE = 500;
 
 
 export const SLOTS = [
@@ -174,5 +175,125 @@ export const PRODUCT_IMAGE_HEIGHT = 140; // Standardized image height for produc
 
 export const PLACEHOLDER_URI =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAACWCAYAAAA8AXHiAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH6AcSCgcTGHRXmQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAZklEQVR42u3BMQEAAADCoPVP7WsIoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAMBxAABHgpUcAAAAABJRU5ErkJggg==';
-// Reliable inline placeholder — a grey box in data URI form
 
+export const getDeliveryStatusMessage = (date: Date) => {
+  const hour = date.getHours();
+  if (hour >= 7 && hour < 22) {
+    return { available: true, message: "" };
+  }
+  return { available: false, message: "Delivery starts at 7:00 AM." };
+};
+
+// --- Home Banners ---
+export const banners = [
+  {
+    id: 1,
+    tag: "Flat 40% OFF",
+    title: "Fresh Veggies",
+    subtitle: "Direct from farms",
+    image: "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=400&h=400&fit=crop",
+    color: "#4CAF50",
+  },
+  {
+    id: 2,
+    tag: "Buy 1 Get 1",
+    title: "Organic Fruits",
+    subtitle: "Best for health",
+    image: "https://images.unsplash.com/photo-1619566636858-adf3ef46400b?w=400&h=400&fit=crop",
+    color: "#FF9800",
+  },
+  {
+    id: 3,
+    tag: "New Launch",
+    title: "Dairy Fresh",
+    subtitle: "Milk & Eggs now live",
+    image: "https://images.unsplash.com/photo-1550583724-1255818c09d3?w=400&h=400&fit=crop",
+    color: "#2196F3",
+  },
+];
+
+// --- Product Categories ---
+export const categories = [
+  { id: 1, name: 'Fresh Vegetables', icon: '🥬', color: '#4CAF50' },
+  { id: 2, name: 'Fruits', icon: '🍎', color: '#FF9800' },
+  { id: 3, name: 'Dairy', icon: '🥛', color: '#2196F3' },
+  { id: 4, name: 'Meat & Fish', icon: '🍖', color: '#F44336' },
+  { id: 5, name: 'Bakery', icon: '🍞', color: '#795548' },
+  { id: 6, name: 'Beverages', icon: '🥤', color: '#9C27B0' },
+  { id: 7, name: 'Snacks', icon: '🍿', color: '#FFC107' },
+  { id: 8, name: 'Household', icon: '🧼', color: '#00BCD4' },
+];
+
+
+
+// Distance thresholds (in kilometers)
+export const DISTANCE_THRESHOLDS = {
+  APPROVED: 5,      // Orders approved within 5km
+  WARNING: 7,       // Warning zone between 5-7km
+  BLOCKED: 7,       // Orders blocked beyond 7km
+} as const;
+
+// GPS accuracy thresholds (in meters)
+export const ACCURACY_THRESHOLDS = {
+  EXCELLENT: 10,    // Excellent accuracy
+  GOOD: 50,         // Good accuracy
+  ACCEPTABLE: 100,  // Acceptable accuracy threshold
+  POOR: 500,        // Poor accuracy
+  UNACCEPTABLE: 1000, // Unacceptable accuracy
+} as const;
+
+// Location fetch timeouts (in milliseconds)
+export const LOCATION_TIMEOUTS = {
+  QUICK_FETCH: 10000,   // 10 seconds for quick location
+  NORMAL_FETCH: 30000,  // 30 seconds for normal location
+  EXTENDED_FETCH: 60000, // 60 seconds for extended location
+} as const;
+
+// Cache settings
+export const CACHE_SETTINGS = {
+  LOCATION_MAX_AGE: 5 * 60 * 1000,     // 5 minutes in milliseconds
+  VALIDATION_CACHE_SIZE: 50,           // Maximum validation records to cache
+  PERMISSION_CHECK_INTERVAL: 60000,    // Check permission status every minute
+} as const;
+
+// Retry settings
+export const RETRY_SETTINGS = {
+  MAX_LOCATION_RETRIES: 3,
+  MAX_API_RETRIES: 3,
+  RETRY_DELAY_BASE: 1000,              // Base delay for exponential backoff
+  RETRY_DELAY_MAX: 10000,              // Maximum retry delay
+} as const;
+
+// User messages
+export const USER_MESSAGES = {
+  PERMISSION_REQUIRED: 'Location access is required for delivery validation. Please enable location services.',
+  LOCATION_FETCHING: 'Getting your location...',
+  LOCATION_POOR_ACCURACY: 'Improving location accuracy...',
+  ORDER_APPROVED: 'Order approved! You are within our delivery area.',
+  ORDER_WARNING: 'You seem to be a bit far from the store. Please confirm your location.',
+  ORDER_BLOCKED: 'You appear to be outside our delivery area. Please refresh your location or contact store.',
+  LOCATION_REFRESH_SUCCESS: 'Location updated successfully.',
+  LOCATION_UPDATE_REQUIRED: 'Please update your delivery location to continue.',
+} as const;
+
+// Storage keys
+export const STORAGE_KEYS = {
+  USER_LOCATION: '@mg_mart_user_location',
+  VALIDATION_CACHE: '@mg_mart_validation_cache',
+  PERMISSION_STATUS: '@mg_mart_permission_status',
+  LAST_LOCATION_FETCH: '@mg_mart_last_location_fetch',
+} as const;
+
+// API endpoints
+export const API_ENDPOINTS = {
+  VALIDATE_LOCATION: '/location/validate',
+  CREATE_LOCATION: '/location/create',
+  UPDATE_LOCATION: '/location/update',
+  LOCATION_AUDIT: '/location/audit',
+} as const;
+
+// Device info
+export const DEVICE_INFO = {
+  PLATFORM: 'react-native',
+  VERSION: '1.0.0',
+} as const;

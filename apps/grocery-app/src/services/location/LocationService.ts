@@ -7,7 +7,7 @@ import { GPSCoordinator } from './GPSCoordinator';
 import { ValidationEngine } from './ValidationEngine';
 import { LocationStorage } from './LocationStorage';
 import { MessageService } from './MessageService';
-import { LOCATION_TIMEOUTS, ACCURACY_THRESHOLDS } from './constants';
+import { LOCATION_TIMEOUTS, ACCURACY_THRESHOLDS } from '../../constants';
 import { createTimestamp, generateLocationId } from './utils';
 
 /**

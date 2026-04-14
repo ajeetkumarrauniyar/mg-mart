@@ -1,7 +1,7 @@
 // Distance calculation implementation using Haversine formula
 import type { LocationCoordinates, ServiceAreaValidation } from './types';
 import type { DistanceCalculator as IDistanceCalculator } from './interfaces';
-import { DISTANCE_THRESHOLDS } from './constants';
+import { DISTANCE_THRESHOLDS } from '../../constants';
 import { validateCoordinates } from './utils';
 
 /**

@@ -1,4 +1,6 @@
 import { create } from "zustand";
+import { useWishlistStore } from './wishlistStore';
+import { useCartStore } from './cartStore';
 import { persist, createJSONStorage } from "zustand/middleware";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { User } from "@mg-mart/types";
@@ -59,7 +61,7 @@ export const useAuthStore = create<AuthStore>()(
 
           // Clear wishlist for new user session
           try {
-            const { useWishlistStore } = await import('./wishlistStore');
+
             useWishlistStore.getState().setUserId(response.user.userId);
           } catch (error) {
             console.warn('Failed to set wishlist user ID on login:', error);
@@ -67,7 +69,7 @@ export const useAuthStore = create<AuthStore>()(
 
           // Sync cart after successful login
           try {
-            const { useCartStore } = await import('./cartStore');
+
             await useCartStore.getState().syncWithServer();
           } catch (syncError) {
             console.warn('Cart sync failed after login:', syncError);
@@ -99,7 +101,7 @@ export const useAuthStore = create<AuthStore>()(
 
           // Clear wishlist for new user
           try {
-            const { useWishlistStore } = await import('./wishlistStore');
+
             useWishlistStore.getState().setUserId(response.user.userId);
           } catch (error) {
             console.warn('Failed to set wishlist user ID on registration:', error);
@@ -107,7 +109,7 @@ export const useAuthStore = create<AuthStore>()(
 
           // Sync cart after successful registration
           try {
-            const { useCartStore } = await import('./cartStore');
+
             await useCartStore.getState().syncWithServer();
           } catch (syncError) {
             console.warn('Cart sync failed after registration:', syncError);
@@ -127,7 +129,7 @@ export const useAuthStore = create<AuthStore>()(
       logout: () => {
         // Clear cart on logout
         try {
-          const { useCartStore } = require('./cartStore');
+
           useCartStore.getState().clearCart(true); // Skip API call
         } catch (error) {
           console.warn('Failed to clear cart on logout:', error);
@@ -135,7 +137,7 @@ export const useAuthStore = create<AuthStore>()(
 
         // Clear wishlist on logout
         try {
-          const { useWishlistStore } = require('./wishlistStore');
+
           useWishlistStore.getState().setUserId(null);
         } catch (error) {
           console.warn('Failed to clear wishlist on logout:', error);

@@ -10,6 +10,18 @@ import { SplashScreen, OnboardingScreen } from './screens';
 
 const ONBOARDING_KEY = '@mg_mart_onboarding_complete';
 
+import { setUnauthorizedCallback } from './services/apiService';
+import { useAuthStore } from './stores/authStore';
+
+// Register global unauthorized listener
+setUnauthorizedCallback(() => {
+  try {
+    useAuthStore.getState().logout();
+  } catch (error) {
+    console.error('Error logging out via callback:', error);
+  }
+});
+
 export default function App() {
   const { isInitialized, initError } = useAppInitialization();
   const [showSplash, setShowSplash] = useState(true);

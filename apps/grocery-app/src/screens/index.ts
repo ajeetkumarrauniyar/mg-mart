@@ -4,8 +4,6 @@ export { default as ProductsScreen } from "./ProductsScreen";
 export { default as CartScreen } from "./CartScreen";
 export { default as ProfileScreen } from "./ProfileScreen";
 export { default as WishlistScreen } from "./WishlistScreen";
-export { default as ProductDetailScreen } from "./ProductDetailScreen";
-export { default as CheckoutScreen } from "./CheckoutScreen";
 export { default as OrderHistoryScreen } from "./OrderHistoryScreen";
 export { default as OrderDetailScreen } from "./OrderDetailScreen";
 export { default as EditProfileScreen } from "./EditProfileScreen";

@@ -1,7 +1,7 @@
 // User messaging service for location-based ordering
 import type { LocationCoordinates } from './types';
 import { ValidationType, PermissionStatus } from './types';
-import { USER_MESSAGES } from './constants';
+import { USER_MESSAGES } from '../../constants';
 
 /**
  * Service for generating user-friendly messages for location scenarios

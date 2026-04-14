@@ -2,7 +2,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { LocationStorage as ILocationStorage } from './interfaces';
 import type { LocationData, LocationCoordinates, ValidationRecord, LocalLocationStorage } from './types';
-import { STORAGE_KEYS, CACHE_SETTINGS } from './constants';
+import { STORAGE_KEYS, CACHE_SETTINGS } from '../../constants';
 import { generateLocationId, createTimestamp, isLocationRecent } from './utils';
 
 /**
