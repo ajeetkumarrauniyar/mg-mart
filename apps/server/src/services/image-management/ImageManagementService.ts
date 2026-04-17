@@ -228,9 +228,9 @@ export class ImageManagementService implements IImageManagementService {
 
         // Determine which stage to retry from
         if (processingStatus.stage === ProcessingStage.DISCOVERY || processingStatus.discoveredImages.length === 0) {
-            return await this.processProductImages(productId);
+            return await this.withExponentialBackoff(() => this.processProductImages(productId));
         } else if (processingStatus.stage === ProcessingStage.PROCESSING && processingStatus.approvedImages.length > 0) {
-            return await this.processApprovedImages(processingStatus);
+            return await this.withExponentialBackoff(() => this.processApprovedImages(processingStatus));
         } else {
             throw new Error(`Cannot determine retry strategy for product ${productId}`);
         }
@@ -415,5 +415,30 @@ export class ImageManagementService implements IImageManagementService {
                 processing: { status: 'healthy', message: 'Processing service operational' }
             }
         };
+    }
+
+    private static sleep(ms: number): Promise<void> {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    private async withExponentialBackoff<T>(
+        operation: () => Promise<T>,
+        maxRetries: number = 3,
+        baseDelayMs: number = 1000
+    ): Promise<T> {
+        let lastError: Error | unknown;
+        for (let attempt = 0; attempt <= maxRetries; attempt++) {
+            try {
+                return await operation();
+            } catch (error) {
+                lastError = error;
+                if (attempt < maxRetries) {
+                    const delayMs = Math.min(baseDelayMs * Math.pow(2, attempt), 30000);
+                    console.log(`Retry attempt ${attempt + 1}/${maxRetries} after ${delayMs}ms delay`);
+                    await ImageManagementService.sleep(delayMs);
+                }
+            }
+        }
+        throw lastError;
     }
 }
