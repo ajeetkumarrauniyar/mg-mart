@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { ImageController } from '../controllers/image-management/ImageController.js';
-import { authenticateToken } from '../middleware/auth.js';
+import { authenticateToken, requireAdmin } from '../middleware/auth.js';
 
 const router = Router();
 const imageController = new ImageController();
@@ -18,6 +18,7 @@ router.get('/products/:id/processing-status',
 
 router.post('/products/:id/approve-images',
     authenticateToken,
+    requireAdmin,
     (req, res) => imageController.approveImages(req, res)
 );
 
@@ -38,12 +39,14 @@ router.put('/products/:productId/images/:imageId/primary',
 
 router.post('/products/:id/retry-processing',
     authenticateToken,
+    requireAdmin,
     (req, res) => imageController.retryProcessing(req, res)
 );
 
 // Image management system routes
 router.get('/image-management/statistics',
     authenticateToken,
+    requireAdmin,
     (req, res) => imageController.getStatistics(req, res)
 );
 
@@ -53,6 +56,7 @@ router.get('/image-management/health',
 
 router.post('/image-management/cleanup',
     authenticateToken,
+    requireAdmin,
     (req, res) => imageController.cleanupTemporaryImages(req, res)
 );
 
