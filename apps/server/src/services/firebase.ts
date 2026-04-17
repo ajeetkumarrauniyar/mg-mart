@@ -12,12 +12,9 @@
 import { initializeApp, cert, getApps } from "firebase-admin/app";
 import { getFirestore, Firestore, Timestamp } from "firebase-admin/firestore";
 import { getAuth as getAuthService } from "firebase-admin/auth";
+import { readFileSync, existsSync } from "fs";
+import { join } from "path";
 import { fileURLToPath } from "url";
-import path from "path";
-import fs from "fs";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 // Global Firestore database instance
 let db: Firestore;
@@ -30,49 +27,59 @@ let db: Firestore;
  * @returns Firestore database instance
  * @throws Error if FIREBASE_PROJECT_ID is not provided
  */
-export const initializeFirebase = async () => {
+export const initializeFirebase = () => {
   // Check if Firebase is already initialized to prevent duplicate initialization
   if (getApps().length === 0) {
-    // Load service account credentials from environment variables or file
-    let serviceAccount;
+    let serviceAccount: any = {};
 
+    // Try to load service account from environment variable first
     if (process.env.FIREBASE_SERVICE_ACCOUNT_KEY) {
       try {
         serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
+        console.log('Firebase: Using service account from environment variable');
       } catch (error) {
-        throw new Error("Invalid FIREBASE_SERVICE_ACCOUNT_KEY format - must be valid JSON");
+        console.error('Firebase: Invalid FIREBASE_SERVICE_ACCOUNT_KEY format');
+        throw new Error('Invalid FIREBASE_SERVICE_ACCOUNT_KEY format');
       }
     } else {
-      // Fallback to key.json file for local development
+      // Try to load from file
       try {
-        const __filename = fileURLToPath(import.meta.url);
-        const __dirname = path.dirname(__filename);
-        const keyPath = path.resolve(__dirname, "../../key.json");
-        const keyContent = fs.readFileSync(keyPath, "utf8");
-        serviceAccount = JSON.parse(keyContent);
+        let keyPath = join(process.cwd(), 'firebase-service-account.json');
+        if (!existsSync(keyPath)) {
+          // Try alternative filename
+          keyPath = join(process.cwd(), 'key.json');
+        }
+
+        if (existsSync(keyPath)) {
+          const keyContent = readFileSync(keyPath, 'utf8');
+          serviceAccount = JSON.parse(keyContent);
+          console.log(`Firebase: Using service account from file: ${keyPath}`);
+        } else {
+          console.warn('Firebase: No service account key found (environment or file)');
+        }
       } catch (error) {
-        throw new Error("Firebase service account credentials not found - please set FIREBASE_SERVICE_ACCOUNT_KEY environment variable or ensure key.json file exists");
+        console.warn('Firebase: Could not load service account from file');
       }
     }
 
     // Validate required environment variables
-    const projectId =
-      process.env.FIREBASE_PROJECT_ID || serviceAccount.project_id;
+    const projectId = process.env.FIREBASE_PROJECT_ID || serviceAccount.project_id;
 
     if (!projectId) {
       throw new Error("FIREBASE_PROJECT_ID environment variable is required");
     }
 
-    try {
-      // Initialize Firebase Admin SDK with credentials
-      initializeApp({
-        credential: cert(serviceAccount),
-        projectId,
-      });
-    } catch (error) {
-      console.error("❌ Firebase initialization failed:", error);
-      throw error;
+    // Initialize Firebase Admin SDK with credentials
+    const initConfig: any = { projectId };
+
+    // Only add credentials if we have a valid service account
+    if (serviceAccount.private_key && serviceAccount.client_email) {
+      initConfig.credential = cert(serviceAccount);
+    } else {
+      console.warn('Firebase: No valid service account credentials found, using default credentials');
     }
+
+    initializeApp(initConfig);
   }
 
   // Initialize and cache Firestore database instance
@@ -81,14 +88,13 @@ export const initializeFirebase = async () => {
 };
 
 // Initialize Firebase immediately when this module is loaded
-(async () => {
-  try {
-    await initializeFirebase();
-  } catch (error) {
-    console.error("Failed to initialize Firebase:", error);
-    process.exit(1);
-  }
-})();
+initializeFirebase();
+
+// Export the db instance for direct access
+export { db };
+
+// Initialize Firebase immediately when this module is loaded
+initializeFirebase();
 
 /**
  * Returns the initialized Firestore database instance

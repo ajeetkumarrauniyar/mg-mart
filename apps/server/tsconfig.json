@@ -12,7 +12,7 @@
     "moduleResolution": "bundler"
   },
   "include": ["src/**/*", "types/**/*", "types/**/*.d.ts", "@types/**/*"],
-  "exclude": ["node_modules", "dist", "src/_tests/**/*"],
+  "exclude": ["node_modules", "dist"],
   "ts-node": {
     "esm": true,
     "transpileOnly": true

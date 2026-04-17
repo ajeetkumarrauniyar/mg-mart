@@ -180,57 +180,40 @@ export class OrderController {
         throw new ApiError("Offset must be a non-negative number", 400);
       }
 
-      // Get orders filtered by userId directly from the repository
-      let orders = await this.orderRepository.list({
-        userId: userId,
-        limit: limitNum,
-        offset: offsetNum
-      });
+      // Get all orders and filter manually to avoid Firestore composite index requirement
+      const allOrders = await this.orderRepository.list({});
+      let orders = allOrders.filter((order) => order.userId === userId);
 
-      // Filter by status if provided (need to get all user orders first if status filter is needed)
+      // Filter by status if provided
       if (status) {
         const validStatuses: OrderStatus[] = [
           "pending",
           "processing",
           "shipped",
           "delivered",
+          "delivered",
           "cancelled",
         ];
         if (!validStatuses.includes(status as OrderStatus)) {
           throw new ApiError("Invalid order status", 400);
         }
-
-        // Get all user orders and filter by status manually since we can't use composite index
-        const allUserOrders = await this.orderRepository.list({ userId: userId });
-        orders = allUserOrders.filter((order) => order.status === status);
-
-        // Apply pagination manually for status-filtered results
-        const total = orders.length;
-        orders = orders.slice(offsetNum, offsetNum + limitNum);
-
-        res.json({
-          success: true,
-          data: {
-            orders,
-            pagination: {
-              total,
-              limit: limitNum,
-              offset: offsetNum,
-              hasMore: offsetNum + limitNum < total,
-            },
-          },
-        });
-        return;
+        orders = orders.filter((order) => order.status === status);
       }
 
-      // For non-status filtered requests, get total count for pagination
-      const allUserOrders = await this.orderRepository.list({ userId: userId });
-      const total = allUserOrders.length;
+      // Sort by creation date (newest first)
+      orders.sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+
+      // Apply pagination
+      const total = orders.length;
+      const paginatedOrders = orders.slice(offsetNum, offsetNum + limitNum);
 
       res.json({
         success: true,
         data: {
-          orders,
+          orders: paginatedOrders,
           pagination: {
             total,
             limit: limitNum,
@@ -422,29 +405,14 @@ export class OrderController {
     try {
       const {
         limit = "20",
-        offset,
-        page,
+        offset = "0",
         status,
         userId: filterUserId,
       } = req.query;
 
       // Parse pagination parameters
       const limitNum = parseInt(limit as string, 10);
-      
-      // Support both 'page' and 'offset' parameters
-      // If 'page' is provided, convert it to 'offset'
-      let offsetNum: number;
-      if (page !== undefined) {
-        const pageNum = parseInt(page as string, 10);
-        if (isNaN(pageNum) || pageNum < 1) {
-          throw new ApiError("Page must be a positive number", 400);
-        }
-        offsetNum = (pageNum - 1) * limitNum;
-      } else if (offset !== undefined) {
-        offsetNum = parseInt(offset as string, 10);
-      } else {
-        offsetNum = 0; // Default to first page
-      }
+      const offsetNum = parseInt(offset as string, 10);
 
       if (isNaN(limitNum) || limitNum < 1 || limitNum > 100) {
         throw new ApiError("Limit must be between 1 and 100", 400);
@@ -528,7 +496,7 @@ export class OrderController {
         averageOrderValue:
           orders.length > 0
             ? orders.reduce((sum, order) => sum + order.totalAmount, 0) /
-            orders.length
+              orders.length
             : 0,
       };
 

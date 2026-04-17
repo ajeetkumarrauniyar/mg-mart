@@ -1,7 +1,7 @@
 /**
  * User management routes for MG Mart grocery application
  *
- * Handles user profile operations and admin user management
+ * Handles user profile operations
  *
  * @author MG Mart Development Team
  * @version 1.0.0
@@ -9,16 +9,13 @@
 
 import { Router } from "express";
 import { UserController } from "../controllers/index.js";
-import { authenticateToken, requireAdmin } from "../middleware/auth.js";
+import { authenticateToken } from "../middleware/auth.js";
 
 const router: Router = Router();
 const userController = new UserController();
 
 // All user routes require authentication
 router.use(authenticateToken);
-
-// Admin routes - Get all users (admin only)
-router.get("/", requireAdmin, userController.getAllUsers);
 
 // User profile routes
 router.get("/profile", userController.getProfile);

@@ -130,6 +130,29 @@ export class UserRepository {
   }
 
   /**
+   * Updates a user's password hash
+   *
+   * @param userId - ID of the user to update
+   * @param passwordHash - New hashed password
+   * @returns Promise resolving to true if updated, false if user not found
+   */
+  async updatePassword(userId: string, passwordHash: string): Promise<boolean> {
+    const userRef = this.collection.doc(userId);
+    const doc = await userRef.get();
+
+    if (!doc.exists) {
+      return false;
+    }
+
+    await userRef.update({
+      passwordHash,
+      updatedAt: createTimestamp(),
+    });
+
+    return true;
+  }
+
+  /**
    * Deletes a user account from the database
    *
    * @param userId - ID of the user to delete

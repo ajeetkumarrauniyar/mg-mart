@@ -18,8 +18,6 @@ const cartController = new CartController();
 router.use(authenticateToken);
 
 // Cart routes
-router.get("/count", cartController.getCartItemCount);
-router.get("/validate", cartController.validateCart);
 router.get("/", cartController.getCart);
 router.post("/add", cartController.addItem);
 router.put("/update/:productId", cartController.updateItem);
