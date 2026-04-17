@@ -45,13 +45,18 @@ export class ImageDiscoveryService implements IImageDiscoveryService {
     private readonly requestTimeout: number = 10000; // 10 seconds
 
     constructor() {
+        const requiredVars = ['GOOGLE_CUSTOM_SEARCH_API_KEY', 'GOOGLE_CUSTOM_SEARCH_ENGINE_ID'];
+        const missing = requiredVars.filter(v => !process.env[v]);
+        if (missing.length > 0) {
+            throw new Error(
+                `ImageDiscoveryService: Missing required environment variables: ${missing.join(', ')}. ` +
+                `See apps/server/.env.example for setup instructions.`
+            );
+        }
+
         this.googleApiKey = process.env.GOOGLE_CUSTOM_SEARCH_API_KEY || '';
         this.googleSearchEngineId = process.env.GOOGLE_CUSTOM_SEARCH_ENGINE_ID || '';
         this.bingApiKey = process.env.BING_SEARCH_API_KEY || '';
-
-        if (!this.googleApiKey && !this.bingApiKey) {
-            console.warn('No image search API keys configured. Image discovery will be limited.');
-        }
     }
 
     async searchImages(productIdentifiers: ProductIdentifier[]): Promise<DiscoveredImage[]> {

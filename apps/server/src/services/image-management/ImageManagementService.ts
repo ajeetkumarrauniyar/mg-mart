@@ -14,12 +14,14 @@ import { ImageProcessingService } from './ImageProcessingService.js';
 import { CloudStorageService } from './CloudStorageService.js';
 import { ImageRepository } from '../../repositories/image-management/ImageRepository.js';
 import { ProductImage, ImageProcessingJob } from '../../models/ProductImage.js';
+import { ProductRepository } from '../../repositories/ProductRepository.js';
 
 export class ImageManagementService implements IImageManagementService {
     private readonly discoveryService: ImageDiscoveryService;
     private readonly processingService: ImageProcessingService;
     private readonly storageService: CloudStorageService;
     private readonly imageRepository: ImageRepository;
+    private readonly productRepository: ProductRepository;
     private readonly maxRetries: number = 3;
     private readonly retryDelayMs: number = 1000;
 
@@ -28,6 +30,7 @@ export class ImageManagementService implements IImageManagementService {
         this.processingService = new ImageProcessingService();
         this.storageService = new CloudStorageService();
         this.imageRepository = new ImageRepository();
+        this.productRepository = new ProductRepository();
     }
 
     async processProductImages(productId: string): Promise<ProcessingStatus> {
@@ -344,117 +347,16 @@ export class ImageManagementService implements IImageManagementService {
     }
 
     private async getProductIdentifiers(productId: string): Promise<ProductIdentifier[]> {
-        // TODO: Fetch actual product data from ProductRepository
-        // For now, return realistic mock data based on product ID patterns
-
-        const lowerProductId = productId.toLowerCase();
-
-        // Extract meaningful product info from ID patterns
-        if (lowerProductId.includes('iphone')) {
-            return [{
-                productName: 'Apple iPhone 15 Pro',
-                displayName: 'iPhone 15 Pro Max 256GB',
-                category: 'electronics',
-                brand: 'Apple'
-            }];
-        } else if (lowerProductId.includes('samsung') || lowerProductId.includes('galaxy')) {
-            return [{
-                productName: 'Samsung Galaxy S24',
-                displayName: 'Galaxy S24 Ultra 512GB',
-                category: 'electronics',
-                brand: 'Samsung'
-            }];
-        } else if (lowerProductId.includes('laptop') || lowerProductId.includes('macbook')) {
-            return [{
-                productName: 'MacBook Pro',
-                displayName: 'MacBook Pro 14-inch M3',
-                category: 'electronics',
-                brand: 'Apple'
-            }];
-        } else if (lowerProductId.includes('nike') || lowerProductId.includes('shoe')) {
-            return [{
-                productName: 'Nike Air Max',
-                displayName: 'Nike Air Max 270 Running Shoes',
-                category: 'footwear',
-                brand: 'Nike'
-            }];
-        } else if (lowerProductId.includes('fogg') || lowerProductId.includes('perfume')) {
-            return [{
-                productName: 'Fogg Premium Perfume',
-                displayName: 'Fogg Premium Body Spray 120ml',
-                category: 'personal care',
-                brand: 'Fogg'
-            }];
-        } else if (lowerProductId.includes('watch') || lowerProductId.includes('smartwatch')) {
-            return [{
-                productName: 'Apple Watch Series 9',
-                displayName: 'Apple Watch Series 9 GPS 45mm',
-                category: 'electronics',
-                brand: 'Apple'
-            }];
-        } else if (lowerProductId.includes('headphone') || lowerProductId.includes('airpods')) {
-            return [{
-                productName: 'Apple AirPods Pro',
-                displayName: 'AirPods Pro 2nd Generation',
-                category: 'electronics',
-                brand: 'Apple'
-            }];
-        } else if (lowerProductId.includes('book') || lowerProductId.includes('novel')) {
-            return [{
-                productName: 'Popular Book',
-                displayName: 'Best Selling Novel',
-                category: 'books',
-                brand: 'Generic'
-            }];
-        } else if (lowerProductId.includes('shirt') || lowerProductId.includes('tshirt') || lowerProductId.includes('clothing')) {
-            return [{
-                productName: 'Cotton T-Shirt',
-                displayName: 'Premium Cotton T-Shirt',
-                category: 'clothing',
-                brand: 'Generic'
-            }];
-        } else if (lowerProductId.includes('coffee') || lowerProductId.includes('tea')) {
-            return [{
-                productName: 'Premium Coffee',
-                displayName: 'Arabica Coffee Beans 500g',
-                category: 'food & beverages',
-                brand: 'Generic'
-            }];
-        } else if (lowerProductId.includes('harpic') || lowerProductId.includes('toilet') || lowerProductId.includes('cleaner')) {
-            return [{
-                productName: 'Harpic Toilet Cleaner',
-                displayName: 'Harpic Toilet Cleaner 500ml',
-                category: 'household',
-                brand: 'Harpic'
-            }];
-        } else if (lowerProductId.includes('detergent') || lowerProductId.includes('washing')) {
-            return [{
-                productName: 'Washing Detergent',
-                displayName: 'Premium Washing Powder 1kg',
-                category: 'household',
-                brand: 'Generic'
-            }];
-        } else {
-            // Try to extract product name from ID by removing common prefixes and suffixes
-            let extractedName = productId
-                .replace(/^test-/, '')
-                .replace(/^manual-/, '')
-                .replace(/-\d+$/, '') // Remove timestamp suffix
-                .replace(/-/g, ' ')
-                .replace(/\b\w/g, l => l.toUpperCase()); // Capitalize words
-
-            // If we couldn't extract a meaningful name, use a generic product
-            if (extractedName.length < 3 || extractedName.includes('test') || extractedName.includes('product')) {
-                extractedName = 'Generic Product';
-            }
-
-            return [{
-                productName: extractedName,
-                displayName: `${extractedName} - Premium Quality`,
-                category: 'general',
-                brand: 'Generic'
-            }];
+        const product = await this.productRepository.findById(productId);
+        if (!product) {
+            throw new Error(`Product not found: ${productId}`);
         }
+        return [{
+            productName: product.name,
+            displayName: product.name,
+            category: product.category,
+            brand: 'MG Mart'
+        }];
     }
 
     private async updateProcessingJob(jobId: string, processingStatus: ProcessingStatus): Promise<void> {
