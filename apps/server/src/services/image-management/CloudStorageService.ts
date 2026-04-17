@@ -19,6 +19,15 @@ export class CloudStorageService implements ICloudStorageService {
         const apiKey = process.env.CLOUDINARY_API_KEY;
         const apiSecret = process.env.CLOUDINARY_API_SECRET;
 
+        const requiredCloudVars = ['CLOUDINARY_CLOUD_NAME', 'CLOUDINARY_API_KEY', 'CLOUDINARY_API_SECRET'];
+        const missingCloud = requiredCloudVars.filter(v => !process.env[v]);
+        if (missingCloud.length > 0 && process.env.NODE_ENV === 'production') {
+            throw new Error(
+                `CloudStorageService: Missing required Cloudinary environment variables: ${missingCloud.join(', ')}. ` +
+                `See apps/server/.env.example for setup instructions.`
+            );
+        }
+
         if (cloudName && apiKey && apiSecret) {
             cloudinary.config({
                 cloud_name: cloudName,
