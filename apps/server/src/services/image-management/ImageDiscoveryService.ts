@@ -99,22 +99,16 @@ export class ImageDiscoveryService implements IImageDiscoveryService {
     private generateSearchQueries(identifier: ProductIdentifier): string[] {
         const queries: string[] = [];
 
-        // Primary query with product name
-        queries.push(`${identifier.productName} product image`);
+        // Primary query is just the clean product name. This yields the most natural product images.
+        queries.push(identifier.productName);
 
-        // Add display name if available
-        if (identifier.displayName && identifier.displayName !== identifier.productName) {
-            queries.push(`${identifier.displayName} product`);
-        }
-
-        // Add brand and category if available
-        if (identifier.brand && identifier.category) {
-            queries.push(`${identifier.brand} ${identifier.productName} ${identifier.category}`);
-        } else if (identifier.brand) {
-            queries.push(`${identifier.brand} ${identifier.productName}`);
-        } else if (identifier.category) {
+        // Fallback: Add category for disambiguation.
+        if (identifier.category && identifier.category !== 'Household') {
             queries.push(`${identifier.productName} ${identifier.category}`);
         }
+
+        // Fallback: Add typical product keywords.
+        queries.push(`${identifier.productName} packaging`);
 
         return queries.slice(0, 3); // Limit to 3 queries to avoid rate limits
     }

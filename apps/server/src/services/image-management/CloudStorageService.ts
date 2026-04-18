@@ -175,9 +175,10 @@ export class CloudStorageService implements ICloudStorageService {
                 createdAt: new Date()
             };
 
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error creating backup:', error);
-            throw new Error(`Failed to create backup: ${error instanceof Error ? error.message : 'Unknown error'}`);
+            const msg = error instanceof Error ? error.message : (error?.message || JSON.stringify(error) || 'Unknown error');
+            throw new Error(`Failed to create backup: ${msg}`);
         }
     }
 

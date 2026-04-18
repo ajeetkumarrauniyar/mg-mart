@@ -227,10 +227,12 @@ export class ImageManagementService implements IImageManagementService {
         processingStatus.updatedAt = new Date();
 
         // Determine which stage to retry from
-        if (processingStatus.stage === ProcessingStage.DISCOVERY || processingStatus.discoveredImages.length === 0) {
-            return await this.withExponentialBackoff(() => this.processProductImages(productId));
-        } else if (processingStatus.stage === ProcessingStage.PROCESSING && processingStatus.approvedImages.length > 0) {
+        if (processingStatus.approvedImages.length > 0) {
+            processingStatus.stage = ProcessingStage.PROCESSING;
             return await this.withExponentialBackoff(() => this.processApprovedImages(processingStatus));
+        } else if (processingStatus.stage === ProcessingStage.DISCOVERY || processingStatus.discoveredImages.length === 0 || processingStatus.discoveredImages.length > 0) {
+            processingStatus.stage = ProcessingStage.DISCOVERY;
+            return await this.withExponentialBackoff(() => this.processProductImages(productId));
         } else {
             throw new Error(`Cannot determine retry strategy for product ${productId}`);
         }
@@ -351,11 +353,15 @@ export class ImageManagementService implements IImageManagementService {
         if (!product) {
             throw new Error(`Product not found: ${productId}`);
         }
+
+        // Clean product name by removing price markers like " 70/-" or " 153/-"
+        const cleanName = product.name.replace(/\s*\d+\/-\s*$/, '').trim();
+
         return [{
-            productName: product.name,
-            displayName: product.name,
+            productName: cleanName,
+            displayName: cleanName,
             category: product.category,
-            brand: 'MG Mart'
+            brand: '' // Removed 'MG Mart' to prevent skewing Google search results towards the local store
         }];
     }
 
