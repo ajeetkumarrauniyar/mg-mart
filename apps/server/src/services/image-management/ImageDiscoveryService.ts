@@ -57,6 +57,10 @@ export class ImageDiscoveryService implements IImageDiscoveryService {
         this.googleApiKey = process.env.GOOGLE_CUSTOM_SEARCH_API_KEY || '';
         this.googleSearchEngineId = process.env.GOOGLE_CUSTOM_SEARCH_ENGINE_ID || '';
         this.bingApiKey = process.env.BING_SEARCH_API_KEY || '';
+
+        if (!this.googleApiKey && !this.bingApiKey) {
+            console.warn('No image search API keys configured. Image discovery will be limited.');
+        }
     }
 
     async searchImages(productIdentifiers: ProductIdentifier[]): Promise<DiscoveredImage[]> {
