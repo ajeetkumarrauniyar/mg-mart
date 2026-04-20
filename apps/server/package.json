@@ -8,6 +8,7 @@
     "dev": "tsx watch server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
+    "start:prod": "node dist/server.js",
     "type-check": "tsc --noEmit",
     "lint": "echo 'Lint not configured yet'",
     "test-repos": "tsx src/test-repositories.ts",
