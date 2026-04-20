@@ -29,29 +29,36 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "fast-check": "^3.15.1",
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2"
+  },
+  "dependencies": {
     "@types/bcrypt": "^5.0.2",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.6",
+    "@types/jest": "^29.5.11",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.6",
     "@types/jest": "^29.5.11",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/node": "^24.3.1",
-    "fast-check": "^3.15.1",
-    "jest": "^29.7.0",
-    "nodemon": "^3.1.10",
-    "ts-node": "^10.9.2",
     "tsx": "^4.7.0",
-    "typescript": "^5.9.2"
-  },
-  "dependencies": {
+    "typescript": "^5.9.2",
     "@mg-mart/types": "workspace:*",
+    "axios": "^1.6.7",
+    "bcrypt": "^5.1.1",
+    "cloudinary": "^2.0.1",
     "axios": "^1.6.7",
     "bcrypt": "^5.1.1",
     "cloudinary": "^2.0.1",
     "cors": "^2.8.5",
     "dotenv": "^17.2.2",
+    "dotenv": "^17.2.2",
     "express": "^5.0.0",
     "firebase-admin": "^13.5.0",
     "jsonwebtoken": "^9.0.2",
-    "sharp": "^0.33.2"
+    "sharp": "^0.33.2""sharp": "^0.33.2"
   }
 }
