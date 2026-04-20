@@ -151,7 +151,7 @@ export class ProductController {
     next: NextFunction
   ): Promise<void> => {
     try {
-      const { productId } = req.params;
+      const { productId } = req.params as Record<string, string>;
 
       if (!productId) {
         throw new ApiError("Product ID is required", 400);
@@ -211,7 +211,7 @@ export class ProductController {
     next: NextFunction
   ): Promise<void> => {
     try {
-      const { category } = req.params;
+      const { category } = req.params as Record<string, string>;
       const { limit = "20", offset = "0" } = req.query;
 
       if (!category) {
@@ -346,7 +346,7 @@ export class ProductController {
     next: NextFunction
   ): Promise<void> => {
     try {
-      const { productId } = req.params;
+      const { productId } = req.params as Record<string, string>;
       const {
         name,
         description,
@@ -408,7 +408,7 @@ export class ProductController {
     next: NextFunction
   ): Promise<void> => {
     try {
-      const { productId } = req.params;
+      const { productId } = req.params as Record<string, string>;
 
       if (!productId) {
         throw new ApiError("Product ID is required", 400);
@@ -437,7 +437,7 @@ export class ProductController {
     next: NextFunction
   ): Promise<void> => {
     try {
-      const { productId } = req.params;
+      const { productId } = req.params as Record<string, string>;
       const { stock } = req.body;
 
       if (!productId) {

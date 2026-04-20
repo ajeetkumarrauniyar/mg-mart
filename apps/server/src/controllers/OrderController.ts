@@ -241,7 +241,7 @@ export class OrderController {
         throw new ApiError("User not authenticated", 401);
       }
 
-      const { orderId } = req.params;
+      const { orderId } = req.params as Record<string, string>;
 
       if (!orderId) {
         throw new ApiError("Order ID is required", 400);
@@ -280,7 +280,7 @@ export class OrderController {
         throw new ApiError("User not authenticated", 401);
       }
 
-      const { orderId } = req.params;
+      const { orderId } = req.params as Record<string, string>;
       const { reason } = req.body;
 
       if (!orderId) {
@@ -337,7 +337,7 @@ export class OrderController {
     next: NextFunction
   ): Promise<void> => {
     try {
-      const { orderId } = req.params;
+      const { orderId } = req.params as Record<string, string>;
       const { status } = req.body;
 
       if (!orderId) {

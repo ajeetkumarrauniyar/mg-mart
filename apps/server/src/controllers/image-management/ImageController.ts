@@ -28,7 +28,7 @@ export class ImageController {
     // POST /api/products/:id/discover-images
     async discoverImages(req: Request, res: Response): Promise<void> {
         try {
-            const { id: productId } = req.params;
+            const { id: productId } = req.params as Record<string, string>;
 
             if (!productId) {
                 res.status(400).json({
@@ -79,7 +79,7 @@ export class ImageController {
     // GET /api/products/:id/processing-status
     async getProcessingStatus(req: Request, res: Response): Promise<void> {
         try {
-            const { id: productId } = req.params;
+            const { id: productId } = req.params as Record<string, string>;
 
             if (!productId) {
                 res.status(400).json({
@@ -117,7 +117,7 @@ export class ImageController {
     // POST /api/products/:id/approve-images
     async approveImages(req: Request, res: Response): Promise<void> {
         try {
-            const { id: productId } = req.params;
+            const { id: productId } = req.params as Record<string, string>;
             const { imageIds, approvedBy } = req.body;
 
             if (!productId) {
@@ -177,7 +177,7 @@ export class ImageController {
     // DELETE /api/products/:productId/images/:imageId
     async deleteProductImage(req: Request, res: Response): Promise<void> {
         try {
-            const { productId, imageId } = req.params;
+            const { productId, imageId } = req.params as Record<string, string>;
 
             if (!productId || !imageId) {
                 res.status(400).json({
@@ -229,7 +229,7 @@ export class ImageController {
     // GET /api/products/:id/images
     async getProductImages(req: Request, res: Response): Promise<void> {
         try {
-            const { id: productId } = req.params;
+            const { id: productId } = req.params as Record<string, string>;
 
             if (!productId) {
                 res.status(400).json({
@@ -263,7 +263,7 @@ export class ImageController {
     // PUT /api/products/:productId/images/:imageId/primary
     async setPrimaryImage(req: Request, res: Response): Promise<void> {
         try {
-            const { productId, imageId } = req.params;
+            const { productId, imageId } = req.params as Record<string, string>;
 
             if (!productId || !imageId) {
                 res.status(400).json({
@@ -313,7 +313,7 @@ export class ImageController {
     // POST /api/products/:id/retry-processing
     async retryProcessing(req: Request, res: Response): Promise<void> {
         try {
-            const { id: productId } = req.params;
+            const { id: productId } = req.params as Record<string, string>;
 
             if (!productId) {
                 res.status(400).json({

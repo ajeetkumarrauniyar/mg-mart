@@ -118,9 +118,9 @@ async function testRealConfiguration() {
 
         if (discoveredImages.length > 0) {
             console.log(`   ✅ Found ${discoveredImages.length} images`);
-            console.log(`   📋 First image: ${discoveredImages[0].sourceUrl}`);
-            console.log(`   📊 Quality score: ${discoveredImages[0].qualityScore}`);
-            console.log(`   📊 Relevance score: ${discoveredImages[0].relevanceScore}`);
+            console.log(`   📋 First image: ${discoveredImages[0]!.sourceUrl}`);
+            console.log(`   📊 Quality score: ${discoveredImages[0]!.qualityScore}`);
+            console.log(`   📊 Relevance score: ${discoveredImages[0]!.relevanceScore}`);
         } else {
             console.log('   ⚠️  No images found (check API keys and quotas)');
         }
@@ -130,7 +130,8 @@ async function testRealConfiguration() {
 
     // Test 5: Firebase Connection (if configured)
     console.log('\n5. 🔥 Testing Firebase Connection...');
-    if (process.env.FIREBASE_PROJECT_ID && (process.env.FIREBASE_SERVICE_ACCOUNT_KEY || readFileSync)) {
+    const hasFirebaseKey = process.env.FIREBASE_SERVICE_ACCOUNT_KEY || existsSync(join(process.cwd(), 'firebase-service-account.json')) || existsSync(join(process.cwd(), 'key.json'));
+    if (process.env.FIREBASE_PROJECT_ID && hasFirebaseKey) {
         try {
             // Re-enable Firebase initialization for testing
             const { initializeFirebase } = await import('./services/firebase.js');

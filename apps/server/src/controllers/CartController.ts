@@ -137,7 +137,7 @@ export class CartController {
         throw new ApiError("User not authenticated", 401);
       }
 
-      const { productId } = req.params;
+      const { productId } = req.params as Record<string, string>;
       const { quantity } = req.body;
 
       // Validate input
@@ -203,7 +203,7 @@ export class CartController {
         throw new ApiError("User not authenticated", 401);
       }
 
-      const { productId } = req.params;
+      const { productId } = req.params as Record<string, string>;
 
       if (!productId) {
         throw new ApiError("Product ID is required", 400);

@@ -219,7 +219,7 @@ export class AdminController {
     */
    deleteUser = async (req: Request, res: Response): Promise<void> => {
       try {
-         const { userId } = req.params;
+         const { userId } = req.params as Record<string, string>;
 
          if (!userId) {
             res.status(400).json({
