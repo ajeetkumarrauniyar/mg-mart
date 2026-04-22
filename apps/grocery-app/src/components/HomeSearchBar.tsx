@@ -6,29 +6,46 @@ import { COLORS, SIZES, SHADOWS } from '../constants';
 interface HomeSearchBarProps {
     value: string;
     onChangeText: (text: string) => void;
+    onSubmit?: (query: string) => void;
     placeholder?: string;
+    autoFocus?: boolean;
 }
 
 export const HomeSearchBar: React.FC<HomeSearchBarProps> = ({
     value,
     onChangeText,
-    placeholder = "Search 'paneer'",
+    onSubmit,
+    placeholder = "Search for groceries...",
+    autoFocus = false,
 }) => {
     return (
         <View style={styles.container}>
             <View style={styles.searchBox}>
-                <Ionicons name="search" size={20} color={COLORS.textSecondary} style={styles.icon} />
+                <TouchableOpacity
+                    onPress={() => onSubmit?.(value)}
+                    activeOpacity={0.7}
+                >
+                    <Ionicons name="search" size={20} color={COLORS.textSecondary} style={styles.icon} />
+                </TouchableOpacity>
                 <TextInput
                     style={styles.input}
                     value={value}
                     onChangeText={onChangeText}
                     placeholder={placeholder}
                     placeholderTextColor={COLORS.textLight}
+                    returnKeyType="search"
+                    autoFocus={autoFocus}
+                    onSubmitEditing={() => onSubmit?.(value)}
                 />
-                <View style={styles.divider} />
-                {/* <TouchableOpacity style={styles.micButton}>
-                    <Ionicons name="mic-outline" size={20} color={COLORS.primary} />
-                </TouchableOpacity> */}
+                {value.length > 0 && (
+                    <TouchableOpacity
+                        onPress={() => onChangeText('')}
+                        activeOpacity={0.7}
+                        style={styles.clearButton}
+                    >
+                        <Ionicons name="close-circle" size={18} color={COLORS.textLight} />
+                    </TouchableOpacity>
+                )}
             </View>
         </View>
     );
@@ -37,7 +54,7 @@ export const HomeSearchBar: React.FC<HomeSearchBarProps> = ({
 const styles = StyleSheet.create({
     container: {
         paddingHorizontal: SIZES.padding,
-        paddingBottom: 15,
+        paddingVertical: 12,
         backgroundColor: COLORS.white,
     },
     searchBox: {
@@ -49,6 +66,7 @@ const styles = StyleSheet.create({
         height: 50,
         borderWidth: 1,
         borderColor: COLORS.borderLight,
+        ...SHADOWS.small,
     },
     icon: {
         marginRight: 10,
@@ -59,13 +77,7 @@ const styles = StyleSheet.create({
         color: COLORS.text,
         fontWeight: '500',
     },
-    divider: {
-        width: 1,
-        height: 24,
-        backgroundColor: '#D1D5DB',
-        marginHorizontal: 10,
-    },
-    micButton: {
+    clearButton: {
         padding: 4,
     },
 });

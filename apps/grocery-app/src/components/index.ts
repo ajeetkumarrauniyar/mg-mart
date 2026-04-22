@@ -26,4 +26,5 @@ export { AppHeader } from './AppHeader';
 export { AnimatedCartBadge } from './AnimatedCartBadge';
 export { default as MinOrderBanner } from "./MinOrderBanner";
 export { default as DeliveryStatusBanner } from "./DeliveryStatusBanner";
+export { default as FloatingCartBar } from './FloatingCartBar';
 export * from "./location";

@@ -1,19 +1,21 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View } from 'react-native';
+import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
 
 import HomeScreen from '@/screens/HomeScreen';
+import CategoriesScreen from '@/screens/CategoriesScreen';
 import ProductsScreen from '@/screens/ProductsScreen';
 import CartScreen from '@/screens/CartScreen';
 import AccountScreen from '@/screens/AccountScreen';
 import WishlistScreen from '@/screens/WishlistScreen';
 import ProductDetailScreen from '@/screens/ProductDetailScreen';
+import OrderHistoryScreen from '@/screens/OrderHistoryScreen';
 
 import EditProfileScreen from '@/screens/EditProfileScreen';
-import OrderHistoryScreen from '@/screens/OrderHistoryScreen';
 import OrderDetailScreen from '@/screens/OrderDetailScreen';
 import AddressBookScreen from '@/screens/AddressBookScreen';
 import PaymentMethodsScreen from '@/screens/PaymentMethodsScreen';
@@ -22,23 +24,30 @@ import TermsAndConditionsScreen from '@/screens/TermsAndConditionsScreen';
 import NotificationsScreen from '@/screens/NotificationsScreen';
 import LocationSelectionScreen from '@/screens/LocationSelectionScreen';
 import { AuthScreen } from '@/screens/AuthScreen';
-import { useCartStore, useWishlistStore, useAuthStore } from '@/stores';
-import { Loading, AnimatedCartBadge } from '@/components';
+import { useAuthStore } from '@/stores';
+import { Loading, FloatingCartBar } from '@/components';
+import { COLORS } from '@/constants';
 
-// Navigation types
+// ─── Navigation Types ─────────────────────────────────────────────────────────
+
 export type RootTabParamList = {
     Home: undefined;
-    Products: undefined;
-    Cart: undefined;
-    Wishlist: undefined;
-    Profile: undefined;
+    Categories: undefined;
+    OrderAgain: undefined;
 };
 
 export type RootStackParamList = {
     Auth: undefined;
     MainTabs: { screen?: keyof RootTabParamList } | undefined;
     ProductDetail: { productId: string };
+    Products: { category?: string; initialQuery?: string };
 
+    // Stack-accessible screens (no longer tabs)
+    Cart: undefined;
+    Account: undefined;
+    Wishlist: undefined;
+
+    // Account sub-screens
     EditProfile: undefined;
     OrderHistory: undefined;
     OrderDetail: { orderId: string };
@@ -53,17 +62,31 @@ export type RootStackParamList = {
 const Tab = createBottomTabNavigator<RootTabParamList>();
 const Stack = createStackNavigator<RootStackParamList>();
 
-// Tab Navigator
+// ─── Tab Navigator (3 tabs) ───────────────────────────────────────────────────
+
 function TabNavigator() {
+    const insets = useSafeAreaInsets();
+    // Use actual safe area bottom inset so tab bar clears the OS nav bar on all devices
+    const tabBarHeight = 54 + insets.bottom;
+
     return (
         <Tab.Navigator
             screenOptions={{
-                tabBarActiveTintColor: '#48bb78',
+                tabBarActiveTintColor: COLORS.primary,
                 tabBarInactiveTintColor: '#4a5568',
                 tabBarStyle: {
                     backgroundColor: '#ffffff',
                     borderTopColor: '#e2e8f0',
+                    borderTopWidth: 1,
+                    height: tabBarHeight,
+                    paddingBottom: insets.bottom + 4,
+                    paddingTop: 6,
                 },
+                tabBarLabelStyle: {
+                    fontSize: 11,
+                    fontWeight: '600',
+                },
+                tabBarActiveBackgroundColor: '#E8F5E9',
                 headerShown: false,
             }}
         >
@@ -71,61 +94,29 @@ function TabNavigator() {
                 name="Home"
                 component={HomeScreen}
                 options={{
-                    tabBarLabel: 'Shop',
+                    tabBarLabel: 'Home',
                     tabBarIcon: ({ color, size }: { color: string; size: number }) => (
                         <Ionicons name="storefront-outline" size={size} color={color} />
                     ),
                 }}
             />
             <Tab.Screen
-                name="Products"
-                component={ProductsScreen}
+                name="Categories"
+                component={CategoriesScreen}
                 options={{
-                    tabBarLabel: 'Explore',
+                    tabBarLabel: 'Categories',
                     tabBarIcon: ({ color, size }: { color: string; size: number }) => (
-                        <Ionicons name="compass-outline" size={size} color={color} />
+                        <Ionicons name="grid-outline" size={size} color={color} />
                     ),
                 }}
             />
             <Tab.Screen
-                name="Cart"
-                component={CartScreen}
+                name="OrderAgain"
+                component={OrderHistoryScreen}
                 options={{
-                    tabBarLabel: 'Cart',
-                    tabBarIcon: ({ color, size }: { color: string; size: number }) => {
-                        const { totalItems } = useCartStore();
-                        return (
-                            <View>
-                                <Ionicons name="cart-outline" size={size} color={color} />
-                                <AnimatedCartBadge count={totalItems} />
-                            </View>
-                        );
-                    },
-                }}
-            />
-            <Tab.Screen
-                name="Wishlist"
-                component={WishlistScreen}
-                options={{
-                    tabBarLabel: 'Favourite',
-                    tabBarIcon: ({ color, size }: { color: string; size: number }) => {
-                        const { wishlistItems } = useWishlistStore();
-                        return (
-                            <View>
-                                <Ionicons name="heart-outline" size={size} color={color} />
-                                <AnimatedCartBadge count={wishlistItems.length} />
-                            </View>
-                        );
-                    },
-                }}
-            />
-            <Tab.Screen
-                name="Profile"
-                component={AccountScreen}
-                options={{
-                    tabBarLabel: 'Account',
+                    tabBarLabel: 'Order Again',
                     tabBarIcon: ({ color, size }: { color: string; size: number }) => (
-                        <Ionicons name="person-outline" size={size} color={color} />
+                        <Ionicons name="time-outline" size={size} color={color} />
                     ),
                 }}
             />
@@ -133,7 +124,8 @@ function TabNavigator() {
     );
 }
 
-// Main App Navigator
+// ─── Main App Navigator ───────────────────────────────────────────────────────
+
 export default function AppNavigator() {
     const { isAuthenticated, isLoading, loadStoredAuth, user, token } = useAuthStore();
     const [navigationReady, setNavigationReady] = React.useState(false);
@@ -142,13 +134,11 @@ export default function AppNavigator() {
     // Fallback: Load stored auth if not already loaded after a short delay
     useEffect(() => {
         const timer = setTimeout(() => {
-            // If we have token/user but not authenticated, something went wrong with rehydration
             if ((user && token) && !isAuthenticated && !isLoading) {
                 console.log('🔄 AppNavigator: Fallback - calling loadStoredAuth');
                 loadStoredAuth();
             }
-        }, 100); // Small delay to allow rehydration to complete
-
+        }, 100);
         return () => clearTimeout(timer);
     }, [user, token, isAuthenticated, isLoading, loadStoredAuth]);
 
@@ -175,16 +165,16 @@ export default function AppNavigator() {
         });
     }, [isAuthenticated, isLoading, user, token]);
 
-    // Show loading while checking auth state
     if (isLoading) {
         console.log('⏳ AppNavigator: Showing loading screen');
         return <Loading />;
     }
 
-    const initialRoute = isAuthenticated ? "MainTabs" : "Auth";
+    const initialRoute = isAuthenticated ? 'MainTabs' : 'Auth';
     console.log('🎯 AppNavigator: Setting initial route to:', initialRoute);
 
     return (
+        <SafeAreaProvider>
         <NavigationContainer
             ref={navigationRef}
             onReady={() => {
@@ -201,18 +191,50 @@ export default function AppNavigator() {
                     component={AuthScreen}
                     options={{ headerShown: false }}
                 />
+
+                {/* Main tabs wrapper — FloatingCartBar is injected here in Plan 11.2 */}
                 <Stack.Screen
                     name="MainTabs"
                     options={{ headerShown: false }}
                 >
-                    {() => <TabNavigator />}
+                {(props) => (
+                        <View style={{ flex: 1 }}>
+                            <TabNavigator />
+                            <FloatingCartBar />
+                        </View>
+                    )}
                 </Stack.Screen>
+
+                {/* Product screens */}
                 <Stack.Screen
                     name="ProductDetail"
                     component={ProductDetailScreen}
                     options={{ headerShown: false }}
                 />
+                <Stack.Screen
+                    name="Products"
+                    component={ProductsScreen}
+                    options={{ headerShown: false }}
+                />
 
+                {/* Formerly-tab screens — now stack-accessible */}
+                <Stack.Screen
+                    name="Cart"
+                    component={CartScreen}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="Account"
+                    component={AccountScreen}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="Wishlist"
+                    component={WishlistScreen}
+                    options={{ headerShown: false }}
+                />
+
+                {/* Account sub-screens */}
                 <Stack.Screen
                     name="EditProfile"
                     component={EditProfileScreen}
@@ -260,26 +282,6 @@ export default function AppNavigator() {
                 />
             </Stack.Navigator>
         </NavigationContainer>
+        </SafeAreaProvider>
     );
 }
-
-
-const styles = StyleSheet.create({
-    badge: {
-        position: 'absolute',
-        right: -8,
-        top: -4,
-        backgroundColor: '#e53e3e',
-        borderRadius: 10,
-        minWidth: 18,
-        height: 18,
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingHorizontal: 4,
-    },
-    badgeText: {
-        color: '#ffffff',
-        fontSize: 10,
-        fontWeight: '700',
-    },
-});
