@@ -118,7 +118,8 @@ export class ImageController {
     async approveImages(req: Request, res: Response): Promise<void> {
         try {
             const { id: productId } = req.params as Record<string, string>;
-            const { imageIds, approvedBy } = req.body;
+            const { imageIds } = req.body;
+            const approvedBy = req.user?.userId || req.body?.approvedBy;
 
             if (!productId) {
                 res.status(400).json({
