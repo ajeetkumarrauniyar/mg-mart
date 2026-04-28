@@ -41,6 +41,22 @@ const apiEndpoints: ApiEndpoints = {
         ANALYTICS: "/admin/analytics",
         SETTINGS: "/admin/settings",
     },
+
+    // Image management endpoints
+    IMAGE_MANAGEMENT: {
+        DISCOVER_IMAGES: (productId: string) => `/products/${productId}/discover-images`,
+        PROCESSING_STATUS: (productId: string) => `/products/${productId}/processing-status`,
+        APPROVE_IMAGES: (productId: string) => `/products/${productId}/approve-images`,
+        PRODUCT_IMAGES: (productId: string) => `/products/${productId}/images`,
+        DELETE_PRODUCT_IMAGE: (productId: string, imageId: string) =>
+            `/products/${productId}/images/${imageId}`,
+        SET_PRIMARY_IMAGE: (productId: string, imageId: string) =>
+            `/products/${productId}/images/${imageId}/primary`,
+        RETRY_PROCESSING: (productId: string) => `/products/${productId}/retry-processing`,
+        STATISTICS: "/image-management/statistics",
+        HEALTH: "/image-management/health",
+        CLEANUP: "/image-management/cleanup",
+    },
 };
 
 // API configuration object
@@ -112,6 +128,7 @@ export const validateApiConfig = (config: ApiConfig): boolean => {
         "ORDERS",
         "USERS",
         "ADMIN",
+        "IMAGE_MANAGEMENT",
     ];
 
     for (const category of requiredCategories) {

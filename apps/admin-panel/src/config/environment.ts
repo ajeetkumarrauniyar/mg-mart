@@ -27,15 +27,37 @@ console.log("  🌐 API Base URL:", import.meta.env.VITE_API_BASE_URL);
 console.log("  📱 App Name:", import.meta.env.VITE_APP_NAME);
 
 // Environment configuration object
+const normalizeApiBaseUrl = (rawUrl?: string): string => {
+    const fallbackUrl = "https://mg-mart-server.onrender.com/api/v1";
+    const source = rawUrl || fallbackUrl;
+
+    try {
+        const url = new URL(source);
+        const path = url.pathname.replace(/\/+$/, "");
+
+        if (path === "") {
+            url.pathname = "/api/v1";
+            return url.toString().replace(/\/$/, "");
+        }
+
+        if (path === "/api") {
+            url.pathname = "/api/v1";
+            return url.toString().replace(/\/$/, "");
+        }
+
+        return url.toString().replace(/\/$/, "");
+    } catch {
+        return fallbackUrl;
+    }
+};
+
 export const environmentConfig: EnvironmentConfig = {
     // App Information
     APP_NAME: import.meta.env.VITE_APP_NAME || "MG Mart Admin Panel",
     APP_VERSION: import.meta.env.VITE_APP_VERSION || "1.0.0",
 
     // API Configuration
-    API_BASE_URL:
-        import.meta.env.VITE_API_BASE_URL ||
-        "https://mg-mart-server.onrender.com/api/v1",
+    API_BASE_URL: normalizeApiBaseUrl(import.meta.env.VITE_API_BASE_URL),
 
     // Authentication
     TOKEN_KEY:

@@ -6,6 +6,7 @@ export { dashboardService } from "./dashboardService";
 export { productService } from "./productService";
 export { orderService } from "./orderService";
 export { userService } from "./userService";
+export { imageManagementService } from "./imageManagementService";
 
 // Export types
 export type { ApiResponse, ApiError } from "./apiService";
@@ -38,3 +39,13 @@ export type {
     UserListResponse,
     UpdateUserData
 } from "./userService";
+export type {
+    ProductImage,
+    DiscoverImagesResponse,
+    ProcessingStatusResponse,
+    ApproveImagesPayload,
+    SetPrimaryImageResponse,
+    ImageManagementStatistics,
+    ImageManagementHealth,
+    CleanupResponse
+} from "./imageManagementService";

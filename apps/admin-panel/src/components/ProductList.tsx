@@ -1,8 +1,15 @@
 import { useEffect, useState } from 'react'
-import { productService } from '../services'
-import type { Product, ProductListResponse, CreateProductData } from '../services'
+import { imageManagementService, productService } from '../services'
+import type {
+    Product,
+    ProductListResponse,
+    CreateProductData,
+    ImageManagementHealth,
+    ImageManagementStatistics
+} from '../services'
 import { ProductModal } from './ProductModal'
 import { ConfirmDialog } from './ConfirmDialog'
+import { ProductDetail } from './ProductDetail'
 
 export function ProductList() {
     const [products, setProducts] = useState<Product[]>([])
@@ -12,6 +19,12 @@ export function ProductList() {
     const [modalMode, setModalMode] = useState<'create' | 'edit'>('create')
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [deleteProduct, setDeleteProduct] = useState<Product | null>(null)
+    const [detailProductId, setDetailProductId] = useState<string | null>(null)
+    const [imageStats, setImageStats] = useState<ImageManagementStatistics | null>(null)
+    const [imageHealth, setImageHealth] = useState<ImageManagementHealth | null>(null)
+    const [imageOpsLoading, setImageOpsLoading] = useState(false)
+    const [imageOpsError, setImageOpsError] = useState<string | null>(null)
+    const [cleanupMessage, setCleanupMessage] = useState<string | null>(null)
     const [pagination, setPagination] = useState({
         total: 0,
         limit: 20,
@@ -20,8 +33,16 @@ export function ProductList() {
     })
 
     useEffect(() => {
-        loadProducts()
+        void loadProducts()
+        void loadImageManagementOverview()
     }, [])
+
+    const getErrorMessage = (err: unknown, fallback: string): string => {
+        if (err && typeof err === 'object' && 'message' in err && typeof err.message === 'string') {
+            return err.message
+        }
+        return fallback
+    }
 
     const loadProducts = async () => {
         try {
@@ -35,6 +56,38 @@ export function ProductList() {
             console.error('Products loading error:', err)
         } finally {
             setLoading(false)
+        }
+    }
+
+    const loadImageManagementOverview = async () => {
+        try {
+            setImageOpsLoading(true)
+            setImageOpsError(null)
+            const [stats, health] = await Promise.all([
+                imageManagementService.getStatistics(),
+                imageManagementService.getHealth()
+            ])
+            setImageStats(stats)
+            setImageHealth(health)
+        } catch (err) {
+            setImageOpsError(getErrorMessage(err, 'Failed to load image management overview'))
+        } finally {
+            setImageOpsLoading(false)
+        }
+    }
+
+    const handleCleanupTemporaryImages = async () => {
+        try {
+            setImageOpsLoading(true)
+            setImageOpsError(null)
+            setCleanupMessage(null)
+            const response = await imageManagementService.cleanupTemporaryImages()
+            setCleanupMessage(response.message || 'Cleanup completed')
+            await loadImageManagementOverview()
+        } catch (err) {
+            setImageOpsError(getErrorMessage(err, 'Failed to cleanup temporary images'))
+        } finally {
+            setImageOpsLoading(false)
         }
     }
 
@@ -67,6 +120,10 @@ export function ProductList() {
 
     const handleDeleteProduct = (product: Product) => {
         setDeleteProduct(product)
+    }
+
+    const handleViewProduct = (product: Product) => {
+        setDetailProductId(product.productId)
     }
 
     const confirmDeleteProduct = async () => {
@@ -129,6 +186,55 @@ export function ProductList() {
                 </button>
             </div>
 
+            <div className="image-management-summary">
+                <div className="image-summary-header">
+                    <h3>Image Management System</h3>
+                    <div className="image-summary-actions">
+                        <button
+                            className="image-summary-btn"
+                            onClick={() => void loadImageManagementOverview()}
+                            disabled={imageOpsLoading}
+                        >
+                            Refresh
+                        </button>
+                        <button
+                            className="image-summary-btn danger"
+                            onClick={() => void handleCleanupTemporaryImages()}
+                            disabled={imageOpsLoading}
+                        >
+                            Cleanup Temporary Images
+                        </button>
+                    </div>
+                </div>
+                {imageOpsLoading && <p>Loading image management overview...</p>}
+                {imageOpsError && <p className="summary-error">{imageOpsError}</p>}
+                {cleanupMessage && <p className="summary-success">{cleanupMessage}</p>}
+                <div className="image-summary-grid">
+                    <div className="image-summary-item">
+                        <span className="label">Health</span>
+                        <span className="value">{imageHealth?.status || 'Unknown'}</span>
+                    </div>
+                    <div className="image-summary-item">
+                        <span className="label">Total Images</span>
+                        <span className="value">
+                            {typeof imageStats?.totalImages === 'number' ? imageStats.totalImages : '-'}
+                        </span>
+                    </div>
+                    <div className="image-summary-item">
+                        <span className="label">Pending Approvals</span>
+                        <span className="value">
+                            {typeof imageStats?.pendingApprovals === 'number' ? imageStats.pendingApprovals : '-'}
+                        </span>
+                    </div>
+                    <div className="image-summary-item">
+                        <span className="label">Failed Processing</span>
+                        <span className="value">
+                            {typeof imageStats?.failedProcessing === 'number' ? imageStats.failedProcessing : '-'}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
             {products.length === 0 ? (
                 <div className="empty-state">
                     <p>No products found</p>
@@ -176,6 +282,12 @@ export function ProductList() {
 
                                 <div className="product-actions">
                                     <button
+                                        className="view-btn"
+                                        onClick={() => handleViewProduct(product)}
+                                    >
+                                        View
+                                    </button>
+                                    <button
                                         className="edit-btn"
                                         onClick={() => handleEditProduct(product)}
                                     >
@@ -219,6 +331,13 @@ export function ProductList() {
                 confirmText="Delete"
                 type="danger"
             />
+
+            {detailProductId && (
+                <ProductDetail
+                    productId={detailProductId}
+                    onClose={() => setDetailProductId(null)}
+                />
+            )}
         </div>
     )
 }

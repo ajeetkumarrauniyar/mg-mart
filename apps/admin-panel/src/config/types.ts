@@ -34,12 +34,26 @@ export interface AdminEndpoints {
     SETTINGS: string;
 }
 
+export interface ImageManagementEndpoints {
+    DISCOVER_IMAGES: (productId: string) => string;
+    PROCESSING_STATUS: (productId: string) => string;
+    APPROVE_IMAGES: (productId: string) => string;
+    PRODUCT_IMAGES: (productId: string) => string;
+    DELETE_PRODUCT_IMAGE: (productId: string, imageId: string) => string;
+    SET_PRIMARY_IMAGE: (productId: string, imageId: string) => string;
+    RETRY_PROCESSING: (productId: string) => string;
+    STATISTICS: string;
+    HEALTH: string;
+    CLEANUP: string;
+}
+
 export interface ApiEndpoints {
     AUTH: AuthEndpoints;
     PRODUCTS: ProductEndpoints;
     ORDERS: OrderEndpoints;
     USERS: UserEndpoints;
     ADMIN: AdminEndpoints;
+    IMAGE_MANAGEMENT: ImageManagementEndpoints;
 }
 
 // Environment configuration interface
