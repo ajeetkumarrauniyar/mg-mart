@@ -9,7 +9,7 @@ import {
   Loader2,
   X,
 } from 'lucide-react'
-import { orderService } from '../services'
+import { orderService, userService } from '../services'
 import type { Order, OrderStatus, OrderStats, OrderFilters } from '../services'
 import {
   getValidNextStatuses,
@@ -93,8 +93,8 @@ function OrderModal({ order, onClose }: { order: Order; onClose: () => void }) {
         {/* Detail grid */}
         <div className="grid grid-cols-2 gap-4 text-sm">
           {[
-            { label: 'Customer', value: order.customerName || 'N/A' },
-            { label: 'Email', value: order.customerEmail || 'N/A' },
+            { label: 'Customer', value: order.customerName || (order.customerEmail ? order.customerEmail.split('@')[0] : 'Customer') },
+            { label: 'Email', value: order.customerEmail || '' },
             { label: 'Status', value: <StatusBadge status={order.status} /> },
             { label: 'Payment', value: order.paymentDetails?.paymentMethod || 'N/A' },
             { label: 'Total', value: `₹${order.totalAmount.toFixed(2)}` },
@@ -142,10 +142,11 @@ function OrderModal({ order, onClose }: { order: Order; onClose: () => void }) {
 }
 
 // ── Main component ────────────────────────────────────────────────────────────
-interface OrderManagementProps {}
+interface OrderManagementProps { }
 
 export function OrderManagement({ }: OrderManagementProps) {
   const [orders, setOrders] = useState<Order[]>([])
+  const [userNamesById, setUserNamesById] = useState<Record<string, string>>({})
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
@@ -170,6 +171,7 @@ export function OrderManagement({ }: OrderManagementProps) {
       setError(null)
       const response = await orderService.getOrders({ ...filters, search: searchTerm || undefined })
       setOrders(response.orders)
+      await resolveCustomerNames(response.orders)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load orders')
     } finally {
@@ -184,6 +186,39 @@ export function OrderManagement({ }: OrderManagementProps) {
     } catch {
       // fall through — stats will be calculated locally
     }
+  }
+
+  const resolveCustomerNames = async (orderList: Order[]) => {
+    const uniqueUserIds = Array.from(
+      new Set(orderList.map((order) => order.userId).filter((id): id is string => Boolean(id))),
+    )
+    const unresolvedIds = uniqueUserIds.filter((id) => !userNamesById[id])
+    if (unresolvedIds.length === 0) return
+
+    const lookups = await Promise.allSettled(
+      unresolvedIds.map(async (userId) => ({
+        userId,
+        user: await userService.getUserById(userId),
+      })),
+    )
+
+    const resolved: Record<string, string> = {}
+    for (const item of lookups) {
+      if (item.status === 'fulfilled' && item.value.user?.name?.trim()) {
+        resolved[item.value.userId] = item.value.user.name
+      }
+    }
+
+    if (Object.keys(resolved).length > 0) {
+      setUserNamesById((prev) => ({ ...prev, ...resolved }))
+    }
+  }
+
+  const getCustomerName = (order: Order): string => {
+    if (order.customerName?.trim()) return order.customerName
+    if (order.userId && userNamesById[order.userId]) return userNamesById[order.userId]
+    if (order.customerEmail?.trim()) return order.customerEmail.split('@')[0]
+    return 'Customer'
   }
 
   const calculateStatsFromOrders = (): OrderStats => ({
@@ -278,7 +313,7 @@ export function OrderManagement({ }: OrderManagementProps) {
   const filteredOrders = orders.filter(
     (o) =>
       o.orderId.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      o.customerName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      getCustomerName(o).toLowerCase().includes(searchTerm.toLowerCase()) ||
       o.customerEmail?.toLowerCase().includes(searchTerm.toLowerCase()),
   )
 
@@ -505,7 +540,7 @@ export function OrderManagement({ }: OrderManagementProps) {
                       </TableCell>
                       <TableCell className="font-mono text-sm">#{order.orderId.slice(-6)}</TableCell>
                       <TableCell>
-                        <p className="font-medium text-sm">{order.customerName || 'N/A'}</p>
+                        <p className="font-medium text-sm">{getCustomerName(order)}</p>
                         <p className="text-xs text-muted-foreground">{order.customerEmail || ''}</p>
                       </TableCell>
                       <TableCell className="text-sm">{order.items?.length ?? 0} items</TableCell>
@@ -556,3 +591,4 @@ export function OrderManagement({ }: OrderManagementProps) {
     </div>
   )
 }
+

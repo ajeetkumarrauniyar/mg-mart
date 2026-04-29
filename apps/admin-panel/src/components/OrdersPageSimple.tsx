@@ -300,8 +300,8 @@ export function OrdersPageSimple({ }: OrdersPageSimpleProps) {
                                         <td className="order-id">#{order.orderId.slice(-6)}</td>
                                         <td>
                                             <div className="customer-info">
-                                                <div className="customer-name">{order.customerName || 'N/A'}</div>
-                                                <div className="customer-email">{order.customerEmail || 'N/A'}</div>
+                                                <div className="customer-name">{order.customerName || (order.customerEmail ? order.customerEmail.split('@')[0] : 'Customer')}</div>
+                                                <div className="customer-email">{order.customerEmail || ''}</div>
                                             </div>
                                         </td>
                                         <td>{order.items?.length || 0} items</td>
@@ -386,10 +386,10 @@ function OrderModal({ order, onClose }: {
 
                     <div className="order-details">
                         <div className="detail-row">
-                            <strong>Customer:</strong> {order.customerName || 'N/A'}
+                            <strong>Customer:</strong> {order.customerName || (order.customerEmail ? order.customerEmail.split('@')[0] : 'Customer')}
                         </div>
                         <div className="detail-row">
-                            <strong>Email:</strong> {order.customerEmail || 'N/A'}
+                            <strong>Email:</strong> {order.customerEmail || ''}
                         </div>
                         <div className="detail-row">
                             <strong>Total:</strong> ${order.totalAmount.toFixed(2)}

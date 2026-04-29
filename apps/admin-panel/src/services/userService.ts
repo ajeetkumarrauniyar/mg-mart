@@ -69,4 +69,11 @@ export const userService = {
             throw error;
         }
     },
+
+    // Get User by Id
+    getUserById: async (userId: string): Promise<User> => {
+        return await api.get<User>(
+            config.api.ENDPOINTS.USERS.DETAIL(userId)
+        );
+    },
 };
