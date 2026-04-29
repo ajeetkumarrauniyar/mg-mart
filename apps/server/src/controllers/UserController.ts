@@ -273,7 +273,7 @@ export class UserController {
         throw new ApiError("User ID is required", 400);
       }
 
-      const user = await this.userRepository.findById(userId);
+      const user = await this.userRepository.findById(userId as string);
       if (!user) {
         throw new ApiError("User not found", 404);
       }
