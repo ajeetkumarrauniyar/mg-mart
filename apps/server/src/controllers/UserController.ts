@@ -259,7 +259,34 @@ export class UserController {
       next(error);
     }
   };
+  /**
+   * Get user by ID
+   */
+  getUserById = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      const userId = req.params.userId;
+      if (!userId) {
+        throw new ApiError("User ID is required", 400);
+      }
 
+      const user = await this.userRepository.findById(userId);
+      if (!user) {
+        throw new ApiError("User not found", 404);
+      }
+
+      res.json({
+        success: true,
+        message: "User fetched successfully",
+        data: user,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
   /**
    * Update user profile
    * Allows partial updates to user information

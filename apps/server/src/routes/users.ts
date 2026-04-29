@@ -9,7 +9,7 @@
 
 import { Router } from "express";
 import { UserController } from "../controllers/index.js";
-import { authenticateToken } from "../middleware/auth.js";
+import { authenticateToken, requireAdmin } from "../middleware/auth.js";
 
 const router: Router = Router();
 const userController = new UserController();
@@ -20,6 +20,7 @@ router.use(authenticateToken);
 // User profile routes
 router.get("/profile", userController.getProfile);
 router.put("/profile", userController.updateProfile);
+router.get("/:userId", requireAdmin, userController.getUserById);
 router.put("/change-password", userController.changePassword);
 router.delete("/account", userController.deleteAccount);
 
