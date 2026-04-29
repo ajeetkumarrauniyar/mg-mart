@@ -1,71 +1,37 @@
+import { Badge } from '@/components/ui/badge'
 import type { OrderStatus } from '../services'
-import './OrderStatusBadge.css'
 
 interface OrderStatusBadgeProps {
-    status: OrderStatus
-    size?: 'sm' | 'md' | 'lg'
-    interactive?: boolean
-    onClick?: () => void
+  status: OrderStatus
+  size?: 'sm' | 'md' | 'lg'
+  interactive?: boolean
+  onClick?: () => void
 }
 
-export function OrderStatusBadge({
-    status,
-    size = 'md',
-    interactive = false,
-    onClick
-}: OrderStatusBadgeProps) {
-    const getStatusConfig = (status: OrderStatus) => {
-        switch (status) {
-            case 'pending':
-                return {
-                    label: 'Pending',
-                    className: 'status-pending',
-                    icon: '⏳'
-                }
-            case 'processing':
-                return {
-                    label: 'Processing',
-                    className: 'status-processing',
-                    icon: '⚙️'
-                }
-            case 'shipped':
-                return {
-                    label: 'Shipped',
-                    className: 'status-shipped',
-                    icon: '🚚'
-                }
-            case 'delivered':
-                return {
-                    label: 'Delivered',
-                    className: 'status-delivered',
-                    icon: '✅'
-                }
-            case 'cancelled':
-                return {
-                    label: 'Cancelled',
-                    className: 'status-cancelled',
-                    icon: '❌'
-                }
-            default:
-                return {
-                    label: 'Unknown',
-                    className: 'status-unknown',
-                    icon: '❓'
-                }
-        }
-    }
+const STATUS_CONFIG: Record<OrderStatus | 'unknown', { label: string; icon: string; className: string }> = {
+  pending: { label: 'Pending', icon: '⏳', className: 'border-yellow-400/40 bg-yellow-50 text-yellow-700 hover:bg-yellow-100' },
+  processing: { label: 'Processing', icon: '⚙️', className: 'border-blue-400/40 bg-blue-50 text-blue-700 hover:bg-blue-100' },
+  confirmed: { label: 'Confirmed', icon: '✔️', className: 'border-indigo-400/40 bg-indigo-50 text-indigo-700 hover:bg-indigo-100' },
+  out_for_delivery: { label: 'Out for Delivery', icon: '🚚', className: 'border-orange-400/40 bg-orange-50 text-orange-700 hover:bg-orange-100' },
+  shipped: { label: 'Shipped', icon: '🚚', className: 'border-orange-400/40 bg-orange-50 text-orange-700 hover:bg-orange-100' },
+  delivered: { label: 'Delivered', icon: '✅', className: 'border-green-400/40 bg-green-50 text-green-700 hover:bg-green-100' },
+  cancelled: { label: 'Cancelled', icon: '❌', className: 'border-red-400/40 bg-red-50 text-red-700 hover:bg-red-100' },
+  unknown: { label: 'Unknown', icon: '❓', className: '' },
+}
 
-    const config = getStatusConfig(status)
+export function OrderStatusBadge({ status, interactive = false, onClick }: OrderStatusBadgeProps) {
+  const config = STATUS_CONFIG[status] ?? STATUS_CONFIG.unknown
 
-    return (
-        <span
-            className={`status-badge ${config.className} size-${size} ${interactive ? 'interactive' : ''}`}
-            onClick={interactive ? onClick : undefined}
-            role={interactive ? 'button' : undefined}
-            tabIndex={interactive ? 0 : undefined}
-        >
-            <span className="status-icon">{config.icon}</span>
-            <span className="status-text">{config.label}</span>
-        </span>
-    )
+  return (
+    <Badge
+      variant="outline"
+      className={`gap-1 ${config.className} ${interactive ? 'cursor-pointer' : ''}`}
+      onClick={interactive ? onClick : undefined}
+      role={interactive ? 'button' : undefined}
+      tabIndex={interactive ? 0 : undefined}
+    >
+      <span>{config.icon}</span>
+      <span>{config.label}</span>
+    </Badge>
+  )
 }

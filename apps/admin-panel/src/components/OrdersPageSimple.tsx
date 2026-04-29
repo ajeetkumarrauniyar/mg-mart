@@ -8,7 +8,7 @@ import {
     getStatusConfig
 } from '../utils/orderStatusUtils'
 import { OrderStatusWorkflow } from './OrderStatusWorkflow'
-import './OrdersPage.css'
+
 
 interface OrdersPageSimpleProps { }
 

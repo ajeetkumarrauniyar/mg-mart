@@ -1,467 +1,365 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { RefreshCw, Search, Users, AlertCircle, Loader2 } from 'lucide-react'
 import { userService } from '../services'
 import type { User, UpdateUserData } from '../services'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Badge } from '@/components/ui/badge'
+import { Card, CardContent, CardDescription, CardHeader } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
 
 interface UserModalProps {
-    isOpen: boolean
-    onClose: () => void
-    onSave: (userData: UpdateUserData) => Promise<void>
-    user?: User | null
+  isOpen: boolean
+  onClose: () => void
+  onSave: (userData: UpdateUserData) => Promise<void>
+  user?: User | null
 }
 
 function UserModal({ isOpen, onClose, onSave, user }: UserModalProps) {
-    const [formData, setFormData] = useState<UpdateUserData & { email?: string }>({
-        firstName: '',
-        lastName: '',
-        email: '',
-        phone: '',
-        role: 'customer'
-    })
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState<string | null>(null)
+  const [formData, setFormData] = useState<UpdateUserData & { email?: string }>({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    role: 'customer',
+  })
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
-    useEffect(() => {
-        if (user) {
-            const nameParts = user.name.split(' ')
-            setFormData({
-                firstName: nameParts[0] || '',
-                lastName: nameParts.slice(1).join(' ') || '',
-                email: user.email,
-                phone: user.phoneNumber || '',
-                role: user.role === 'super_admin' ? 'admin' : user.role
-            })
-        }
-        setError(null)
-    }, [user, isOpen])
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value } = e.target
-        setFormData(prev => ({ ...prev, [name]: value }))
+  useEffect(() => {
+    if (user) {
+      const nameParts = user.name.split(' ')
+      setFormData({
+        firstName: nameParts[0] || '',
+        lastName: nameParts.slice(1).join(' ') || '',
+        email: user.email,
+        phone: user.phoneNumber || '',
+        role: user.role === 'super_admin' ? 'admin' : user.role,
+      })
     }
+    setError(null)
+  }, [user, isOpen])
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-        setLoading(true)
-        setError(null)
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setFormData((prev) => ({ ...prev, [name]: value }))
+  }
 
-        try {
-            if (!formData.firstName?.trim() || !formData.lastName?.trim()) {
-                throw new Error('First name and last name are required')
-            }
-
-            await onSave(formData)
-            onClose()
-        } catch (err) {
-            setError(err instanceof Error ? err.message : 'Failed to save user')
-            console.error('User save error:', err)
-        } finally {
-            setLoading(false)
-        }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
+    try {
+      if (!formData.firstName?.trim() || !formData.lastName?.trim()) {
+        throw new Error('First name and last name are required')
+      }
+      await onSave(formData)
+      onClose()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to save user')
+    } finally {
+      setLoading(false)
     }
+  }
 
-    if (!isOpen) return null
-
-    return (
-        <div className="modal-overlay" onClick={onClose}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                <div className="modal-header">
-                    <h2>Edit User</h2>
-                    <button className="close-btn" onClick={onClose}>&times;</button>
-                </div>
-
-                <form onSubmit={handleSubmit} className="user-form">
-                    <div className="form-row">
-                        <div className="form-group">
-                            <label htmlFor="firstName">First Name *</label>
-                            <input
-                                type="text"
-                                id="firstName"
-                                name="firstName"
-                                value={formData.firstName}
-                                onChange={handleChange}
-                                required
-                                disabled={loading}
-                            />
-                        </div>
-
-                        <div className="form-group">
-                            <label htmlFor="lastName">Last Name *</label>
-                            <input
-                                type="text"
-                                id="lastName"
-                                name="lastName"
-                                value={formData.lastName}
-                                onChange={handleChange}
-                                required
-                                disabled={loading}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="email">Email *</label>
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            disabled={true}
-                            placeholder="user@example.com"
-                        />
-                        <small className="form-note">Email cannot be changed</small>
-                    </div>
-
-                    <div className="form-row">
-                        <div className="form-group">
-                            <label htmlFor="phone">Phone Number</label>
-                            <input
-                                type="tel"
-                                id="phone"
-                                name="phone"
-                                value={formData.phone}
-                                onChange={handleChange}
-                                disabled={loading}
-                                placeholder="+1234567890"
-                            />
-                        </div>
-
-                        <div className="form-group">
-                            <label htmlFor="role">Role *</label>
-                            <select
-                                id="role"
-                                name="role"
-                                value={formData.role}
-                                onChange={handleChange}
-                                required
-                                disabled={loading}
-                            >
-                                <option value="customer">Customer</option>
-                                <option value="admin">Admin</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div className="edit-warning">
-                        ℹ️ <strong>Note:</strong> User updates use the profile endpoint. Role updates may have limitations.
-                    </div>
-
-                    {error && (
-                        <div className="error-message">
-                            {error}
-                        </div>
-                    )}
-
-                    <div className="modal-actions">
-                        <button type="button" onClick={onClose} disabled={loading} className="cancel-btn">
-                            Cancel
-                        </button>
-                        <button type="submit" disabled={loading} className="save-btn">
-                            {loading ? 'Saving...' : 'Update User'}
-                        </button>
-                    </div>
-                </form>
+  return (
+    <Dialog open={isOpen} onOpenChange={(open) => { if (!open) onClose() }}>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle>Edit Customer</DialogTitle>
+        </DialogHeader>
+        <form id="user-form" onSubmit={(e) => void handleSubmit(e)} className="space-y-4 py-2">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="firstName">First Name *</Label>
+              <Input id="firstName" name="firstName" value={formData.firstName} onChange={handleChange} required disabled={loading} />
             </div>
-        </div>
-    )
+            <div className="space-y-2">
+              <Label htmlFor="lastName">Last Name *</Label>
+              <Input id="lastName" name="lastName" value={formData.lastName} onChange={handleChange} required disabled={loading} />
+            </div>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="userEmail">Email</Label>
+            <Input id="userEmail" name="email" type="email" value={formData.email ?? ''} disabled className="bg-muted/50 text-muted-foreground" />
+            <p className="text-xs text-muted-foreground">Email cannot be changed</p>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="phone">Phone</Label>
+              <Input id="phone" name="phone" type="tel" value={formData.phone ?? ''} onChange={handleChange} disabled={loading} placeholder="+91" />
+            </div>
+            <div className="space-y-2">
+              <Label>Role *</Label>
+              <Select
+                value={formData.role ?? 'customer'}
+                onValueChange={(v) => setFormData((prev) => ({ ...prev, role: v as 'customer' | 'admin' }))}
+                disabled={loading}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="customer">Customer</SelectItem>
+                  <SelectItem value="admin">Admin</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          {error && (
+            <div className="flex items-start gap-2 rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+              <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
+              <span>{error}</span>
+            </div>
+          )}
+        </form>
+        <DialogFooter>
+          <Button type="button" variant="outline" onClick={onClose} disabled={loading}>Cancel</Button>
+          <Button type="submit" form="user-form" disabled={loading}>
+            {loading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Saving…</> : 'Save Changes'}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
 }
 
 export function UserList() {
-    const [users, setUsers] = useState<User[]>([])
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState<string | null>(null)
-    const [selectedUser, setSelectedUser] = useState<User | null>(null)
-    const [isModalOpen, setIsModalOpen] = useState(false)
-    const [searchTerm, setSearchTerm] = useState('')
-    const [roleFilter, setRoleFilter] = useState<'all' | 'customer' | 'admin'>('all')
-    const [apiStatus, setApiStatus] = useState<'success' | 'error' | 'fallback' | null>(null)
+  const [users, setUsers] = useState<User[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [selectedUser, setSelectedUser] = useState<User | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [roleFilter, setRoleFilter] = useState<'all' | 'customer' | 'admin'>('all')
 
-    useEffect(() => {
-        loadUsers()
-    }, [])
+  useEffect(() => { void loadUsers() }, [])
 
-    const loadUsers = async () => {
-        try {
-            setLoading(true)
-            setError(null)
-            setApiStatus(null)
-
-            // Load all users without filters - we'll filter client-side
-            const response = await userService.getUsers()
-
-            // Handle both array response and object response with users property
-            const usersData = Array.isArray(response) ? response : response.users || []
-
-            console.log('✅ Users loaded from API:', usersData.length, 'users')
-            setUsers(usersData)
-            setApiStatus('success')
-        } catch (err) {
-            console.error('❌ Users loading error:', err)
-            setError(err instanceof Error ? err.message : 'Failed to load users')
-            setApiStatus('error')
-        } finally {
-            setLoading(false)
-        }
+  const loadUsers = async () => {
+    try {
+      setLoading(true)
+      setError(null)
+      const response = await userService.getUsers()
+      const usersData = Array.isArray(response) ? response : response.users || []
+      setUsers(usersData)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load customers')
+    } finally {
+      setLoading(false)
     }
+  }
 
-    const formatDate = (dateString: string | { _seconds: number; _nanoseconds: number }) => {
-        let date: Date
+  const formatDate = (dateValue: string | { _seconds: number; _nanoseconds: number }) => {
+    const date = typeof dateValue === 'string' ? new Date(dateValue) : new Date(dateValue._seconds * 1000)
+    return date.toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })
+  }
 
-        if (typeof dateString === 'string') {
-            date = new Date(dateString)
-        } else {
-            date = new Date(dateString._seconds * 1000)
-        }
+  const formatCurrency = (amount: number) =>
+    new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(amount)
 
-        return date.toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        })
+  const filteredUsers = useMemo(
+    () =>
+      users.filter((user) => {
+        const normalizedRole = user.role === 'super_admin' ? 'admin' : user.role
+        const matchesRole = roleFilter === 'all' || normalizedRole === roleFilter
+        const matchesSearch =
+          !searchTerm.trim() ||
+          user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          (user.phoneNumber || '').toLowerCase().includes(searchTerm.toLowerCase())
+        return matchesRole && matchesSearch
+      }),
+    [users, roleFilter, searchTerm],
+  )
+
+  const stats = useMemo(() => {
+    const customers = filteredUsers.filter((u) => u.role === 'customer')
+    const totalOrders = customers.reduce((sum, u) => sum + (u.orderCount || 0), 0)
+    const highValue = customers.filter((u) => (u.totalSpent || 0) >= 10000).length
+    return {
+      total: filteredUsers.length,
+      customers: customers.length,
+      admins: filteredUsers.filter((u) => u.role === 'admin' || u.role === 'super_admin').length,
+      highValue,
+      totalOrders,
     }
+  }, [filteredUsers])
 
-    const formatCurrency = (amount: number) => {
-        return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD'
-        }).format(amount)
-    }
+  const handleEditUser = (user: User) => { setSelectedUser(user); setIsModalOpen(true) }
 
-    const getTimeAgo = (dateString: string) => {
-        const date = new Date(dateString)
-        const now = new Date()
-        const diffInMs = now.getTime() - date.getTime()
-        const diffInMinutes = Math.floor(diffInMs / (1000 * 60))
-        const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60))
-        const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24))
+  const handleSaveUser = async (userData: UpdateUserData) => {
+    if (!selectedUser) return
+    const updatedUser = await userService.updateUser(selectedUser.userId, userData)
+    const mergedUser: User = { ...selectedUser, ...updatedUser, userId: selectedUser.userId }
+    setUsers((prev) => prev.map((u) => (u.userId === selectedUser.userId ? mergedUser : u)))
+  }
 
-        if (diffInMinutes < 60) {
-            return `${diffInMinutes} ${diffInMinutes === 1 ? 'minute' : 'minutes'} ago`
-        } else if (diffInHours < 24) {
-            return `${diffInHours} ${diffInHours === 1 ? 'hour' : 'hours'} ago`
-        } else if (diffInDays < 30) {
-            return `${diffInDays} ${diffInDays === 1 ? 'day' : 'days'} ago`
-        } else {
-            return formatDate(dateString)
-        }
-    }
-
-    const handleEditUser = (user: User) => {
-        setSelectedUser(user)
-        setIsModalOpen(true)
-    }
-
-    const handleSaveUser = async (userData: UpdateUserData) => {
-        if (!selectedUser) return
-
-        try {
-            console.log('🔄 Updating user:', selectedUser.userId, userData)
-
-            const updatedUser = await userService.updateUser(selectedUser.userId, userData)
-
-            // Update local state with API response
-            const userToUpdate = {
-                ...updatedUser,
-                userId: selectedUser.userId // Preserve original userId
-            }
-
-            setUsers(prev => prev.map(u =>
-                u.userId === selectedUser.userId ? userToUpdate : u
-            ))
-
-            console.log('✅ User updated successfully')
-        } catch (err) {
-            console.error('❌ User save error:', err)
-            throw new Error(err instanceof Error ? err.message : 'Failed to save user')
-        }
-    }
-
-    const closeModal = () => {
-        setIsModalOpen(false)
-        setSelectedUser(null)
-    }
-
-    // Client-side filtering for better UX (no loading states on search/filter changes)
-    const filteredUsers = users.filter(user => {
-        // Role filter
-        if (roleFilter !== 'all' && user.role !== roleFilter) {
-            return false
-        }
-
-        // Search filter (name, phone and email)
-        if (searchTerm.trim()) {
-            const searchLower = searchTerm.toLowerCase()
-            const nameMatch = user.name.toLowerCase().includes(searchLower)
-            const emailMatch = user.email.toLowerCase().includes(searchLower)
-            const phoneMatch = user.phoneNumber?.toLowerCase().includes(searchLower) || false
-            return nameMatch || emailMatch || phoneMatch
-        }
-
-        return true
-    })
-
-    if (loading) {
-        return (
-            <div className="users-container">
-                <div className="loading">Loading users...</div>
-            </div>
-        )
-    }
-
-    if (error) {
-        return (
-            <div className="users-container">
-                <div className="error">
-                    <p>Error: {error}</p>
-                    <button onClick={loadUsers} className="retry-btn">
-                        Retry
-                    </button>
-                </div>
-            </div>
-        )
-    }
-
-    return (
-        <div className="users-container">
-            <div className="users-header">
-                <h2>Users ({filteredUsers.length})</h2>
-                <div className="header-actions">
-                    <button className="refresh-btn" onClick={loadUsers} disabled={loading}>
-                        {loading ? '🔄' : '↻'} Refresh
-                    </button>
-                </div>
-            </div>
-
-            <div className="users-filters">
-                <div className="search-box">
-                    <input
-                        type="text"
-                        placeholder="Search users by name, email, or phone..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="search-input"
-                    />
-                </div>
-
-                <div className="role-filter">
-                    <select
-                        value={roleFilter}
-                        onChange={(e) => setRoleFilter(e.target.value as 'all' | 'customer' | 'admin')}
-                        className="filter-select"
-                    >
-                        <option value="all">All Roles</option>
-                        <option value="customer">Customers</option>
-                        <option value="admin">Admins</option>
-                    </select>
-                </div>
-            </div>
-
-            {apiStatus && (
-                <div className={`api-status ${apiStatus}`}>
-                    {apiStatus === 'success' && (
-                        <>
-                            ✅ <span>Data loaded from API successfully</span>
-                        </>
-                    )}
-                    {apiStatus === 'error' && (
-                        <>
-                            ❌ <span>API connection failed</span>
-                        </>
-                    )}
-                </div>
-            )}
-
-            {filteredUsers.length === 0 ? (
-                <div className="empty-state">
-                    <p>No users found</p>
-                </div>
-            ) : (
-                <div className="users-table-container">
-                    <table className="users-table">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Phone</th>
-                                <th>Role</th>
-                                <th>Orders</th>
-                                <th>Total Spent</th>
-                                <th>Last Order</th>
-                                <th>Created</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {filteredUsers.map((user) => (
-                                <tr key={user.userId}>
-                                    <td className="user-name">
-                                        <div className="user-info">
-                                            <span className="name">{user.name}</span>
-                                            <span className="user-id">ID: {user.userId.slice(-8)}</span>
-                                        </div>
-                                    </td>
-                                    <td className="user-email">{user.email}</td>
-                                    <td className="user-phone">{user.phoneNumber || 'N/A'}</td>
-                                    <td className="user-role">
-                                        <span className={`role-badge ${user.role}`}>
-                                            {user.role}
-                                        </span>
-                                    </td>
-                                    <td className="user-orders">
-                                        {user.role === 'customer' && user.orderCount !== undefined ? (
-                                            <div className="order-info">
-                                                <span className="order-count">{user.orderCount}</span>
-                                                <span className="order-label">Orders</span>
-                                            </div>
-                                        ) : (
-                                            <span className="not-applicable">N/A</span>
-                                        )}
-                                    </td>
-                                    <td className="user-spent">
-                                        {user.role === 'customer' && user.totalSpent !== undefined ? (
-                                            <div className="spent-info">
-                                                <span className="spent-amount">{formatCurrency(user.totalSpent)}</span>
-                                                <span className="spent-label">Spent</span>
-                                            </div>
-                                        ) : (
-                                            <span className="not-applicable">N/A</span>
-                                        )}
-                                    </td>
-                                    <td className="user-last-order">
-                                        {user.role === 'customer' && user.lastOrderDate ? (
-                                            <div className="last-order-info">
-                                                <span className="last-order-time">{getTimeAgo(user.lastOrderDate)}</span>
-                                                <span className="last-order-id">#{user.lastOrderId?.slice(-6)}</span>
-                                            </div>
-                                        ) : (
-                                            <span className="not-applicable">N/A</span>
-                                        )}
-                                    </td>
-                                    <td className="user-created">{formatDate(user.createdAt)}</td>
-                                    <td className="user-actions">
-                                        <button
-                                            className="edit-btn"
-                                            onClick={() => handleEditUser(user)}
-                                            title="Edit user"
-                                        >
-                                            Edit
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            )}
-
-            <UserModal
-                isOpen={isModalOpen}
-                onClose={closeModal}
-                onSave={handleSaveUser}
-                user={selectedUser}
-            />
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold">Customers</h2>
+          <p className="text-muted-foreground text-sm mt-0.5">Simple customer list for quick support and account checks.</p>
         </div>
-    )
+        <Button variant="outline" size="sm" className="gap-2" onClick={() => void loadUsers()}>
+          <RefreshCw className="h-3.5 w-3.5" />
+          Refresh
+        </Button>
+      </div>
+
+      {/* KPI strip */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {[
+          { label: 'Visible Users', value: stats.total },
+          { label: 'Customers', value: stats.customers },
+          { label: 'Admins', value: stats.admins },
+          { label: 'High Value (≥₹10k)', value: stats.highValue },
+        ].map((kpi) => (
+          <Card key={kpi.label}>
+            <CardHeader className="pb-2">
+              <CardDescription>{kpi.label}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-2xl font-bold">{kpi.value}</p>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {/* Error */}
+      {error && (
+        <div className="flex items-start gap-2 rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+          <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
+          <span>{error}</span>
+          <Button variant="link" size="sm" className="ml-auto text-destructive h-auto p-0" onClick={() => void loadUsers()}>Retry</Button>
+        </div>
+      )}
+
+      {/* Filters */}
+      <div className="flex flex-wrap items-center gap-3">
+        <div className="relative flex-1 min-w-[220px] max-w-sm">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Search name, email or phone"
+            className="pl-9"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+        <Select value={roleFilter} onValueChange={(v) => setRoleFilter(v as 'all' | 'customer' | 'admin')}>
+          <SelectTrigger className="w-36">
+            <SelectValue placeholder="All Roles" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Roles</SelectItem>
+            <SelectItem value="customer">Customers</SelectItem>
+            <SelectItem value="admin">Admins</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Table */}
+      <Card>
+        <CardHeader className="py-3 px-4">
+          <p className="text-sm text-muted-foreground">
+            {filteredUsers.length} users shown · Total orders: {stats.totalOrders}
+          </p>
+        </CardHeader>
+        <CardContent className="p-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Name</TableHead>
+                <TableHead>Email</TableHead>
+                <TableHead>Phone</TableHead>
+                <TableHead>Role</TableHead>
+                <TableHead>Orders</TableHead>
+                <TableHead>Total Spent</TableHead>
+                <TableHead>Joined</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {loading ? (
+                Array.from({ length: 5 }).map((_, i) => (
+                  <TableRow key={i}>
+                    {Array.from({ length: 8 }).map((_, j) => (
+                      <TableCell key={j}><Skeleton className="h-4 w-full" /></TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : filteredUsers.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={8} className="text-center py-16">
+                    <Users className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+                    <p className="text-muted-foreground">No users match your filters.</p>
+                  </TableCell>
+                </TableRow>
+              ) : (
+                filteredUsers.map((user) => {
+                  const normalizedRole = user.role === 'super_admin' ? 'admin' : user.role
+                  return (
+                    <TableRow key={user.userId}>
+                      <TableCell>
+                        <p className="font-medium text-sm">{user.name}</p>
+                        <p className="text-xs text-muted-foreground font-mono">ID: {user.userId.slice(-8)}</p>
+                      </TableCell>
+                      <TableCell className="text-sm">{user.email}</TableCell>
+                      <TableCell className="text-sm text-muted-foreground">{user.phoneNumber || 'N/A'}</TableCell>
+                      <TableCell>
+                        <Badge variant={normalizedRole === 'admin' ? 'default' : 'secondary'}>
+                          {normalizedRole}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-sm">{user.orderCount ?? 0}</TableCell>
+                      <TableCell className="text-sm font-medium">
+                        {user.totalSpent ? formatCurrency(user.totalSpent) : 'N/A'}
+                      </TableCell>
+                      <TableCell className="text-sm text-muted-foreground">{formatDate(user.createdAt)}</TableCell>
+                      <TableCell>
+                        <div className="flex justify-end">
+                          <Button variant="outline" size="sm" onClick={() => handleEditUser(user)}>Edit</Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  )
+                })
+              )}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+
+      <UserModal
+        isOpen={isModalOpen}
+        onClose={() => { setIsModalOpen(false); setSelectedUser(null) }}
+        onSave={handleSaveUser}
+        user={selectedUser}
+      />
+    </div>
+  )
 }

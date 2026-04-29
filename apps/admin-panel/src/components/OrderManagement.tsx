@@ -1,602 +1,558 @@
 import { useState, useEffect, useCallback } from 'react'
+import {
+  RefreshCw,
+  Search,
+  Filter,
+  Download,
+  ShoppingCart,
+  AlertCircle,
+  Loader2,
+  X,
+} from 'lucide-react'
 import { orderService } from '../services'
 import type { Order, OrderStatus, OrderStats, OrderFilters } from '../services'
 import {
-    getValidNextStatuses,
-    isValidStatusTransition,
-    getStatusTransitionError,
-    getStatusConfig
+  getValidNextStatuses,
+  isValidStatusTransition,
+  getStatusTransitionError,
+  getStatusConfig,
 } from '../utils/orderStatusUtils'
 import { OrderStatusWorkflow } from './OrderStatusWorkflow'
-import './OrdersPage.css'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Badge } from '@/components/ui/badge'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
 
-interface OrderManagementProps { }
-
-/**
- * Comprehensive Order Management Component
- * Combines features from OrdersPage, OrdersPageSimple, and OrderTest
- * Works with your current API and gracefully handles optional features
- */
-export function OrderManagement({ }: OrderManagementProps) {
-    const [orders, setOrders] = useState<Order[]>([])
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState<string | null>(null)
-    const [searchTerm, setSearchTerm] = useState('')
-    const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
-    const [showModal, setShowModal] = useState(false)
-    const [stats, setStats] = useState<OrderStats | null>(null)
-    const [selectedOrders, setSelectedOrders] = useState<Set<string>>(new Set())
-    const [bulkLoading, setBulkLoading] = useState(false)
-    const [filters, setFilters] = useState<OrderFilters>({
-        limit: 20,
-        page: 1
-    })
-    const [showFilters, setShowFilters] = useState(false)
-    const [exportLoading, setExportLoading] = useState(false)
-    const [statusUpdateError, setStatusUpdateError] = useState<string | null>(null)
-
-    useEffect(() => {
-        loadOrders()
-        loadStats()
-    }, [filters])
-
-    const loadOrders = async () => {
-        try {
-            setLoading(true)
-            setError(null)
-
-            const response = await orderService.getOrders({
-                ...filters,
-                search: searchTerm || undefined
-            })
-
-            setOrders(response.orders)
-        } catch (err) {
-            setError(err instanceof Error ? err.message : 'Failed to load orders')
-            console.error('Orders loading error:', err)
-        } finally {
-            setLoading(false)
-        }
-    }
-
-    const loadStats = async () => {
-        try {
-            const statsData = await orderService.getOrderStats()
-            setStats(statsData) // Will be null if endpoint not available
-        } catch (err) {
-            console.error('Stats loading error:', err)
-            // Calculate stats from current orders if server stats not available
-            if (orders.length > 0) {
-                const calculatedStats = calculateStatsFromOrders()
-                setStats(calculatedStats)
-            }
-        }
-    }
-
-    const calculateStatsFromOrders = (): OrderStats => {
-        const totalOrders = orders.length
-        const totalRevenue = orders.reduce((sum, order) => sum + order.totalAmount, 0)
-        const averageOrderValue = totalOrders > 0 ? totalRevenue / totalOrders : 0
-
-        const statusBreakdown = {
-            pending: orders.filter(o => o.status === 'pending').length,
-            processing: orders.filter(o => o.status === 'processing').length,
-            shipped: orders.filter(o => o.status === 'shipped').length,
-            delivered: orders.filter(o => o.status === 'delivered').length,
-            cancelled: orders.filter(o => o.status === 'cancelled').length,
-        }
-
-        return {
-            totalOrders,
-            totalRevenue,
-            averageOrderValue,
-            statusBreakdown
-        }
-    }
-
-    const handleStatusUpdate = async (orderId: string, newStatus: OrderStatus) => {
-        try {
-            setStatusUpdateError(null)
-
-            // Find the current order to check status transition
-            const currentOrder = orders.find(order => order.orderId === orderId)
-            if (currentOrder && !isValidStatusTransition(currentOrder.status, newStatus)) {
-                const errorMessage = getStatusTransitionError(currentOrder.status, newStatus)
-                setStatusUpdateError(errorMessage)
-                return
-            }
-
-            await orderService.updateOrderStatus(orderId, newStatus)
-            await loadOrders() // Refresh the list
-            await loadStats() // Refresh stats
-        } catch (err) {
-            console.error('Status update error:', err)
-            const errorMessage = err instanceof Error ? err.message : 'Failed to update order status'
-            setStatusUpdateError(errorMessage)
-        }
-    }
-
-    const handleBulkStatusUpdate = async (newStatus: OrderStatus) => {
-        if (selectedOrders.size === 0) return
-
-        try {
-            setBulkLoading(true)
-            const orderIds = Array.from(selectedOrders)
-
-            const result = await orderService.bulkUpdateStatus(orderIds, newStatus)
-
-            if (result === null) {
-                // Bulk update not available, update individually
-                for (const orderId of orderIds) {
-                    try {
-                        await orderService.updateOrderStatus(orderId, newStatus)
-                    } catch (err) {
-                        console.error(`Failed to update order ${orderId}:`, err)
-                    }
-                }
-            }
-
-            setSelectedOrders(new Set())
-            await loadOrders()
-            await loadStats()
-        } catch (err) {
-            console.error('Bulk update error:', err)
-            setStatusUpdateError('Failed to update selected orders')
-        } finally {
-            setBulkLoading(false)
-        }
-    }
-
-    const handleExport = async () => {
-        try {
-            setExportLoading(true)
-
-            const blob = await orderService.exportOrders(filters)
-
-            if (blob === null) {
-                setStatusUpdateError('Export feature is not available')
-                return
-            }
-
-            // Create download link
-            const url = window.URL.createObjectURL(blob)
-            const link = document.createElement('a')
-            link.href = url
-            link.download = `orders-${new Date().toISOString().split('T')[0]}.csv`
-            document.body.appendChild(link)
-            link.click()
-            document.body.removeChild(link)
-            window.URL.revokeObjectURL(url)
-        } catch (err) {
-            console.error('Export error:', err)
-            setStatusUpdateError('Failed to export orders')
-        } finally {
-            setExportLoading(false)
-        }
-    }
-
-    const handleSearch = useCallback(() => {
-        setFilters(prev => ({ ...prev, page: 1 }))
-        loadOrders()
-    }, [searchTerm])
-
-    const handleSelectOrder = (orderId: string) => {
-        const newSelected = new Set(selectedOrders)
-        if (newSelected.has(orderId)) {
-            newSelected.delete(orderId)
-        } else {
-            newSelected.add(orderId)
-        }
-        setSelectedOrders(newSelected)
-    }
-
-    const handleSelectAll = () => {
-        if (selectedOrders.size === orders.length) {
-            setSelectedOrders(new Set())
-        } else {
-            setSelectedOrders(new Set(orders.map(order => order.orderId)))
-        }
-    }
-
-    const filteredOrders = orders.filter(order =>
-        order.orderId.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        order.customerName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        order.customerEmail?.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-
-    const formatCurrency = (amount: number) => {
-        return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD'
-        }).format(amount)
-    }
-
-    const formatDate = (dateString: string) => {
-        return new Date(dateString).toLocaleDateString('en-US', {
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric'
-        })
-    }
-
-    const getStatusColor = (status: string) => {
-        switch (status.toLowerCase()) {
-            case 'delivered': return 'status-delivered'
-            case 'processing': return 'status-processing'
-            case 'pending': return 'status-pending'
-            case 'shipped': return 'status-shipped'
-            case 'cancelled': return 'status-cancelled'
-            case 'confirmed': return 'status-processing'
-            default: return 'status-pending'
-        }
-    }
-
-    // Use server stats if available, otherwise calculate from current data
-    const displayStats = stats || calculateStatsFromOrders()
-
-    return (
-        <div className="orders-page">
-            <div className="page-header">
-                <h2>Orders Management</h2>
-                <p>Track and manage customer orders</p>
-            </div>
-
-            {/* Stats Cards */}
-            {displayStats && (
-                <div className="stats-grid">
-                    <div className="stat-card">
-                        <div className="stat-value">{displayStats.totalOrders}</div>
-                        <div className="stat-label">
-                            Total Orders {!stats && '(Current View)'}
-                        </div>
-                    </div>
-                    <div className="stat-card">
-                        <div className="stat-value">{formatCurrency(displayStats.totalRevenue)}</div>
-                        <div className="stat-label">
-                            Total Revenue {!stats && '(Current View)'}
-                        </div>
-                    </div>
-                    <div className="stat-card">
-                        <div className="stat-value">{formatCurrency(displayStats.averageOrderValue)}</div>
-                        <div className="stat-label">Average Order Value</div>
-                    </div>
-                    <div className="stat-card">
-                        <div className="stat-value">{displayStats.statusBreakdown.pending}</div>
-                        <div className="stat-label">Pending Orders</div>
-                    </div>
-                </div>
-            )}
-
-            <div className="page-controls">
-                <div className="search-box">
-                    <input
-                        type="text"
-                        placeholder="Search orders..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                        className="search-input"
-                    />
-                </div>
-                <button className="btn btn-outline" onClick={handleSearch}>
-                    <span>🔍</span>
-                    Search
-                </button>
-                <button
-                    className="btn btn-outline"
-                    onClick={() => setShowFilters(!showFilters)}
-                >
-                    <span>⚙️</span>
-                    Filters
-                </button>
-                <button
-                    className="btn btn-outline"
-                    onClick={handleExport}
-                    disabled={exportLoading}
-                >
-                    <span>📥</span>
-                    {exportLoading ? 'Exporting...' : 'Export'}
-                </button>
-                <button className="btn btn-outline" onClick={loadOrders}>
-                    <span>🔄</span>
-                    Refresh
-                </button>
-            </div>
-
-            {/* Advanced Filters */}
-            {showFilters && (
-                <div className="filters-panel">
-                    <div className="filter-row">
-                        <select
-                            value={filters.status || ''}
-                            onChange={(e) => setFilters(prev => ({
-                                ...prev,
-                                status: e.target.value as OrderStatus || undefined,
-                                page: 1
-                            }))}
-                            className="filter-select"
-                        >
-                            <option value="">All Statuses</option>
-                            <option value="pending">Pending</option>
-                            <option value="processing">Processing</option>
-                            <option value="shipped">Shipped</option>
-                            <option value="delivered">Delivered</option>
-                            <option value="cancelled">Cancelled</option>
-                        </select>
-                        <input
-                            type="date"
-                            value={filters.dateFrom || ''}
-                            onChange={(e) => setFilters(prev => ({
-                                ...prev,
-                                dateFrom: e.target.value || undefined,
-                                page: 1
-                            }))}
-                            className="filter-input"
-                            placeholder="From Date"
-                        />
-                        <input
-                            type="date"
-                            value={filters.dateTo || ''}
-                            onChange={(e) => setFilters(prev => ({
-                                ...prev,
-                                dateTo: e.target.value || undefined,
-                                page: 1
-                            }))}
-                            className="filter-input"
-                            placeholder="To Date"
-                        />
-                        <button
-                            className="btn btn-outline btn-sm"
-                            onClick={() => {
-                                setFilters({ limit: 20, page: 1 })
-                                setSearchTerm('')
-                            }}
-                        >
-                            Clear
-                        </button>
-                    </div>
-                </div>
-            )}
-
-            {/* Bulk Actions */}
-            {selectedOrders.size > 0 && (
-                <div className="bulk-actions">
-                    <span className="bulk-count">
-                        {selectedOrders.size} order{selectedOrders.size !== 1 ? 's' : ''} selected
-                    </span>
-                    <div className="bulk-buttons">
-                        <button
-                            className="btn btn-sm btn-outline"
-                            onClick={() => handleBulkStatusUpdate('processing')}
-                            disabled={bulkLoading}
-                        >
-                            Mark Processing
-                        </button>
-                        <button
-                            className="btn btn-sm btn-outline"
-                            onClick={() => handleBulkStatusUpdate('shipped')}
-                            disabled={bulkLoading}
-                        >
-                            Mark Shipped
-                        </button>
-                        <button
-                            className="btn btn-sm btn-outline"
-                            onClick={() => handleBulkStatusUpdate('delivered')}
-                            disabled={bulkLoading}
-                        >
-                            Mark Delivered
-                        </button>
-                        <button
-                            className="btn btn-sm btn-outline"
-                            onClick={() => setSelectedOrders(new Set())}
-                        >
-                            Clear Selection
-                        </button>
-                    </div>
-                </div>
-            )}
-
-            {statusUpdateError && (
-                <div className="error">
-                    <p>Status Update Error: {statusUpdateError}</p>
-                    <button
-                        onClick={() => setStatusUpdateError(null)}
-                        className="btn btn-sm btn-outline"
-                    >
-                        Dismiss
-                    </button>
-                </div>
-            )}
-
-            {loading && (
-                <div className="loading">Loading orders...</div>
-            )}
-
-            {error && (
-                <div className="error">
-                    <p>Error: {error}</p>
-                    <button onClick={loadOrders} className="btn btn-primary">
-                        Retry
-                    </button>
-                </div>
-            )}
-
-            {!loading && !error && (
-                <div className="orders-table-container">
-                    <table className="orders-table">
-                        <thead>
-                            <tr>
-                                <th>
-                                    <input
-                                        type="checkbox"
-                                        checked={selectedOrders.size === orders.length && orders.length > 0}
-                                        onChange={handleSelectAll}
-                                    />
-                                </th>
-                                <th>Order ID</th>
-                                <th>Customer</th>
-                                <th>Items</th>
-                                <th>Total</th>
-                                <th>Status</th>
-                                <th>Date</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {filteredOrders.length === 0 ? (
-                                <tr>
-                                    <td colSpan={8} className="no-data">
-                                        No orders found
-                                    </td>
-                                </tr>
-                            ) : (
-                                filteredOrders.map((order) => {
-                                    const statusConfig = getStatusConfig(order.status)
-                                    const validNextStatuses = getValidNextStatuses(order.status)
-
-                                    return (
-                                        <tr key={order.orderId}>
-                                            <td>
-                                                <input
-                                                    type="checkbox"
-                                                    checked={selectedOrders.has(order.orderId)}
-                                                    onChange={() => handleSelectOrder(order.orderId)}
-                                                />
-                                            </td>
-                                            <td className="order-id">#{order.orderId.slice(-6)}</td>
-                                            <td>
-                                                <div className="customer-info">
-                                                    <div className="customer-name">{order.customerName || 'N/A'}</div>
-                                                    <div className="customer-email">{order.customerEmail || 'N/A'}</div>
-                                                </div>
-                                            </td>
-                                            <td>{order.items?.length || 0} items</td>
-                                            <td className="order-total">{formatCurrency(order.totalAmount)}</td>
-                                            <td>
-                                                <select
-                                                    value={order.status}
-                                                    onChange={(e) => handleStatusUpdate(order.orderId, e.target.value as OrderStatus)}
-                                                    className={`status-select ${getStatusColor(order.status)}`}
-                                                >
-                                                    {/* Current status */}
-                                                    <option value={order.status}>
-                                                        {statusConfig.label}
-                                                    </option>
-
-                                                    {/* Valid next statuses */}
-                                                    {validNextStatuses.map(status => (
-                                                        <option key={status} value={status}>
-                                                            {getStatusConfig(status).label}
-                                                        </option>
-                                                    ))}
-                                                </select>
-                                            </td>
-                                            <td>{formatDate(order.createdAt)}</td>
-                                            <td>
-                                                <button
-                                                    onClick={() => {
-                                                        setSelectedOrder(order)
-                                                        setShowModal(true)
-                                                    }}
-                                                    className="btn btn-sm btn-outline"
-                                                >
-                                                    View
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    )
-                                })
-                            )}
-                        </tbody>
-                    </table>
-                </div>
-            )}
-
-            {showModal && selectedOrder && (
-                <OrderModal
-                    order={selectedOrder}
-                    onClose={() => {
-                        setShowModal(false)
-                        setSelectedOrder(null)
-                    }}
-                />
-            )}
-        </div>
-    )
+// ── Status badge helper ──────────────────────────────────────────────────────
+const STATUS_STYLES: Record<string, string> = {
+  pending: 'border-yellow-400/40 bg-yellow-50 text-yellow-700',
+  processing: 'border-blue-400/40 bg-blue-50 text-blue-700',
+  confirmed: 'border-indigo-400/40 bg-indigo-50 text-indigo-700',
+  shipped: 'border-orange-400/40 bg-orange-50 text-orange-700',
+  out_for_delivery: 'border-orange-400/40 bg-orange-50 text-orange-700',
+  delivered: 'border-green-400/40 bg-green-50 text-green-700',
+  cancelled: 'border-red-400/40 bg-red-50 text-red-700',
 }
 
-// Enhanced Order Modal Component with Status Workflow
-function OrderModal({ order, onClose }: {
-    order: Order
-    onClose: () => void
-}) {
-    const formatAddress = (address: any) => {
-        if (typeof address === 'string') return address
-        if (typeof address === 'object' && address) {
-            return `${address.street}, ${address.city}, ${address.state} ${address.zipCode}${address.country ? `, ${address.country}` : ''}`
-        }
-        return 'No address provided'
+function StatusBadge({ status }: { status: string }) {
+  const cls = STATUS_STYLES[status] ?? ''
+  return (
+    <Badge variant="outline" className={`capitalize ${cls}`}>
+      {status.replace(/_/g, ' ')}
+    </Badge>
+  )
+}
+
+// ── Order detail modal ────────────────────────────────────────────────────────
+function OrderModal({ order, onClose }: { order: Order; onClose: () => void }) {
+  const formatAddress = (address: unknown) => {
+    if (typeof address === 'string') return address
+    if (typeof address === 'object' && address !== null) {
+      const a = address as Record<string, string>
+      return `${a.street}, ${a.city}, ${a.state} ${a.zipCode}${a.country ? `, ${a.country}` : ''}`
     }
+    return 'No address provided'
+  }
 
-    return (
-        <div className="modal-overlay" onClick={onClose}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                <div className="modal-header">
-                    <h3>Order Details - #{order.orderId.slice(-6)}</h3>
-                    <button onClick={onClose} className="modal-close">×</button>
-                </div>
-                <div className="modal-body">
-                    {/* Status Workflow */}
-                    <div style={{ marginBottom: '20px' }}>
-                        <OrderStatusWorkflow currentStatus={order.status} size="md" />
-                    </div>
+  return (
+    <Dialog open onOpenChange={(open) => { if (!open) onClose() }}>
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>Order Details — #{order.orderId.slice(-6)}</DialogTitle>
+        </DialogHeader>
 
-                    <div className="order-details">
-                        <div className="detail-row">
-                            <strong>Customer:</strong> {order.customerName || 'N/A'}
-                        </div>
-                        <div className="detail-row">
-                            <strong>Email:</strong> {order.customerEmail || 'N/A'}
-                        </div>
-                        <div className="detail-row">
-                            <strong>Total:</strong> ${order.totalAmount.toFixed(2)}
-                        </div>
-                        <div className="detail-row">
-                            <strong>Status:</strong>
-                            <span className={`status ${order.status}`}>{order.status}</span>
-                        </div>
-                        <div className="detail-row">
-                            <strong>Payment:</strong> {order.paymentDetails.paymentMethod}
-                        </div>
-                        <div className="detail-row">
-                            <strong>Date:</strong> {new Date(order.createdAt).toLocaleString()}
-                        </div>
-                        {order.shippingAddress && (
-                            <div className="detail-row">
-                                <strong>Shipping Address:</strong>
-                                <div className="address">{formatAddress(order.shippingAddress)}</div>
-                            </div>
-                        )}
-                        {order.items && order.items.length > 0 && (
-                            <div className="detail-row">
-                                <strong>Items:</strong>
-                                <div className="items-list">
-                                    {order.items.map((item, index) => (
-                                        <div key={index} className="item">
-                                            {item.name} - Qty: {item.quantity} - ${item.price.toFixed(2)}
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                </div>
-                <div className="modal-footer">
-                    <button onClick={onClose} className="btn btn-outline">
-                        Close
-                    </button>
-                </div>
-            </div>
+        {/* Status workflow */}
+        <div className="py-2">
+          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">Order Progress</p>
+          <OrderStatusWorkflow currentStatus={order.status} />
         </div>
+
+        {/* Detail grid */}
+        <div className="grid grid-cols-2 gap-4 text-sm">
+          {[
+            { label: 'Customer', value: order.customerName || 'N/A' },
+            { label: 'Email', value: order.customerEmail || 'N/A' },
+            { label: 'Status', value: <StatusBadge status={order.status} /> },
+            { label: 'Payment', value: order.paymentDetails?.paymentMethod || 'N/A' },
+            { label: 'Total', value: `₹${order.totalAmount.toFixed(2)}` },
+            { label: 'Date', value: new Date(order.createdAt).toLocaleString('en-IN') },
+          ].map(({ label, value }) => (
+            <div key={label} className="space-y-0.5">
+              <p className="text-xs text-muted-foreground">{label}</p>
+              <p className="font-medium">{value}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Shipping address */}
+        {order.shippingAddress && (
+          <div className="rounded-lg border bg-muted/40 px-4 py-3 text-sm">
+            <p className="text-xs text-muted-foreground mb-1">Shipping Address</p>
+            <p className="font-medium">{formatAddress(order.shippingAddress)}</p>
+          </div>
+        )}
+
+        {/* Items list */}
+        {order.items && order.items.length > 0 && (
+          <div>
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Items ({order.items.length})</p>
+            <div className="rounded-lg border divide-y text-sm">
+              {order.items.map((item, i) => (
+                <div key={i} className="flex items-center justify-between px-4 py-2.5">
+                  <span className="font-medium">{item.name}</span>
+                  <div className="flex items-center gap-4 text-muted-foreground">
+                    <span>Qty: {item.quantity}</span>
+                    <span className="font-medium text-foreground">₹{item.price.toFixed(2)}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <DialogFooter>
+          <Button variant="outline" onClick={onClose}>Close</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+// ── Main component ────────────────────────────────────────────────────────────
+interface OrderManagementProps {}
+
+export function OrderManagement({ }: OrderManagementProps) {
+  const [orders, setOrders] = useState<Order[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
+  const [showModal, setShowModal] = useState(false)
+  const [stats, setStats] = useState<OrderStats | null>(null)
+  const [selectedOrders, setSelectedOrders] = useState<Set<string>>(new Set())
+  const [bulkLoading, setBulkLoading] = useState(false)
+  const [filters, setFilters] = useState<OrderFilters>({ limit: 20, page: 1 })
+  const [showFilters, setShowFilters] = useState(false)
+  const [exportLoading, setExportLoading] = useState(false)
+  const [statusUpdateError, setStatusUpdateError] = useState<string | null>(null)
+
+  useEffect(() => {
+    void loadOrders()
+    void loadStats()
+  }, [filters])
+
+  const loadOrders = async () => {
+    try {
+      setLoading(true)
+      setError(null)
+      const response = await orderService.getOrders({ ...filters, search: searchTerm || undefined })
+      setOrders(response.orders)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load orders')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const loadStats = async () => {
+    try {
+      const statsData = await orderService.getOrderStats()
+      setStats(statsData)
+    } catch {
+      // fall through — stats will be calculated locally
+    }
+  }
+
+  const calculateStatsFromOrders = (): OrderStats => ({
+    totalOrders: orders.length,
+    totalRevenue: orders.reduce((s, o) => s + o.totalAmount, 0),
+    averageOrderValue: orders.length > 0 ? orders.reduce((s, o) => s + o.totalAmount, 0) / orders.length : 0,
+    statusBreakdown: {
+      pending: orders.filter((o) => o.status === 'pending').length,
+      processing: orders.filter((o) => o.status === 'processing').length,
+      shipped: orders.filter((o) => o.status === 'shipped').length,
+      delivered: orders.filter((o) => o.status === 'delivered').length,
+      cancelled: orders.filter((o) => o.status === 'cancelled').length,
+    },
+  })
+
+  const handleStatusUpdate = async (orderId: string, newStatus: OrderStatus) => {
+    setStatusUpdateError(null)
+    const currentOrder = orders.find((o) => o.orderId === orderId)
+    if (currentOrder && !isValidStatusTransition(currentOrder.status, newStatus)) {
+      setStatusUpdateError(getStatusTransitionError(currentOrder.status, newStatus))
+      return
+    }
+    try {
+      await orderService.updateOrderStatus(orderId, newStatus)
+      await loadOrders()
+      await loadStats()
+    } catch (err) {
+      setStatusUpdateError(err instanceof Error ? err.message : 'Failed to update order status')
+    }
+  }
+
+  const handleBulkStatusUpdate = async (newStatus: OrderStatus) => {
+    if (selectedOrders.size === 0) return
+    try {
+      setBulkLoading(true)
+      const ids = Array.from(selectedOrders)
+      const result = await orderService.bulkUpdateStatus(ids, newStatus)
+      if (result === null) {
+        for (const id of ids) {
+          try { await orderService.updateOrderStatus(id, newStatus) } catch { /* skip */ }
+        }
+      }
+      setSelectedOrders(new Set())
+      await loadOrders()
+      await loadStats()
+    } catch {
+      setStatusUpdateError('Failed to update selected orders')
+    } finally {
+      setBulkLoading(false)
+    }
+  }
+
+  const handleExport = async () => {
+    try {
+      setExportLoading(true)
+      const blob = await orderService.exportOrders(filters)
+      if (!blob) { setStatusUpdateError('Export feature is not available'); return }
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `orders-${new Date().toISOString().split('T')[0]}.csv`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      window.URL.revokeObjectURL(url)
+    } catch {
+      setStatusUpdateError('Failed to export orders')
+    } finally {
+      setExportLoading(false)
+    }
+  }
+
+  const handleSearch = useCallback(() => {
+    setFilters((prev) => ({ ...prev, page: 1 }))
+    void loadOrders()
+  }, [searchTerm])
+
+  const toggleSelectOrder = (id: string) => {
+    setSelectedOrders((prev) => {
+      const next = new Set(prev)
+      next.has(id) ? next.delete(id) : next.add(id)
+      return next
+    })
+  }
+
+  const handleSelectAll = () => {
+    setSelectedOrders(
+      selectedOrders.size === orders.length ? new Set() : new Set(orders.map((o) => o.orderId)),
     )
+  }
+
+  const filteredOrders = orders.filter(
+    (o) =>
+      o.orderId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      o.customerName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      o.customerEmail?.toLowerCase().includes(searchTerm.toLowerCase()),
+  )
+
+  const formatCurrency = (n: number) =>
+    new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(n)
+
+  const displayStats = stats ?? calculateStatsFromOrders()
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold">Orders</h2>
+          <p className="text-muted-foreground text-sm mt-0.5">Track and manage customer orders</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" className="gap-2" onClick={() => void loadOrders()}>
+            <RefreshCw className="h-3.5 w-3.5" />
+            Refresh
+          </Button>
+          <Button variant="outline" size="sm" className="gap-2" onClick={() => void handleExport()} disabled={exportLoading}>
+            {exportLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Download className="h-3.5 w-3.5" />}
+            Export
+          </Button>
+        </div>
+      </div>
+
+      {/* KPI strip */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {[
+          { label: 'Total Orders', value: displayStats.totalOrders },
+          { label: 'Total Revenue', value: formatCurrency(displayStats.totalRevenue) },
+          { label: 'Avg Order Value', value: formatCurrency(displayStats.averageOrderValue) },
+          { label: 'Pending', value: displayStats.statusBreakdown.pending },
+        ].map((kpi) => (
+          <Card key={kpi.label}>
+            <CardHeader className="pb-2">
+              <CardDescription>{kpi.label}{!stats && ' (current view)'}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-2xl font-bold">{kpi.value}</p>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {/* Search + filter bar */}
+      <div className="flex flex-wrap items-center gap-3">
+        <div className="relative flex-1 min-w-[220px] max-w-sm">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Search orders…"
+            className="pl-9"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+          />
+        </div>
+        <Button variant="outline" size="sm" className="gap-2" onClick={handleSearch}>
+          <Search className="h-3.5 w-3.5" />
+          Search
+        </Button>
+        <Button
+          variant={showFilters ? 'default' : 'outline'}
+          size="sm"
+          className="gap-2"
+          onClick={() => setShowFilters(!showFilters)}
+        >
+          <Filter className="h-3.5 w-3.5" />
+          Filters
+        </Button>
+      </div>
+
+      {/* Filters panel */}
+      {showFilters && (
+        <Card>
+          <CardContent className="pt-4 pb-4">
+            <div className="flex flex-wrap items-center gap-3">
+              <Select
+                value={filters.status ?? ''}
+                onValueChange={(v) => setFilters((prev) => ({ ...prev, status: (v || undefined) as OrderStatus | undefined, page: 1 }))}
+              >
+                <SelectTrigger className="w-44">
+                  <SelectValue placeholder="All Statuses" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="">All Statuses</SelectItem>
+                  {['pending', 'processing', 'confirmed', 'shipped', 'out_for_delivery', 'delivered', 'cancelled'].map((s) => (
+                    <SelectItem key={s} value={s} className="capitalize">{s.replace(/_/g, ' ')}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <Input
+                type="date"
+                className="w-40"
+                value={filters.dateFrom ?? ''}
+                onChange={(e) => setFilters((prev) => ({ ...prev, dateFrom: e.target.value || undefined, page: 1 }))}
+              />
+              <span className="text-muted-foreground text-sm">to</span>
+              <Input
+                type="date"
+                className="w-40"
+                value={filters.dateTo ?? ''}
+                onChange={(e) => setFilters((prev) => ({ ...prev, dateTo: e.target.value || undefined, page: 1 }))}
+              />
+
+              <Button
+                variant="ghost"
+                size="sm"
+                className="gap-1.5 text-muted-foreground"
+                onClick={() => { setFilters({ limit: 20, page: 1 }); setSearchTerm('') }}
+              >
+                <X className="h-3.5 w-3.5" />
+                Clear
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Bulk action bar */}
+      {selectedOrders.size > 0 && (
+        <div className="flex items-center gap-3 rounded-lg border bg-muted/50 px-4 py-2.5">
+          <span className="text-sm font-medium">
+            {selectedOrders.size} order{selectedOrders.size !== 1 ? 's' : ''} selected
+          </span>
+          <div className="flex items-center gap-2 ml-auto">
+            {(['processing', 'shipped', 'delivered'] as OrderStatus[]).map((s) => (
+              <Button
+                key={s}
+                variant="outline"
+                size="sm"
+                disabled={bulkLoading}
+                onClick={() => void handleBulkStatusUpdate(s)}
+              >
+                {bulkLoading && <Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" />}
+                Mark {s.charAt(0).toUpperCase() + s.slice(1)}
+              </Button>
+            ))}
+            <Button variant="ghost" size="sm" onClick={() => setSelectedOrders(new Set())}>
+              <X className="h-3.5 w-3.5" />
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Error banners */}
+      {statusUpdateError && (
+        <div className="flex items-center gap-3 rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+          <AlertCircle className="h-4 w-4 shrink-0" />
+          <span>{statusUpdateError}</span>
+          <Button variant="ghost" size="sm" className="ml-auto h-auto p-0 text-destructive" onClick={() => setStatusUpdateError(null)}>
+            Dismiss
+          </Button>
+        </div>
+      )}
+      {error && (
+        <div className="flex items-center gap-3 rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+          <AlertCircle className="h-4 w-4 shrink-0" />
+          <span>{error}</span>
+          <Button variant="ghost" size="sm" className="ml-auto h-auto p-0 text-destructive" onClick={() => void loadOrders()}>
+            Retry
+          </Button>
+        </div>
+      )}
+
+      {/* Orders table */}
+      <Card>
+        <CardHeader className="py-3 px-4 flex flex-row items-center justify-between">
+          <p className="text-sm text-muted-foreground">{filteredOrders.length} orders shown</p>
+        </CardHeader>
+        <CardContent className="p-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-10">
+                  <input
+                    type="checkbox"
+                    checked={selectedOrders.size === orders.length && orders.length > 0}
+                    onChange={handleSelectAll}
+                    className="h-4 w-4 rounded border-border accent-primary"
+                  />
+                </TableHead>
+                <TableHead>Order ID</TableHead>
+                <TableHead>Customer</TableHead>
+                <TableHead>Items</TableHead>
+                <TableHead>Total</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Date</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {loading ? (
+                Array.from({ length: 6 }).map((_, i) => (
+                  <TableRow key={i}>
+                    {Array.from({ length: 8 }).map((_, j) => (
+                      <TableCell key={j}><Skeleton className="h-4 w-full" /></TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : filteredOrders.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={8} className="text-center py-16">
+                    <ShoppingCart className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+                    <p className="text-muted-foreground">No orders found</p>
+                  </TableCell>
+                </TableRow>
+              ) : (
+                filteredOrders.map((order) => {
+                  const validNext = getValidNextStatuses(order.status)
+
+                  return (
+                    <TableRow key={order.orderId} className={selectedOrders.has(order.orderId) ? 'bg-muted/40' : ''}>
+                      <TableCell>
+                        <input
+                          type="checkbox"
+                          checked={selectedOrders.has(order.orderId)}
+                          onChange={() => toggleSelectOrder(order.orderId)}
+                          className="h-4 w-4 rounded border-border accent-primary"
+                        />
+                      </TableCell>
+                      <TableCell className="font-mono text-sm">#{order.orderId.slice(-6)}</TableCell>
+                      <TableCell>
+                        <p className="font-medium text-sm">{order.customerName || 'N/A'}</p>
+                        <p className="text-xs text-muted-foreground">{order.customerEmail || ''}</p>
+                      </TableCell>
+                      <TableCell className="text-sm">{order.items?.length ?? 0} items</TableCell>
+                      <TableCell className="font-medium text-sm">{formatCurrency(order.totalAmount)}</TableCell>
+                      <TableCell>
+                        {/* Inline status select for quick updates */}
+                        {validNext.length > 0 ? (
+                          <select
+                            value={order.status}
+                            onChange={(e) => void handleStatusUpdate(order.orderId, e.target.value as OrderStatus)}
+                            className="h-8 rounded-md border border-border bg-background px-2 text-xs focus:outline-none focus:ring-1 focus:ring-ring"
+                          >
+                            <option value={order.status}>{getStatusConfig(order.status).label}</option>
+                            {validNext.map((s) => (
+                              <option key={s} value={s}>{getStatusConfig(s).label}</option>
+                            ))}
+                          </select>
+                        ) : (
+                          <StatusBadge status={order.status} />
+                        )}
+                      </TableCell>
+                      <TableCell className="text-sm text-muted-foreground">
+                        {new Date(order.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex justify-end">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => { setSelectedOrder(order); setShowModal(true) }}
+                          >
+                            View
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  )
+                })
+              )}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+
+      {showModal && selectedOrder && (
+        <OrderModal order={selectedOrder} onClose={() => { setShowModal(false); setSelectedOrder(null) }} />
+      )}
+    </div>
+  )
 }
