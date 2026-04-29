@@ -252,8 +252,9 @@ export class OrderController {
         throw new ApiError("Order not found", 404);
       }
 
-      // Ensure user can only access their own orders
-      if (order.userId !== userId) {
+      // Admins can access any order; regular users can only access their own
+      const isAdmin = req.user?.role === "admin";
+      if (!isAdmin && order.userId !== userId) {
         throw new ApiError("Access denied", 403);
       }
 
@@ -292,8 +293,9 @@ export class OrderController {
         throw new ApiError("Order not found", 404);
       }
 
-      // Ensure user can only cancel their own orders
-      if (order.userId !== userId) {
+      // Admins can cancel any order; regular users can only cancel their own
+      const isAdmin = req.user?.role === "admin";
+      if (!isAdmin && order.userId !== userId) {
         throw new ApiError("Access denied", 403);
       }
 
