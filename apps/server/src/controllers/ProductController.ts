@@ -62,7 +62,10 @@ export class ProductController {
       }
 
       // Build filter options
-      const filterOptions: any = {};
+      const filterOptions: {
+        category?: ProductCategory;
+        isFeatured?: boolean;
+      } = {};
 
       if (category) {
         filterOptions.category = category as ProductCategory;
@@ -72,27 +75,10 @@ export class ProductController {
         filterOptions.isFeatured = featured === "true";
       }
 
-      // Get products with filters
-      let products = await this.productRepository.list({
-        limit: limitNum,
-        offset: offsetNum,
-        category: filterOptions.category,
-        isFeatured: filterOptions.isFeatured,
-      });
-
-      // Apply category filter
-      if (filterOptions.category) {
-        products = products.filter(
-          (product) => product.category === filterOptions.category
-        );
-      }
-
-      // Apply featured filter
-      if (filterOptions.isFeatured !== undefined) {
-        products = products.filter(
-          (product) => product.isFeatured === filterOptions.isFeatured
-        );
-      }
+      // Load the full filtered set first so pagination metadata is correct.
+      // Pagination is applied after search/filter/sort, otherwise the controller
+      // only knows about the current page and reports incorrect totals.
+      let products = await this.productRepository.list(filterOptions);
 
       // Apply search filter
       if (search) {
