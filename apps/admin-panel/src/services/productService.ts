@@ -45,6 +45,7 @@ export interface ProductFilters {
     search?: string;
     page?: number;
     limit?: number;
+    offset?: number;
 }
 
 // Product service

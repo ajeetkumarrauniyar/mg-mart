@@ -51,6 +51,7 @@ export function ProductList() {
   const [stockFilter, setStockFilter] = useState<'all' | 'low' | 'out' | 'ok'>('all')
   const [featuredFilter, setFeaturedFilter] = useState<'all' | 'featured' | 'normal'>('all')
   const [pagination, setPagination] = useState({ total: 0, limit: 20, offset: 0, hasMore: false })
+  const [loadingMore, setLoadingMore] = useState(false)
 
   useEffect(() => {
     void loadProducts()
@@ -64,17 +65,19 @@ export function ProductList() {
     return fallback
   }
 
-  const loadProducts = async () => {
+  const loadProducts = async (offset = 0, append = false) => {
     try {
-      setLoading(true)
+      if (append) setLoadingMore(true)
+      else setLoading(true)
       setError(null)
-      const response: ProductListResponse = await productService.getProducts()
-      setProducts(response.products)
+      const response: ProductListResponse = await productService.getProducts({ offset, limit: 20 })
+      setProducts((prev) => append ? [...prev, ...response.products] : response.products)
       setPagination(response.pagination)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load products')
     } finally {
       setLoading(false)
+      setLoadingMore(false)
     }
   }
 
@@ -211,7 +214,7 @@ export function ProductList() {
       {/* KPI strip */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { label: 'Visible SKUs', value: catalogStats.total, variant: 'normal' },
+          { label: 'Total SKUs', value: pagination.total, variant: 'normal' },
           { label: 'Featured', value: catalogStats.featured, variant: 'normal' },
           { label: 'Low Stock', value: catalogStats.lowStock, variant: 'warning' },
           { label: 'Out of Stock', value: catalogStats.outOfStock, variant: 'danger' },
@@ -411,7 +414,13 @@ export function ProductList() {
 
       {pagination.hasMore && (
         <div className="text-center">
-          <Button variant="outline" onClick={() => void loadProducts()}>Load More Products</Button>
+          <Button
+            variant="outline"
+            disabled={loadingMore}
+            onClick={() => void loadProducts(pagination.offset + pagination.limit, true)}
+          >
+            {loadingMore ? 'Loading…' : 'Load More Products'}
+          </Button>
         </div>
       )}
 
