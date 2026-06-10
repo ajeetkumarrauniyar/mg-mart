@@ -152,17 +152,16 @@ export function OrderManagement({ }: OrderManagementProps) {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
   const [showModal, setShowModal] = useState(false)
-  const [stats, setStats] = useState<OrderStats | null>(null)
+  const [statusUpdateError, setStatusUpdateError] = useState<string | null>(null)
+
   const [selectedOrders, setSelectedOrders] = useState<Set<string>>(new Set())
   const [bulkLoading, setBulkLoading] = useState(false)
   const [filters, setFilters] = useState<OrderFilters>({ limit: 20, page: 1 })
   const [showFilters, setShowFilters] = useState(false)
   const [exportLoading, setExportLoading] = useState(false)
-  const [statusUpdateError, setStatusUpdateError] = useState<string | null>(null)
 
   useEffect(() => {
     void loadOrders()
-    void loadStats()
   }, [filters])
 
   const loadOrders = async () => {
@@ -179,14 +178,6 @@ export function OrderManagement({ }: OrderManagementProps) {
     }
   }
 
-  const loadStats = async () => {
-    try {
-      const statsData = await orderService.getOrderStats()
-      setStats(statsData)
-    } catch {
-      // fall through — stats will be calculated locally
-    }
-  }
 
   const resolveCustomerNames = async (orderList: Order[]) => {
     const uniqueUserIds = Array.from(
@@ -244,7 +235,6 @@ export function OrderManagement({ }: OrderManagementProps) {
     try {
       await orderService.updateOrderStatus(orderId, newStatus)
       await loadOrders()
-      await loadStats()
     } catch (err) {
       setStatusUpdateError(err instanceof Error ? err.message : 'Failed to update order status')
     }
@@ -263,7 +253,6 @@ export function OrderManagement({ }: OrderManagementProps) {
       }
       setSelectedOrders(new Set())
       await loadOrders()
-      await loadStats()
     } catch {
       setStatusUpdateError('Failed to update selected orders')
     } finally {
@@ -320,7 +309,7 @@ export function OrderManagement({ }: OrderManagementProps) {
   const formatCurrency = (n: number) =>
     new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(n)
 
-  const displayStats = stats ?? calculateStatsFromOrders()
+  const displayStats = calculateStatsFromOrders()
 
   return (
     <div className="space-y-6">
@@ -352,7 +341,7 @@ export function OrderManagement({ }: OrderManagementProps) {
         ].map((kpi) => (
           <Card key={kpi.label}>
             <CardHeader className="pb-2">
-              <CardDescription>{kpi.label}{!stats && ' (current view)'}</CardDescription>
+              <CardDescription>{kpi.label} (current view)</CardDescription>
             </CardHeader>
             <CardContent>
               <p className="text-2xl font-bold">{kpi.value}</p>
