@@ -8,7 +8,8 @@ export const ORDER_STATUS_TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
     pending: ['processing', 'cancelled'],
     confirmed: ['processing', 'cancelled'],
     processing: ['shipped', 'cancelled'],
-    shipped: ['delivered', 'cancelled'],
+    shipped: ['out_for_delivery', 'cancelled'],
+    out_for_delivery: ['delivered', 'cancelled'],
     delivered: [], // Final state - no transitions allowed
     cancelled: [] // Final state - no transitions allowed
 }
@@ -65,8 +66,16 @@ export function getStatusConfig(status: OrderStatus) {
             color: '#007bff',
             bgColor: '#cce5ff',
             textColor: '#004085',
-            icon: '🚚',
+            icon: '📦',
             description: 'Order has been shipped'
+        },
+        out_for_delivery: {
+            label: 'Out for Delivery',
+            color: '#fd7e14',
+            bgColor: '#ffe5d0',
+            textColor: '#843504',
+            icon: '🚚',
+            description: 'Order is out for delivery'
         },
         delivered: {
             label: 'Delivered',
@@ -110,7 +119,7 @@ export function getStatusTransitionError(
  * Returns statuses that can be applied to multiple orders safely
  */
 export function getBulkCompatibleStatuses(): OrderStatus[] {
-    return ['processing', 'shipped', 'delivered', 'cancelled']
+    return ['processing', 'shipped', 'out_for_delivery', 'delivered', 'cancelled']
 }
 
 /**
@@ -129,8 +138,9 @@ export function getStatusPriority(status: OrderStatus): number {
         confirmed: 2,
         processing: 3,
         shipped: 4,
-        delivered: 5,
-        cancelled: 6
+        out_for_delivery: 5,
+        delivered: 6,
+        cancelled: 7
     }
 
     return priorities[status] || 999
@@ -168,6 +178,11 @@ export function getStatusWorkflow(): Array<{
             status: 'shipped',
             label: 'Shipped',
             description: 'On the way'
+        },
+        {
+            status: 'out_for_delivery',
+            label: 'Out for Delivery',
+            description: 'With delivery partner'
         },
         {
             status: 'delivered',

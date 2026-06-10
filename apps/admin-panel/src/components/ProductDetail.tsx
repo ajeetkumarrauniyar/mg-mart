@@ -3,6 +3,7 @@ import {
   AlertCircle,
   CheckCircle2,
   ImageIcon,
+  Package,
   RefreshCw,
   Search,
   Star,
