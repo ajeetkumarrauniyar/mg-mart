@@ -11,36 +11,26 @@
     "start:prod": "node dist/server.js",
     "type-check": "tsc --noEmit",
     "lint": "echo 'Lint not configured yet'",
-    "test-repos": "tsx src/test-repositories.ts",
-    "test-controllers": "tsx src/test-controllers.ts",
-    "test-endpoints": "tsx src/test-endpoints.ts",
-    "validate-controllers": "tsx src/validate-controllers.ts",
-    "test-runner": "tsx src/run-controller-tests.ts",
-    "test-all": "tsx src/run-controller-tests.ts all",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test-image-management": "tsx src/test-image-management.ts",
-    "test-real-config": "tsx src/test-real-config.ts",
-    "setup-firebase": "tsx src/setup-firebase.ts",
-    "test-api": "tsx src/test-api-endpoints.ts",
-    "test-direct": "tsx src/test-direct-services.ts",
-    "test-workflow": "tsx src/test-complete-workflow.ts"
+    "test-real-config": "tsx --tsconfig tsconfig.json src/test-real-config.ts",
+    "setup-firebase": "tsx --tsconfig tsconfig.json src/setup-firebase.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/jest": "^29.5.11",
     "fast-check": "^3.15.1",
     "jest": "^29.7.0",
     "nodemon": "^3.1.10",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "tsx": "^4.7.0",
+    "typescript": "^5.9.2"
   },
   "dependencies": {
     "@mg-mart/types": "workspace:*",
     "@types/bcrypt": "^5.0.2",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.6",
-    "@types/jest": "^29.5.11",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/node": "^24.3.1",
     "axios": "^1.6.7",
@@ -51,8 +41,6 @@
     "express": "^5.0.0",
     "firebase-admin": "^13.5.0",
     "jsonwebtoken": "^9.0.2",
-    "sharp": "^0.33.2",
-    "tsx": "^4.7.0",
-    "typescript": "^5.9.2"
+    "sharp": "^0.33.2"
   }
 }
