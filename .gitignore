@@ -34,6 +34,7 @@ coverage
 out/
 build
 dist
+.expo/
 
 # Debug
 npm-debug.log*
