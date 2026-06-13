@@ -44,6 +44,7 @@ yarn-error.log*
 !/README.md
 !docs/CONTRIBUTING.md
 !CHANGELOG.md
+!apps/grocery-app/*.md
 
 # IDEs and editors
 .vscode/
