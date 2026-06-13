@@ -6,7 +6,7 @@ services:
     plan: starter
     buildCommand: |
       cd ../..
-      pnpm install --frozen-lockfile
+      pnpm install --frozen-lockfile --prod=false
       pnpm --filter @mg-mart/server run build
     startCommand: node dist/server.js
     healthCheckPath: /health

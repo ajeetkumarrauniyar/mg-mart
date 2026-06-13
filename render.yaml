@@ -5,7 +5,7 @@ services:
     region: oregon
     plan: starter
     buildCommand: |
-      pnpm install --frozen-lockfile
+      pnpm install --frozen-lockfile --prod=false
       pnpm --filter @mg-mart/server run build
     startCommand: pnpm --filter @mg-mart/server run start:prod
     healthCheckPath: /health
