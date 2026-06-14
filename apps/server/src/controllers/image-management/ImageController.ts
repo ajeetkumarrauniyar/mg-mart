@@ -212,6 +212,20 @@ export class ImageController {
 
             console.log(`Deleted image ${imageId} for product ${productId}`);
 
+            // If the deleted image was primary, find another image to set as primary
+            if (productImage.isPrimary) {
+                const remainingImages = await this.imageRepository.getProductImagesByProductId(productId);
+                if (remainingImages.length > 0) {
+                    const newPrimaryImage = remainingImages[0];
+                    if (newPrimaryImage) {
+                        await this.imageRepository.setPrimaryImage(productId, newPrimaryImage.id);
+                    }
+                } else {
+                    // Set product's imageUrl to empty string
+                    await this.imageRepository.updateProductImageUrl(productId, '');
+                }
+            }
+
             res.status(200).json({
                 success: true,
                 message: 'Image deleted successfully'

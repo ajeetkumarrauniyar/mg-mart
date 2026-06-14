@@ -303,6 +303,12 @@ export class ImageManagementService implements IImageManagementService {
 
                 await this.imageRepository.createProductImage(productImage);
 
+                if (productImage.isPrimary) {
+                    await this.productRepository.update(processingStatus.productId, {
+                        imageUrl: productImage.cloudStorageUrl
+                    });
+                }
+
                 console.log(`Successfully processed and stored image ${discoveredImage.id}`);
 
             } catch (error) {

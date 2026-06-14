@@ -89,10 +89,33 @@ export class ImageRepository {
             const primaryImageRef = db.collection(this.productImagesCollection).doc(imageId);
             batch.update(primaryImageRef, { isPrimary: true, updatedAt: new Date() });
 
+            // Also update the main product's imageUrl
+            const primaryImageDoc = await primaryImageRef.get();
+            if (primaryImageDoc.exists) {
+                const data = primaryImageDoc.data();
+                const primaryImageUrl = data?.cloudStorageUrl || data?.thumbnailUrl;
+                if (primaryImageUrl) {
+                    const productRef = db.collection('products').doc(productId);
+                    batch.update(productRef, { imageUrl: primaryImageUrl, updatedAt: new Date() });
+                }
+            }
+
             await batch.commit();
         } catch (error) {
             console.error('Error setting primary image:', error);
             throw new Error(`Failed to set primary image: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        }
+    }
+
+    async updateProductImageUrl(productId: string, imageUrl: string): Promise<void> {
+        try {
+            await db.collection('products').doc(productId).update({
+                imageUrl: imageUrl,
+                updatedAt: new Date()
+            });
+        } catch (error) {
+            console.error('Error updating product imageUrl:', error);
+            throw new Error(`Failed to update product image URL: ${error instanceof Error ? error.message : 'Unknown error'}`);
         }
     }
 
