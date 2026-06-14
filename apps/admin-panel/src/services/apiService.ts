@@ -81,8 +81,14 @@ apiClient.interceptors.response.use(
         }
 
         // Transform error for consistent handling
+        const responseData = error.response?.data as {
+            message?: string;
+            error?: string;
+            details?: string;
+        };
         const errorMessage =
-            (error.response?.data as ApiError)?.message ||
+            responseData?.error ||
+            responseData?.message ||
             error.message ||
             "An error occurred";
         const transformedError = {

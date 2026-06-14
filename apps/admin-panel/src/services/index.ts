@@ -41,6 +41,8 @@ export type {
 } from "./userService";
 export type {
     ProductImage,
+    DiscoveredImage,
+    DisplayImage,
     DiscoverImagesResponse,
     ProcessingStatusResponse,
     ApproveImagesPayload,
@@ -49,3 +51,4 @@ export type {
     ImageManagementHealth,
     CleanupResponse
 } from "./imageManagementService";
+export { buildDisplayImages } from "./imageManagementService";

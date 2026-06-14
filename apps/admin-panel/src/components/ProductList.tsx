@@ -396,12 +396,13 @@ export function ProductList() {
           {cleanupMessage && (
             <div className="text-sm text-green-600 mb-3">{cleanupMessage}</div>
           )}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
             {[
               { label: 'Health', value: imageHealth?.status ?? '—' },
-              { label: 'Total Images', value: typeof imageStats?.totalImages === 'number' ? imageStats.totalImages : '—' },
-              { label: 'Pending Approvals', value: typeof imageStats?.pendingApprovals === 'number' ? imageStats.pendingApprovals : '—' },
-              { label: 'Failed Processing', value: typeof imageStats?.failedProcessing === 'number' ? imageStats.failedProcessing : '—' },
+              { label: 'Total Jobs', value: imageStats?.total ?? '—' },
+              { label: 'Pending', value: imageStats?.pending ?? '—' },
+              { label: 'In Progress', value: imageStats?.inProgress ?? '—' },
+              { label: 'Failed', value: imageStats?.failed ?? '—' },
             ].map((item) => (
               <div key={item.label} className="rounded-lg border bg-muted/40 px-4 py-3">
                 <p className="text-xs text-muted-foreground">{item.label}</p>
