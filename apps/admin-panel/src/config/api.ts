@@ -1,6 +1,5 @@
 // API configuration - Endpoints, timeouts, and network settings
 import type { ApiConfig, ApiEndpoints } from "./types";
-import { viteMode } from "./environment";
 
 // API Endpoints organized by feature area
 const apiEndpoints: ApiEndpoints = {
@@ -62,7 +61,7 @@ const apiEndpoints: ApiEndpoints = {
 // API configuration object
 export const apiConfig: ApiConfig = {
     // Network timeouts and retry settings
-    TIMEOUT: 10000, // 10 seconds
+    TIMEOUT: 30000, // 30 seconds
     RETRY_ATTEMPTS: 3,
     RETRY_DELAY: 1000, // 1 second
 
@@ -92,8 +91,8 @@ export const getEndpoint = (
 
 // Get timeout configuration based on environment
 export const getApiTimeout = (): number => {
-    // Shorter timeout in development for faster feedback
-    return viteMode === "development" ? 5000 : apiConfig.TIMEOUT;
+    // Long-running operations like image discovery/processing need at least 30 seconds
+    return 30000;
 };
 
 // Get retry configuration
