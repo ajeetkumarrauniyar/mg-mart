@@ -1,6 +1,6 @@
 # MG Supermart - Founder Brief
 
-Version: 1.0
+Version: 1.1
 Status: Living Document
 Owner: Ajeet Kumar
 Last Updated: July 2026
@@ -171,6 +171,8 @@ Simple experiences over flashy designs.
 Accessibility over trends.
 
 Real business over marketing hype.
+
+Seasonality should be treated as a core part of the customer experience rather than a temporary marketing campaign. The platform should continuously adapt to local festivals, seasons, community events, and shopping behaviors while maintaining a consistent brand identity.
 
 ---
 
@@ -473,4 +475,76 @@ The website should become the foundation for future products, including Android 
 Every future product should inherit the values defined in this document.
 
 
+---
+
+# 20. Future Capability – Seasonal Experience Engine (SEE)
+
+MG Supermart should not feel like a static ecommerce website.
+
+It should evolve into a living digital supermarket that reflects local seasons, festivals, community events, and customer needs throughout the year.
+
+To support this vision, the platform should be architected with a **Seasonal Experience Engine (SEE)**.
+
+The Seasonal Experience Engine will allow the website to automatically adapt its customer experience based on predefined campaigns, seasons, festivals, and regional events without requiring major code changes.
+
+Examples include:
+
+- Shravan
+- Raksha Bandhan
+- Janmashtami
+- Ganesh Chaturthi
+- Vishwakarma Puja
+- Navratri
+- Durga Puja
+- Dussehra
+- Karwa Chauth
+- Dhanteras
+- Diwali
+- Chhath Puja
+- Wedding Season
+- Makar Sankranti
+- Holi
+
+The engine should also support non-festival experiences, such as:
+
+- Monsoon Essentials
+- Summer Essentials
+- Winter Essentials
+- School Reopening
+- Examination Season
+- Cricket World Cup
+- Independence Day
+- Republic Day
+- Local Community Events
+- Store Anniversary
+- Flash Campaigns
+
+When activated, a seasonal experience may update one or more of the following:
+
+- Homepage hero section
+- Featured collections
+- Promotional campaigns
+- Product recommendations
+- Homepage merchandising
+- Category highlights
+- Navigation emphasis
+- Greetings and messaging
+- Coupons and loyalty campaigns
+- Visual branding
+- Content blocks
+
+This capability is **not part of the initial MVP**.
+
+However, the overall product architecture should be designed so this capability can be introduced in the future through configuration rather than requiring major redesigns or code rewrites.
+
+The Seasonal Experience Engine is intended to become one of the long-term differentiators of MG Supermart by delivering a localized, culturally relevant, and continuously evolving shopping experience for customers in Bihar and similar markets across India.
+
+---
+
+# Version History
+
+| Version | Date | Changes |
+|----------|------|---------|
+| 1.0 | July 2026 | Initial Founder Brief |
+| 1.1 | July 2026 | Added Seasonal Experience Engine (SEE) as a long-term product capability |
 
