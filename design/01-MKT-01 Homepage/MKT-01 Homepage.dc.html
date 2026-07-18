@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <meta name="design_doc_mode" content="canvas">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Martel:wght@400;700;800;900&family=Mukta:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body{margin:0;background:#F3F0E7;color:#24201A;font-family:'Mukta','Noto Sans Devanagari',system-ui,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+    a{color:#235C3F;text-decoration-color:#C1D9C9;text-underline-offset:3px}
+    a:hover{color:#1B4831}
+    ::selection{background:#DEEBE1;color:#133523}
+  </style>
+</helmet>
+
+<section id="t1" data-screen-label="Turn 1 — MKT-01 Homepage" style="padding:36px 40px 64px">
+  <div style="display:flex;align-items:baseline;gap:12px;margin:0 0 18px">
+    <a href="#t1" style="font-family:ui-monospace,Menlo,monospace;font-size:11px;font-weight:600;background:#24201A;color:#FAF8F2;border-radius:5px;padding:3px 8px;text-decoration:none">1</a>
+    <span style="font-family:'Martel',serif;font-weight:800;font-size:20px;color:#24201A">MKT-01 · Homepage — बरगद पर बना</span>
+    <span style="font-size:13px;color:#6B6453">Mobile primary · Desktop secondary · Default + Shravan (SEE)</span>
+  </div>
+
+  <div style="max-width:1560px;background:#FFFFFF;border:1px solid #D3CDBC;border-radius:16px;padding:18px 20px;margin-bottom:28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px 22px">
+    <div>
+      <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#235C3F;margin-bottom:5px">स्रोत · SOURCE DISCIPLINE</div>
+      <p style="font-size:13.5px;line-height:1.6;color:#37322A;margin:0">IA §5 की 18-सेक्शन order बिना बदले (CP-5)। हर hex/px/ms Bargad §04–§21 से — कोई नया token नहीं। Primary info: “यह पिपरा की दुकान है, आपके इलाक़े में डिलीवरी, अगला स्लॉट X” · primary action: browsing शुरू करना (IH, §5.3)।</p>
+    </div>
+    <div>
+      <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#235C3F;margin-bottom:5px">पहला स्क्रीनफुल · EP-1</div>
+      <p style="font-size:13.5px;line-height:1.6;color:#37322A;margin:0">Identity + इलाक़ा + अगला स्लॉट + दुकान के घंटे बिना scroll के (EP-1.1/1.2)। ₹500 नियम और तेल/खुली चीनी exception दरवाज़े पर ही, asmani info में — warning नहीं (EP-1.4)। कोई modal, gate, prompt नहीं (EP-1.3)। अ/A हमेशा दिख रहा; default Hindi (FLW-01 D2 — shop policy)।</p>
+    </div>
+    <div>
+      <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#8A5F0B;margin-bottom:5px">सावन · SEE RANGOLI</div>
+      <p style="font-size:13.5px;line-height:1.6;color:#37322A;margin:0">आँगन वही, रंगोली नई (Bargad §25): hero greeting + art, एक collection section, collection badge — बस। ≤10% pixels (CP-6)। Buttons Banyan ही; nav, prices, semantics, section order अछूते। तुलना: <a href="#1a">1a</a> ⇄ <a href="#1b">1b</a>, <a href="#1c">1c</a> ⇄ <a href="#1d">1d</a>।</p>
+    </div>
+    <div>
+      <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#6B6453;margin-bottom:5px">PLACEHOLDERS · TWEAKS · OPEN</div>
+      <p style="font-size:13.5px;line-height:1.6;color:#37322A;margin:0">Striped tiles = असली फ़ोटो pending (Bargad §15 — stock मना है); copy व दाम sample हैं। Tweaks: live-order strip (IH-5 — default ON दिखाई) और outside-area strip (FLW-01 E2)। Docs के open प्रश्न वैसे ही छोड़े: announcement dismissal (OQ-15), inner-page strip (OQ-16), mobile membership (OQ-19)।</p>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-wrap:wrap;gap:36px;align-items:flex-start">
+
+    <!-- ============ 1a MOBILE DEFAULT ============ -->
+    <div id="1a" data-screen-label="1a Mobile default" style="flex:none;display:flex;flex-direction:column;gap:9px">
+      <div style="display:flex;align-items:baseline;gap:8px;font-size:11.5px;color:#6B6453">
+        <a href="#1a" style="font-family:ui-monospace,Menlo,monospace;font-size:10.5px;font-weight:600;background:#24201A;color:#FAF8F2;border-radius:5px;padding:3px 7px;text-decoration:none">1a</a>
+        <span><b style="color:#37322A">Mobile 390 — default.</b> “ordinary Tuesday” (EP-0.7) · live-order strip ON (IH-5 — Tweaks से off) · bottom bar व FABs fixed</span>
+      </div>
+      <div style="width:390px;background:#FAF8F2;border:1px solid #D3CDBC;border-radius:16px;overflow:hidden;box-shadow:0 1px 3px rgba(36,32,26,0.07)">
+
+        <div style="background:#133523;color:#DEEBE1;font-size:12.5px;text-align:center;padding:7px 12px">पिपरा में मुफ़्त डिलीवरी — ₹500 से ऊपर के ऑर्डर पर</div>
+
+        <div style="display:flex;align-items:center;gap:10px;padding:12px 16px 4px">
+          <div style="width:36px;height:36px;border-radius:10px;background:#235C3F;color:#FAF8F2;display:grid;place-items:center;font-family:'Martel',serif;font-weight:900;font-size:14px;flex:none">MG</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-family:'Martel',serif;font-weight:800;font-size:15.5px;line-height:1.3">MG Supermart</div>
+            <div style="font-size:11.5px;color:#6B6453;line-height:1.3">एमजी सुपरमार्केट · पिपरा</div>
+          </div>
+          <span style="display:inline-flex;border:1.5px solid #D3CDBC;border-radius:999px;overflow:hidden;font-size:12.5px;font-weight:700"><span style="padding:4px 10px;background:#235C3F;color:#FAF8F2">अ</span><span style="padding:4px 10px;color:#514B3D">A</span></span>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#24201A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M6.5 15.5v-5a5.5 5.5 0 0 1 11 0v5l1.5 2.5h-14l1.5-2.5z"></path><path d="M10.2 20.5a2 2 0 0 0 3.6 0"></path></svg>
+        </div>
+
+        <div style="padding:10px 16px 4px">
+          <div style="display:flex;align-items:center;gap:9px;border:1.5px solid #D3CDBC;border-radius:12px;padding:13px 14px;background:#FFFFFF">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B6453" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"></circle><path d="m16.5 16.5 4 4"></path></svg>
+            <span style="font-size:14.5px;color:#8A8370">खोजें: आटा, दाल, साबुन…</span>
+          </div>
+        </div>
+
+        <sc-if value="{{ inArea }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;align-items:center;gap:7px;padding:9px 16px;background:#F0F5F1;margin-top:8px;font-size:12.5px;color:#1B4831">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#235C3F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M12 21s-6.5-5.5-6.5-10.3a6.5 6.5 0 1 1 13 0C18.5 15.5 12 21 12 21z"></path><circle cx="12" cy="10.5" r="2.2"></circle></svg>
+            <b>डिलीवरी: पिपरा व 5 किमी</b><span style="color:#316F4E">· अगला स्लॉट — आज शाम 5–7</span>
+          </div>
+        </sc-if>
+        <sc-if value="{{ outsideArea }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;gap:9px;padding:10px 16px;background:#EFF3F8;margin-top:8px;font-size:12.5px;color:#2F4767;line-height:1.55">
+            <span style="width:18px;height:18px;border-radius:999px;background:#3D5A82;color:#FFFFFF;display:grid;place-items:center;font-size:11px;font-weight:800;flex:none;margin-top:1px">i</span>
+            <span><b>अभी डिलीवरी सिर्फ़ पिपरा व 5 किमी तक है।</b> आप दुकान पर आ सकते हैं — मुख्य बाज़ार, पिपरा — या WhatsApp पर पूछ सकते हैं।</span>
+          </div>
+        </sc-if>
+        <div style="display:flex;gap:8px;padding:9px 16px;background:#EFF3F8;border-top:1px solid #DFE7F1;font-size:12.5px;color:#2F4767;line-height:1.55">
+          <span style="width:18px;height:18px;border-radius:999px;background:#3D5A82;color:#FFFFFF;display:grid;place-items:center;font-size:11px;font-weight:800;flex:none;margin-top:1px">i</span>
+          <span>न्यूनतम ऑर्डर ₹500 है। तेल और खुली चीनी इसमें नहीं गिने जाते — पहले ही बताना ठीक लगा।</span>
+        </div>
+
+        <sc-if value="{{ liveOrder }}" hint-placeholder-val="{{ false }}">
+          <div style="margin:12px 16px 0;background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:14px 16px;box-shadow:0 1px 2px rgba(36,32,26,0.05), 0 2px 8px rgba(36,32,26,0.05)">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><b style="font-size:15px">ऑर्डर #1284</b><span style="font-size:13px;color:#316F4E;font-weight:700">रास्ते में · आज शाम 5–7</span></div>
+            <div style="display:flex;align-items:center;margin-top:12px">
+              <span style="width:14px;height:14px;border-radius:999px;background:#316F4E;flex:none"></span><span style="flex:1;height:2.5px;background:#316F4E"></span>
+              <span style="width:14px;height:14px;border-radius:999px;background:#316F4E;flex:none"></span><span style="flex:1;height:2.5px;background:#316F4E"></span>
+              <span style="width:16px;height:16px;border-radius:999px;background:#FFFFFF;border:3px solid #316F4E;flex:none;box-sizing:border-box"></span><span style="flex:1;height:2.5px;background:#E7E2D5"></span>
+              <span style="width:14px;height:14px;border-radius:999px;background:#E7E2D5;flex:none"></span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:11.5px;color:#6B6453;margin-top:6px"><span>मिला</span><span>पैक हुआ</span><span style="color:#316F4E;font-weight:700">रास्ते में</span><span>पहुँचा</span></div>
+            <div style="font-size:13.5px;color:#235C3F;font-weight:600;margin-top:10px">ऑर्डर ट्रैक करें →</div>
+          </div>
+        </sc-if>
+
+        <div style="padding:22px 16px 8px">
+          <div style="font-family:'Martel',serif;font-weight:800;font-size:29px;line-height:1.45">नमस्ते! पिपरा का अपना सुपरमार्केट, अब ऑनलाइन।</div>
+          <p style="font-size:16px;line-height:1.7;color:#514B3D;margin:10px 0 0">वही दुकान, वही दाम, वही भरोसा — राशन चुनिए, हम घर पहुँचा देंगे। <span style="color:#6B6453">The shop you already know, now online.</span></p>
+          <div style="font-size:13.5px;color:#6B6453;margin-top:8px">दुकान: सोम–शनि, सुबह 8 – रात 9 · मुख्य बाज़ार, पिपरा, पूर्वी चम्पारण</div>
+          <button style="width:100%;min-height:52px;margin-top:16px;background:#235C3F;color:#FAF8F2;border:none;border-radius:12px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:17px;font-weight:600;cursor:pointer" style-hover="background:#1B4831" style-active="background:#133523">खरीदारी शुरू करें</button>
+          <div style="margin-top:14px;aspect-ratio:16/9;border-radius:16px;overflow:hidden;position:relative;background:linear-gradient(180deg,#EFF3F8 0%,#EFF3F8 58%,#E7E2D5 58%)">
+            <div style="position:absolute;left:8%;right:8%;top:9%;bottom:13%;background:#FAF1EC;border:1.5px solid #F4E1D7;border-bottom:none;border-radius:8px 8px 0 0"></div>
+            <div style="position:absolute;left:13%;right:13%;top:14%;height:16%;background:#133523;border-radius:7px;display:flex;align-items:center;justify-content:center;gap:7px">
+              <span style="background:#FAF8F2;color:#133523;font-family:'Martel',serif;font-weight:900;font-size:10px;border-radius:4px;padding:1px 4px;line-height:1.5">MG</span>
+              <span style="color:#FAF8F2;font-family:'Martel',serif;font-weight:800;font-size:13px;line-height:1">एमजी सुपरमार्केट</span>
+            </div>
+            <div style="position:absolute;left:10.5%;right:10.5%;top:32%;height:9.5%;background:repeating-linear-gradient(90deg,#235C3F 0 22px,#FAF8F2 22px 44px);border-radius:0 0 5px 5px;box-shadow:0 2px 0 rgba(36,32,26,0.12)"></div>
+            <div style="position:absolute;left:13%;width:31%;top:46%;bottom:13%;background:#FFFFFF;border:1.5px solid #F4E1D7;border-bottom:none;display:grid;grid-template-rows:1fr 1fr;padding:2.5% 2% 0;box-sizing:border-box">
+              <div style="display:flex;align-items:flex-end;gap:3px;border-bottom:2.5px solid #D3CDBC">
+                <span style="flex:1;height:60%;background:#E0A93E;border-radius:2px 2px 0 0"></span><span style="flex:1;height:78%;background:#316F4E;border-radius:2px 2px 0 0"></span><span style="flex:1;height:52%;background:#3D5A82;border-radius:2px 2px 0 0"></span><span style="flex:1;height:70%;background:#7C3D20;border-radius:2px 2px 0 0"></span><span style="flex:1;height:60%;background:#C1D9C9;border-radius:2px 2px 0 0"></span>
+              </div>
+              <div style="display:flex;align-items:flex-end;gap:3px;border-bottom:2.5px solid #D3CDBC">
+                <span style="flex:1;height:70%;background:#3D5A82;border-radius:2px 2px 0 0"></span><span style="flex:1;height:55%;background:#E0A93E;border-radius:2px 2px 0 0"></span><span style="flex:1;height:75%;background:#7C3D20;border-radius:2px 2px 0 0"></span><span style="flex:1;height:58%;background:#316F4E;border-radius:2px 2px 0 0"></span><span style="flex:1;height:68%;background:#E0A93E;border-radius:2px 2px 0 0"></span>
+              </div>
+            </div>
+            <div style="position:absolute;left:47%;width:15%;top:46%;bottom:13%;background:#514B3D;border-radius:4px 4px 0 0;display:grid;align-items:end;justify-items:center"><span style="width:62%;height:82%;background:#6B6453;border-radius:3px 3px 0 0"></span></div>
+            <div style="position:absolute;right:13%;width:22%;top:46%;bottom:13%;background:#FFFFFF;border:1.5px solid #F4E1D7;border-bottom:none;display:grid;grid-template-rows:1fr 1fr;padding:2.5% 2% 0;box-sizing:border-box">
+              <div style="display:flex;align-items:flex-end;gap:3px;border-bottom:2.5px solid #D3CDBC">
+                <span style="flex:1;height:65%;background:#7C3D20;border-radius:2px 2px 0 0"></span><span style="flex:1;height:52%;background:#E0A93E;border-radius:2px 2px 0 0"></span><span style="flex:1;height:74%;background:#316F4E;border-radius:2px 2px 0 0"></span>
+              </div>
+              <div style="display:flex;align-items:flex-end;gap:3px;border-bottom:2.5px solid #D3CDBC">
+                <span style="flex:1;height:58%;background:#316F4E;border-radius:2px 2px 0 0"></span><span style="flex:1;height:72%;background:#3D5A82;border-radius:2px 2px 0 0"></span><span style="flex:1;height:55%;background:#E0A93E;border-radius:2px 2px 0 0"></span>
+              </div>
+            </div>
+            <div style="position:absolute;left:5%;bottom:5%;display:flex;gap:5px;align-items:flex-end">
+              <span style="width:34px;height:20px;background:#E7E2D5;border:1.5px solid #D3CDBC;border-radius:3px;display:flex;align-items:flex-start;justify-content:center;gap:2px;padding-top:2px;box-sizing:border-box"><span style="width:7px;height:7px;border-radius:999px;background:#316F4E"></span><span style="width:7px;height:7px;border-radius:999px;background:#E0A93E"></span><span style="width:7px;height:7px;border-radius:999px;background:#316F4E"></span></span>
+              <span style="width:28px;height:16px;background:#E7E2D5;border:1.5px solid #D3CDBC;border-radius:3px;display:flex;align-items:flex-start;justify-content:center;gap:2px;padding-top:2px;box-sizing:border-box"><span style="width:6px;height:6px;border-radius:999px;background:#7C3D20"></span><span style="width:6px;height:6px;border-radius:999px;background:#E0A93E"></span></span>
+            </div>
+            <span style="position:absolute;left:50%;transform:translateX(-50%);bottom:3.5%;font-family:ui-monospace,monospace;font-size:10px;color:#7C3D20;background:rgba(255,255,255,0.96);border:1px dashed #D3CDBC;border-radius:6px;padding:2px 8px;white-space:nowrap">PLACEHOLDER — यहाँ असली दुकान की फ़ोटो लगेगी</span>
+          </div>
+        </div>
+
+        <div style="padding:26px 16px 8px">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px">
+            <div style="font-family:'Martel',serif;font-weight:700;font-size:20px">श्रेणियाँ <span style="font-family:'Mukta',sans-serif;font-weight:400;font-size:13px;color:#6B6453">· Shop by category</span></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px">
+            <sc-for list="{{ cats }}" as="c" hint-placeholder-count="8">
+              <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:12px;display:flex;gap:10px;align-items:center">
+                <div style="width:46px;height:46px;border-radius:12px;background:repeating-linear-gradient(45deg,#F3F0E7,#F3F0E7 8px,#FAF8F2 8px,#FAF8F2 16px);flex:none;display:grid;place-items:center"><span style="font-family:ui-monospace,monospace;font-size:9px;color:#8A8370">photo</span></div>
+                <div style="min-width:0">
+                  <div style="font-size:14px;font-weight:600;line-height:1.4">{{ c.hi }}</div>
+                  <div style="font-size:11.5px;color:#6B6453;line-height:1.35">{{ c.en }} · {{ c.n }} →</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <button style="width:100%;min-height:48px;margin-top:10px;background:transparent;color:#235C3F;border:none;border-radius:12px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:15.5px;font-weight:600;cursor:pointer" style-hover="background:#F0F5F1">सभी 13 श्रेणियाँ देखें →</button>
+        </div>
+
+        <div style="padding:22px 0 8px">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding:0 16px">
+            <div style="font-family:'Martel',serif;font-weight:700;font-size:20px">आज के ऑफ़र <span style="font-family:'Mukta',sans-serif;font-weight:400;font-size:13px;color:#6B6453">· Today's offers</span></div>
+            <span style="font-size:13.5px;font-weight:600;color:#235C3F;flex:none">सभी देखें →</span>
+          </div>
+          <div style="display:flex;gap:12px;overflow-x:auto;padding:12px 16px 6px">
+            <sc-for list="{{ offers }}" as="p" hint-placeholder-count="5">
+              <div style="flex:none;width:164px;background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:10px;box-shadow:0 1px 2px rgba(36,32,26,0.05), 0 2px 8px rgba(36,32,26,0.05)">
+                <div style="position:relative">
+                  <div style="aspect-ratio:1;border-radius:12px;background:repeating-linear-gradient(45deg,#F3F0E7,#F3F0E7 10px,#FAF8F2 10px,#FAF8F2 20px);display:grid;place-items:center"><span style="font-family:ui-monospace,monospace;font-size:10px;color:#6B6453;background:#FFFFFF;border-radius:6px;padding:2px 6px">product photo</span></div>
+                  <span style="position:absolute;top:8px;left:8px;background:#E0A93E;color:#24201A;font-size:12px;font-weight:700;border-radius:8px;padding:2px 8px">{{ p.badge }}</span>
+                </div>
+                <div style="font-size:14px;font-weight:500;line-height:1.45;margin-top:8px;min-height:40px">{{ p.hi }} · {{ p.en }}</div>
+                <div style="font-size:12.5px;color:#6B6453">{{ p.unit }}</div>
+                <div style="display:flex;align-items:baseline;gap:6px;margin-top:4px;font-variant-numeric:tabular-nums">
+                  <b style="font-size:18px">{{ p.price }}</b>
+                  <span style="font-size:12.5px;color:#8A8370;text-decoration:line-through">{{ p.mrp }}</span>
+                  <span style="font-size:12px;color:#316F4E;font-weight:700">{{ p.save }}</span>
+                </div>
+                <button style="width:100%;height:42px;margin-top:8px;border:1.5px solid #235C3F;background:#FFFFFF;color:#235C3F;border-radius:999px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:15px;font-weight:700;cursor:pointer" style-hover="background:#F0F5F1">जोड़ें +</button>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="padding:22px 16px 8px">
+          <div style="font-family:'Martel',serif;font-weight:700;font-size:20px">घर की ज़रूरी चीज़ें <span style="font-family:'Mukta',sans-serif;font-weight:400;font-size:13px;color:#6B6453">· Everyday essentials</span></div>
+          <div style="font-size:13px;color:#6B6453;margin-top:2px">चुनी हुई चीज़ें — हर हफ़्ते बदलती हैं</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px">
+            <sc-for list="{{ coll }}" as="p" hint-placeholder-count="4">
+              <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:10px;box-shadow:0 1px 2px rgba(36,32,26,0.05), 0 2px 8px rgba(36,32,26,0.05)">
+                <div style="aspect-ratio:1;border-radius:12px;background:repeating-linear-gradient(45deg,#F3F0E7,#F3F0E7 10px,#FAF8F2 10px,#FAF8F2 20px);display:grid;place-items:center"><span style="font-family:ui-monospace,monospace;font-size:10px;color:#6B6453;background:#FFFFFF;border-radius:6px;padding:2px 6px">product photo</span></div>
+                <div style="font-size:14px;font-weight:500;line-height:1.45;margin-top:8px;min-height:40px">{{ p.hi }} · {{ p.en }}</div>
+                <div style="font-size:12.5px;color:#6B6453">{{ p.unit }}</div>
+                <div style="display:flex;align-items:baseline;gap:6px;margin-top:4px;font-variant-numeric:tabular-nums"><b style="font-size:18px">{{ p.price }}</b></div>
+                <button style="width:100%;height:42px;margin-top:8px;border:1.5px solid #235C3F;background:#FFFFFF;color:#235C3F;border-radius:999px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:15px;font-weight:700;cursor:pointer" style-hover="background:#F0F5F1">जोड़ें +</button>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="padding:22px 0 8px">
+          <div style="display:flex;align-items:center;gap:7px;padding:0 16px">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#235C3F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M12 21s-6.5-5.5-6.5-10.3a6.5 6.5 0 1 1 13 0C18.5 15.5 12 21 12 21z"></path><circle cx="12" cy="10.5" r="2.2"></circle></svg>
+            <div style="font-family:'Martel',serif;font-weight:700;font-size:20px">पिपरा में लोकप्रिय <span style="font-family:'Mukta',sans-serif;font-weight:400;font-size:13px;color:#6B6453">· Popular near you</span></div>
+          </div>
+          <div style="display:flex;gap:12px;overflow-x:auto;padding:12px 16px 6px">
+            <sc-for list="{{ popular }}" as="p" hint-placeholder-count="5">
+              <div style="flex:none;width:164px;background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:10px;box-shadow:0 1px 2px rgba(36,32,26,0.05), 0 2px 8px rgba(36,32,26,0.05)">
+                <div style="aspect-ratio:1;border-radius:12px;background:repeating-linear-gradient(45deg,#F3F0E7,#F3F0E7 10px,#FAF8F2 10px,#FAF8F2 20px);display:grid;place-items:center"><span style="font-family:ui-monospace,monospace;font-size:10px;color:#6B6453;background:#FFFFFF;border-radius:6px;padding:2px 6px">product photo</span></div>
+                <div style="font-size:14px;font-weight:500;line-height:1.45;margin-top:8px;min-height:40px">{{ p.hi }} · {{ p.en }}</div>
+                <div style="font-size:12.5px;color:#6B6453">{{ p.unit }}</div>
+                <div style="display:flex;align-items:baseline;gap:6px;margin-top:4px;font-variant-numeric:tabular-nums">
+                  <b style="font-size:18px">{{ p.price }}</b>
+                  <sc-if value="{{ p.mrp }}" hint-placeholder-val="{{ false }}"><span style="font-size:12.5px;color:#8A8370;text-decoration:line-through">{{ p.mrp }}</span><span style="font-size:12px;color:#316F4E;font-weight:700">{{ p.save }}</span></sc-if>
+                </div>
+                <button style="width:100%;height:42px;margin-top:8px;border:1.5px solid #235C3F;background:#FFFFFF;color:#235C3F;border-radius:999px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:15px;font-weight:700;cursor:pointer" style-hover="background:#F0F5F1">जोड़ें +</button>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="padding:22px 16px 8px">
+          <div style="font-family:'Martel',serif;font-weight:700;font-size:20px">सबसे ज़्यादा बिकने वाले <span style="font-family:'Mukta',sans-serif;font-weight:400;font-size:13px;color:#6B6453">· Best sellers</span></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px">
+            <sc-for list="{{ best }}" as="p" hint-placeholder-count="4">
+              <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:10px;box-shadow:0 1px 2px rgba(36,32,26,0.05), 0 2px 8px rgba(36,32,26,0.05)">
+                <div style="position:relative">
+                  <div style="aspect-ratio:1;border-radius:12px;background:repeating-linear-gradient(45deg,#F3F0E7,#F3F0E7 10px,#FAF8F2 10px,#FAF8F2 20px);display:grid;place-items:center;opacity:{{ p.op }}"><span style="font-family:ui-monospace,monospace;font-size:10px;color:#6B6453;background:#FFFFFF;border-radius:6px;padding:2px 6px">product photo</span></div>
+                  <sc-if value="{{ p.oos }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:8px;left:8px;background:#F3F0E7;color:#514B3D;font-size:12px;font-weight:700;border-radius:8px;padding:2px 8px;border:1px solid #D3CDBC">जल्द वापस</span></sc-if>
+                  <sc-if value="{{ p.badge }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:8px;left:8px;background:#E0A93E;color:#24201A;font-size:12px;font-weight:700;border-radius:8px;padding:2px 8px">{{ p.badge }}</span></sc-if>
+                </div>
+                <div style="font-size:14px;font-weight:500;line-height:1.45;margin-top:8px;min-height:40px;color:{{ p.nameColor }}">{{ p.hi }} · {{ p.en }}</div>
+                <div style="font-size:12.5px;color:#6B6453">{{ p.unit }}</div>
+                <div style="display:flex;align-items:baseline;gap:6px;margin-top:4px;font-variant-numeric:tabular-nums">
+                  <b style="font-size:18px;color:{{ p.priceColor }}">{{ p.price }}</b>
+                  <sc-if value="{{ p.mrp }}" hint-placeholder-val="{{ false }}"><span style="font-size:12.5px;color:#8A8370;text-decoration:line-through">{{ p.mrp }}</span><span style="font-size:12px;color:#316F4E;font-weight:700">{{ p.save }}</span></sc-if>
+                </div>
+                <sc-if value="{{ p.oos }}" hint-placeholder-val="{{ false }}">
+                  <button style="width:100%;height:42px;margin-top:8px;border:1.5px solid #D3CDBC;background:#F3F0E7;color:#6B6453;border-radius:999px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:14px;font-weight:600;cursor:pointer" style-hover="border-color:#8A8370">आने पर बताएँ</button>
+                </sc-if>
+                <sc-if value="{{ p.inStock }}" hint-placeholder-val="{{ true }}">
+                  <button style="width:100%;height:42px;margin-top:8px;border:1.5px solid #235C3F;background:#FFFFFF;color:#235C3F;border-radius:999px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:15px;font-weight:700;cursor:pointer" style-hover="background:#F0F5F1">जोड़ें +</button>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="padding:22px 16px 8px">
+          <div style="background:#F0F5F1;border:1px solid #C1D9C9;border-radius:16px;padding:18px;display:flex;gap:14px;align-items:center">
+            <div style="width:72px;height:72px;border-radius:12px;background:repeating-linear-gradient(45deg,#DEEBE1,#DEEBE1 10px,#F0F5F1 10px,#F0F5F1 20px);flex:none;display:grid;place-items:center"><span style="font-family:ui-monospace,monospace;font-size:9px;color:#235C3F;background:#FFFFFF;border-radius:6px;padding:2px 5px;text-align:center">aangan art:<br>दउरा</span></div>
+            <div style="min-width:0">
+              <div style="font-family:'Martel',serif;font-weight:700;font-size:18px;line-height:1.5">महीने का राशन, एक बार में</div>
+              <div style="font-size:13.5px;line-height:1.55;color:#514B3D;margin-top:2px">आटा, चावल, दाल, तेल, मसाले — पूरी लिस्ट एक साथ ऑर्डर करें।</div>
+              <button style="min-height:44px;margin-top:10px;padding:0 18px;background:#DEEBE1;color:#133523;border:none;border-radius:12px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:14.5px;font-weight:600;cursor:pointer" style-hover="background:#C1D9C9">मंथली लिस्ट देखें</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding:22px 16px 8px">
+          <div style="font-family:'Martel',serif;font-weight:700;font-size:20px">ब्रांड से खरीदें <span style="font-family:'Mukta',sans-serif;font-weight:400;font-size:13px;color:#6B6453">· Shop by brand</span></div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px">
+            <span style="border:1px solid #E7E2D5;background:#FFFFFF;border-radius:999px;padding:9px 16px;font-size:14px;font-weight:600;color:#37322A">आशीर्वाद</span>
+            <span style="border:1px solid #E7E2D5;background:#FFFFFF;border-radius:999px;padding:9px 16px;font-size:14px;font-weight:600;color:#37322A">फ़ॉर्च्यून</span>
+            <span style="border:1px solid #E7E2D5;background:#FFFFFF;border-radius:999px;padding:9px 16px;font-size:14px;font-weight:600;color:#37322A">टाटा</span>
+            <span style="border:1px solid #E7E2D5;background:#FFFFFF;border-radius:999px;padding:9px 16px;font-size:14px;font-weight:600;color:#37322A">पारले</span>
+            <span style="border:1px solid #E7E2D5;background:#FFFFFF;border-radius:999px;padding:9px 16px;font-size:14px;font-weight:600;color:#37322A">ब्रिटानिया</span>
+            <span style="border:1px solid #E7E2D5;background:#FFFFFF;border-radius:999px;padding:9px 16px;font-size:14px;font-weight:600;color:#37322A">डाबर</span>
+            <span style="border:1px solid #E7E2D5;background:#FFFFFF;border-radius:999px;padding:9px 16px;font-size:14px;font-weight:600;color:#37322A">सुधा</span>
+            <span style="border:1px solid #E7E2D5;background:#FFFFFF;border-radius:999px;padding:9px 16px;font-size:14px;font-weight:600;color:#37322A">सर्फ़ एक्सेल</span>
+            <span style="border:none;background:transparent;border-radius:999px;padding:9px 12px;font-size:14px;font-weight:600;color:#235C3F">सभी ब्रांड →</span>
+          </div>
+        </div>
+
+        <div style="padding:26px 16px 8px">
+          <div style="font-family:'Martel',serif;font-weight:700;font-size:20px">MG Supermart ही क्यों? <span style="font-family:'Mukta',sans-serif;font-weight:400;font-size:13px;color:#6B6453">· Why MG</span></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px">
+            <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:14px">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#235C3F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"></circle><path d="m8.5 12.5 2.4 2.4 4.6-5.3"></path></svg>
+              <div style="font-size:14.5px;font-weight:700;margin-top:8px">असली सामान</div>
+              <div style="font-size:13px;line-height:1.55;color:#514B3D;margin-top:3px">जो दिखता है वही मिलता है — बिल के साथ।</div>
+            </div>
+            <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:14px">
+              <span style="width:22px;height:22px;display:grid;place-items:center;font-size:16px;font-weight:800;color:#235C3F;border:2px solid #235C3F;border-radius:999px;box-sizing:border-box;line-height:1">₹</span>
+              <div style="font-size:14.5px;font-weight:700;margin-top:8px">सही दाम</div>
+              <div style="font-size:13px;line-height:1.55;color:#514B3D;margin-top:3px">MRP से ज़्यादा कभी नहीं — बचत साफ़-साफ़।</div>
+            </div>
+            <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:14px">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#235C3F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-5.5-6.5-10.3a6.5 6.5 0 1 1 13 0C18.5 15.5 12 21 12 21z"></path><circle cx="12" cy="10.5" r="2.2"></circle></svg>
+              <div style="font-size:14.5px;font-weight:700;margin-top:8px">5 किमी में डिलीवरी</div>
+              <div style="font-size:13px;line-height:1.55;color:#514B3D;margin-top:3px">पिपरा व आस-पास — तय स्लॉट पर, घर तक।</div>
+            </div>
+            <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:14px">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#235C3F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4.5h4L10.5 9 8.5 10.5a12.5 12.5 0 0 0 5 5L15 13.5l4.5 1.5v4a2 2 0 0 1-2 2A16.5 16.5 0 0 1 3 6.5a2 2 0 0 1 2-2z"></path></svg>
+              <div style="font-size:14.5px;font-weight:700;margin-top:8px">इंसान से बात</div>
+              <div style="font-size:13px;line-height:1.55;color:#514B3D;margin-top:3px">WhatsApp या कॉल — सीधे दुकान से जवाब।</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding:22px 0 8px">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding:0 16px">
+            <div style="font-family:'Martel',serif;font-weight:700;font-size:20px">ग्राहक क्या कहते हैं <span style="font-family:'Mukta',sans-serif;font-weight:400;font-size:13px;color:#6B6453">· Google reviews</span></div>
+          </div>
+          <div style="display:flex;gap:12px;overflow-x:auto;padding:12px 16px 6px">
+            <sc-for list="{{ reviews }}" as="r" hint-placeholder-count="3">
+              <div style="flex:none;width:264px;background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:16px">
+                <div style="color:#E0A93E;font-size:14px;letter-spacing:2px">{{ r.stars }}</div>
+                <p style="font-size:14px;line-height:1.65;color:#37322A;margin:8px 0 0">{{ r.text }}</p>
+                <div style="font-size:13px;font-weight:600;margin-top:10px">{{ r.name }} <span style="font-weight:400;color:#6B6453">· {{ r.place }}</span></div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="padding:2px 16px"><span style="font-size:13.5px;font-weight:600;color:#235C3F">Google पर सभी समीक्षाएँ →</span></div>
+        </div>
+
+        <div style="padding:22px 16px 8px">
+          <div style="font-family:'Martel',serif;font-weight:700;font-size:20px">Instagram पर <span style="font-family:'Mukta',sans-serif;font-weight:400;font-size:13px;color:#6B6453">· @mgsupermart</span></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px">
+            <div style="aspect-ratio:1;border-radius:12px;background:repeating-linear-gradient(45deg,#F4E1D7,#F4E1D7 10px,#FAF1EC 10px,#FAF1EC 20px);display:grid;place-items:center"><span style="font-family:ui-monospace,monospace;font-size:10px;color:#7C3D20;background:#FFFFFF;border-radius:6px;padding:2px 6px">store post</span></div>
+            <div style="aspect-ratio:1;border-radius:12px;background:repeating-linear-gradient(45deg,#F3F0E7,#F3F0E7 10px,#FAF8F2 10px,#FAF8F2 20px);display:grid;place-items:center"><span style="font-family:ui-monospace,monospace;font-size:10px;color:#6B6453;background:#FFFFFF;border-radius:6px;padding:2px 6px">store post</span></div>
+            <div style="aspect-ratio:1;border-radius:12px;background:repeating-linear-gradient(45deg,#F9EDD1,#F9EDD1 10px,#FCF6E8 10px,#FCF6E8 20px);display:grid;place-items:center"><span style="font-family:ui-monospace,monospace;font-size:10px;color:#8A5F0B;background:#FFFFFF;border-radius:6px;padding:2px 6px">store post</span></div>
+            <div style="aspect-ratio:1;border-radius:12px;background:repeating-linear-gradient(45deg,#DEEBE1,#DEEBE1 10px,#F0F5F1 10px,#F0F5F1 20px);display:grid;place-items:center"><span style="font-family:ui-monospace,monospace;font-size:10px;color:#235C3F;background:#FFFFFF;border-radius:6px;padding:2px 6px">store post</span></div>
+          </div>
+          <div style="margin-top:10px"><span style="font-size:13.5px;font-weight:600;color:#235C3F">Instagram पर फ़ॉलो करें →</span></div>
+        </div>
+
+        <div style="padding:22px 16px 8px">
+          <div style="background:#FAF1EC;border:1px solid #F4E1D7;border-radius:16px;padding:18px">
+            <div style="display:flex;gap:12px;align-items:center">
+              <span style="width:44px;height:44px;border-radius:999px;background:#FFFFFF;border:1px solid #F4E1D7;display:grid;place-items:center;flex:none"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#316F4E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8.5 8.5 0 0 1-12.4 7.5L4 21l1.5-4.4A8.5 8.5 0 1 1 21 12z"></path></svg></span>
+              <div style="font-family:'Martel',serif;font-weight:700;font-size:18px;line-height:1.5;color:#5A2B15">MG WhatsApp कम्युनिटी</div>
+            </div>
+            <p style="font-size:14px;line-height:1.65;color:#514B3D;margin:10px 0 0">हफ़्ते में 2–3 संदेश — ऑफ़र, त्योहार की तैयारी, नई चीज़ें। कभी भी छोड़ सकते हैं, कोई सवाल नहीं।</p>
+            <button style="min-height:48px;margin-top:12px;padding:0 20px;background:#DEEBE1;color:#133523;border:none;border-radius:12px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:15px;font-weight:600;cursor:pointer" style-hover="background:#C1D9C9">कम्युनिटी से जुड़ें</button>
+          </div>
+        </div>
+
+        <div style="padding:22px 16px 26px">
+          <div style="font-family:'Martel',serif;font-weight:700;font-size:20px">दुकान पर आइए <span style="font-family:'Mukta',sans-serif;font-weight:400;font-size:13px;color:#6B6453">· Visit our store</span></div>
+          <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;overflow:hidden;margin-top:12px">
+            <div style="aspect-ratio:16/9;background:repeating-linear-gradient(45deg,#DFE7F1,#DFE7F1 10px,#EFF3F8 10px,#EFF3F8 20px);display:grid;place-items:center"><span style="font-family:ui-monospace,monospace;font-size:11px;color:#2F4767;background:#FFFFFF;border-radius:6px;padding:3px 8px">Google Map embed — मुख्य बाज़ार, पिपरा</span></div>
+            <div style="padding:16px">
+              <div style="font-size:15px;font-weight:700">एमजी सुपरमार्केट</div>
+              <div style="font-size:14px;line-height:1.65;color:#514B3D;margin-top:2px">मुख्य बाज़ार, पिपरा, पूर्वी चम्पारण, बिहार — 845412</div>
+              <div style="font-size:13.5px;color:#6B6453;margin-top:4px">सोम–शनि, सुबह 8 – रात 9 · +91 98765 43210</div>
+              <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+                <button style="min-height:44px;padding:0 16px;background:#FFFFFF;color:#24201A;border:1.5px solid #D3CDBC;border-radius:12px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:14px;font-weight:600;cursor:pointer" style-hover="border-color:#8A8370">कॉल करें</button>
+                <button style="min-height:44px;padding:0 16px;background:#FFFFFF;color:#24201A;border:1.5px solid #D3CDBC;border-radius:12px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:14px;font-weight:600;cursor:pointer" style-hover="border-color:#8A8370">WhatsApp</button>
+                <button style="min-height:44px;padding:0 16px;background:#FFFFFF;color:#24201A;border:1.5px solid #D3CDBC;border-radius:12px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:14px;font-weight:600;cursor:pointer" style-hover="border-color:#8A8370">Maps में देखें</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:#133523;color:#9ABFA8;padding:26px 16px 22px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="width:34px;height:34px;border-radius:10px;background:#FAF8F2;color:#133523;display:grid;place-items:center;font-family:'Martel',serif;font-weight:900;font-size:13px">MG</span>
+            <div>
+              <div style="font-family:'Martel',serif;font-weight:800;font-size:16px;color:#FAF8F2;line-height:1.4">MG Supermart</div>
+              <div style="font-size:12px;color:#C1D9C9;line-height:1.4">एमजी सुपरमार्केट · पिपरा, पूर्वी चम्पारण</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:18px 28px;margin-top:20px">
+            <div style="flex:1 1 140px;min-width:130px">
+              <div style="font-size:12.5px;font-weight:700;color:#DEEBE1;margin-bottom:8px">हमारे बारे में</div>
+              <div style="display:grid;gap:6px;font-size:13.5px"><span>हमारी कहानी</span><span>कम्युनिटी</span><span>थोक ख़रीद · Wholesale</span></div>
+            </div>
+            <div style="flex:1 1 140px;min-width:130px">
+              <div style="font-size:12.5px;font-weight:700;color:#DEEBE1;margin-bottom:8px">ग्राहक</div>
+              <div style="display:grid;gap:6px;font-size:13.5px"><span>हेल्प सेंटर</span><span>संपर्क करें</span><span>ऑर्डर ट्रैक करें</span><span>FAQs</span></div>
+            </div>
+            <div style="flex:1 1 140px;min-width:130px">
+              <div style="font-size:12.5px;font-weight:700;color:#DEEBE1;margin-bottom:8px">नीतियाँ</div>
+              <div style="display:grid;gap:6px;font-size:13.5px"><span>प्राइवेसी पॉलिसी</span><span>नियम व शर्तें</span><span>शिपिंग पॉलिसी</span><span>कैंसिलेशन व रिफ़ंड</span></div>
+            </div>
+            <div style="flex:1 1 140px;min-width:130px">
+              <div style="font-size:12.5px;font-weight:700;color:#DEEBE1;margin-bottom:8px">कम्युनिटी</div>
+              <div style="display:grid;gap:6px;font-size:13.5px"><span>Instagram</span><span>WhatsApp कम्युनिटी</span><span>Google Business</span><span>Facebook</span></div>
+            </div>
+            <div style="flex:1 1 160px;min-width:150px">
+              <div style="font-size:12.5px;font-weight:700;color:#DEEBE1;margin-bottom:8px">संपर्क</div>
+              <div style="display:grid;gap:6px;font-size:13.5px"><span>मुख्य बाज़ार, पिपरा — 845412</span><span>+91 98765 43210</span><span>सोम–शनि, 8 am – 9 pm</span><span>Google Maps पर देखें</span></div>
+            </div>
+          </div>
+          <div style="border-top:1px solid #1B4831;margin-top:20px;padding-top:14px;font-size:12.5px">© 2026 MG Supermart · पिपरा का अपना सुपरमार्केट</div>
+        </div>
+
+        <div style="position:sticky;bottom:0;z-index:5">
+          <div style="display:flex;justify-content:flex-end;gap:10px;padding:0 12px 10px">
+            <span style="width:52px;height:52px;border-radius:999px;background:#FFFFFF;border:1px solid #E7E2D5;box-shadow:0 4px 16px rgba(36,32,26,0.10);display:grid;place-items:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#316F4E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8.5 8.5 0 0 1-12.4 7.5L4 21l1.5-4.4A8.5 8.5 0 1 1 21 12z"></path></svg></span>
+            <span style="width:52px;height:52px;border-radius:999px;background:#FFFFFF;border:1px solid #E7E2D5;box-shadow:0 4px 16px rgba(36,32,26,0.10);display:grid;place-items:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#235C3F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4.5h4L10.5 9 8.5 10.5a12.5 12.5 0 0 0 5 5L15 13.5l4.5 1.5v4a2 2 0 0 1-2 2A16.5 16.5 0 0 1 3 6.5a2 2 0 0 1 2-2z"></path></svg></span>
+          </div>
+          <div style="display:flex;border-top:1px solid #E7E2D5;background:#FFFFFF">
+            <div style="flex:1;display:grid;justify-items:center;gap:3px;padding:9px 0 8px">
+              <svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 3.5 3.5 10.4V20.5h17V10.4L12 3.5z" fill="#235C3F"></path></svg>
+              <span style="font-size:11.5px;font-weight:700;color:#235C3F">घर</span>
+            </div>
+            <div style="flex:1;display:grid;justify-items:center;gap:3px;padding:9px 0 8px">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6B6453" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1.5"></rect><rect x="13" y="4" width="7" height="7" rx="1.5"></rect><rect x="4" y="13" width="7" height="7" rx="1.5"></rect><rect x="13" y="13" width="7" height="7" rx="1.5"></rect></svg>
+              <span style="font-size:11.5px;color:#6B6453">श्रेणियाँ</span>
+            </div>
+            <div style="flex:1;display:grid;justify-items:center;gap:3px;padding:9px 0 8px">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6B6453" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"></circle><path d="m16.5 16.5 4 4"></path></svg>
+              <span style="font-size:11.5px;color:#6B6453">खोजें</span>
+            </div>
+            <div style="flex:1;display:grid;justify-items:center;gap:3px;padding:9px 0 8px">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6B6453" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 9.5h15L18 18.6a1.9 1.9 0 0 1-1.9 1.4H7.9A1.9 1.9 0 0 1 6 18.6L4.5 9.5z"></path><path d="M8.5 9.5a3.5 3.5 0 0 1 7 0"></path></svg>
+              <span style="font-size:11.5px;color:#6B6453">कार्ट</span>
+            </div>
+            <div style="flex:1;display:grid;justify-items:center;gap:3px;padding:9px 0 8px">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6B6453" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8.2" r="3.4"></circle><path d="M5.2 20a6.8 6.8 0 0 1 13.6 0"></path></svg>
+              <span style="font-size:11.5px;color:#6B6453">खाता</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 1b MOBILE SHRAVAN ============ -->
+    <div id="1b" data-screen-label="1b Mobile Shravan" style="flex:none;display:flex;flex-direction:column;gap:9px">
+      <div style="display:flex;align-items:baseline;gap:8px;font-size:11.5px;color:#6B6453">
+        <a href="#1b" style="font-family:ui-monospace,Menlo,monospace;font-size:10.5px;font-weight:600;background:#8F4A10;color:#FAF8F2;border-radius:5px;padding:3px 7px;text-decoration:none">1b</a>
+        <span><b style="color:#37322A">Mobile 390 — सावन (SEE)।</b> बदला: hero greeting + art, एक collection, badge। बाक़ी सब <a href="#1a">1a</a> जैसा (live-order strip ग्राहक-state है, campaign नहीं — यहाँ off)</span>
+      </div>
+      <div style="width:390px;background:#FAF8F2;border:1px solid #D3CDBC;border-radius:16px;overflow:hidden;box-shadow:0 1px 3px rgba(36,32,26,0.07)">
+
+        <div style="background:#133523;color:#DEEBE1;font-size:12.5px;text-align:center;padding:7px 12px">पिपरा में मुफ़्त डिलीवरी — ₹500 से ऊपर के ऑर्डर पर</div>
+
+        <div style="display:flex;align-items:center;gap:10px;padding:12px 16px 4px">
+          <div style="width:36px;height:36px;border-radius:10px;background:#235C3F;color:#FAF8F2;display:grid;place-items:center;font-family:'Martel',serif;font-weight:900;font-size:14px;flex:none">MG</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-family:'Martel',serif;font-weight:800;font-size:15.5px;line-height:1.3">MG Supermart</div>
+            <div style="font-size:11.5px;color:#6B6453;line-height:1.3">एमजी सुपरमार्केट · पिपरा</div>
+          </div>
+          <span style="display:inline-flex;border:1.5px solid #D3CDBC;border-radius:999px;overflow:hidden;font-size:12.5px;font-weight:700"><span style="padding:4px 10px;background:#235C3F;color:#FAF8F2">अ</span><span style="padding:4px 10px;color:#514B3D">A</span></span>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#24201A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M6.5 15.5v-5a5.5 5.5 0 0 1 11 0v5l1.5 2.5h-14l1.5-2.5z"></path><path d="M10.2 20.5a2 2 0 0 0 3.6 0"></path></svg>
+        </div>
+
+        <div style="padding:10px 16px 4px">
+          <div style="display:flex;align-items:center;gap:9px;border:1.5px solid #D3CDBC;border-radius:12px;padding:13px 14px;background:#FFFFFF">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B6453" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"></circle><path d="m16.5 16.5 4 4"></path></svg>
+            <span style="font-size:14.5px;color:#8A8370">खोजें: आटा, दाल, साबुन…</span>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:7px;padding:9px 16px;background:#F0F5F1;margin-top:8px;font-size:12.5px;color:#1B4831">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#235C3F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M12 21s-6.5-5.5-6.5-10.3a6.5 6.5 0 1 1 13 0C18.5 15.5 12 21 12 21z"></path><circle cx="12" cy="10.5" r="2.2"></circle></svg>
+          <b>डिलीवरी: पिपरा व 5 किमी</b><span style="color:#316F4E">· अगला स्लॉट — आज शाम 5–7</span>
+        </div>
+        <div style="display:flex;gap:8px;padding:9px 16px;background:#EFF3F8;border-top:1px solid #DFE7F1;font-size:12.5px;color:#2F4767;line-height:1.55">
+          <span style="width:18px;height:18px;border-radius:999px;background:#3D5A82;color:#FFFFFF;display:grid;place-items:center;font-size:11px;font-weight:800;flex:none;margin-top:1px">i</span>
+          <span>न्यूनतम ऑर्डर ₹500 है। तेल और खुली चीनी इसमें नहीं गिने जाते — पहले ही बताना ठीक लगा।</span>
+        </div>
+
+        <div style="padding:16px 16px 8px">
+          <div style="background:#FBF1E3;border:1px solid #F0D3A6;border-radius:24px;padding:20px 18px">
+            <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#8F4A10">सावन कलेक्शन · Shravan Collection</div>
+            <div style="font-family:'Martel',serif;font-weight:800;font-size:26px;line-height:1.5;color:#8F4A10;margin-top:4px">सावन की हार्दिक शुभकामनाएँ</div>
+            <p style="font-size:14.5px;line-height:1.65;color:#514B3D;margin:8px 0 0">हर सोमवार की पूजा और व्रत की तैयारी — एक ही जगह। <span style="color:#6B6453">Shravan essentials, together in one place.</span></p>
+            <div style="margin-top:14px;aspect-ratio:16/9;border-radius:16px;background:repeating-linear-gradient(45deg,#F6E2C4,#F6E2C4 10px,#FBF1E3 10px,#FBF1E3 20px);display:grid;place-items:center"><span style="font-family:ui-monospace,monospace;font-size:11px;color:#8F4A10;background:#FFFFFF;border-radius:6px;padding:3px 9px;text-align:center">aangan illustration — बेलपत्र,<br>कलश व दीया (सावन motif set)</span></div>
+            <button style="width:100%;min-height:52px;margin-top:14px;background:#235C3F;color:#FAF8F2;border:none;border-radius:12px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:17px;font-weight:600;cursor:pointer" style-hover="background:#1B4831">सावन कलेक्शन देखें</button>
+          </div>
+          <div style="font-size:13.5px;color:#6B6453;margin-top:8px">दुकान: सोम–शनि, सुबह 8 – रात 9 · मुख्य बाज़ार, पिपरा</div>
+        </div>
+
+        <div style="padding:22px 16px 8px">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px">
+            <div style="font-family:'Martel',serif;font-weight:700;font-size:20px">श्रेणियाँ <span style="font-family:'Mukta',sans-serif;font-weight:400;font-size:13px;color:#6B6453">· Shop by category</span></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px">
+            <sc-for list="{{ cats }}" as="c" hint-placeholder-count="8">
+              <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:12px;display:flex;gap:10px;align-items:center">
+                <div style="width:46px;height:46px;border-radius:12px;background:repeating-linear-gradient(45deg,#F3F0E7,#F3F0E7 8px,#FAF8F2 8px,#FAF8F2 16px);flex:none;display:grid;place-items:center"><span style="font-family:ui-monospace,monospace;font-size:9px;color:#8A8370">photo</span></div>
+                <div style="min-width:0">
+                  <div style="font-size:14px;font-weight:600;line-height:1.4">{{ c.hi }}</div>
+                  <div style="font-size:11.5px;color:#6B6453;line-height:1.35">{{ c.en }} · {{ c.n }} →</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <button style="width:100%;min-height:48px;margin-top:10px;background:transparent;color:#235C3F;border:none;border-radius:12px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:15.5px;font-weight:600;cursor:pointer" style-hover="background:#F0F5F1">सभी 13 श्रेणियाँ देखें →</button>
+        </div>
+
+        <div style="padding:22px 0 8px">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding:0 16px">
+            <div style="font-family:'Martel',serif;font-weight:700;font-size:20px">आज के ऑफ़र <span style="font-family:'Mukta',sans-serif;font-weight:400;font-size:13px;color:#6B6453">· Today's offers</span></div>
+            <span style="font-size:13.5px;font-weight:600;color:#235C3F;flex:none">सभी देखें →</span>
+          </div>
+          <div style="display:flex;gap:12px;overflow-x:auto;padding:12px 16px 6px">
+            <sc-for list="{{ offers }}" as="p" hint-placeholder-count="5">
+              <div style="flex:none;width:164px;background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:10px;box-shadow:0 1px 2px rgba(36,32,26,0.05), 0 2px 8px rgba(36,32,26,0.05)">
+                <div style="position:relative">
+                  <div style="aspect-ratio:1;border-radius:12px;background:repeating-linear-gradient(45deg,#F3F0E7,#F3F0E7 10px,#FAF8F2 10px,#FAF8F2 20px);display:grid;place-items:center"><span style="font-family:ui-monospace,monospace;font-size:10px;color:#6B6453;background:#FFFFFF;border-radius:6px;padding:2px 6px">product photo</span></div>
+                  <span style="position:absolute;top:8px;left:8px;background:#E0A93E;color:#24201A;font-size:12px;font-weight:700;border-radius:8px;padding:2px 8px">{{ p.badge }}</span>
+                </div>
+                <div style="font-size:14px;font-weight:500;line-height:1.45;margin-top:8px;min-height:40px">{{ p.hi }} · {{ p.en }}</div>
+                <div style="font-size:12.5px;color:#6B6453">{{ p.unit }}</div>
+                <div style="display:flex;align-items:baseline;gap:6px;margin-top:4px;font-variant-numeric:tabular-nums">
+                  <b style="font-size:18px">{{ p.price }}</b>
+                  <span style="font-size:12.5px;color:#8A8370;text-decoration:line-through">{{ p.mrp }}</span>
+                  <span style="font-size:12px;color:#316F4E;font-weight:700">{{ p.save }}</span>
+                </div>
+                <button style="width:100%;height:42px;margin-top:8px;border:1.5px solid #235C3F;background:#FFFFFF;color:#235C3F;border-radius:999px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:15px;font-weight:700;cursor:pointer" style-hover="background:#F0F5F1">जोड़ें +</button>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="padding:22px 0 8px">
+          <div style="padding:0 16px">
+            <div style="background:#FBF1E3;border:1px solid #F0D3A6;border-radius:16px;padding:16px 18px">
+              <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#8F4A10">सावन कलेक्शन · Shravan Collection</div>
+              <div style="font-family:'Martel',serif;font-weight:700;font-size:19px;line-height:1.5;color:#8F4A10;margin-top:3px">सोमवार व्रत और पूजा की तैयारी</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+                <span style="background:#FFFFFF;border:1px solid #F0D3A6;color:#8F4A10;border-radius:999px;padding:7px 13px;font-size:13px;font-weight:600">व्रत का सामान</span>
+                <span style="background:#FFFFFF;border:1px solid #F0D3A6;color:#8F4A10;border-radius:999px;padding:7px 13px;font-size:13px;font-weight:600">पूजा सामग्री</span>
+                <span style="background:#FFFFFF;border:1px solid #F0D3A6;color:#8F4A10;border-radius:999px;padding:7px 13px;font-size:13px;font-weight:600">दूध-दही</span>
+                <span style="background:#FFFFFF;border:1px solid #F0D3A6;color:#8F4A10;border-radius:999px;padding:7px 13px;font-size:13px;font-weight:600">फल व मेवे</span>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;gap:12px;overflow-x:auto;padding:12px 16px 6px">
+            <sc-for list="{{ shravan }}" as="p" hint-placeholder-count="5">
+              <div style="flex:none;width:164px;background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:10px;box-shadow:0 1px 2px rgba(36,32,26,0.05), 0 2px 8px rgba(36,32,26,0.05)">
+                <div style="position:relative">
+                  <div style="aspect-ratio:1;border-radius:12px;background:repeating-linear-gradient(45deg,#F3F0E7,#F3F0E7 10px,#FAF8F2 10px,#FAF8F2 20px);display:grid;place-items:center"><span style="font-family:ui-monospace,monospace;font-size:10px;color:#6B6453;background:#FFFFFF;border-radius:6px;padding:2px 6px">product photo</span></div>
+                  <span style="position:absolute;top:8px;left:8px;background:#FBF1E3;color:#8F4A10;border:1px solid #F0D3A6;font-size:12px;font-weight:700;border-radius:8px;padding:2px 8px">सावन</span>
+                </div>
+                <div style="font-size:14px;font-weight:500;line-height:1.45;margin-top:8px;min-height:40px">{{ p.hi }} · {{ p.en }}</div>
+                <div style="font-size:12.5px;color:#6B6453">{{ p.unit }}</div>
+                <div style="display:flex;align-items:baseline;gap:6px;margin-top:4px;font-variant-numeric:tabular-nums"><b style="font-size:18px">{{ p.price }}</b></div>
+                <button style="width:100%;height:42px;margin-top:8px;border:1.5px solid #235C3F;background:#FFFFFF;color:#235C3F;border-radius:999px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:15px;font-weight:700;cursor:pointer" style-hover="background:#F0F5F1">जोड़ें +</button>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="padding:22px 0 8px">
+          <div style="display:flex;align-items:center;gap:7px;padding:0 16px">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#235C3F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M12 21s-6.5-5.5-6.5-10.3a6.5 6.5 0 1 1 13 0C18.5 15.5 12 21 12 21z"></path><circle cx="12" cy="10.5" r="2.2"></circle></svg>
+            <div style="font-family:'Martel',serif;font-weight:700;font-size:20px">पिपरा में लोकप्रिय <span style="font-family:'Mukta',sans-serif;font-weight:400;font-size:13px;color:#6B6453">· Popular near you</span></div>
+          </div>
+          <div style="display:flex;gap:12px;overflow-x:auto;padding:12px 16px 6px">
+            <sc-for list="{{ popular }}" as="p" hint-placeholder-count="5">
+              <div style="flex:none;width:164px;background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:10px;box-shadow:0 1px 2px rgba(36,32,26,0.05), 0 2px 8px rgba(36,32,26,0.05)">
+                <div style="aspect-ratio:1;border-radius:12px;background:repeating-linear-gradient(45deg,#F3F0E7,#F3F0E7 10px,#FAF8F2 10px,#FAF8F2 20px);display:grid;place-items:center"><span style="font-family:ui-monospace,monospace;font-size:10px;color:#6B6453;background:#FFFFFF;border-radius:6px;padding:2px 6px">product photo</span></div>
+                <div style="font-size:14px;font-weight:500;line-height:1.45;margin-top:8px;min-height:40px">{{ p.hi }} · {{ p.en }}</div>
+                <div style="font-size:12.5px;color:#6B6453">{{ p.unit }}</div>
+                <div style="display:flex;align-items:baseline;gap:6px;margin-top:4px;font-variant-numeric:tabular-nums">
+                  <b style="font-size:18px">{{ p.price }}</b>
+                  <sc-if value="{{ p.mrp }}" hint-placeholder-val="{{ false }}"><span style="font-size:12.5px;color:#8A8370;text-decoration:line-through">{{ p.mrp }}</span><span style="font-size:12px;color:#316F4E;font-weight:700">{{ p.save }}</span></sc-if>
+                </div>
+                <button style="width:100%;height:42px;margin-top:8px;border:1.5px solid #235C3F;background:#FFFFFF;color:#235C3F;border-radius:999px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:15px;font-weight:700;cursor:pointer" style-hover="background:#F0F5F1">जोड़ें +</button>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="padding:22px 16px 10px;color:#6B6453;font-size:13px;line-height:1.6;background:#FFFFFF;border-top:1px dashed #D3CDBC">
+          <b style="color:#37322A">यहाँ से नीचे सब कुछ <a href="#1a">1a</a> जैसा ही:</b> Best sellers · मंथली राशन · ब्रांड · Why MG · समीक्षाएँ · Instagram · WhatsApp कम्युनिटी · दुकान · footer · bottom bar — सावन में इनमें कुछ नहीं बदलता (CP-6: ≤10% pixels; nav व buttons अछूते)।
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 1c DESKTOP DEFAULT ============ -->
+    <div id="1c" data-screen-label="1c Desktop default" style="flex:none;display:flex;flex-direction:column;gap:9px">
+      <div style="display:flex;align-items:baseline;gap:8px;font-size:11.5px;color:#6B6453">
+        <a href="#1c" style="font-family:ui-monospace,Menlo,monospace;font-size:10.5px;font-weight:600;background:#24201A;color:#FAF8F2;border-radius:5px;padding:3px 7px;text-decoration:none">1c</a>
+        <span><b style="color:#37322A">Desktop 1280 — default.</b> वही vocabulary, चौड़ा counter (Bargad §23) · content 1200 पर capped · mega-menu on hover · live-order strip ON</span>
+      </div>
+      <div style="width:1280px;background:#FAF8F2;border:1px solid #D3CDBC;border-radius:16px;overflow:hidden;box-shadow:0 1px 3px rgba(36,32,26,0.07)">
+
+        <div style="background:#133523;color:#DEEBE1;font-size:13px;text-align:center;padding:7px 12px">पिपरा में मुफ़्त डिलीवरी — ₹500 से ऊपर के ऑर्डर पर</div>
+
+        <div style="background:#FFFFFF;border-bottom:1px solid #F3F0E7">
+          <div style="max-width:1200px;margin:0 auto;padding:12px 32px;display:flex;align-items:center;gap:20px">
+            <div style="display:flex;align-items:center;gap:10px;flex:none">
+              <div style="width:34px;height:34px;border-radius:10px;background:#235C3F;color:#FAF8F2;display:grid;place-items:center;font-family:'Martel',serif;font-weight:900;font-size:13px">MG</div>
+              <div>
+                <div style="font-family:'Martel',serif;font-weight:800;font-size:16px;line-height:1.3">MG Supermart</div>
+                <div style="font-size:11px;color:#6B6453;line-height:1.3">एमजी सुपरमार्केट · पिपरा</div>
+              </div>
+            </div>
+            <div style="flex:1 1 auto;max-width:520px;display:flex;align-items:center;gap:9px;border:1.5px solid #D3CDBC;border-radius:12px;padding:11px 14px;background:#FAF8F2">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#6B6453" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"></circle><path d="m16.5 16.5 4 4"></path></svg>
+              <span style="font-size:14px;color:#8A8370">खोजें: आटा, दाल, साबुन…</span>
+            </div>
+            <div style="display:flex;gap:18px;align-items:center;font-size:14px;color:#514B3D;flex:none;margin-left:auto">
+              <span style="display:inline-flex;border:1.5px solid #D3CDBC;border-radius:999px;overflow:hidden;font-size:12px;font-weight:700"><span style="padding:3px 9px;background:#235C3F;color:#FAF8F2">अ</span><span style="padding:3px 9px">A</span></span>
+              <span style="display:inline-flex;align-items:center;gap:6px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#514B3D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.7-7-10a4.1 4.1 0 0 1 7-2.9A4.1 4.1 0 0 1 19 10c0 5.3-7 10-7 10z"></path></svg>पसंद</span>
+              <span style="display:inline-flex;align-items:center;gap:6px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#514B3D" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8.2" r="3.4"></circle><path d="M5.2 20a6.8 6.8 0 0 1 13.6 0"></path></svg>खाता</span>
+              <b style="color:#235C3F;display:inline-flex;align-items:center;gap:6px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#235C3F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 9.5h15L18 18.6a1.9 1.9 0 0 1-1.9 1.4H7.9A1.9 1.9 0 0 1 6 18.6L4.5 9.5z"></path><path d="M8.5 9.5a3.5 3.5 0 0 1 7 0"></path></svg>कार्ट</b>
+            </div>
+          </div>
+          <div style="max-width:1200px;margin:0 auto;padding:0 32px;display:flex;gap:24px;font-size:14.5px;color:#37322A">
+            <b style="color:#235C3F;border-bottom:2.5px solid #235C3F;padding:10px 0">होम</b><span style="padding:10px 0">शॉप</span><span style="padding:10px 0">श्रेणियाँ</span><span style="padding:10px 0">ऑफ़र</span><span style="padding:10px 0">मेंबरशिप</span><span style="padding:10px 0">हमारे बारे में</span><span style="padding:10px 0">संपर्क</span>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-wrap:wrap">
+          <sc-if value="{{ inArea }}" hint-placeholder-val="{{ true }}">
+            <div style="flex:1 1 380px;display:flex;align-items:center;justify-content:center;gap:7px;padding:9px 16px;background:#F0F5F1;font-size:13px;color:#1B4831">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#235C3F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M12 21s-6.5-5.5-6.5-10.3a6.5 6.5 0 1 1 13 0C18.5 15.5 12 21 12 21z"></path><circle cx="12" cy="10.5" r="2.2"></circle></svg>
+              <b>डिलीवरी: पिपरा व 5 किमी</b><span style="color:#316F4E">· अगला स्लॉट — आज शाम 5–7</span>
+            </div>
+          </sc-if>
+          <sc-if value="{{ outsideArea }}" hint-placeholder-val="{{ false }}">
+            <div style="flex:1 1 380px;display:flex;align-items:center;justify-content:center;gap:8px;padding:9px 16px;background:#EFF3F8;font-size:13px;color:#2F4767">
+              <span style="width:17px;height:17px;border-radius:999px;background:#3D5A82;color:#FFFFFF;display:grid;place-items:center;font-size:10.5px;font-weight:800;flex:none">i</span>
+              <span><b>अभी डिलीवरी सिर्फ़ पिपरा व 5 किमी तक है</b> — दुकान पर आइए या WhatsApp पर पूछिए।</span>
+            </div>
+          </sc-if>
+          <div style="flex:1 1 480px;display:flex;align-items:center;justify-content:center;gap:8px;padding:9px 16px;background:#EFF3F8;border-left:1px solid #DFE7F1;font-size:13px;color:#2F4767">
+            <span style="width:17px;height:17px;border-radius:999px;background:#3D5A82;color:#FFFFFF;display:grid;place-items:center;font-size:10.5px;font-weight:800;flex:none">i</span>
+            <span>न्यूनतम ऑर्डर ₹500 — तेल और खुली चीनी इसमें नहीं गिने जाते। पहले ही बताना ठीक लगा।</span>
+          </div>
+        </div>
+
+        <div style="max-width:1200px;margin:0 auto;padding:0 32px">
+          <sc-if value="{{ liveOrder }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top:18px;max-width:640px;background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:14px 18px;box-shadow:0 1px 2px rgba(36,32,26,0.05), 0 2px 8px rgba(36,32,26,0.05)">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><b style="font-size:15px">ऑर्डर #1284</b><span style="font-size:13px;color:#316F4E;font-weight:700">रास्ते में · आज शाम 5–7</span></div>
+              <div style="display:flex;align-items:center;margin-top:12px">
+                <span style="width:14px;height:14px;border-radius:999px;background:#316F4E;flex:none"></span><span style="flex:1;height:2.5px;background:#316F4E"></span>
+                <span style="width:14px;height:14px;border-radius:999px;background:#316F4E;flex:none"></span><span style="flex:1;height:2.5px;background:#316F4E"></span>
+                <span style="width:16px;height:16px;border-radius:999px;background:#FFFFFF;border:3px solid #316F4E;flex:none;box-sizing:border-box"></span><span style="flex:1;height:2.5px;background:#E7E2D5"></span>
+                <span style="width:14px;height:14px;border-radius:999px;background:#E7E2D5;flex:none"></span>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:11.5px;color:#6B6453;margin-top:6px"><span>मिला</span><span>पैक हुआ</span><span style="color:#316F4E;font-weight:700">रास्ते में</span><span>पहुँचा</span></div>
+            </div>
+          </sc-if>
+
+          <div style="display:grid;grid-template-columns:1fr 560px;gap:40px;align-items:center;padding:44px 0 10px">
+            <div>
+              <div style="font-family:'Martel',serif;font-weight:800;font-size:44px;line-height:1.4">नमस्ते! पिपरा का अपना सुपरमार्केट, अब ऑनलाइन।</div>
+              <p style="font-size:18px;line-height:1.7;color:#514B3D;margin:14px 0 0;max-width:52ch">वही दुकान, वही दाम, वही भरोसा — राशन चुनिए, हम घर पहुँचा देंगे। <span style="color:#6B6453">The shop you already know, now online.</span></p>
+              <div style="font-size:14px;color:#6B6453;margin-top:10px">दुकान: सोम–शनि, सुबह 8 – रात 9 · मुख्य बाज़ार, पिपरा, पूर्वी चम्पारण</div>
+              <button style="min-height:52px;margin-top:20px;padding:0 30px;background:#235C3F;color:#FAF8F2;border:none;border-radius:12px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:17px;font-weight:600;cursor:pointer" style-hover="background:#1B4831" style-active="background:#133523">खरीदारी शुरू करें</button>
+            </div>
+            <div style="aspect-ratio:16/10;border-radius:24px;overflow:hidden;position:relative;background:linear-gradient(180deg,#EFF3F8 0%,#EFF3F8 58%,#E7E2D5 58%)">
+              <div style="position:absolute;left:8%;right:8%;top:9%;bottom:13%;background:#FAF1EC;border:1.5px solid #F4E1D7;border-bottom:none;border-radius:10px 10px 0 0"></div>
+              <div style="position:absolute;left:13%;right:13%;top:14%;height:16%;background:#133523;border-radius:8px;display:flex;align-items:center;justify-content:center;gap:9px">
+                <span style="background:#FAF8F2;color:#133523;font-family:'Martel',serif;font-weight:900;font-size:12px;border-radius:5px;padding:1px 5px;line-height:1.5">MG</span>
+                <span style="color:#FAF8F2;font-family:'Martel',serif;font-weight:800;font-size:17px;line-height:1">एमजी सुपरमार्केट</span>
+              </div>
+              <div style="position:absolute;left:10.5%;right:10.5%;top:32%;height:9.5%;background:repeating-linear-gradient(90deg,#235C3F 0 28px,#FAF8F2 28px 56px);border-radius:0 0 6px 6px;box-shadow:0 2px 0 rgba(36,32,26,0.12)"></div>
+              <div style="position:absolute;left:13%;width:31%;top:46%;bottom:13%;background:#FFFFFF;border:1.5px solid #F4E1D7;border-bottom:none;display:grid;grid-template-rows:1fr 1fr;padding:2.5% 2% 0;box-sizing:border-box">
+                <div style="display:flex;align-items:flex-end;gap:4px;border-bottom:3px solid #D3CDBC">
+                  <span style="flex:1;height:60%;background:#E0A93E;border-radius:2px 2px 0 0"></span><span style="flex:1;height:78%;background:#316F4E;border-radius:2px 2px 0 0"></span><span style="flex:1;height:52%;background:#3D5A82;border-radius:2px 2px 0 0"></span><span style="flex:1;height:70%;background:#7C3D20;border-radius:2px 2px 0 0"></span><span style="flex:1;height:60%;background:#C1D9C9;border-radius:2px 2px 0 0"></span>
+                </div>
+                <div style="display:flex;align-items:flex-end;gap:4px;border-bottom:3px solid #D3CDBC">
+                  <span style="flex:1;height:70%;background:#3D5A82;border-radius:2px 2px 0 0"></span><span style="flex:1;height:55%;background:#E0A93E;border-radius:2px 2px 0 0"></span><span style="flex:1;height:75%;background:#7C3D20;border-radius:2px 2px 0 0"></span><span style="flex:1;height:58%;background:#316F4E;border-radius:2px 2px 0 0"></span><span style="flex:1;height:68%;background:#E0A93E;border-radius:2px 2px 0 0"></span>
+                </div>
+              </div>
+              <div style="position:absolute;left:47%;width:15%;top:46%;bottom:13%;background:#514B3D;border-radius:5px 5px 0 0;display:grid;align-items:end;justify-items:center"><span style="width:62%;height:82%;background:#6B6453;border-radius:4px 4px 0 0"></span></div>
+              <div style="position:absolute;right:13%;width:22%;top:46%;bottom:13%;background:#FFFFFF;border:1.5px solid #F4E1D7;border-bottom:none;display:grid;grid-template-rows:1fr 1fr;padding:2.5% 2% 0;box-sizing:border-box">
+                <div style="display:flex;align-items:flex-end;gap:4px;border-bottom:3px solid #D3CDBC">
+                  <span style="flex:1;height:65%;background:#7C3D20;border-radius:2px 2px 0 0"></span><span style="flex:1;height:52%;background:#E0A93E;border-radius:2px 2px 0 0"></span><span style="flex:1;height:74%;background:#316F4E;border-radius:2px 2px 0 0"></span>
+                </div>
+                <div style="display:flex;align-items:flex-end;gap:4px;border-bottom:3px solid #D3CDBC">
+                  <span style="flex:1;height:58%;background:#316F4E;border-radius:2px 2px 0 0"></span><span style="flex:1;height:72%;background:#3D5A82;border-radius:2px 2px 0 0"></span><span style="flex:1;height:55%;background:#E0A93E;border-radius:2px 2px 0 0"></span>
+                </div>
+              </div>
+              <div style="position:absolute;left:5%;bottom:5%;display:flex;gap:6px;align-items:flex-end">
+                <span style="width:44px;height:26px;background:#E7E2D5;border:1.5px solid #D3CDBC;border-radius:4px;display:flex;align-items:flex-start;justify-content:center;gap:3px;padding-top:3px;box-sizing:border-box"><span style="width:9px;height:9px;border-radius:999px;background:#316F4E"></span><span style="width:9px;height:9px;border-radius:999px;background:#E0A93E"></span><span style="width:9px;height:9px;border-radius:999px;background:#316F4E"></span></span>
+                <span style="width:36px;height:20px;background:#E7E2D5;border:1.5px solid #D3CDBC;border-radius:4px;display:flex;align-items:flex-start;justify-content:center;gap:3px;padding-top:3px;box-sizing:border-box"><span style="width:8px;height:8px;border-radius:999px;background:#7C3D20"></span><span style="width:8px;height:8px;border-radius:999px;background:#E0A93E"></span></span>
+              </div>
+              <span style="position:absolute;left:50%;transform:translateX(-50%);bottom:3.5%;font-family:ui-monospace,monospace;font-size:11px;color:#7C3D20;background:rgba(255,255,255,0.96);border:1px dashed #D3CDBC;border-radius:6px;padding:2px 9px;white-space:nowrap">PLACEHOLDER — यहाँ असली दुकान की फ़ोटो लगेगी</span>
+            </div>
+          </div>
+
+          <div style="padding:40px 0 8px">
+            <div style="font-family:'Martel',serif;font-weight:700;font-size:26px">श्रेणियाँ <span style="font-family:'Mukta',sans-serif;font-weight:400;font-size:14px;color:#6B6453">· Shop by category</span></div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:16px">
+              <sc-for list="{{ cats }}" as="c" hint-placeholder-count="8">
+                <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:16px;display:flex;gap:12px;align-items:center">
+                  <div style="width:56px;height:56px;border-radius:12px;background:repeating-linear-gradient(45deg,#F3F0E7,#F3F0E7 8px,#FAF8F2 8px,#FAF8F2 16px);flex:none;display:grid;place-items:center"><span style="font-family:ui-monospace,monospace;font-size:9px;color:#8A8370">photo</span></div>
+                  <div style="min-width:0">
+                    <div style="font-size:15.5px;font-weight:600;line-height:1.4">{{ c.hi }}</div>
+                    <div style="font-size:12.5px;color:#6B6453;line-height:1.4">{{ c.en }} · {{ c.n }} →</div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="margin-top:12px"><span style="font-size:14.5px;font-weight:600;color:#235C3F">सभी 13 श्रेणियाँ देखें →</span></div>
+          </div>
+
+          <div style="padding:36px 0 8px">
+            <div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px">
+              <div style="font-family:'Martel',serif;font-weight:700;font-size:26px">आज के ऑफ़र <span style="font-family:'Mukta',sans-serif;font-weight:400;font-size:14px;color:#6B6453">· Today's offers</span></div>
+              <span style="font-size:14.5px;font-weight:600;color:#235C3F;flex:none">सभी देखें →</span>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:16px">
+              <sc-for list="{{ offers }}" as="p" hint-placeholder-count="5">
+                <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:12px;box-shadow:0 1px 2px rgba(36,32,26,0.05), 0 2px 8px rgba(36,32,26,0.05)">
+                  <div style="position:relative">
+                    <div style="aspect-ratio:1;border-radius:12px;background:repeating-linear-gradient(45deg,#F3F0E7,#F3F0E7 10px,#FAF8F2 10px,#FAF8F2 20px);display:grid;place-items:center"><span style="font-family:ui-monospace,monospace;font-size:10px;color:#6B6453;background:#FFFFFF;border-radius:6px;padding:2px 6px">product photo</span></div>
+                    <span style="position:absolute;top:8px;left:8px;background:#E0A93E;color:#24201A;font-size:12px;font-weight:700;border-radius:8px;padding:2px 8px">{{ p.badge }}</span>
+                  </div>
+                  <div style="font-size:14.5px;font-weight:500;line-height:1.45;margin-top:9px;min-height:42px">{{ p.hi }} · {{ p.en }}</div>
+                  <div style="font-size:13px;color:#6B6453">{{ p.unit }}</div>
+                  <div style="display:flex;align-items:baseline;gap:6px;margin-top:4px;font-variant-numeric:tabular-nums">
+                    <b style="font-size:18px">{{ p.price }}</b>
+                    <span style="font-size:13px;color:#8A8370;text-decoration:line-through">{{ p.mrp }}</span>
+                    <span style="font-size:12.5px;color:#316F4E;font-weight:700">{{ p.save }}</span>
+                  </div>
+                  <button style="width:100%;height:42px;margin-top:9px;border:1.5px solid #235C3F;background:#FFFFFF;color:#235C3F;border-radius:999px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:15px;font-weight:700;cursor:pointer" style-hover="background:#F0F5F1">जोड़ें +</button>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="padding:36px 0 8px">
+            <div style="font-family:'Martel',serif;font-weight:700;font-size:26px">घर की ज़रूरी चीज़ें <span style="font-family:'Mukta',sans-serif;font-weight:400;font-size:14px;color:#6B6453">· Everyday essentials</span></div>
+            <div style="font-size:13.5px;color:#6B6453;margin-top:2px">चुनी हुई चीज़ें — हर हफ़्ते बदलती हैं · यही section मौसम के साथ SEE से बदलता है (देखें <a href="#1d">1d</a>)</div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:16px">
+              <sc-for list="{{ coll }}" as="p" hint-placeholder-count="4">
+                <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:12px;box-shadow:0 1px 2px rgba(36,32,26,0.05), 0 2px 8px rgba(36,32,26,0.05)">
+                  <div style="aspect-ratio:1;border-radius:12px;background:repeating-linear-gradient(45deg,#F3F0E7,#F3F0E7 10px,#FAF8F2 10px,#FAF8F2 20px);display:grid;place-items:center"><span style="font-family:ui-monospace,monospace;font-size:10px;color:#6B6453;background:#FFFFFF;border-radius:6px;padding:2px 6px">product photo</span></div>
+                  <div style="font-size:14.5px;font-weight:500;line-height:1.45;margin-top:9px;min-height:42px">{{ p.hi }} · {{ p.en }}</div>
+                  <div style="font-size:13px;color:#6B6453">{{ p.unit }}</div>
+                  <div style="display:flex;align-items:baseline;gap:6px;margin-top:4px;font-variant-numeric:tabular-nums"><b style="font-size:18px">{{ p.price }}</b></div>
+                  <button style="width:100%;height:42px;margin-top:9px;border:1.5px solid #235C3F;background:#FFFFFF;color:#235C3F;border-radius:999px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:15px;font-weight:700;cursor:pointer" style-hover="background:#F0F5F1">जोड़ें +</button>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="padding:36px 0 8px">
+            <div style="display:flex;align-items:center;gap:8px">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#235C3F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M12 21s-6.5-5.5-6.5-10.3a6.5 6.5 0 1 1 13 0C18.5 15.5 12 21 12 21z"></path><circle cx="12" cy="10.5" r="2.2"></circle></svg>
+              <div style="font-family:'Martel',serif;font-weight:700;font-size:26px">पिपरा में लोकप्रिय <span style="font-family:'Mukta',sans-serif;font-weight:400;font-size:14px;color:#6B6453">· Popular near you</span></div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:16px">
+              <sc-for list="{{ popular }}" as="p" hint-placeholder-count="5">
+                <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:12px;box-shadow:0 1px 2px rgba(36,32,26,0.05), 0 2px 8px rgba(36,32,26,0.05)">
+                  <div style="aspect-ratio:1;border-radius:12px;background:repeating-linear-gradient(45deg,#F3F0E7,#F3F0E7 10px,#FAF8F2 10px,#FAF8F2 20px);display:grid;place-items:center"><span style="font-family:ui-monospace,monospace;font-size:10px;color:#6B6453;background:#FFFFFF;border-radius:6px;padding:2px 6px">product photo</span></div>
+                  <div style="font-size:14.5px;font-weight:500;line-height:1.45;margin-top:9px;min-height:42px">{{ p.hi }} · {{ p.en }}</div>
+                  <div style="font-size:13px;color:#6B6453">{{ p.unit }}</div>
+                  <div style="display:flex;align-items:baseline;gap:6px;margin-top:4px;font-variant-numeric:tabular-nums">
+                    <b style="font-size:18px">{{ p.price }}</b>
+                    <sc-if value="{{ p.mrp }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:#8A8370;text-decoration:line-through">{{ p.mrp }}</span><span style="font-size:12.5px;color:#316F4E;font-weight:700">{{ p.save }}</span></sc-if>
+                  </div>
+                  <button style="width:100%;height:42px;margin-top:9px;border:1.5px solid #235C3F;background:#FFFFFF;color:#235C3F;border-radius:999px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:15px;font-weight:700;cursor:pointer" style-hover="background:#F0F5F1">जोड़ें +</button>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="padding:36px 0 8px">
+            <div style="font-family:'Martel',serif;font-weight:700;font-size:26px">सबसे ज़्यादा बिकने वाले <span style="font-family:'Mukta',sans-serif;font-weight:400;font-size:14px;color:#6B6453">· Best sellers</span></div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:16px">
+              <sc-for list="{{ best }}" as="p" hint-placeholder-count="4">
+                <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:12px;box-shadow:0 1px 2px rgba(36,32,26,0.05), 0 2px 8px rgba(36,32,26,0.05)">
+                  <div style="position:relative">
+                    <div style="aspect-ratio:1;border-radius:12px;background:repeating-linear-gradient(45deg,#F3F0E7,#F3F0E7 10px,#FAF8F2 10px,#FAF8F2 20px);display:grid;place-items:center;opacity:{{ p.op }}"><span style="font-family:ui-monospace,monospace;font-size:10px;color:#6B6453;background:#FFFFFF;border-radius:6px;padding:2px 6px">product photo</span></div>
+                    <sc-if value="{{ p.oos }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:8px;left:8px;background:#F3F0E7;color:#514B3D;font-size:12px;font-weight:700;border-radius:8px;padding:2px 8px;border:1px solid #D3CDBC">जल्द वापस</span></sc-if>
+                    <sc-if value="{{ p.badge }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:8px;left:8px;background:#E0A93E;color:#24201A;font-size:12px;font-weight:700;border-radius:8px;padding:2px 8px">{{ p.badge }}</span></sc-if>
+                  </div>
+                  <div style="font-size:14.5px;font-weight:500;line-height:1.45;margin-top:9px;min-height:42px;color:{{ p.nameColor }}">{{ p.hi }} · {{ p.en }}</div>
+                  <div style="font-size:13px;color:#6B6453">{{ p.unit }}</div>
+                  <div style="display:flex;align-items:baseline;gap:6px;margin-top:4px;font-variant-numeric:tabular-nums">
+                    <b style="font-size:18px;color:{{ p.priceColor }}">{{ p.price }}</b>
+                    <sc-if value="{{ p.mrp }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:#8A8370;text-decoration:line-through">{{ p.mrp }}</span><span style="font-size:12.5px;color:#316F4E;font-weight:700">{{ p.save }}</span></sc-if>
+                  </div>
+                  <sc-if value="{{ p.oos }}" hint-placeholder-val="{{ false }}">
+                    <button style="width:100%;height:42px;margin-top:9px;border:1.5px solid #D3CDBC;background:#F3F0E7;color:#6B6453;border-radius:999px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:14px;font-weight:600;cursor:pointer" style-hover="border-color:#8A8370">आने पर बताएँ · Notify</button>
+                  </sc-if>
+                  <sc-if value="{{ p.inStock }}" hint-placeholder-val="{{ true }}">
+                    <button style="width:100%;height:42px;margin-top:9px;border:1.5px solid #235C3F;background:#FFFFFF;color:#235C3F;border-radius:999px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:15px;font-weight:700;cursor:pointer" style-hover="background:#F0F5F1">जोड़ें +</button>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="padding:36px 0 8px">
+            <div style="background:#F0F5F1;border:1px solid #C1D9C9;border-radius:24px;padding:26px 28px;display:flex;gap:24px;align-items:center">
+              <div style="width:110px;height:110px;border-radius:16px;background:repeating-linear-gradient(45deg,#DEEBE1,#DEEBE1 10px,#F0F5F1 10px,#F0F5F1 20px);flex:none;display:grid;place-items:center"><span style="font-family:ui-monospace,monospace;font-size:10px;color:#235C3F;background:#FFFFFF;border-radius:6px;padding:2px 6px;text-align:center">aangan art:<br>दउरा</span></div>
+              <div style="flex:1;min-width:0">
+                <div style="font-family:'Martel',serif;font-weight:700;font-size:24px;line-height:1.5">महीने का राशन, एक बार में</div>
+                <div style="font-size:15px;line-height:1.6;color:#514B3D;margin-top:4px;max-width:60ch">आटा, चावल, दाल, तेल, मसाले — पूरी लिस्ट एक साथ ऑर्डर करें। हर महीने वही लिस्ट दोहराना और भी आसान।</div>
+              </div>
+              <button style="min-height:48px;padding:0 24px;background:#DEEBE1;color:#133523;border:none;border-radius:12px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:15.5px;font-weight:600;cursor:pointer;flex:none" style-hover="background:#C1D9C9">मंथली लिस्ट देखें</button>
+            </div>
+          </div>
+
+          <div style="padding:36px 0 8px">
+            <div style="font-family:'Martel',serif;font-weight:700;font-size:26px">ब्रांड से खरीदें <span style="font-family:'Mukta',sans-serif;font-weight:400;font-size:14px;color:#6B6453">· Shop by brand</span></div>
+            <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:14px">
+              <span style="border:1px solid #E7E2D5;background:#FFFFFF;border-radius:999px;padding:10px 18px;font-size:14.5px;font-weight:600;color:#37322A">आशीर्वाद</span>
+              <span style="border:1px solid #E7E2D5;background:#FFFFFF;border-radius:999px;padding:10px 18px;font-size:14.5px;font-weight:600;color:#37322A">फ़ॉर्च्यून</span>
+              <span style="border:1px solid #E7E2D5;background:#FFFFFF;border-radius:999px;padding:10px 18px;font-size:14.5px;font-weight:600;color:#37322A">टाटा</span>
+              <span style="border:1px solid #E7E2D5;background:#FFFFFF;border-radius:999px;padding:10px 18px;font-size:14.5px;font-weight:600;color:#37322A">पारले</span>
+              <span style="border:1px solid #E7E2D5;background:#FFFFFF;border-radius:999px;padding:10px 18px;font-size:14.5px;font-weight:600;color:#37322A">ब्रिटानिया</span>
+              <span style="border:1px solid #E7E2D5;background:#FFFFFF;border-radius:999px;padding:10px 18px;font-size:14.5px;font-weight:600;color:#37322A">डाबर</span>
+              <span style="border:1px solid #E7E2D5;background:#FFFFFF;border-radius:999px;padding:10px 18px;font-size:14.5px;font-weight:600;color:#37322A">सुधा</span>
+              <span style="border:1px solid #E7E2D5;background:#FFFFFF;border-radius:999px;padding:10px 18px;font-size:14.5px;font-weight:600;color:#37322A">सर्फ़ एक्सेल</span>
+              <span style="padding:10px 12px;font-size:14.5px;font-weight:600;color:#235C3F">सभी ब्रांड →</span>
+            </div>
+          </div>
+
+          <div style="padding:40px 0 8px">
+            <div style="font-family:'Martel',serif;font-weight:700;font-size:26px">MG Supermart ही क्यों? <span style="font-family:'Mukta',sans-serif;font-weight:400;font-size:14px;color:#6B6453">· Why MG Supermart</span></div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:16px">
+              <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:20px">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#235C3F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"></circle><path d="m8.5 12.5 2.4 2.4 4.6-5.3"></path></svg>
+                <div style="font-size:15.5px;font-weight:700;margin-top:10px">असली सामान</div>
+                <div style="font-size:14px;line-height:1.6;color:#514B3D;margin-top:4px">जो दिखता है वही मिलता है — बिल के साथ।</div>
+              </div>
+              <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:20px">
+                <span style="width:24px;height:24px;display:grid;place-items:center;font-size:16px;font-weight:800;color:#235C3F;border:2px solid #235C3F;border-radius:999px;box-sizing:border-box;line-height:1">₹</span>
+                <div style="font-size:15.5px;font-weight:700;margin-top:10px">सही दाम</div>
+                <div style="font-size:14px;line-height:1.6;color:#514B3D;margin-top:4px">MRP से ज़्यादा कभी नहीं — बचत साफ़-साफ़, हरे में।</div>
+              </div>
+              <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:20px">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#235C3F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-5.5-6.5-10.3a6.5 6.5 0 1 1 13 0C18.5 15.5 12 21 12 21z"></path><circle cx="12" cy="10.5" r="2.2"></circle></svg>
+                <div style="font-size:15.5px;font-weight:700;margin-top:10px">5 किमी में डिलीवरी</div>
+                <div style="font-size:14px;line-height:1.6;color:#514B3D;margin-top:4px">पिपरा व आस-पास — तय स्लॉट पर, घर तक।</div>
+              </div>
+              <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:20px">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#235C3F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4.5h4L10.5 9 8.5 10.5a12.5 12.5 0 0 0 5 5L15 13.5l4.5 1.5v4a2 2 0 0 1-2 2A16.5 16.5 0 0 1 3 6.5a2 2 0 0 1 2-2z"></path></svg>
+                <div style="font-size:15.5px;font-weight:700;margin-top:10px">इंसान से बात</div>
+                <div style="font-size:14px;line-height:1.6;color:#514B3D;margin-top:4px">WhatsApp या कॉल — सीधे दुकान से जवाब।</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="padding:36px 0 8px">
+            <div style="display:flex;align-items:baseline;justify-content:space-between">
+              <div style="font-family:'Martel',serif;font-weight:700;font-size:26px">ग्राहक क्या कहते हैं <span style="font-family:'Mukta',sans-serif;font-weight:400;font-size:14px;color:#6B6453">· Google reviews</span></div>
+              <span style="font-size:14.5px;font-weight:600;color:#235C3F">Google पर सभी समीक्षाएँ →</span>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px">
+              <sc-for list="{{ reviews }}" as="r" hint-placeholder-count="3">
+                <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:20px">
+                  <div style="color:#E0A93E;font-size:15px;letter-spacing:2px">{{ r.stars }}</div>
+                  <p style="font-size:14.5px;line-height:1.7;color:#37322A;margin:10px 0 0">{{ r.text }}</p>
+                  <div style="font-size:13.5px;font-weight:600;margin-top:12px">{{ r.name }} <span style="font-weight:400;color:#6B6453">· {{ r.place }}</span></div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="padding:36px 0 8px">
+            <div style="display:flex;align-items:baseline;justify-content:space-between">
+              <div style="font-family:'Martel',serif;font-weight:700;font-size:26px">Instagram पर <span style="font-family:'Mukta',sans-serif;font-weight:400;font-size:14px;color:#6B6453">· @mgsupermart</span></div>
+              <span style="font-size:14.5px;font-weight:600;color:#235C3F">फ़ॉलो करें →</span>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px">
+              <div style="aspect-ratio:1;border-radius:12px;background:repeating-linear-gradient(45deg,#F4E1D7,#F4E1D7 10px,#FAF1EC 10px,#FAF1EC 20px);display:grid;place-items:center"><span style="font-family:ui-monospace,monospace;font-size:10.5px;color:#7C3D20;background:#FFFFFF;border-radius:6px;padding:2px 7px">store post</span></div>
+              <div style="aspect-ratio:1;border-radius:12px;background:repeating-linear-gradient(45deg,#F3F0E7,#F3F0E7 10px,#FAF8F2 10px,#FAF8F2 20px);display:grid;place-items:center"><span style="font-family:ui-monospace,monospace;font-size:10.5px;color:#6B6453;background:#FFFFFF;border-radius:6px;padding:2px 7px">store post</span></div>
+              <div style="aspect-ratio:1;border-radius:12px;background:repeating-linear-gradient(45deg,#F9EDD1,#F9EDD1 10px,#FCF6E8 10px,#FCF6E8 20px);display:grid;place-items:center"><span style="font-family:ui-monospace,monospace;font-size:10.5px;color:#8A5F0B;background:#FFFFFF;border-radius:6px;padding:2px 7px">store post</span></div>
+              <div style="aspect-ratio:1;border-radius:12px;background:repeating-linear-gradient(45deg,#DEEBE1,#DEEBE1 10px,#F0F5F1 10px,#F0F5F1 20px);display:grid;place-items:center"><span style="font-family:ui-monospace,monospace;font-size:10.5px;color:#235C3F;background:#FFFFFF;border-radius:6px;padding:2px 7px">store post</span></div>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:2fr 3fr;gap:14px;padding:36px 0 40px">
+            <div style="background:#FAF1EC;border:1px solid #F4E1D7;border-radius:16px;padding:24px;align-self:start">
+              <div style="display:flex;gap:12px;align-items:center">
+                <span style="width:48px;height:48px;border-radius:999px;background:#FFFFFF;border:1px solid #F4E1D7;display:grid;place-items:center;flex:none"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#316F4E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8.5 8.5 0 0 1-12.4 7.5L4 21l1.5-4.4A8.5 8.5 0 1 1 21 12z"></path></svg></span>
+                <div style="font-family:'Martel',serif;font-weight:700;font-size:21px;line-height:1.5;color:#5A2B15">MG WhatsApp कम्युनिटी</div>
+              </div>
+              <p style="font-size:14.5px;line-height:1.7;color:#514B3D;margin:12px 0 0">हफ़्ते में 2–3 संदेश — ऑफ़र, त्योहार की तैयारी, नई चीज़ें। कभी भी छोड़ सकते हैं, कोई सवाल नहीं।</p>
+              <button style="min-height:48px;margin-top:14px;padding:0 22px;background:#DEEBE1;color:#133523;border:none;border-radius:12px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:15px;font-weight:600;cursor:pointer" style-hover="background:#C1D9C9">कम्युनिटी से जुड़ें</button>
+            </div>
+            <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;overflow:hidden;display:grid;grid-template-columns:1fr 1fr">
+              <div style="background:repeating-linear-gradient(45deg,#DFE7F1,#DFE7F1 10px,#EFF3F8 10px,#EFF3F8 20px);display:grid;place-items:center;min-height:220px"><span style="font-family:ui-monospace,monospace;font-size:11px;color:#2F4767;background:#FFFFFF;border-radius:6px;padding:3px 8px;text-align:center">Google Map embed —<br>मुख्य बाज़ार, पिपरा</span></div>
+              <div style="padding:22px">
+                <div style="font-family:'Martel',serif;font-weight:700;font-size:20px">दुकान पर आइए</div>
+                <div style="font-size:14.5px;line-height:1.65;color:#514B3D;margin-top:6px">एमजी सुपरमार्केट<br>मुख्य बाज़ार, पिपरा, पूर्वी चम्पारण, बिहार — 845412</div>
+                <div style="font-size:13.5px;color:#6B6453;margin-top:6px">सोम–शनि, सुबह 8 – रात 9 · +91 98765 43210</div>
+                <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
+                  <button style="min-height:44px;padding:0 16px;background:#FFFFFF;color:#24201A;border:1.5px solid #D3CDBC;border-radius:12px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:14px;font-weight:600;cursor:pointer" style-hover="border-color:#8A8370">कॉल करें</button>
+                  <button style="min-height:44px;padding:0 16px;background:#FFFFFF;color:#24201A;border:1.5px solid #D3CDBC;border-radius:12px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:14px;font-weight:600;cursor:pointer" style-hover="border-color:#8A8370">WhatsApp</button>
+                  <button style="min-height:44px;padding:0 16px;background:#FFFFFF;color:#24201A;border:1.5px solid #D3CDBC;border-radius:12px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:14px;font-weight:600;cursor:pointer" style-hover="border-color:#8A8370">Maps में देखें</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:#133523;color:#9ABFA8;padding:32px 0 26px">
+          <div style="max-width:1200px;margin:0 auto;padding:0 32px">
+            <div style="display:flex;flex-wrap:wrap;gap:24px 40px;align-items:flex-start;justify-content:space-between">
+              <div style="flex:0 1 240px">
+                <div style="display:flex;align-items:center;gap:10px">
+                  <span style="width:36px;height:36px;border-radius:10px;background:#FAF8F2;color:#133523;display:grid;place-items:center;font-family:'Martel',serif;font-weight:900;font-size:14px">MG</span>
+                  <div>
+                    <div style="font-family:'Martel',serif;font-weight:800;font-size:17px;color:#FAF8F2;line-height:1.4">MG Supermart</div>
+                    <div style="font-size:12px;color:#C1D9C9;line-height:1.4">एमजी सुपरमार्केट</div>
+                  </div>
+                </div>
+                <p style="font-size:13px;line-height:1.65;margin:12px 0 0">पिपरा का अपना सुपरमार्केट — असली सामान, सही दाम, अपनापन।</p>
+              </div>
+              <div style="flex:1 1 120px;min-width:120px">
+                <div style="font-size:12.5px;font-weight:700;color:#DEEBE1;margin-bottom:9px">हमारे बारे में</div>
+                <div style="display:grid;gap:7px;font-size:13.5px"><span>हमारी कहानी</span><span>कम्युनिटी</span><span>थोक ख़रीद · Wholesale</span></div>
+              </div>
+              <div style="flex:1 1 120px;min-width:120px">
+                <div style="font-size:12.5px;font-weight:700;color:#DEEBE1;margin-bottom:9px">ग्राहक</div>
+                <div style="display:grid;gap:7px;font-size:13.5px"><span>हेल्प सेंटर</span><span>संपर्क करें</span><span>ऑर्डर ट्रैक करें</span><span>FAQs</span></div>
+              </div>
+              <div style="flex:1 1 130px;min-width:130px">
+                <div style="font-size:12.5px;font-weight:700;color:#DEEBE1;margin-bottom:9px">नीतियाँ</div>
+                <div style="display:grid;gap:7px;font-size:13.5px"><span>प्राइवेसी पॉलिसी</span><span>नियम व शर्तें</span><span>शिपिंग पॉलिसी</span><span>कैंसिलेशन व रिफ़ंड</span></div>
+              </div>
+              <div style="flex:1 1 150px;min-width:150px">
+                <div style="font-size:12.5px;font-weight:700;color:#DEEBE1;margin-bottom:9px">संपर्क</div>
+                <div style="display:grid;gap:7px;font-size:13.5px"><span>मुख्य बाज़ार, पिपरा — 845412</span><span>+91 98765 43210</span><span>सोम–शनि, 8 am – 9 pm</span><span>Google Maps पर देखें</span></div>
+              </div>
+            </div>
+            <div style="border-top:1px solid #1B4831;margin-top:24px;padding-top:16px;font-size:12.5px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap"><span>© 2026 MG Supermart · पिपरा का अपना सुपरमार्केट</span><span>Instagram · WhatsApp · Google Business · Facebook</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 1d DESKTOP SHRAVAN ============ -->
+    <div id="1d" data-screen-label="1d Desktop Shravan" style="flex:none;display:flex;flex-direction:column;gap:9px">
+      <div style="display:flex;align-items:baseline;gap:8px;font-size:11.5px;color:#6B6453">
+        <a href="#1d" style="font-family:ui-monospace,Menlo,monospace;font-size:10.5px;font-weight:600;background:#8F4A10;color:#FAF8F2;border-radius:5px;padding:3px 7px;text-decoration:none">1d</a>
+        <span><b style="color:#37322A">Desktop 1280 — सावन (SEE)।</b> बदला: hero greeting + art, collection section, badge। header, nav, बाक़ी sections <a href="#1c">1c</a> जैसे</span>
+      </div>
+      <div style="width:1280px;background:#FAF8F2;border:1px solid #D3CDBC;border-radius:16px;overflow:hidden;box-shadow:0 1px 3px rgba(36,32,26,0.07)">
+
+        <div style="background:#133523;color:#DEEBE1;font-size:13px;text-align:center;padding:7px 12px">पिपरा में मुफ़्त डिलीवरी — ₹500 से ऊपर के ऑर्डर पर</div>
+
+        <div style="background:#FFFFFF;border-bottom:1px solid #F3F0E7">
+          <div style="max-width:1200px;margin:0 auto;padding:12px 32px;display:flex;align-items:center;gap:20px">
+            <div style="display:flex;align-items:center;gap:10px;flex:none">
+              <div style="width:34px;height:34px;border-radius:10px;background:#235C3F;color:#FAF8F2;display:grid;place-items:center;font-family:'Martel',serif;font-weight:900;font-size:13px">MG</div>
+              <div>
+                <div style="font-family:'Martel',serif;font-weight:800;font-size:16px;line-height:1.3">MG Supermart</div>
+                <div style="font-size:11px;color:#6B6453;line-height:1.3">एमजी सुपरमार्केट · पिपरा</div>
+              </div>
+            </div>
+            <div style="flex:1 1 auto;max-width:520px;display:flex;align-items:center;gap:9px;border:1.5px solid #D3CDBC;border-radius:12px;padding:11px 14px;background:#FAF8F2">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#6B6453" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"></circle><path d="m16.5 16.5 4 4"></path></svg>
+              <span style="font-size:14px;color:#8A8370">खोजें: आटा, दाल, साबुन…</span>
+            </div>
+            <div style="display:flex;gap:18px;align-items:center;font-size:14px;color:#514B3D;flex:none;margin-left:auto">
+              <span style="display:inline-flex;border:1.5px solid #D3CDBC;border-radius:999px;overflow:hidden;font-size:12px;font-weight:700"><span style="padding:3px 9px;background:#235C3F;color:#FAF8F2">अ</span><span style="padding:3px 9px">A</span></span>
+              <span style="display:inline-flex;align-items:center;gap:6px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#514B3D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.7-7-10a4.1 4.1 0 0 1 7-2.9A4.1 4.1 0 0 1 19 10c0 5.3-7 10-7 10z"></path></svg>पसंद</span>
+              <span style="display:inline-flex;align-items:center;gap:6px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#514B3D" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8.2" r="3.4"></circle><path d="M5.2 20a6.8 6.8 0 0 1 13.6 0"></path></svg>खाता</span>
+              <b style="color:#235C3F;display:inline-flex;align-items:center;gap:6px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#235C3F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 9.5h15L18 18.6a1.9 1.9 0 0 1-1.9 1.4H7.9A1.9 1.9 0 0 1 6 18.6L4.5 9.5z"></path><path d="M8.5 9.5a3.5 3.5 0 0 1 7 0"></path></svg>कार्ट</b>
+            </div>
+          </div>
+          <div style="max-width:1200px;margin:0 auto;padding:0 32px;display:flex;gap:24px;font-size:14.5px;color:#37322A">
+            <b style="color:#235C3F;border-bottom:2.5px solid #235C3F;padding:10px 0">होम</b><span style="padding:10px 0">शॉप</span><span style="padding:10px 0">श्रेणियाँ</span><span style="padding:10px 0">ऑफ़र</span><span style="padding:10px 0">मेंबरशिप</span><span style="padding:10px 0">हमारे बारे में</span><span style="padding:10px 0">संपर्क</span>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-wrap:wrap">
+          <div style="flex:1 1 380px;display:flex;align-items:center;justify-content:center;gap:7px;padding:9px 16px;background:#F0F5F1;font-size:13px;color:#1B4831">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#235C3F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M12 21s-6.5-5.5-6.5-10.3a6.5 6.5 0 1 1 13 0C18.5 15.5 12 21 12 21z"></path><circle cx="12" cy="10.5" r="2.2"></circle></svg>
+            <b>डिलीवरी: पिपरा व 5 किमी</b><span style="color:#316F4E">· अगला स्लॉट — आज शाम 5–7</span>
+          </div>
+          <div style="flex:1 1 480px;display:flex;align-items:center;justify-content:center;gap:8px;padding:9px 16px;background:#EFF3F8;border-left:1px solid #DFE7F1;font-size:13px;color:#2F4767">
+            <span style="width:17px;height:17px;border-radius:999px;background:#3D5A82;color:#FFFFFF;display:grid;place-items:center;font-size:10.5px;font-weight:800;flex:none">i</span>
+            <span>न्यूनतम ऑर्डर ₹500 — तेल और खुली चीनी इसमें नहीं गिने जाते। पहले ही बताना ठीक लगा।</span>
+          </div>
+        </div>
+
+        <div style="max-width:1200px;margin:0 auto;padding:0 32px">
+          <div style="margin-top:24px;background:#FBF1E3;border:1px solid #F0D3A6;border-radius:24px;padding:34px 36px;display:grid;grid-template-columns:1fr 520px;gap:36px;align-items:center">
+            <div>
+              <div style="font-size:13px;font-weight:700;letter-spacing:0.08em;color:#8F4A10">सावन कलेक्शन · Shravan Collection</div>
+              <div style="font-family:'Martel',serif;font-weight:800;font-size:40px;line-height:1.42;color:#8F4A10;margin-top:6px">सावन की हार्दिक शुभकामनाएँ</div>
+              <p style="font-size:17px;line-height:1.7;color:#514B3D;margin:12px 0 0;max-width:50ch">हर सोमवार की पूजा और व्रत की तैयारी — एक ही जगह। <span style="color:#6B6453">Shravan essentials, together in one place.</span></p>
+              <button style="min-height:52px;margin-top:18px;padding:0 28px;background:#235C3F;color:#FAF8F2;border:none;border-radius:12px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:17px;font-weight:600;cursor:pointer" style-hover="background:#1B4831">सावन कलेक्शन देखें</button>
+            </div>
+            <div style="aspect-ratio:16/10;border-radius:16px;background:repeating-linear-gradient(45deg,#F6E2C4,#F6E2C4 10px,#FBF1E3 10px,#FBF1E3 20px);display:grid;place-items:center"><span style="font-family:ui-monospace,monospace;font-size:12px;color:#8F4A10;background:#FFFFFF;border-radius:6px;padding:3px 9px;text-align:center">aangan illustration — बेलपत्र,<br>कलश व दीया (सावन motif set)</span></div>
+          </div>
+          <div style="font-size:13.5px;color:#6B6453;margin-top:10px">दुकान: सोम–शनि, सुबह 8 – रात 9 · मुख्य बाज़ार, पिपरा — hero के नीचे की पहचान-पंक्ति वही रहती है</div>
+
+          <div style="padding:36px 0 8px">
+            <div style="font-family:'Martel',serif;font-weight:700;font-size:26px">श्रेणियाँ <span style="font-family:'Mukta',sans-serif;font-weight:400;font-size:14px;color:#6B6453">· Shop by category</span></div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:16px">
+              <sc-for list="{{ cats }}" as="c" hint-placeholder-count="8">
+                <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:16px;display:flex;gap:12px;align-items:center">
+                  <div style="width:56px;height:56px;border-radius:12px;background:repeating-linear-gradient(45deg,#F3F0E7,#F3F0E7 8px,#FAF8F2 8px,#FAF8F2 16px);flex:none;display:grid;place-items:center"><span style="font-family:ui-monospace,monospace;font-size:9px;color:#8A8370">photo</span></div>
+                  <div style="min-width:0">
+                    <div style="font-size:15.5px;font-weight:600;line-height:1.4">{{ c.hi }}</div>
+                    <div style="font-size:12.5px;color:#6B6453;line-height:1.4">{{ c.en }} · {{ c.n }} →</div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="padding:32px 0 8px">
+            <div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px">
+              <div style="font-family:'Martel',serif;font-weight:700;font-size:26px">आज के ऑफ़र <span style="font-family:'Mukta',sans-serif;font-weight:400;font-size:14px;color:#6B6453">· Today's offers</span></div>
+              <span style="font-size:14.5px;font-weight:600;color:#235C3F;flex:none">सभी देखें →</span>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:16px">
+              <sc-for list="{{ offers }}" as="p" hint-placeholder-count="5">
+                <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:12px;box-shadow:0 1px 2px rgba(36,32,26,0.05), 0 2px 8px rgba(36,32,26,0.05)">
+                  <div style="position:relative">
+                    <div style="aspect-ratio:1;border-radius:12px;background:repeating-linear-gradient(45deg,#F3F0E7,#F3F0E7 10px,#FAF8F2 10px,#FAF8F2 20px);display:grid;place-items:center"><span style="font-family:ui-monospace,monospace;font-size:10px;color:#6B6453;background:#FFFFFF;border-radius:6px;padding:2px 6px">product photo</span></div>
+                    <span style="position:absolute;top:8px;left:8px;background:#E0A93E;color:#24201A;font-size:12px;font-weight:700;border-radius:8px;padding:2px 8px">{{ p.badge }}</span>
+                  </div>
+                  <div style="font-size:14.5px;font-weight:500;line-height:1.45;margin-top:9px;min-height:42px">{{ p.hi }} · {{ p.en }}</div>
+                  <div style="font-size:13px;color:#6B6453">{{ p.unit }}</div>
+                  <div style="display:flex;align-items:baseline;gap:6px;margin-top:4px;font-variant-numeric:tabular-nums">
+                    <b style="font-size:18px">{{ p.price }}</b>
+                    <span style="font-size:13px;color:#8A8370;text-decoration:line-through">{{ p.mrp }}</span>
+                    <span style="font-size:12.5px;color:#316F4E;font-weight:700">{{ p.save }}</span>
+                  </div>
+                  <button style="width:100%;height:42px;margin-top:9px;border:1.5px solid #235C3F;background:#FFFFFF;color:#235C3F;border-radius:999px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:15px;font-weight:700;cursor:pointer" style-hover="background:#F0F5F1">जोड़ें +</button>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="padding:32px 0 40px">
+            <div style="background:#FBF1E3;border:1px solid #F0D3A6;border-radius:16px;padding:20px 24px;display:flex;gap:18px;align-items:center;flex-wrap:wrap">
+              <div style="flex:1;min-width:280px">
+                <div style="font-size:12.5px;font-weight:700;letter-spacing:0.08em;color:#8F4A10">सावन कलेक्शन · Shravan Collection</div>
+                <div style="font-family:'Martel',serif;font-weight:700;font-size:23px;line-height:1.5;color:#8F4A10;margin-top:3px">सोमवार व्रत और पूजा की तैयारी</div>
+              </div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <span style="background:#FFFFFF;border:1px solid #F0D3A6;color:#8F4A10;border-radius:999px;padding:8px 15px;font-size:13.5px;font-weight:600">व्रत का सामान</span>
+                <span style="background:#FFFFFF;border:1px solid #F0D3A6;color:#8F4A10;border-radius:999px;padding:8px 15px;font-size:13.5px;font-weight:600">पूजा सामग्री</span>
+                <span style="background:#FFFFFF;border:1px solid #F0D3A6;color:#8F4A10;border-radius:999px;padding:8px 15px;font-size:13.5px;font-weight:600">दूध-दही</span>
+                <span style="background:#FFFFFF;border:1px solid #F0D3A6;color:#8F4A10;border-radius:999px;padding:8px 15px;font-size:13.5px;font-weight:600">फल व मेवे</span>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:14px">
+              <sc-for list="{{ shravan }}" as="p" hint-placeholder-count="5">
+                <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:12px;box-shadow:0 1px 2px rgba(36,32,26,0.05), 0 2px 8px rgba(36,32,26,0.05)">
+                  <div style="position:relative">
+                    <div style="aspect-ratio:1;border-radius:12px;background:repeating-linear-gradient(45deg,#F3F0E7,#F3F0E7 10px,#FAF8F2 10px,#FAF8F2 20px);display:grid;place-items:center"><span style="font-family:ui-monospace,monospace;font-size:10px;color:#6B6453;background:#FFFFFF;border-radius:6px;padding:2px 6px">product photo</span></div>
+                    <span style="position:absolute;top:8px;left:8px;background:#FBF1E3;color:#8F4A10;border:1px solid #F0D3A6;font-size:12px;font-weight:700;border-radius:8px;padding:2px 8px">सावन</span>
+                  </div>
+                  <div style="font-size:14.5px;font-weight:500;line-height:1.45;margin-top:9px;min-height:42px">{{ p.hi }} · {{ p.en }}</div>
+                  <div style="font-size:13px;color:#6B6453">{{ p.unit }}</div>
+                  <div style="display:flex;align-items:baseline;gap:6px;margin-top:4px;font-variant-numeric:tabular-nums"><b style="font-size:18px">{{ p.price }}</b></div>
+                  <button style="width:100%;height:42px;margin-top:9px;border:1.5px solid #235C3F;background:#FFFFFF;color:#235C3F;border-radius:999px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:15px;font-weight:700;cursor:pointer" style-hover="background:#F0F5F1">जोड़ें +</button>
+                </div>
+              </sc-for>
+            </div>
+            <div style="margin-top:16px;padding:14px 18px;background:#FFFFFF;border:1px dashed #D3CDBC;border-radius:12px;color:#6B6453;font-size:13.5px;line-height:1.6"><b style="color:#37322A">यहाँ से नीचे सब कुछ <a href="#1c">1c</a> जैसा ही:</b> पिपरा में लोकप्रिय · Best sellers · मंथली राशन · ब्रांड · Why MG · समीक्षाएँ · Instagram · WhatsApp कम्युनिटी · दुकान · footer। <b style="color:#37322A">क्या बदला:</b> greeting, hero art, एक collection, badge — <b style="color:#37322A">क्या नहीं:</b> बटन Banyan, nav, दाम, semantic रंग, section order (Bargad §25, CP-6)।</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p style="margin:26px 0 0;font-size:12.5px;color:#6B6453">आगे: “<a href="#1b">1b</a> का hero art असली photo से बदलो” · “<a href="#1a">1a</a> में live-order strip on करके दिखाओ (Tweaks)” · “CAT-01 अगली स्क्रीन बनाओ”</p>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;liveOrder&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Homepage states&quot;,&quot;label&quot;:&quot;Live order strip (IH-5, returning customer)&quot;},&quot;outsideArea&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Homepage states&quot;,&quot;label&quot;:&quot;Outside delivery area (FLW-01 E2)&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const cats = [
+      { hi: 'अनाज व दालें', en: 'Grains & dals', n: 86 },
+      { hi: 'मसाले व तेल', en: 'Cooking essentials', n: 74 },
+      { hi: 'नाश्ता व बिस्कुट', en: 'Snacks', n: 120 },
+      { hi: 'चाय व पेय', en: 'Beverages', n: 55 },
+      { hi: 'पर्सनल केयर', en: 'Personal care', n: 68 },
+      { hi: 'घर की सफ़ाई', en: 'Home care', n: 42 },
+      { hi: 'बेबी केयर', en: 'Baby care', n: 25 },
+      { hi: 'पूजा सामग्री', en: 'Puja essentials', n: 30 },
+    ];
+    const offers = [
+      { hi: 'आशीर्वाद आटा', en: 'Atta', unit: '5 kg', price: '₹245', mrp: '₹260', save: '6% बचत', badge: '₹15 बचत' },
+      { hi: 'सर्फ़ एक्सेल', en: 'Surf Excel', unit: '1 kg', price: '₹135', mrp: '₹150', save: '10% बचत', badge: '₹15 बचत' },
+      { hi: 'रेड लेबल चाय', en: 'Red Label', unit: '250 g', price: '₹145', mrp: '₹155', save: '6% बचत', badge: '₹10 बचत' },
+      { hi: 'पारले-जी', en: 'Parle-G family', unit: '800 g', price: '₹78', mrp: '₹90', save: '13% बचत', badge: '₹12 बचत' },
+      { hi: 'फ़ॉर्च्यून सरसों तेल', en: 'Mustard oil', unit: '1 L', price: '₹165', mrp: '₹172', save: '4% बचत', badge: '₹7 बचत' },
+    ];
+    const popular = [
+      { hi: 'सुधा दूध', en: 'Sudha milk', unit: '1 L', price: '₹56', mrp: '', save: '' },
+      { hi: 'ताज़ा टमाटर', en: 'Tomato (local)', unit: '500 g', price: '₹22', mrp: '₹25', save: '12% बचत' },
+      { hi: 'अरहर दाल', en: 'Toor dal', unit: '1 kg', price: '₹142', mrp: '₹150', save: '5% बचत' },
+      { hi: 'आलू', en: 'Potato (local)', unit: '1 kg', price: '₹28', mrp: '', save: '' },
+      { hi: 'उसना चावल', en: 'Rice (usna)', unit: '5 kg', price: '₹310', mrp: '', save: '' },
+    ];
+    const best = [
+      { hi: 'चीनी', en: 'Sugar', unit: '1 kg', price: '₹45', mrp: '', save: '', oos: false, inStock: true, op: 1, badge: '', nameColor: '#24201A', priceColor: '#24201A' },
+      { hi: 'धारा सरसों तेल', en: 'Mustard oil', unit: '1 L', price: '₹168', mrp: '', save: '', oos: true, inStock: false, op: 0.45, badge: '', nameColor: '#6B6453', priceColor: '#8A8370' },
+      { hi: 'सुधा देसी घी', en: 'Ghee', unit: '500 ml', price: '₹340', mrp: '', save: '', oos: false, inStock: true, op: 1, badge: '', nameColor: '#24201A', priceColor: '#24201A' },
+      { hi: 'कोलगेट', en: 'Colgate', unit: '200 g', price: '₹104', mrp: '₹118', save: '12% बचत', oos: false, inStock: true, op: 1, badge: '₹14 बचत', nameColor: '#24201A', priceColor: '#24201A' },
+    ];
+    const coll = [
+      { hi: 'चना दाल', en: 'Chana dal', unit: '1 kg', price: '₹95' },
+      { hi: 'बेसन', en: 'Besan', unit: '500 g', price: '₹60' },
+      { hi: 'पोहा', en: 'Poha', unit: '1 kg', price: '₹58' },
+      { hi: 'सेंधा नमक', en: 'Rock salt', unit: '500 g', price: '₹38' },
+    ];
+    const shravan = [
+      { hi: 'साबूदाना', en: 'Sabudana', unit: '500 g', price: '₹65' },
+      { hi: 'कुट्टू का आटा', en: 'Kuttu atta', unit: '500 g', price: '₹80' },
+      { hi: 'सेंधा नमक', en: 'Sendha namak', unit: '500 g', price: '₹38' },
+      { hi: 'मखाना', en: 'Makhana', unit: '250 g', price: '₹180' },
+      { hi: 'सुधा देसी घी', en: 'Ghee', unit: '500 ml', price: '₹340' },
+    ];
+    const reviews = [
+      { stars: '★★★★★', text: '“सामान बिल्कुल दुकान जैसा — तौल में पूरा, दाम वही। शाम के स्लॉट में समय पर आया।”', name: 'रीना देवी', place: 'पिपरा' },
+      { stars: '★★★★★', text: '“पहली बार ऑनलाइन मँगाया। WhatsApp पर पूछा तो तुरंत जवाब मिला — जैसे दुकान पर।”', name: 'मो. इम्तियाज़', place: 'पिपरा बाज़ार' },
+      { stars: '★★★★☆', text: '“लिस्ट भेज दो, सामान हाज़िर। महीने का राशन अब यहीं से जाता है।”', name: 'संजय कुमार', place: 'जीवधारा' },
+    ];
+    const liveOrder = !!(this.props.liveOrder ?? true);
+    const outsideArea = !!(this.props.outsideArea ?? false);
+    return { cats, offers, popular, best, coll, shravan, reviews, liveOrder, outsideArea, inArea: !outsideArea };
+  }
+}
+</script>
+</body>
+</html>
