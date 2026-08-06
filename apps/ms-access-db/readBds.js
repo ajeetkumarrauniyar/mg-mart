@@ -4,6 +4,58 @@ const path = require("path");
 
 const DB_PATH = "./db12026.bds";
 
+
+function listAllMasterTypes() {
+  try {
+    console.log("🔍 Scanning Master1 table...\n");
+
+    const csvData = execSync(`mdb-export "${DB_PATH}" "Master1"`, {
+      encoding: "utf8",
+      maxBuffer: 1024 * 1024 * 50,
+    });
+
+    const lines = csvData.trim().split("\n");
+    if (lines.length <= 1) return;
+
+    const headers = lines[0]
+      .split(",")
+      .map((h) => h.replace(/^"|"$/g, "").trim());
+    const typeIdx = headers.indexOf("MasterType");
+    const nameIdx = headers.indexOf("Name");
+
+    const masterSummary = {};
+
+    for (let i = 1; i < lines.length; i++) {
+      const values = lines[i].match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || [];
+      const type = values[typeIdx]
+        ? values[typeIdx].replace(/^"|"$/g, "").trim()
+        : "Unknown";
+      const name = values[nameIdx]
+        ? values[nameIdx].replace(/^"|"$/g, "").trim()
+        : "";
+
+      if (!masterSummary[type]) {
+        masterSummary[type] = { count: 0, samples: [] };
+      }
+
+      masterSummary[type].count++;
+      if (masterSummary[type].samples.length < 2 && name) {
+        masterSummary[type].samples.push(name);
+      }
+    }
+
+    const result = Object.keys(masterSummary).map((type) => ({
+      MasterType: type,
+      "Total Records": masterSummary[type].count,
+      "Sample Names": masterSummary[type].samples.join(" / "),
+    }));
+
+    console.table(result);
+  } catch (error) {
+    console.error("❌ Error scanning database:", error.message);
+  }
+}
+
 // Simple CSV to JSON converter
 function csvToJson(csvString) {
   const lines = csvString.trim().split("\n");
@@ -50,7 +102,7 @@ function readBusyTable(tableName) {
 
           return {
             ...item,
-            D2: Math.round(priceD2 * 100), // Direct integer rounding
+            D2: Math.round(priceD2 * 100) / 100, // Direct integer rounding
           };
         });
 
@@ -87,7 +139,6 @@ function readBusyTable(tableName) {
       // Save processed products to JSON
       fs.writeFileSync("products.json", JSON.stringify(products, null, 2));
       console.log("💾 Saved products to products.json");
-      
       // Save processed groups to JSON
       fs.writeFileSync("groups.json", JSON.stringify(groups, null, 2));
       console.log("💾 Saved groups to groups.json");
@@ -96,6 +147,8 @@ function readBusyTable(tableName) {
     console.error("❌ Error reading database:", error.message);
   }
 }
+
+listAllMasterTypes();
 
 // Read Master1 table
 readBusyTable("Master1");
