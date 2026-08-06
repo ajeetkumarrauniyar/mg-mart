@@ -43,7 +43,17 @@ function readBusyTable(tableName) {
 
     // Filter Products if reading Master1 (BUSY stores Items in Master1)
     if (tableName === "Master1") {
-      const products = records.filter((item) => item.MasterType === "6"); // 6 = Items in BUSY
+      const products = records
+        .filter((item) => item.MasterType === "6") // 6 = Items in BUSY
+        .map((item) => {
+          const priceD2 = parseFloat(item.D2) || 0;
+
+          return {
+            ...item,
+            D2: Math.round(priceD2 * 100), // Direct integer rounding
+          };
+        });
+
       console.log(`📦 Found ${products.length} products (MasterType = 6)`);
 
       if (products.length > 0) {
