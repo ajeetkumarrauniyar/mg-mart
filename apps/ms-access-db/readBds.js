@@ -54,8 +54,20 @@ function readBusyTable(tableName) {
           };
         });
 
-      console.log(`📦 Found ${products.length} products (MasterType = 6)`);
+      // 2. Filter Item Groups / Categories (MasterType = 5)
+      const groups = records
+        .filter((item) => item.MasterType === "5")
+        .map((group) => ({
+          Code: group.Code,
+          Name: group.Name,
+          Alias: group.Alias,
+          ParentGrp: group.ParentGrp, // Parent Group ID (for sub-categories)
+        }));
 
+      console.log(`📦 Found ${products.length} products (MasterType = 6)`);
+      console.log(`📂 Found ${groups.length} item groups (MasterType = 5)`);
+
+      // Print Sample Product
       if (products.length > 0) {
         console.log("\nSample Product:");
         console.log({
@@ -66,9 +78,19 @@ function readBusyTable(tableName) {
         });
       }
 
+      // Print Sample Group
+      if (groups.length > 0) {
+        console.log("\nSample Item Group:");
+        console.log(groups[0]);
+      }
+
       // Save processed products to JSON
       fs.writeFileSync("products.json", JSON.stringify(products, null, 2));
       console.log("💾 Saved products to products.json");
+      
+      // Save processed groups to JSON
+      fs.writeFileSync("groups.json", JSON.stringify(groups, null, 2));
+      console.log("💾 Saved groups to groups.json");
     }
   } catch (error) {
     console.error("❌ Error reading database:", error.message);
