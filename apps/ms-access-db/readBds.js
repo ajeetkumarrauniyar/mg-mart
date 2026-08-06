@@ -4,7 +4,6 @@ const path = require("path");
 
 const DB_PATH = "./db12026.bds";
 
-
 function listAllMasterTypes() {
   try {
     console.log("🔍 Scanning Master1 table...\n");
@@ -116,8 +115,18 @@ function readBusyTable(tableName) {
           ParentGrp: group.ParentGrp, // Parent Group ID (for sub-categories)
         }));
 
+      // 3. Brands / Manufacturers (MasterType = 201)
+      const brands = records
+        .filter((item) => item.MasterType === "201")
+        .map((brand) => ({
+          Code: brand.Code,
+          Name: brand.Name,
+          Alias: brand.Alias,
+        }));
+
       console.log(`📦 Found ${products.length} products (MasterType = 6)`);
       console.log(`📂 Found ${groups.length} item groups (MasterType = 5)`);
+      console.log(`🏷️ Found ${brands.length} brands (MasterType = 201)`);
 
       // Print Sample Product
       if (products.length > 0) {
@@ -136,19 +145,28 @@ function readBusyTable(tableName) {
         console.log(groups[0]);
       }
 
+      // Print Sample Brand
+      if (brands.length > 0) {
+        console.log("\nSample Brand:");
+        console.log(brands[0]);
+      }
+
       // Save processed products to JSON
       fs.writeFileSync("products.json", JSON.stringify(products, null, 2));
       console.log("💾 Saved products to products.json");
       // Save processed groups to JSON
       fs.writeFileSync("groups.json", JSON.stringify(groups, null, 2));
       console.log("💾 Saved groups to groups.json");
+      // Save processed brands to JSON
+      fs.writeFileSync("brands.json", JSON.stringify(brands, null, 2));
+      console.log("💾 Saved brands to brands.json");
     }
   } catch (error) {
     console.error("❌ Error reading database:", error.message);
   }
 }
 
-listAllMasterTypes();
+// listAllMasterTypes();
 
 // Read Master1 table
 readBusyTable("Master1");
