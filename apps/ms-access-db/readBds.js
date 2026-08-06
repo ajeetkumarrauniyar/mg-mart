@@ -4,6 +4,66 @@ const path = require("path");
 
 const DB_PATH = "./db12026.bds";
 
+// Check all tables and their record counts from the bds file
+function checkAllTablesCount() {
+  try {
+    console.log("🔍 Fetching table list...\n");
+
+    // 1. Get list of all tables
+    const tableListStr = execSync(`mdb-tables -1 "${DB_PATH}"`, {
+      encoding: "utf8",
+    });
+    const tables = tableListStr.trim().split("\n").filter(Boolean);
+
+    console.log(`Total Tables Found: ${tables.length}\n`);
+
+    const tableCounts = [];
+    let emptyTables = 0;
+    let failedTables = 0;
+
+    // 2. Count records in each table
+    for (const table of tables) {
+      if (table === "Master1") continue; // Master1 already checked
+
+      try {
+        const csvData = execSync(`mdb-export "${DB_PATH}" "${table}"`, {
+          encoding: "utf8",
+          maxBuffer: 1024 * 1024 * 10,
+        });
+
+        const rowCount = Math.max(0, csvData.trim().split("\n").length - 1);
+
+        if (rowCount > 0) {
+          tableCounts.push({
+            "Table Name": table,
+            "Total Records": rowCount,
+          });
+        } else {
+          emptyTables++;
+        }
+      } catch (err) {
+        failedTables++;
+        console.error(`❌ Failed to read table [${table}]:`, err.message);
+      }
+    }
+
+    // Sort by most records first
+    tableCounts.sort((a, b) => b["Total Records"] - a["Total Records"]);
+
+    // console.table(tableCounts);
+    console.log("Non Empty :", tableCounts.length);
+    console.log("Empty :", emptyTables);
+    console.log("Failed :", failedTables);
+
+    fs.writeFileSync("table-counts.json", JSON.stringify(tableCounts, null, 2));
+
+    console.log("💾 Saved table counts to table-counts.json");
+  } catch (error) {
+    console.error("❌ Error scanning tables:", error.message);
+  }
+}
+
+// List all Master Types in Master1 table with counts and sample names
 function listAllMasterTypes() {
   try {
     console.log("🔍 Scanning Master1 table...\n");
@@ -41,6 +101,11 @@ function listAllMasterTypes() {
       if (masterSummary[type].samples.length < 2 && name) {
         masterSummary[type].samples.push(name);
       }
+
+      fs.writeFileSync(
+        "master_summary.json",
+        JSON.stringify(masterSummary, null, 2),
+      );
     }
 
     const result = Object.keys(masterSummary).map((type) => ({
@@ -79,6 +144,7 @@ function csvToJson(csvString) {
   });
 }
 
+// Read and process the Master1 table from the BDS database
 function readBusyTable(tableName) {
   try {
     console.log(`1. Exporting table [${tableName}] from ${DB_PATH}...`);
@@ -166,7 +232,8 @@ function readBusyTable(tableName) {
   }
 }
 
+checkAllTablesCount();
+
 // listAllMasterTypes();
 
-// Read Master1 table
-readBusyTable("Master1");
+// readBusyTable("Master1");

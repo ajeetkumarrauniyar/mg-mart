@@ -1,0 +1,134 @@
+[
+  {
+    "Table Name": "Tran2",
+    "Total Records": 33621
+  },
+  {
+    "Table Name": "DailySum",
+    "Total Records": 22038
+  },
+  {
+    "Table Name": "VchGSTSumItemWise",
+    "Total Records": 10189
+  },
+  {
+    "Table Name": "Help1",
+    "Total Records": 5373
+  },
+  {
+    "Table Name": "Tran1",
+    "Total Records": 4391
+  },
+  {
+    "Table Name": "VchOtherInfo",
+    "Total Records": 4379
+  },
+  {
+    "Table Name": "Tran3",
+    "Total Records": 4351
+  },
+  {
+    "Table Name": "Help1AddnInfo",
+    "Total Records": 3798
+  },
+  {
+    "Table Name": "POSDet",
+    "Total Records": 3399
+  },
+  {
+    "Table Name": "MastFootPrint",
+    "Total Records": 2279
+  },
+  {
+    "Table Name": "Folio1",
+    "Total Records": 2254
+  },
+  {
+    "Table Name": "MasterAddressInfo",
+    "Total Records": 1941
+  },
+  {
+    "Table Name": "MasterSupport",
+    "Total Records": 1606
+  },
+  {
+    "Table Name": "Tran4",
+    "Total Records": 1501
+  },
+  {
+    "Table Name": "Tran12",
+    "Total Records": 760
+  },
+  {
+    "Table Name": "EventLog",
+    "Total Records": 754
+  },
+  {
+    "Table Name": "Tran7",
+    "Total Records": 638
+  },
+  {
+    "Table Name": "RepColSize",
+    "Total Records": 458
+  },
+  {
+    "Table Name": "CloudSyncIncrDet",
+    "Total Records": 444
+  },
+  {
+    "Table Name": "CloudSyncIncr",
+    "Total Records": 439
+  },
+  {
+    "Table Name": "BillingDet",
+    "Total Records": 381
+  },
+  {
+    "Table Name": "RepOptValues",
+    "Total Records": 363
+  },
+  {
+    "Table Name": "Help2",
+    "Total Records": 253
+  },
+  {
+    "Table Name": "Config",
+    "Total Records": 236
+  },
+  {
+    "Table Name": "ItemDesc",
+    "Total Records": 139
+  },
+  {
+    "Table Name": "DeletedMasters",
+    "Total Records": 120
+  },
+  {
+    "Table Name": "GSTITCPendingVchDet",
+    "Total Records": 15
+  },
+  {
+    "Table Name": "OrgSalePurc",
+    "Total Records": 15
+  },
+  {
+    "Table Name": "ExternalData",
+    "Total Records": 9
+  },
+  {
+    "Table Name": "Tran10",
+    "Total Records": 2
+  },
+  {
+    "Table Name": "CloudSyncStatus",
+    "Total Records": 1
+  },
+  {
+    "Table Name": "Locks",
+    "Total Records": 1
+  },
+  {
+    "Table Name": "Tran6",
+    "Total Records": 1
+  }
+]
