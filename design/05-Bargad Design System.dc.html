@@ -1,0 +1,1818 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Martel:wght@400;700;800;900&family=Mukta:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    html{scroll-behavior:smooth}
+    body{margin:0;background:#FAF8F2;color:#24201A;font-family:'Mukta','Noto Sans Devanagari',system-ui,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+    a{color:#235C3F;text-decoration-color:#C1D9C9;text-underline-offset:3px}
+    a:hover{color:#1B4831}
+    ::selection{background:#DEEBE1;color:#133523}
+    @keyframes bargad-spin{to{transform:rotate(360deg)}}
+    @keyframes bargad-pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+  </style>
+</helmet>
+
+<!-- ============ COVER ============ -->
+<div data-screen-label="Cover" style="background:#133523;color:#FAF8F2">
+  <div style="max-width:1440px;margin:0 auto;padding:44px clamp(20px,5vw,64px) 56px">
+    <div style="display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;font-size:13px;color:#9ABFA8;font-weight:500">
+      <span>दस्तावेज़ · Document 05</span><span>Version 1.0</span><span>Status — Ready for build</span><span>Owner — Design Direction</span><span>July 2026 · Milestone 2</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px;margin-top:40px">
+      <div style="width:52px;height:52px;border-radius:15px;background:#FAF8F2;color:#133523;display:grid;place-items:center;font-family:'Martel',serif;font-weight:900;font-size:20px;flex:none">MG</div>
+      <div>
+        <div style="font-family:'Martel',serif;font-weight:800;font-size:19px;line-height:1.3">MG Supermart</div>
+        <div style="font-size:13.5px;color:#C1D9C9;line-height:1.4">एमजी सुपरमार्केट · पिपरा, पूर्वी चम्पारण</div>
+      </div>
+    </div>
+    <h1 style="margin:26px 0 0;font-family:'Martel',serif;font-weight:900;font-size:clamp(54px,9vw,104px);line-height:1.22;letter-spacing:-0.01em">बरगद</h1>
+    <div style="font-family:'Martel',serif;font-weight:700;font-size:clamp(19px,2.4vw,26px);color:#DEEBE1;margin-top:4px">Bargad — the MG Supermart design language</div>
+    <p style="max-width:64ch;font-size:16.5px;line-height:1.75;color:#C1D9C9;margin:22px 0 0">बरगद मौसम के साथ नहीं बदलता — हर मौसम में छाँव देता है। A banyan does not change with the seasons; it gives shade through all of them. This is the visual DNA for a shop that families should trust for decades: calm, warm, bilingual, honest about money, and deliberately indifferent to trends.</p>
+    <p style="max-width:64ch;font-size:14.5px;line-height:1.7;color:#9ABFA8;margin:14px 0 0">Built on the Founder Brief, Product Strategy, Design Principles and Information Architecture (Documents 01–04). It governs the customer website, admin panel, future apps and marketing. Screens come next — this document decides what every screen will obey.</p>
+  </div>
+</div>
+
+<!-- ============ AT A GLANCE ============ -->
+<div style="border-bottom:1px solid #E7E2D5;background:#FFFFFF">
+  <div style="max-width:1440px;margin:0 auto;padding:18px clamp(20px,5vw,64px);display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+    <span style="display:inline-flex;align-items:center;gap:8px;border:1px solid #E7E2D5;border-radius:999px;padding:5px 14px 5px 7px;font-size:13px;font-weight:600"><span style="width:20px;height:20px;border-radius:999px;background:#235C3F;display:inline-block"></span>Banyan #235C3F</span>
+    <span style="display:inline-flex;align-items:center;gap:8px;border:1px solid #E7E2D5;border-radius:999px;padding:5px 14px 5px 7px;font-size:13px;font-weight:600"><span style="width:20px;height:20px;border-radius:999px;background:#FAF8F2;border:1px solid #D3CDBC;display:inline-block"></span>Malai #FAF8F2</span>
+    <span style="display:inline-flex;align-items:center;gap:8px;border:1px solid #E7E2D5;border-radius:999px;padding:5px 14px 5px 7px;font-size:13px;font-weight:600"><span style="width:20px;height:20px;border-radius:999px;background:#24201A;display:inline-block"></span>Kajal #24201A</span>
+    <span style="display:inline-flex;align-items:center;gap:8px;border:1px solid #E7E2D5;border-radius:999px;padding:5px 14px 5px 7px;font-size:13px;font-weight:600"><span style="width:20px;height:20px;border-radius:999px;background:#E0A93E;display:inline-block"></span>Haldi #E0A93E</span>
+    <span style="display:inline-flex;align-items:center;gap:8px;border:1px solid #E7E2D5;border-radius:999px;padding:5px 14px 5px 7px;font-size:13px;font-weight:600"><span style="width:20px;height:20px;border-radius:999px;background:#BC6844;display:inline-block"></span>Mitti #BC6844</span>
+    <span style="border:1px solid #E7E2D5;border-radius:999px;padding:5px 14px;font-size:13px;font-weight:600;color:#514B3D">Martel + Mukta · Devanagari-first</span>
+    <span style="border:1px solid #E7E2D5;border-radius:999px;padding:5px 14px;font-size:13px;font-weight:600;color:#514B3D">4 px rhythm</span>
+    <span style="border:1px solid #E7E2D5;border-radius:999px;padding:5px 14px;font-size:13px;font-weight:600;color:#514B3D">48 px touch minimum</span>
+    <span style="border:1px solid #E7E2D5;border-radius:999px;padding:5px 14px;font-size:13px;font-weight:600;color:#514B3D">WCAG 2.2 AA+</span>
+  </div>
+</div>
+
+<!-- ============ BODY: RAIL + CONTENT ============ -->
+<div style="max-width:1440px;margin:0 auto;padding:0 clamp(20px,5vw,64px);display:flex;flex-wrap:wrap;gap:24px 56px;align-items:flex-start">
+
+  <nav style="flex:1 1 240px;max-width:300px;min-width:225px;order:1">
+    <div style="position:sticky;top:0;max-height:100vh;overflow:auto;padding:32px 0 24px">
+      <div style="font-size:12px;font-weight:700;letter-spacing:0.1em;color:#8A8370;margin:0 0 6px">Part A — नींव Foundations</div>
+      <a href="#s01" style="display:block;padding:4px 0;font-size:14px;color:#514B3D;text-decoration:none"><span style="color:#B0A995">01</span>&nbsp; Brand DNA</a>
+      <a href="#s02" style="display:block;padding:4px 0;font-size:14px;color:#514B3D;text-decoration:none"><span style="color:#B0A995">02</span>&nbsp; Visual identity</a>
+      <a href="#s03" style="display:block;padding:4px 0;font-size:14px;color:#514B3D;text-decoration:none"><span style="color:#B0A995">03</span>&nbsp; Color philosophy</a>
+      <a href="#s04" style="display:block;padding:4px 0;font-size:14px;color:#514B3D;text-decoration:none"><span style="color:#B0A995">04</span>&nbsp; Primary palette</a>
+      <a href="#s05" style="display:block;padding:4px 0;font-size:14px;color:#514B3D;text-decoration:none"><span style="color:#B0A995">05</span>&nbsp; Secondary palette</a>
+      <a href="#s06" style="display:block;padding:4px 0;font-size:14px;color:#514B3D;text-decoration:none"><span style="color:#B0A995">06</span>&nbsp; Semantic colors</a>
+      <a href="#s07" style="display:block;padding:4px 0;font-size:14px;color:#514B3D;text-decoration:none"><span style="color:#B0A995">07</span>&nbsp; Typography system</a>
+      <a href="#s08" style="display:block;padding:4px 0;font-size:14px;color:#514B3D;text-decoration:none"><span style="color:#B0A995">08</span>&nbsp; Hindi + English pairing</a>
+      <a href="#s09" style="display:block;padding:4px 0;font-size:14px;color:#514B3D;text-decoration:none"><span style="color:#B0A995">09</span>&nbsp; Grid system</a>
+      <a href="#s10" style="display:block;padding:4px 0;font-size:14px;color:#514B3D;text-decoration:none"><span style="color:#B0A995">10</span>&nbsp; Spacing scale</a>
+      <a href="#s11" style="display:block;padding:4px 0;font-size:14px;color:#514B3D;text-decoration:none"><span style="color:#B0A995">11</span>&nbsp; Border radius</a>
+      <a href="#s12" style="display:block;padding:4px 0;font-size:14px;color:#514B3D;text-decoration:none"><span style="color:#B0A995">12</span>&nbsp; Elevation &amp; shadow</a>
+      <div style="font-size:12px;font-weight:700;letter-spacing:0.1em;color:#8A8370;margin:18px 0 6px">Part B — अभिव्यक्ति Expression</div>
+      <a href="#s13" style="display:block;padding:4px 0;font-size:14px;color:#514B3D;text-decoration:none"><span style="color:#B0A995">13</span>&nbsp; Iconography</a>
+      <a href="#s14" style="display:block;padding:4px 0;font-size:14px;color:#514B3D;text-decoration:none"><span style="color:#B0A995">14</span>&nbsp; Illustration</a>
+      <a href="#s15" style="display:block;padding:4px 0;font-size:14px;color:#514B3D;text-decoration:none"><span style="color:#B0A995">15</span>&nbsp; Photography</a>
+      <a href="#s16" style="display:block;padding:4px 0;font-size:14px;color:#514B3D;text-decoration:none"><span style="color:#B0A995">16</span>&nbsp; Motion</a>
+      <div style="font-size:12px;font-weight:700;letter-spacing:0.1em;color:#8A8370;margin:18px 0 6px">Part C — घटक Components</div>
+      <a href="#s17" style="display:block;padding:4px 0;font-size:14px;color:#514B3D;text-decoration:none"><span style="color:#B0A995">17</span>&nbsp; Component philosophy</a>
+      <a href="#s18" style="display:block;padding:4px 0;font-size:14px;color:#514B3D;text-decoration:none"><span style="color:#B0A995">18</span>&nbsp; Buttons</a>
+      <a href="#s19" style="display:block;padding:4px 0;font-size:14px;color:#514B3D;text-decoration:none"><span style="color:#B0A995">19</span>&nbsp; Form controls</a>
+      <a href="#s20" style="display:block;padding:4px 0;font-size:14px;color:#514B3D;text-decoration:none"><span style="color:#B0A995">20</span>&nbsp; Cards</a>
+      <a href="#s21" style="display:block;padding:4px 0;font-size:14px;color:#514B3D;text-decoration:none"><span style="color:#B0A995">21</span>&nbsp; Navigation</a>
+      <div style="font-size:12px;font-weight:700;letter-spacing:0.1em;color:#8A8370;margin:18px 0 6px">Part D — व्यवस्था Systems</div>
+      <a href="#s22" style="display:block;padding:4px 0;font-size:14px;color:#514B3D;text-decoration:none"><span style="color:#B0A995">22</span>&nbsp; Accessibility</a>
+      <a href="#s23" style="display:block;padding:4px 0;font-size:14px;color:#514B3D;text-decoration:none"><span style="color:#B0A995">23</span>&nbsp; Responsive strategy</a>
+      <a href="#s24" style="display:block;padding:4px 0;font-size:14px;color:#514B3D;text-decoration:none"><span style="color:#B0A995">24</span>&nbsp; Dark mode</a>
+      <a href="#s25" style="display:block;padding:4px 0;font-size:14px;color:#514B3D;text-decoration:none"><span style="color:#B0A995">25</span>&nbsp; Seasonal themes</a>
+      <a href="#s26" style="display:block;padding:4px 0;font-size:14px;color:#514B3D;text-decoration:none"><span style="color:#B0A995">—</span>&nbsp; Governance</a>
+    </div>
+  </nav>
+
+  <div style="flex:999 1 620px;min-width:0;max-width:960px;order:2;padding-bottom:48px">
+
+    <!-- ============ 01 BRAND DNA ============ -->
+    <section id="s01" data-screen-label="01 Brand DNA" style="padding:52px 0 20px">
+      <div style="font-size:13px;font-weight:700;letter-spacing:0.12em;color:#235C3F;margin-bottom:12px">Part A — Foundations · नींव</div>
+      <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+        <span style="font-family:'Martel',serif;font-size:15px;color:#8A8370">01</span>
+        <h2 style="margin:0;font-family:'Martel',serif;font-weight:800;font-size:clamp(26px,3vw,32px);line-height:1.4">Brand DNA</h2>
+        <span style="font-size:15px;color:#6B6453">ब्रांड की आत्मा</span>
+      </div>
+      <p style="max-width:70ch;font-size:16px;line-height:1.75;color:#37322A;margin:14px 0 0">Everything in this document grows from one word. Not a slogan — a feeling every customer already has when they walk into the shop in Pipra, which every screen must now reproduce.</p>
+
+      <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:32px 28px;margin:24px 0 0">
+        <div style="font-family:'Martel',serif;font-weight:900;font-size:clamp(40px,6vw,60px);line-height:1.35;color:#235C3F">अपनापन</div>
+        <div style="font-size:15px;color:#6B6453;margin-top:2px">apnāpan — the warmth of being known</div>
+        <p style="max-width:66ch;font-size:16px;line-height:1.75;color:#37322A;margin:14px 0 0">The shopkeeper who remembers your family, rounds off the odd rupee, and tells you honestly when the atta is not fresh. Big platforms sell speed and discounts; nobody in Tier-3 India trusts them the way they trust their own shop. Apnapan is the one asset Blinkit, Zepto and Amazon cannot copy — so the entire design language is engineered to carry it onto a screen.</p>
+      </div>
+
+      <h3 style="font-size:17px;font-weight:700;margin:36px 0 10px">The banyan model <span style="font-weight:400;color:#6B6453">· बरगद क्यों?</span></h3>
+      <p style="max-width:70ch;font-size:15.5px;line-height:1.7;color:#37322A;margin:0 0 14px">Every village and qasba has one: the bargad under which the market sits. It is the local architecture of trust — and the structural model for this system.</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:12px">
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:20px">
+          <div style="font-family:'Martel',serif;font-weight:800;font-size:19px;line-height:1.5">जड़ें <span style="font-family:'Mukta',sans-serif;font-weight:500;font-size:14px;color:#6B6453">Roots</span></div>
+          <p style="font-size:14.5px;line-height:1.65;color:#514B3D;margin:8px 0 0">Tokens — color, type, spacing, radius. Fixed and deep. They never change with campaigns, and no screen may invent values outside them.</p>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:20px">
+          <div style="font-family:'Martel',serif;font-weight:800;font-size:19px;line-height:1.5">तना <span style="font-family:'Mukta',sans-serif;font-weight:500;font-size:14px;color:#6B6453">Trunk</span></div>
+          <p style="font-size:14.5px;line-height:1.65;color:#514B3D;margin:8px 0 0">Components — buttons, cards, forms, navigation. One recognizable body shared by the website, admin panel and future apps.</p>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:20px">
+          <div style="font-family:'Martel',serif;font-weight:800;font-size:19px;line-height:1.5">छाँव <span style="font-family:'Mukta',sans-serif;font-weight:500;font-size:14px;color:#6B6453">Canopy</span></div>
+          <p style="font-size:14.5px;line-height:1.65;color:#514B3D;margin:8px 0 0">Experiences — pages, festivals, campaigns. The canopy flowers with every season (Chhath, Diwali, Holi) while roots and trunk stay still.</p>
+        </div>
+      </div>
+
+      <h3 style="font-size:17px;font-weight:700;margin:36px 0 12px">Personality, measured <span style="font-weight:400;color:#6B6453">· ताकि “warm” बहस न बने</span></h3>
+      <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:22px 24px;display:grid;gap:16px">
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:13.5px;font-weight:600;color:#514B3D"><span>Warm गर्मजोशी</span><span style="color:#B0A995">Cool / clinical</span></div>
+          <div style="position:relative;height:6px;border-radius:999px;background:#E7E2D5;margin-top:7px"><div style="position:absolute;left:0;top:0;bottom:0;width:82%;background:#C1D9C9;border-radius:999px"></div><div style="position:absolute;left:82%;top:50%;width:14px;height:14px;border-radius:999px;background:#235C3F;transform:translate(-50%,-50%)"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:13.5px;font-weight:600;color:#514B3D"><span>Familiar जाना-पहचाना</span><span style="color:#B0A995">Novel / experimental</span></div>
+          <div style="position:relative;height:6px;border-radius:999px;background:#E7E2D5;margin-top:7px"><div style="position:absolute;left:0;top:0;bottom:0;width:78%;background:#C1D9C9;border-radius:999px"></div><div style="position:absolute;left:78%;top:50%;width:14px;height:14px;border-radius:999px;background:#235C3F;transform:translate(-50%,-50%)"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:13.5px;font-weight:600;color:#514B3D"><span>Calm शांत</span><span style="color:#B0A995">Energetic / loud</span></div>
+          <div style="position:relative;height:6px;border-radius:999px;background:#E7E2D5;margin-top:7px"><div style="position:absolute;left:0;top:0;bottom:0;width:86%;background:#C1D9C9;border-radius:999px"></div><div style="position:absolute;left:86%;top:50%;width:14px;height:14px;border-radius:999px;background:#235C3F;transform:translate(-50%,-50%)"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:13.5px;font-weight:600;color:#514B3D"><span>Honest value सही दाम</span><span style="color:#B0A995">Luxury signalling</span></div>
+          <div style="position:relative;height:6px;border-radius:999px;background:#E7E2D5;margin-top:7px"><div style="position:absolute;left:0;top:0;bottom:0;width:70%;background:#C1D9C9;border-radius:999px"></div><div style="position:absolute;left:70%;top:50%;width:14px;height:14px;border-radius:999px;background:#235C3F;transform:translate(-50%,-50%)"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:13.5px;font-weight:600;color:#514B3D"><span>Local अपने मोहल्ले का</span><span style="color:#B0A995">Global / placeless</span></div>
+          <div style="position:relative;height:6px;border-radius:999px;background:#E7E2D5;margin-top:7px"><div style="position:absolute;left:0;top:0;bottom:0;width:88%;background:#C1D9C9;border-radius:999px"></div><div style="position:absolute;left:88%;top:50%;width:14px;height:14px;border-radius:999px;background:#235C3F;transform:translate(-50%,-50%)"></div></div>
+        </div>
+        <p style="font-size:13.5px;line-height:1.6;color:#6B6453;margin:0">“Premium” here means craft — generous space, careful type, honest photography — never luxury cues like gold foil, thin serifs on black, or minimal-to-the-point-of-cold layouts.</p>
+      </div>
+
+      <h3 style="font-size:17px;font-weight:700;margin:36px 0 12px">Voice — the shopkeeper test <span style="font-weight:400;color:#6B6453">· दुकानदार की ज़बान</span></h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px">
+        <div style="background:#F0F5F1;border:1px solid #C1D9C9;border-radius:16px;padding:18px 20px">
+          <div style="font-size:13px;font-weight:700;color:#235C3F;margin-bottom:8px">✓ ऐसा बोलें — say this</div>
+          <div style="display:grid;gap:9px;font-size:14.5px;line-height:1.6;color:#37322A">
+            <div>“नमस्ते! त्योहार की तैयारी शुरू करें।”</div>
+            <div>“हम कल शाम 5–7 बजे के बीच पहुँचा देंगे।”</div>
+            <div>“तेल और खुली चीनी ₹500 की न्यूनतम राशि में नहीं गिने जाते — पहले ही बता देना ठीक लगा।”</div>
+            <div>“Your order is packed. Ramesh is on the way.”</div>
+          </div>
+        </div>
+        <div style="background:#F3F0E7;border:1px solid #D3CDBC;border-radius:16px;padding:18px 20px">
+          <div style="font-size:13px;font-weight:700;color:#8E2C21;margin-bottom:8px">✗ ऐसा कभी नहीं — never this</div>
+          <div style="display:grid;gap:9px;font-size:14.5px;line-height:1.6;color:#514B3D">
+            <div>“MEGA BLOWOUT SALE!!! 80% OFF!!!”</div>
+            <div>“Hurry! Only 2 left!” (when it is not true)</div>
+            <div>“10-minute delivery” — promises we borrow from apps we are not</div>
+            <div>Machine-translated Hindi: “आपका गाड़ी खाली है”</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#F0F5F1;border:1px solid #C1D9C9;border-radius:12px;padding:16px 18px;margin:20px 0 0">
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#235C3F;margin-bottom:6px">क्यों · WHY</div>
+        <div style="font-size:15px;line-height:1.7;color:#37322A">Trust psychology is boring on purpose: people trust what is <b>consistent, unhurried and transparent</b>. Loud interfaces read as desperate; calm ones read as established. Every DNA trait therefore maps to a concrete UI behavior — Warm → cream surfaces and a serif voice; Honest → policies stated before checkout, never during; Calm → one primary action per screen; Local → Hindi as a first-class script, never a fallback; Human → real photographs of the real shop. If a screen cannot pass the shopkeeper test (“would Ajeet say this across the counter?”), it does not ship.</div>
+      </div>
+    </section>
+
+    <!-- ============ 02 VISUAL IDENTITY ============ -->
+    <section id="s02" data-screen-label="02 Visual identity" style="padding:52px 0 20px;border-top:1px solid #E7E2D5;margin-top:32px">
+      <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+        <span style="font-family:'Martel',serif;font-size:15px;color:#8A8370">02</span>
+        <h2 style="margin:0;font-family:'Martel',serif;font-weight:800;font-size:clamp(26px,3vw,32px);line-height:1.4">Visual identity</h2>
+        <span style="font-size:15px;color:#6B6453">पहचान</span>
+      </div>
+      <p style="max-width:70ch;font-size:16px;line-height:1.75;color:#37322A;margin:14px 0 0">The identity is typographic, in the tradition of hand-painted shop boards across Bihar's bazaars — letters, not mascots. A serif wordmark and a simple seal. Nothing that needs a redesign in five years.</p>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin-top:24px">
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:32px 28px">
+          <div style="font-size:12px;font-weight:700;color:#8A8370;margin-bottom:18px">Primary wordmark — bilingual lockup</div>
+          <div style="font-family:'Martel',serif;font-weight:800;font-size:clamp(28px,4vw,38px);line-height:1.4;color:#24201A">MG Supermart</div>
+          <div style="font-family:'Martel',serif;font-weight:700;font-size:clamp(19px,2.6vw,24px);line-height:1.6;color:#235C3F">एमजी सुपरमार्केट</div>
+          <div style="font-size:13px;color:#6B6453;margin-top:14px">Martel Heavy / Bold. Hindi is set at equal visual weight — never smaller, never greyer. In Bihar-facing contexts the Hindi line may lead.</div>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:32px 28px">
+          <div style="font-size:12px;font-weight:700;color:#8A8370;margin-bottom:18px">The seal — मुहर monogram</div>
+          <div style="display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap">
+            <div style="width:88px;height:88px;border-radius:24px;background:#235C3F;color:#FAF8F2;display:grid;place-items:center;font-family:'Martel',serif;font-weight:900;font-size:34px">MG</div>
+            <div style="width:56px;height:56px;border-radius:16px;background:#235C3F;color:#FAF8F2;display:grid;place-items:center;font-family:'Martel',serif;font-weight:900;font-size:22px">MG</div>
+            <div style="width:36px;height:36px;border-radius:10px;background:#235C3F;color:#FAF8F2;display:grid;place-items:center;font-family:'Martel',serif;font-weight:900;font-size:14px">MG</div>
+          </div>
+          <div style="font-size:13px;color:#6B6453;margin-top:16px">Rounded square, corner radius ≈ 28% of side. Used for app icon, favicon, avatar, packing-slip stamp. Minimum size 32 px; below that use the plain letters.</div>
+        </div>
+      </div>
+
+      <div style="background:#133523;border-radius:16px;padding:26px 28px;margin:12px 0 0;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between">
+        <div>
+          <div style="font-family:'Martel',serif;font-weight:800;font-size:24px;line-height:1.45;color:#FAF8F2">MG Supermart <span style="font-weight:700;color:#C1D9C9">· एमजी सुपरमार्केट</span></div>
+          <div style="font-size:13px;color:#9ABFA8;margin-top:4px">Inverse lockup — footer, signage, packing tape, delivery bag stickers.</div>
+        </div>
+        <div style="width:56px;height:56px;border-radius:16px;background:#FAF8F2;color:#133523;display:grid;place-items:center;font-family:'Martel',serif;font-weight:900;font-size:22px;flex:none">MG</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin-top:12px">
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:24px">
+          <div style="font-size:12px;font-weight:700;color:#8A8370;margin-bottom:14px">Clear space &amp; minimums</div>
+          <div style="border:1.5px dashed #D3CDBC;border-radius:10px;padding:26px;display:inline-block">
+            <span style="font-family:'Martel',serif;font-weight:800;font-size:24px;line-height:1.4">MG Supermart</span>
+          </div>
+          <div style="font-size:13.5px;line-height:1.65;color:#514B3D;margin-top:12px">Clear space on all sides = cap-height of “M”. Wordmark never below 120 px wide on screen; seal never below 32 px. On photography, only on a solid Kajal or Banyan-900 scrim band — never floating on the image.</div>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:24px">
+          <div style="font-size:12px;font-weight:700;color:#8A8370;margin-bottom:14px">Identity rules — no exceptions</div>
+          <div style="display:grid;gap:8px;font-size:14px;line-height:1.6;color:#37322A">
+            <div style="display:flex;gap:8px"><span style="color:#8E2C21;font-weight:700">✗</span><span>No gradients, shadows, outlines or 3D effects on the mark</span></div>
+            <div style="display:flex;gap:8px"><span style="color:#8E2C21;font-weight:700">✗</span><span>No festival recoloring — the seal stays Banyan even during Diwali</span></div>
+            <div style="display:flex;gap:8px"><span style="color:#8E2C21;font-weight:700">✗</span><span>No stretching, tilting or letter-spacing changes</span></div>
+            <div style="display:flex;gap:8px"><span style="color:#8E2C21;font-weight:700">✗</span><span>Hindi never rendered smaller or lighter than English</span></div>
+            <div style="display:flex;gap:8px"><span style="color:#235C3F;font-weight:700">✓</span><span>Allowed colorways: Kajal or Banyan-700 on light; Malai on Banyan-800/900. Nothing else.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#F0F5F1;border:1px solid #C1D9C9;border-radius:12px;padding:16px 18px;margin:20px 0 0">
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#235C3F;margin-bottom:6px">क्यों · WHY</div>
+        <div style="font-size:15px;line-height:1.7;color:#37322A">A serif wordmark borrows the memory of <b>painted dukaan boards</b> — the visual shorthand for “this shop was here before apps and will be here after”. A geometric mascot or lowercase rounded logotype would file MG Supermart next to Blinkit and Zepto in the customer's mind, which is exactly the shelf we refuse. The seal works like a मुहर (stamp): stamps mean authenticity and receipts, not marketing. And the strict two-colorway rule exists because identity recognition is a memory game — every extra variant taxes the memory of a first-time internet user.</div>
+      </div>
+    </section>
+
+    <!-- ============ 03 COLOR PHILOSOPHY ============ -->
+    <section id="s03" data-screen-label="03 Color philosophy" style="padding:52px 0 20px;border-top:1px solid #E7E2D5;margin-top:32px">
+      <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+        <span style="font-family:'Martel',serif;font-size:15px;color:#8A8370">03</span>
+        <h2 style="margin:0;font-family:'Martel',serif;font-weight:800;font-size:clamp(26px,3vw,32px);line-height:1.4">Color philosophy</h2>
+        <span style="font-size:15px;color:#6B6453">रंगों का मतलब</span>
+      </div>
+      <p style="max-width:70ch;font-size:16px;line-height:1.75;color:#37322A;margin:14px 0 0">Color is vocabulary, not decoration. Many of our customers are first-time internet users; some read slowly. For them a consistent color <i>is</i> a word — so every color in Bargad has exactly one meaning, used the same way on every screen, forever. This ledger is locked by Design Principles §6.</p>
+
+      <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:8px 22px;margin:22px 0 0">
+        <div style="display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid #F3F0E7">
+          <span style="width:22px;height:22px;border-radius:999px;background:#235C3F;flex:none"></span>
+          <div style="flex:1;min-width:200px"><b style="font-size:14.5px">Banyan green</b> <span style="font-size:14px;color:#6B6453">— freshness, success, “this is the right way”. Primary actions, links, confirmations.</span></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid #F3F0E7">
+          <span style="width:22px;height:22px;border-radius:999px;background:#E0A93E;flex:none"></span>
+          <div style="flex:1;min-width:200px"><b style="font-size:14.5px">Haldi yellow</b> <span style="font-size:14px;color:#6B6453">— offers and highlights. Good news about money, never alarm.</span></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid #F3F0E7">
+          <span style="width:22px;height:22px;border-radius:999px;background:#B23B2E;flex:none"></span>
+          <div style="flex:1;min-width:200px"><b style="font-size:14.5px">Sindoor red</b> <span style="font-size:14px;color:#6B6453">— errors and true urgency only. Never prices, never discounts, never marketing.</span></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid #F3F0E7">
+          <span style="width:22px;height:22px;border-radius:999px;background:#3D5A82;flex:none"></span>
+          <div style="flex:1;min-width:200px"><b style="font-size:14.5px">Asmani blue</b> <span style="font-size:14px;color:#6B6453">— information: policies, delivery notes, helpful explanations.</span></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid #F3F0E7">
+          <span style="width:22px;height:22px;border-radius:999px;background:#BC6844;flex:none"></span>
+          <div style="flex:1;min-width:200px"><b style="font-size:14.5px">Mitti terracotta</b> <span style="font-size:14px;color:#6B6453">— community and festival warmth. Emotional, never functional.</span></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;padding:13px 0">
+          <span style="width:22px;height:22px;border-radius:999px;background:#24201A;flex:none"></span>
+          <div style="flex:1;min-width:200px"><b style="font-size:14.5px">Kajal &amp; Khadi neutrals</b> <span style="font-size:14px;color:#6B6453">— content and structure. The quiet 90% of every screen.</span></div>
+        </div>
+      </div>
+
+      <h3 style="font-size:17px;font-weight:700;margin:34px 0 10px">Proportion — the 70 / 20 / 10 rule</h3>
+      <div style="display:flex;height:64px;border-radius:12px;overflow:hidden;border:1px solid #E7E2D5">
+        <div style="flex:70;background:#FAF8F2;display:grid;place-items:center;font-size:13px;font-weight:600;color:#514B3D;text-align:center;padding:0 8px">≈70% warm air<br>Malai &amp; white</div>
+        <div style="flex:20;background:#F3F0E7;display:grid;place-items:center;font-size:13px;font-weight:600;color:#514B3D;text-align:center;padding:0 8px">≈20% structure<br>ink, borders, photos</div>
+        <div style="flex:10;background:#235C3F;display:grid;place-items:center;font-size:12px;font-weight:600;color:#FAF8F2;text-align:center;padding:0 6px">≈10%<br>brand</div>
+      </div>
+      <p style="font-size:13.5px;color:#6B6453;margin:10px 0 0;max-width:70ch">If a screen feels “off-brand”, it is almost always this ratio broken — too much green, too many accents. The brand lives in the 10%, which is why it stays powerful.</p>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:26px">
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:20px">
+          <div style="font-size:15px;font-weight:700">Deep, not bright</div>
+          <p style="font-size:14px;line-height:1.65;color:#514B3D;margin:8px 0 0">High saturation is the color of hurry — flash sales, 10-minute apps. Depth is the color of establishment. Our green is a banyan leaf in shade, not a neon “ORDER NOW”.</p>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:20px">
+          <div style="font-size:15px;font-weight:700">Warm, not white</div>
+          <p style="font-size:14px;line-height:1.65;color:#514B3D;margin:8px 0 0">Pure #FFFFFF glares on cheap panels and in outdoor sun, where our customers actually shop. Malai reads like paper, calms the page, and makes food photography look appetizing.</p>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:20px">
+          <div style="font-size:15px;font-weight:700">One accent per view</div>
+          <p style="font-size:14px;line-height:1.65;color:#514B3D;margin:8px 0 0">A bazaar shouts from every stall; a trusted shop speaks once. A screen may use one accent family besides green. Two is a warning; three is a bug.</p>
+        </div>
+      </div>
+
+      <div style="background:#F0F5F1;border:1px solid #C1D9C9;border-radius:12px;padding:16px 18px;margin:20px 0 0">
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#235C3F;margin-bottom:6px">क्यों · WHY</div>
+        <div style="font-size:15px;line-height:1.7;color:#37322A">Every hue is borrowed from materials our customers already trust — banyan leaf, malai, haldi, mitti, kajal, sindoor, the sky. Borrowed color carries borrowed meaning: haldi is already auspicious, mitti already feels like home. It also gives the team a shared language (“make it haldi, not sindoor”) that survives translation between designers, developers and the family running the shop. Trend palettes (neon gradients, purple-blue SaaS) would place us in the startup shelf and age in three years; earth doesn't go out of fashion.</div>
+      </div>
+    </section>
+
+    <!-- ============ 04 PRIMARY PALETTE ============ -->
+    <section id="s04" data-screen-label="04 Primary palette" style="padding:52px 0 20px;border-top:1px solid #E7E2D5;margin-top:32px">
+      <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+        <span style="font-family:'Martel',serif;font-size:15px;color:#8A8370">04</span>
+        <h2 style="margin:0;font-family:'Martel',serif;font-weight:800;font-size:clamp(26px,3vw,32px);line-height:1.4">Primary palette</h2>
+        <span style="font-size:15px;color:#6B6453">मुख्य रंग</span>
+      </div>
+      <p style="max-width:70ch;font-size:16px;line-height:1.75;color:#37322A;margin:14px 0 0">One green family, one warm neutral family, one ink. That is the whole brand — narrow on purpose, so that after three visits a customer recognizes MG Supermart from across the room.</p>
+
+      <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:22px">
+        <div style="flex:2 1 260px;background:#235C3F;color:#FAF8F2;border-radius:16px;padding:22px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end">
+          <div style="font-family:'Martel',serif;font-weight:800;font-size:22px;line-height:1.5">Banyan बरगद</div>
+          <div style="font-size:13.5px;color:#C1D9C9">#235C3F · oklch(0.42 0.07 155) — the one green. Action, freshness, trust.</div>
+        </div>
+        <div style="flex:1.4 1 200px;background:#FAF8F2;border:1px solid #E7E2D5;border-radius:16px;padding:22px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end">
+          <div style="font-family:'Martel',serif;font-weight:800;font-size:22px;line-height:1.5">Malai मलाई</div>
+          <div style="font-size:13.5px;color:#6B6453">#FAF8F2 — the warm air every screen breathes.</div>
+        </div>
+        <div style="flex:1.4 1 200px;background:#24201A;color:#FAF8F2;border-radius:16px;padding:22px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end">
+          <div style="font-family:'Martel',serif;font-weight:800;font-size:22px;line-height:1.5">Kajal काजल</div>
+          <div style="font-size:13.5px;color:#D3CDBC">#24201A — warm ink, never pure black.</div>
+        </div>
+      </div>
+
+      <h3 style="font-size:17px;font-weight:700;margin:34px 0 4px">Banyan scale <span style="font-weight:400;color:#6B6453">· 10 steps, one hue</span></h3>
+      <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:6px 20px 14px;margin-top:10px">
+        <sc-for list="{{ greens }}" as="c" hint-placeholder-count="10">
+          <div style="display:flex;align-items:center;gap:14px;padding:9px 0;border-top:1px solid #F3F0E7;flex-wrap:wrap">
+            <div style="width:132px;height:50px;border-radius:10px;background:{{ c.hex }};color:{{ c.fg }};flex:none;display:flex;align-items:flex-end;padding:6px 10px;font-size:12px;font-weight:600;box-sizing:border-box;border:1px solid rgba(36,32,26,0.08)">{{ c.hex }}</div>
+            <div style="flex:1;min-width:180px">
+              <div style="font-size:14px;font-weight:700">{{ c.t }}</div>
+              <div style="font-size:13.5px;color:#6B6453;line-height:1.5">{{ c.use }}</div>
+            </div>
+            <sc-if value="{{ c.ratio }}" hint-placeholder-val="{{ false }}">
+              <span style="font-size:12px;font-weight:600;color:#514B3D;border:1px solid #E7E2D5;background:#FAF8F2;border-radius:999px;padding:3px 10px;flex:none">{{ c.ratio }}</span>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+
+      <h3 style="font-size:17px;font-weight:700;margin:30px 0 4px">Khadi neutrals <span style="font-weight:400;color:#6B6453">· warm greys, like unbleached cloth</span></h3>
+      <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:6px 20px 14px;margin-top:10px">
+        <sc-for list="{{ khadi }}" as="c" hint-placeholder-count="11">
+          <div style="display:flex;align-items:center;gap:14px;padding:9px 0;border-top:1px solid #F3F0E7;flex-wrap:wrap">
+            <div style="width:132px;height:50px;border-radius:10px;background:{{ c.hex }};color:{{ c.fg }};flex:none;display:flex;align-items:flex-end;padding:6px 10px;font-size:12px;font-weight:600;box-sizing:border-box;border:1px solid rgba(36,32,26,0.08)">{{ c.hex }}</div>
+            <div style="flex:1;min-width:180px">
+              <div style="font-size:14px;font-weight:700">{{ c.t }}</div>
+              <div style="font-size:13.5px;color:#6B6453;line-height:1.5">{{ c.use }}</div>
+            </div>
+            <sc-if value="{{ c.ratio }}" hint-placeholder-val="{{ false }}">
+              <span style="font-size:12px;font-weight:600;color:#514B3D;border:1px solid #E7E2D5;background:#FAF8F2;border-radius:999px;padding:3px 10px;flex:none">{{ c.ratio }}</span>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin-top:14px">
+        <div style="background:#F0F5F1;border:1px solid #C1D9C9;border-radius:16px;padding:18px 20px">
+          <div style="font-size:13px;font-weight:700;color:#235C3F;margin-bottom:8px">✓ Pairing rules</div>
+          <div style="display:grid;gap:7px;font-size:14px;line-height:1.6;color:#37322A">
+            <div>Body text → Kajal on Malai (15.2:1, beyond AAA)</div>
+            <div>Secondary text → khadi-600 or darker</div>
+            <div>Primary action → banyan-700 fill + Malai label</div>
+            <div>Links → banyan-700, underlined on hover</div>
+            <div>Success → banyan-600 text, banyan-50 surface</div>
+          </div>
+        </div>
+        <div style="background:#F3F0E7;border:1px solid #D3CDBC;border-radius:16px;padding:18px 20px">
+          <div style="font-size:13px;font-weight:700;color:#8E2C21;margin-bottom:8px">✗ Forbidden</div>
+          <div style="display:grid;gap:7px;font-size:14px;line-height:1.6;color:#514B3D">
+            <div>banyan-400 and lighter as text on light surfaces</div>
+            <div>khadi-400/500 as body text (decoration only)</div>
+            <div>Green backgrounds behind long reading text</div>
+            <div>Any hex value that is not in these tables</div>
+            <div>Gradients as surfaces — flat color only</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#F0F5F1;border:1px solid #C1D9C9;border-radius:12px;padding:16px 18px;margin:20px 0 0">
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#235C3F;margin-bottom:6px">क्यों · WHY</div>
+        <div style="font-size:15px;line-height:1.7;color:#37322A">Green is mandated by the Design Principles (freshness, success) and it is honest for a grocer rooted in farming country — but <b>which</b> green decides everything. Step 700 is the brand: dark enough for 7.9:1 contrast (elderly eyes, sunlight, ₹6,000 phones), calm enough to never feel like a discount banner. Quick-commerce greens live around step 400–500 with double the saturation — we are deliberately two shades deeper and one register quieter. And it is a single green <i>family</i>: multi-hue “fruit salad” UIs feel busy and cheap, while one deep green + warm paper is ownable for decades.</div>
+      </div>
+    </section>
+
+    <!-- ============ 05 SECONDARY PALETTE ============ -->
+    <section id="s05" data-screen-label="05 Secondary palette" style="padding:52px 0 20px;border-top:1px solid #E7E2D5;margin-top:32px">
+      <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+        <span style="font-family:'Martel',serif;font-size:15px;color:#8A8370">05</span>
+        <h2 style="margin:0;font-family:'Martel',serif;font-weight:800;font-size:clamp(26px,3vw,32px);line-height:1.4">Secondary palette</h2>
+        <span style="font-size:15px;color:#6B6453">सहायक रंग</span>
+      </div>
+      <p style="max-width:70ch;font-size:16px;line-height:1.75;color:#37322A;margin:14px 0 0">Accents are spices — measured by the pinch. Three families, all earthen, all tuned to the same oklch chroma band (≈0.09–0.11) so no accent can shout over another. They color moments, never machinery: an accent may decorate an offer strip or a festival card, but the button inside it stays banyan.</p>
+
+      <sc-for list="{{ accents }}" as="g" hint-placeholder-count="3">
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:20px 22px;margin-top:16px">
+          <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">
+            <div style="font-family:'Martel',serif;font-weight:800;font-size:20px;line-height:1.5">{{ g.name }}</div>
+            <div style="font-size:13.5px;color:#8A8370">{{ g.sub }}</div>
+          </div>
+          <p style="font-size:14px;line-height:1.65;color:#514B3D;margin:6px 0 12px;max-width:75ch">{{ g.role }}</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <sc-for list="{{ g.rows }}" as="c" hint-placeholder-count="6">
+              <div style="flex:1 1 130px;min-width:118px;border-radius:10px;background:{{ c.hex }};color:{{ c.fg }};padding:12px 12px 10px;box-sizing:border-box;border:1px solid rgba(36,32,26,0.08)">
+                <div style="font-size:12.5px;font-weight:700">{{ c.t }}</div>
+                <div style="font-size:11.5px;opacity:0.85">{{ c.hex }}</div>
+                <div style="font-size:11.5px;line-height:1.45;margin-top:8px;opacity:0.95">{{ c.use }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+
+      <div style="background:#F0F5F1;border:1px solid #C1D9C9;border-radius:12px;padding:16px 18px;margin:20px 0 0">
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#235C3F;margin-bottom:6px">क्यों · WHY</div>
+        <div style="font-size:15px;line-height:1.7;color:#37322A"><b>Haldi</b> because turmeric and marigold are already शुभ — an offer wrapped in haldi feels like good fortune, not pressure; the same offer in red feels like a trap. <b>Mitti</b> because clay is the material of home, दउरा and diyas — it warms community and festival moments without borrowing green's authority. <b>Asmani</b> because information should feel calm and slightly official, like a clear sky — and we deliberately name it “sky”, not “neel”: indigo carries a painful history in Champaran, and a neighborhood brand should not decorate with it. Matching chroma across all three keeps the shelf quiet: no accent can win a shouting match, because none is allowed to shout.</div>
+      </div>
+    </section>
+
+    <!-- ============ 06 SEMANTIC COLORS ============ -->
+    <section id="s06" data-screen-label="06 Semantic colors" style="padding:52px 0 20px;border-top:1px solid #E7E2D5;margin-top:32px">
+      <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+        <span style="font-family:'Martel',serif;font-size:15px;color:#8A8370">06</span>
+        <h2 style="margin:0;font-family:'Martel',serif;font-weight:800;font-size:clamp(26px,3vw,32px);line-height:1.4">Semantic colors</h2>
+        <span style="font-size:15px;color:#6B6453">स्थिति के रंग</span>
+      </div>
+      <p style="max-width:70ch;font-size:16px;line-height:1.75;color:#37322A;margin:14px 0 0">Four states, each spoken three ways at once — color + icon + words — so the message survives color-blindness, sun glare and hurry. Every example below is real copy in the shopkeeper's voice: it explains the cause and offers the next step.</p>
+
+      <div style="display:grid;gap:12px;margin-top:22px">
+        <div>
+          <div style="background:#F0F5F1;border:1px solid #C1D9C9;border-radius:12px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start">
+            <span style="width:26px;height:26px;border-radius:999px;background:#316F4E;color:#FFFFFF;display:grid;place-items:center;font-size:13px;font-weight:800;flex:none;margin-top:2px">✓</span>
+            <div>
+              <div style="font-size:15px;font-weight:600;color:#1B4831;line-height:1.6">ऑर्डर मिल गया — शाम 5–7 बजे के बीच पहुँचेगा। <span style="font-weight:400">Order placed, arriving 5–7 pm.</span></div>
+              <div style="font-size:12.5px;color:#316F4E;margin-top:4px">surface banyan-50 · border banyan-200 · text banyan-800 · icon banyan-600</div>
+            </div>
+          </div>
+          <p style="font-size:13.5px;line-height:1.6;color:#6B6453;margin:7px 2px 0">Success सफलता — confirmations, delivered states, savings (“₹40 की बचत”). One family with freshness: good things growing.</p>
+        </div>
+
+        <div>
+          <div style="background:#FCF6E8;border:1px solid #F0CE8A;border-radius:12px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start">
+            <span style="width:26px;height:26px;border-radius:999px;background:#C08A1E;color:#FFFFFF;display:grid;place-items:center;font-size:13px;font-weight:800;flex:none;margin-top:2px">!</span>
+            <div>
+              <div style="font-size:15px;font-weight:600;color:#8A5F0B;line-height:1.6">बारिश की वजह से डिलीवरी में थोड़ी देरी हो सकती है। <span style="font-weight:400">Delivery may run a little late due to rain.</span></div>
+              <div style="font-size:12.5px;color:#A87816;margin-top:4px">surface haldi-50 · border haldi-300 · text haldi-700 · icon haldi-600</div>
+            </div>
+          </div>
+          <p style="font-size:13.5px;line-height:1.6;color:#6B6453;margin:7px 2px 0">Warning सावधानी — a heads-up that deserves attention, not fear. Warnings always name the cause; a shopkeeper never just says “problem”.</p>
+        </div>
+
+        <div>
+          <div style="background:#FBEFED;border:1px solid #EFC4BC;border-radius:12px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start">
+            <span style="width:26px;height:26px;border-radius:999px;background:#B23B2E;color:#FFFFFF;display:grid;place-items:center;font-size:13px;font-weight:800;flex:none;margin-top:2px">✕</span>
+            <div>
+              <div style="font-size:15px;font-weight:600;color:#8E2C21;line-height:1.6">भुगतान नहीं हो पाया — दोबारा कोशिश करें या कैश-ऑन-डिलीवरी चुनें। <span style="font-weight:400">Payment failed — try again or choose cash on delivery.</span></div>
+              <div style="font-size:12.5px;color:#B23B2E;margin-top:4px">surface sindoor-50 · border sindoor-200 · text sindoor-700 · icon sindoor-600 #B23B2E</div>
+            </div>
+          </div>
+          <p style="font-size:13.5px;line-height:1.6;color:#6B6453;margin:7px 2px 0">Error त्रुटि — genuine failure and destructive confirmation only. Errors never blame the customer, and always offer a way forward (Design Principles §12).</p>
+        </div>
+
+        <div>
+          <div style="background:#EFF3F8;border:1px solid #C6D4E6;border-radius:12px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start">
+            <span style="width:26px;height:26px;border-radius:999px;background:#3D5A82;color:#FFFFFF;display:grid;place-items:center;font-size:13px;font-weight:800;flex:none;margin-top:2px">i</span>
+            <div>
+              <div style="font-size:15px;font-weight:600;color:#2F4767;line-height:1.6">तेल और खुली चीनी ₹500 की न्यूनतम राशि में नहीं गिने जाते। <span style="font-weight:400">Oils &amp; loose sugar don't count toward the ₹500 minimum.</span></div>
+              <div style="font-size:12.5px;color:#3D5A82;margin-top:4px">surface asmani-50 · border asmani-200 · text asmani-700 · icon asmani-600</div>
+            </div>
+          </div>
+          <p style="font-size:13.5px;line-height:1.6;color:#6B6453;margin:7px 2px 0">Info जानकारी — policies stated politely and early, in the cart, not at payment. “Never surprise customers during checkout” (Founder Brief §9).</p>
+        </div>
+      </div>
+
+      <div style="background:#F0F5F1;border:1px solid #C1D9C9;border-radius:12px;padding:16px 18px;margin:22px 0 0">
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#235C3F;margin-bottom:6px">क्यों · WHY — the red discipline</div>
+        <div style="font-size:15px;line-height:1.7;color:#37322A">Indian ecommerce paints prices, timers and discounts red to spike adrenaline. We refuse: on MG Supermart <b>red appears only when something is actually wrong</b>. Savings are told in green (“₹12 की बचत” — a gain, not an emergency), the MRP strikethrough is quiet khadi-500, and there are no countdown timers anywhere. The payoff is compounding: when every red is real, one red banner earns instant attention — and when nothing screams, customers stop bracing for tricks. That felt safety is the whole brand.</div>
+      </div>
+    </section>
+
+    <!-- ============ 07 TYPOGRAPHY ============ -->
+    <section id="s07" data-screen-label="07 Typography system" style="padding:52px 0 20px;border-top:1px solid #E7E2D5;margin-top:32px">
+      <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+        <span style="font-family:'Martel',serif;font-size:15px;color:#8A8370">07</span>
+        <h2 style="margin:0;font-family:'Martel',serif;font-weight:800;font-size:clamp(26px,3vw,32px);line-height:1.4">Typography system</h2>
+        <span style="font-size:15px;color:#6B6453">अक्षर-व्यवस्था</span>
+      </div>
+      <p style="max-width:70ch;font-size:16px;line-height:1.75;color:#37322A;margin:14px 0 0">Two voices. <b>Martel</b> (serif) is the brand speaking — hero lines, festival greetings, storytelling. <b>Mukta</b> (sans) is the shop working — prices, buttons, forms, everything functional. Both families were designed Devanagari-first, so Hindi is never a fallback font wearing borrowed clothes.</p>
+
+      <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:6px 22px 10px;margin-top:22px">
+        <sc-for list="{{ typeRoles }}" as="r" hint-placeholder-count="9">
+          <div style="display:flex;gap:18px;padding:16px 0;border-top:1px solid #F3F0E7;flex-wrap:wrap;align-items:center">
+            <div style="flex:0 0 195px;min-width:175px">
+              <div style="font-size:14px;font-weight:700">{{ r.role }}</div>
+              <div style="font-size:12.5px;color:#6B6453;line-height:1.6">mobile {{ r.m }} · desktop {{ r.d }} · wt {{ r.w }}</div>
+              <div style="font-size:12.5px;color:#8A8370;line-height:1.55">{{ r.use }}</div>
+            </div>
+            <div style="flex:1;min-width:250px">
+              <div style="font-family:{{ r.font }};font-weight:{{ r.w }};font-size:{{ r.px }}px;line-height:{{ r.lh }};color:#24201A">{{ r.hi }}</div>
+              <div style="font-family:{{ r.font }};font-weight:{{ r.w }};font-size:{{ r.px }}px;line-height:{{ r.lh }};color:#514B3D">{{ r.en }}</div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:14px">
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px 20px">
+          <div style="font-size:14px;font-weight:700;margin-bottom:8px">Composition rules</div>
+          <div style="display:grid;gap:7px;font-size:14px;line-height:1.6;color:#37322A">
+            <div>Sentence case everywhere. <b>No all-caps, ever</b> — Devanagari has no capitals, so caps would make English shout while Hindi whispers.</div>
+            <div>No italics — Devanagari has none. Emphasis = weight or Banyan color.</div>
+            <div>Never letter-space Devanagari; matras break apart.</div>
+            <div>Measure: 45–70 characters English, ≈55 Hindi.</div>
+          </div>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px 20px">
+          <div style="font-size:14px;font-weight:700;margin-bottom:8px">Numbers &amp; floors</div>
+          <div style="display:grid;gap:7px;font-size:14px;line-height:1.6;color:#37322A">
+            <div>Prices in tabular numerals, Latin digits (₹68 — matching shop receipts), ₹ always attached to the amount.</div>
+            <div>Hindi body gets +2 line-height steps (16/28 vs 16/26) — matras need headroom.</div>
+            <div>13 px is the absolute floor. Body is 16 px so browsers never auto-zoom and elderly customers never squint.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#F0F5F1;border:1px solid #C1D9C9;border-radius:12px;padding:16px 18px;margin:20px 0 0">
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#235C3F;margin-bottom:6px">क्यों · WHY</div>
+        <div style="font-size:15px;line-height:1.7;color:#37322A">A serif for the brand voice carries the authority of print — newspapers, schoolbooks, painted boards — the materials rural India already trusts. A tall-x-height humanist sans for the working voice maximizes legibility at 14–16 px on low-resolution screens. Two families is the ceiling: every additional font costs kilobytes on slow connections and coherence in the mind. The system reads as one calm speaker with two registers — the same shopkeeper, sometimes warm, sometimes efficient.</div>
+      </div>
+    </section>
+
+    <!-- ============ 08 FONT PAIRING ============ -->
+    <section id="s08" data-screen-label="08 Hindi English font pairing" style="padding:52px 0 20px;border-top:1px solid #E7E2D5;margin-top:32px">
+      <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+        <span style="font-family:'Martel',serif;font-size:15px;color:#8A8370">08</span>
+        <h2 style="margin:0;font-family:'Martel',serif;font-weight:800;font-size:clamp(26px,3vw,32px);line-height:1.4">Hindi + English pairing</h2>
+        <span style="font-size:15px;color:#6B6453">दो भाषाएँ, एक आवाज़</span>
+      </div>
+      <p style="max-width:70ch;font-size:16px;line-height:1.75;color:#37322A;margin:14px 0 0">Most Indian ecommerce sets English in a brand font and lets Hindi fall back to a system default — a typographic way of saying Hindi customers matter less. Bargad inverts this: both families were drawn <b>Devanagari-first</b>, with Latin designed to match, so the two scripts share one visual weight and rhythm.</p>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin-top:22px">
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:24px">
+          <div style="font-size:12px;font-weight:700;color:#8A8370;margin-bottom:12px">Brand voice — Martel</div>
+          <div style="font-family:'Martel',serif;font-weight:800;font-size:30px;line-height:1.5">अपनापन</div>
+          <div style="font-family:'Martel',serif;font-weight:800;font-size:30px;line-height:1.45">Apnapan</div>
+          <p style="font-size:13.5px;line-height:1.65;color:#514B3D;margin:12px 0 0">By Dan Reynolds — a Devanagari text serif with calligraphic roots, commissioned for long-form Hindi reading. Weights used: 700, 800, 900. Latin drawn to sit beside the Devanagari, not above it.</p>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:24px">
+          <div style="font-size:12px;font-weight:700;color:#8A8370;margin-bottom:12px">Working voice — Mukta</div>
+          <div style="font-family:'Mukta',sans-serif;font-weight:600;font-size:30px;line-height:1.5">कार्ट में डालें</div>
+          <div style="font-family:'Mukta',sans-serif;font-weight:600;font-size:30px;line-height:1.45">Add to cart</div>
+          <p style="font-size:13.5px;line-height:1.65;color:#514B3D;margin:12px 0 0">By Ek Type, Mumbai — a humanist multi-script sans built for Indian signage and UI. Weights used: 400, 500, 600, 700. Open apertures and a tall x-height keep 14 px legible on ₹6,000 phones.</p>
+        </div>
+      </div>
+
+      <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:24px;margin-top:12px">
+        <div style="font-size:12px;font-weight:700;color:#8A8370;margin-bottom:14px">The parity test — one card, two languages, identical hierarchy</div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <div style="flex:1 1 240px;border:1px solid #E7E2D5;border-radius:12px;padding:18px;background:#FAF8F2">
+            <div style="font-family:'Martel',serif;font-weight:700;font-size:19px;line-height:1.55">आज की ताज़ा सब्ज़ियाँ</div>
+            <div style="font-size:14px;line-height:1.7;color:#514B3D;margin-top:4px">शाम 5 बजे से पहले ऑर्डर करें, आज ही पाएँ।</div>
+            <div style="display:inline-block;background:#235C3F;color:#FAF8F2;border-radius:12px;padding:9px 18px;font-size:15px;font-weight:600;margin-top:12px">अभी खरीदें</div>
+          </div>
+          <div style="flex:1 1 240px;border:1px solid #E7E2D5;border-radius:12px;padding:18px;background:#FAF8F2">
+            <div style="font-family:'Martel',serif;font-weight:700;font-size:19px;line-height:1.55">Today's fresh vegetables</div>
+            <div style="font-size:14px;line-height:1.7;color:#514B3D;margin-top:4px">Order before 5 pm, get it today.</div>
+            <div style="display:inline-block;background:#235C3F;color:#FAF8F2;border-radius:12px;padding:9px 18px;font-size:15px;font-weight:600;margin-top:12px">Buy now</div>
+          </div>
+        </div>
+        <p style="font-size:13.5px;color:#6B6453;margin:12px 0 0">Same tokens, same sizes, same weights. Switching language must never change the design — only the words. Layouts budget ~15% extra width for Hindi labels and extra height for matras.</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:12px">
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px 20px">
+          <div style="font-size:14px;font-weight:700;margin-bottom:8px">Fallback stacks</div>
+          <div style="font-size:13.5px;line-height:1.8;color:#37322A;font-family:ui-monospace,monospace">--font-brand: 'Martel', 'Noto Serif Devanagari', serif;<br>--font-ui: 'Mukta', 'Noto Sans Devanagari', system-ui, sans-serif;</div>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px 20px">
+          <div style="font-size:14px;font-weight:700;margin-bottom:8px">Loading on slow networks</div>
+          <div style="display:grid;gap:7px;font-size:14px;line-height:1.6;color:#37322A">
+            <div>Subset per script; preload only Mukta 400/600 (the UI survives on these two).</div>
+            <div><span style="font-family:ui-monospace,monospace;font-size:13px">font-display: swap</span> — words first, beauty a moment later.</div>
+            <div>Martel loads lazily; headlines fall back to Noto Serif without layout shift (metrics-matched sizing).</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#F0F5F1;border:1px solid #C1D9C9;border-radius:12px;padding:16px 18px;margin:20px 0 0">
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#235C3F;margin-bottom:6px">क्यों · WHY</div>
+        <div style="font-size:15px;line-height:1.7;color:#37322A">Language is the deepest trust signal we control. When Hindi renders in a thin default font next to polished English, customers feel — correctly — that the site was designed for someone else. Devanagari-first families make the Hindi experience the <b>reference</b> experience. Both are open-source Google Fonts: zero licensing risk for a small business, guaranteed availability for the future Android app, and both were designed by people who design for India, not adapted for it afterwards.</div>
+      </div>
+    </section>
+
+    <!-- ============ 09 GRID ============ -->
+    <section id="s09" data-screen-label="09 Grid system" style="padding:52px 0 20px;border-top:1px solid #E7E2D5;margin-top:32px">
+      <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+        <span style="font-family:'Martel',serif;font-size:15px;color:#8A8370">09</span>
+        <h2 style="margin:0;font-family:'Martel',serif;font-weight:800;font-size:clamp(26px,3vw,32px);line-height:1.4">Grid system</h2>
+        <span style="font-size:15px;color:#6B6453">ढाँचा</span>
+      </div>
+      <p style="max-width:70ch;font-size:16px;line-height:1.75;color:#37322A;margin:14px 0 0">Everything sits on a 4 px baseline. Columns scale from 4 on mobile — the canonical layout — to 12 on desktop, with content capped at 1200 px. The same grid governs the website, admin panel and future app, so teams and customers only ever learn one geometry.</p>
+
+      <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:22px;margin-top:22px">
+        <div style="display:flex;gap:8px">
+          <div style="flex:1;height:64px;background:#DEEBE1;border-radius:6px"></div><div style="flex:1;height:64px;background:#DEEBE1;border-radius:6px"></div><div style="flex:1;height:64px;background:#DEEBE1;border-radius:6px"></div><div style="flex:1;height:64px;background:#DEEBE1;border-radius:6px"></div><div style="flex:1;height:64px;background:#DEEBE1;border-radius:6px"></div><div style="flex:1;height:64px;background:#DEEBE1;border-radius:6px"></div><div style="flex:1;height:64px;background:#DEEBE1;border-radius:6px"></div><div style="flex:1;height:64px;background:#DEEBE1;border-radius:6px"></div><div style="flex:1;height:64px;background:#DEEBE1;border-radius:6px"></div><div style="flex:1;height:64px;background:#DEEBE1;border-radius:6px"></div><div style="flex:1;height:64px;background:#DEEBE1;border-radius:6px"></div><div style="flex:1;height:64px;background:#DEEBE1;border-radius:6px"></div>
+        </div>
+        <div style="margin-top:18px;display:grid;gap:0;font-size:14px">
+          <div style="display:flex;gap:12px;padding:10px 0;border-top:1px solid #F3F0E7;flex-wrap:wrap"><b style="flex:0 0 170px">0 – 599 · Mobile</b><span style="color:#514B3D;flex:1;min-width:200px">4 columns · 16 px margins · 12 px gutters — the canonical layout</span></div>
+          <div style="display:flex;gap:12px;padding:10px 0;border-top:1px solid #F3F0E7;flex-wrap:wrap"><b style="flex:0 0 170px">600 – 904 · Tablet</b><span style="color:#514B3D;flex:1;min-width:200px">8 columns · 24 px margins · 16 px gutters</span></div>
+          <div style="display:flex;gap:12px;padding:10px 0;border-top:1px solid #F3F0E7;flex-wrap:wrap"><b style="flex:0 0 170px">905 – 1239 · Desktop</b><span style="color:#514B3D;flex:1;min-width:200px">12 columns · 32 px margins · 24 px gutters</span></div>
+          <div style="display:flex;gap:12px;padding:10px 0;border-top:1px solid #F3F0E7;flex-wrap:wrap"><b style="flex:0 0 170px">1240+ · Wide</b><span style="color:#514B3D;flex:1;min-width:200px">12 columns · content capped at 1200 px, centered · 24 px gutters</span></div>
+          <div style="display:flex;gap:12px;padding:10px 0;border-top:1px solid #F3F0E7;flex-wrap:wrap"><b style="flex:0 0 170px">Product grid</b><span style="color:#514B3D;flex:1;min-width:200px">2-up mobile → 3-up tablet → 4/5-up desktop, always with 12–16 px gutters</span></div>
+        </div>
+      </div>
+
+      <div style="background:#F0F5F1;border:1px solid #C1D9C9;border-radius:12px;padding:16px 18px;margin:20px 0 0">
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#235C3F;margin-bottom:6px">क्यों · WHY</div>
+        <div style="font-size:15px;line-height:1.7;color:#37322A">A 4 px base (not 8) because our touch minimums — 48, 52, 56 — and dense grocery grids need the finer step without breaking rhythm. The 1200 px cap keeps line lengths readable and the page at the scale of a shop, not a warehouse: edge-to-edge desktop layouts read as “platform”, and we are deliberately not one. Mobile is designed first and never adapted down — 90%+ of our customers will only ever see the 4-column layout, so it is the original, not the compromise.</div>
+      </div>
+    </section>
+
+    <!-- ============ 10 SPACING ============ -->
+    <section id="s10" data-screen-label="10 Spacing scale" style="padding:52px 0 20px;border-top:1px solid #E7E2D5;margin-top:32px">
+      <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+        <span style="font-family:'Martel',serif;font-size:15px;color:#8A8370">10</span>
+        <h2 style="margin:0;font-family:'Martel',serif;font-weight:800;font-size:clamp(26px,3vw,32px);line-height:1.4">Spacing scale</h2>
+        <span style="font-size:15px;color:#6B6453">साँस लेने की जगह</span>
+      </div>
+      <p style="max-width:70ch;font-size:16px;line-height:1.75;color:#37322A;margin:14px 0 0">Nine steps on the 4 px base, shown at actual size. Spacing is how the interface breathes — and generous breathing room is the cheapest premium signal there is.</p>
+
+      <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:8px 22px 14px;margin-top:22px">
+        <sc-for list="{{ spacing }}" as="s" hint-placeholder-count="9">
+          <div style="display:flex;align-items:center;gap:16px;padding:9px 0;border-top:1px solid #F3F0E7;flex-wrap:wrap">
+            <b style="flex:0 0 110px;font-size:14px">{{ s.k }}</b>
+            <span style="flex:0 0 46px;font-size:13px;color:#6B6453">{{ s.v }} px</span>
+            <span style="display:inline-block;width:{{ s.v }}px;height:26px;background:#C1D9C9;border-radius:4px;flex:none"></span>
+            <span style="flex:1;min-width:180px;font-size:13.5px;color:#514B3D">{{ s.use }}</span>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:14px">
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px 20px">
+          <div style="font-size:14px;font-weight:700;margin-bottom:8px">Proximity = relationship</div>
+          <p style="font-size:14px;line-height:1.65;color:#37322A;margin:0">8 px inside an element · 16 px between related things · 24–32 px between groups · 48–64 px between page sections. Spacing does the explaining so borders and boxes don't have to.</p>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px 20px">
+          <div style="font-size:14px;font-weight:700;margin-bottom:8px">Touch floors</div>
+          <p style="font-size:14px;line-height:1.65;color:#37322A;margin:0">48 px minimum tap target, 56 px for money actions, ≥8 px between adjacent targets. Forms never compress below 16 px vertical rhythm — dense grocery grids may drop to 12 px gutters, nothing else may.</p>
+        </div>
+      </div>
+
+      <div style="background:#F0F5F1;border:1px solid #C1D9C9;border-radius:12px;padding:16px 18px;margin:20px 0 0">
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#235C3F;margin-bottom:6px">क्यों · WHY</div>
+        <div style="font-size:15px;line-height:1.7;color:#37322A">Crowding reads as bazaar; air reads as confidence. For elderly customers and first-time smartphone users, whitespace is also motor accessibility — fat fingers on small screens need forgiveness between targets. The named scale ends design-by-eyeball: when every gap is a token, screens built by different people in different years still feel like one shop.</div>
+      </div>
+    </section>
+
+    <!-- ============ 11 RADIUS ============ -->
+    <section id="s11" data-screen-label="11 Border radius" style="padding:52px 0 20px;border-top:1px solid #E7E2D5;margin-top:32px">
+      <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+        <span style="font-family:'Martel',serif;font-size:15px;color:#8A8370">11</span>
+        <h2 style="margin:0;font-family:'Martel',serif;font-weight:800;font-size:clamp(26px,3vw,32px);line-height:1.4">Border radius</h2>
+        <span style="font-size:15px;color:#6B6453">कोमल कोने</span>
+      </div>
+      <p style="max-width:70ch;font-size:16px;line-height:1.75;color:#37322A;margin:14px 0 0">Five steps. Soft enough to feel human, restrained enough to stay serious.</p>
+
+      <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:22px;margin-top:22px;display:flex;gap:20px;flex-wrap:wrap;align-items:flex-end">
+        <sc-for list="{{ radii }}" as="r" hint-placeholder-count="5">
+          <div style="display:grid;gap:8px;justify-items:start">
+            <div style="width:{{ r.w }}px;height:56px;border-radius:{{ r.v }}px;background:#DEEBE1;border:1.5px solid #235C3F"></div>
+            <div style="font-size:13px;font-weight:700">{{ r.k }}</div>
+            <div style="font-size:12.5px;color:#6B6453;max-width:150px;line-height:1.5">{{ r.use }}</div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:12px">
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px 20px">
+          <div style="font-size:14px;font-weight:700;margin-bottom:8px">Nesting rule</div>
+          <p style="font-size:14px;line-height:1.65;color:#37322A;margin:0">Corners step <b>down</b> one level as you nest: card r-16 → image tile r-12 → tag r-8. Never equal or larger inside — mismatched nesting is the fastest way to look hand-made in the bad sense.</p>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px 20px">
+          <div style="font-size:14px;font-weight:700;margin-bottom:8px">Pill discipline</div>
+          <p style="font-size:14px;line-height:1.65;color:#37322A;margin:0">Full pills are for small, grabbable things — chips, steppers, badges. Buttons and inputs stay r-12: pill-shaped primary buttons are the signature of the very apps we refuse to resemble.</p>
+        </div>
+      </div>
+
+      <div style="background:#F0F5F1;border:1px solid #C1D9C9;border-radius:12px;padding:16px 18px;margin:20px 0 0">
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#235C3F;margin-bottom:6px">क्यों · WHY</div>
+        <div style="font-size:15px;line-height:1.7;color:#37322A">Sharp corners read as institutional and cold; over-round corners read as toy-like and trendy — both fail “timeless”. 12–16 px is the warmth of a worn shop counter: soft where hands touch, straight where structure matters. One geometry runs through everything — rounded rectangle surfaces, round-capped icons, open round letterforms in Mukta — so the whole interface feels carved from the same wood.</div>
+      </div>
+    </section>
+
+    <!-- ============ 12 ELEVATION ============ -->
+    <section id="s12" data-screen-label="12 Elevation and shadow" style="padding:52px 0 20px;border-top:1px solid #E7E2D5;margin-top:32px">
+      <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+        <span style="font-family:'Martel',serif;font-size:15px;color:#8A8370">12</span>
+        <h2 style="margin:0;font-family:'Martel',serif;font-weight:800;font-size:clamp(26px,3vw,32px);line-height:1.4">Elevation &amp; shadow</h2>
+        <span style="font-size:15px;color:#6B6453">छाँव के स्तर</span>
+      </div>
+      <p style="max-width:70ch;font-size:16px;line-height:1.75;color:#37322A;margin:14px 0 0">Four levels, named after the tree. Most of the interface rests on the ground and is separated by borders; shadow is earned only by things that truly float above the page while you scroll.</p>
+
+      <div style="background:#F3F0E7;border:1px solid #E7E2D5;border-radius:16px;padding:26px;margin-top:22px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px">
+        <sc-for list="{{ elev }}" as="e" hint-placeholder-count="4">
+          <div style="background:#FFFFFF;border:{{ e.bd }};border-radius:16px;padding:18px;box-shadow:{{ e.shadow }}">
+            <div style="font-size:13.5px;font-weight:700">{{ e.k }}</div>
+            <div style="font-size:12.5px;color:#6B6453;line-height:1.6;margin-top:6px">{{ e.use }}</div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:12px">
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px 20px">
+          <div style="font-size:14px;font-weight:700;margin-bottom:8px">Shadow recipe</div>
+          <p style="font-size:14px;line-height:1.65;color:#37322A;margin:0">Always warm ink — <span style="font-family:ui-monospace,monospace;font-size:13px">rgba(36,32,26, …)</span> — never blue-black, never colored glows. Soft, downward, honest about a single light source, like afternoon light through leaves.</p>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px 20px">
+          <div style="font-size:14px;font-weight:700;margin-bottom:8px">Border-first separation</div>
+          <p style="font-size:14px;line-height:1.65;color:#37322A;margin:0">Cheap panels band and posterize large soft shadows. A crisp 1 px khadi-200 border costs nothing, renders perfectly on every screen, and keeps the page calm. In dark mode, elevation becomes surface lightness — shadows disappear.</p>
+        </div>
+      </div>
+
+      <div style="background:#F0F5F1;border:1px solid #C1D9C9;border-radius:12px;padding:16px 18px;margin:20px 0 0">
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#235C3F;margin-bottom:6px">क्यों · WHY</div>
+        <div style="font-size:15px;line-height:1.7;color:#37322A">Deep drop-shadows are drama, and drama is the opposite of calm. Reserving Level 3 for one sheet per screen preserves a physical logic even first-time users grasp instantly: <b>what floats is what you're holding right now</b>. Everything else stays on the counter.</div>
+      </div>
+    </section>
+
+    <!-- ============ 13 ICONOGRAPHY ============ -->
+    <section id="s13" data-screen-label="13 Iconography" style="padding:52px 0 20px;border-top:1px solid #E7E2D5;margin-top:32px">
+      <div style="font-size:13px;font-weight:700;letter-spacing:0.12em;color:#235C3F;margin-bottom:12px">Part B — Expression · अभिव्यक्ति</div>
+      <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+        <span style="font-family:'Martel',serif;font-size:15px;color:#8A8370">13</span>
+        <h2 style="margin:0;font-family:'Martel',serif;font-weight:800;font-size:clamp(26px,3vw,32px);line-height:1.4">Iconography</h2>
+        <span style="font-size:15px;color:#6B6453">चिह्न</span>
+      </div>
+      <p style="max-width:70ch;font-size:16px;line-height:1.75;color:#37322A;margin:14px 0 0">Outlined, 2 px stroke, rounded caps and joins, drawn on a 24 px grid. Light like a pencil line, never thinner — hairline icons vanish on low-resolution screens. Base library: <b>Lucide</b> (open source, matches this spec), customized only where local life demands it.</p>
+
+      <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:24px;margin-top:22px">
+        <div style="display:flex;gap:18px 26px;flex-wrap:wrap">
+          <div style="display:grid;justify-items:center;gap:6px;min-width:64px">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#24201A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5 12 4l8 6.5"></path><path d="M6.5 9.5V20h11V9.5"></path></svg>
+            <span style="font-size:12px;color:#6B6453">घर Home</span>
+          </div>
+          <div style="display:grid;justify-items:center;gap:6px;min-width:64px">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#24201A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1.5"></rect><rect x="13" y="4" width="7" height="7" rx="1.5"></rect><rect x="4" y="13" width="7" height="7" rx="1.5"></rect><rect x="13" y="13" width="7" height="7" rx="1.5"></rect></svg>
+            <span style="font-size:12px;color:#6B6453">श्रेणियाँ Categories</span>
+          </div>
+          <div style="display:grid;justify-items:center;gap:6px;min-width:64px">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#24201A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"></circle><path d="m16.5 16.5 4 4"></path></svg>
+            <span style="font-size:12px;color:#6B6453">खोजें Search</span>
+          </div>
+          <div style="display:grid;justify-items:center;gap:6px;min-width:64px">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#24201A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 9.5h15L18 18.6a1.9 1.9 0 0 1-1.9 1.4H7.9A1.9 1.9 0 0 1 6 18.6L4.5 9.5z"></path><path d="M8.5 9.5a3.5 3.5 0 0 1 7 0"></path></svg>
+            <span style="font-size:12px;color:#6B6453">कार्ट Cart</span>
+          </div>
+          <div style="display:grid;justify-items:center;gap:6px;min-width:64px">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#24201A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.2" r="3.4"></circle><path d="M5.2 20a6.8 6.8 0 0 1 13.6 0"></path></svg>
+            <span style="font-size:12px;color:#6B6453">खाता Account</span>
+          </div>
+          <div style="display:grid;justify-items:center;gap:6px;min-width:64px">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#24201A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.7-7-10a4.1 4.1 0 0 1 7-2.9A4.1 4.1 0 0 1 19 10c0 5.3-7 10-7 10z"></path></svg>
+            <span style="font-size:12px;color:#6B6453">पसंद Wishlist</span>
+          </div>
+          <div style="display:grid;justify-items:center;gap:6px;min-width:64px">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#24201A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-5.5-6.5-10.3a6.5 6.5 0 1 1 13 0C18.5 15.5 12 21 12 21z"></path><circle cx="12" cy="10.5" r="2.2"></circle></svg>
+            <span style="font-size:12px;color:#6B6453">पता Address</span>
+          </div>
+          <div style="display:grid;justify-items:center;gap:6px;min-width:64px">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#24201A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 15.5v-5a5.5 5.5 0 0 1 11 0v5l1.5 2.5h-14l1.5-2.5z"></path><path d="M10.2 20.5a2 2 0 0 0 3.6 0"></path></svg>
+            <span style="font-size:12px;color:#6B6453">सूचना Alerts</span>
+          </div>
+          <div style="display:grid;justify-items:center;gap:6px;min-width:64px">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#24201A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
+            <span style="font-size:12px;color:#6B6453">जोड़ें Add</span>
+          </div>
+          <div style="display:grid;justify-items:center;gap:6px;min-width:64px">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#24201A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"></path></svg>
+            <span style="font-size:12px;color:#6B6453">आगे Next</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:12px">
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px 20px">
+          <div style="font-size:14px;font-weight:700;margin-bottom:10px">Outline rests, fill speaks</div>
+          <div style="display:flex;align-items:center;gap:22px">
+            <div style="display:grid;justify-items:center;gap:5px">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#6B6453" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5 12 4l8 6.5"></path><path d="M6.5 9.5V20h11V9.5"></path></svg>
+              <span style="font-size:12px;color:#8A8370">resting</span>
+            </div>
+            <div style="display:grid;justify-items:center;gap:5px">
+              <svg width="26" height="26" viewBox="0 0 24 24"><path d="M12 3.5 3.5 10.4V20.5h17V10.4L12 3.5z" fill="#235C3F"></path></svg>
+              <span style="font-size:12px;color:#235C3F;font-weight:600">selected</span>
+            </div>
+          </div>
+          <p style="font-size:13.5px;line-height:1.6;color:#514B3D;margin:10px 0 0">The filled state is the only fill in the icon set — selection becomes readable at a glance, even peripherally.</p>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px 20px">
+          <div style="font-size:14px;font-weight:700;margin-bottom:8px">Rules</div>
+          <div style="display:grid;gap:7px;font-size:14px;line-height:1.6;color:#37322A">
+            <div>Icons never travel alone — navigation and actions always pair icon + word.</div>
+            <div>Currency is ₹, drawn as type, never an icon; metaphors stay local (delivery = scooter, not a US mailbox).</div>
+            <div>Familiar beats clever: cart stays a cart. The दउरा basket lives in illustration, not navigation.</div>
+            <div>Minimum optical size 20 px; touch wrapper 48 px.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#F0F5F1;border:1px solid #C1D9C9;border-radius:12px;padding:16px 18px;margin:20px 0 0">
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#235C3F;margin-bottom:6px">क्यों · WHY</div>
+        <div style="font-size:15px;line-height:1.7;color:#37322A">For a first-time internet user an unlabeled icon is a locked door — research across low-literacy users is unanimous, which is why every icon carries its word. The 2 px rounded stroke matches Mukta's pen weight and the soft radius language, so icons feel written by the same hand that wrote the text. And choosing a maintained open-source set over bespoke drawing means the future Android app and admin panel inherit hundreds of consistent glyphs for free.</div>
+      </div>
+    </section>
+
+    <!-- ============ 14 ILLUSTRATION ============ -->
+    <section id="s14" data-screen-label="14 Illustration" style="padding:52px 0 20px;border-top:1px solid #E7E2D5;margin-top:32px">
+      <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+        <span style="font-family:'Martel',serif;font-size:15px;color:#8A8370">14</span>
+        <h2 style="margin:0;font-family:'Martel',serif;font-weight:800;font-size:clamp(26px,3vw,32px);line-height:1.4">Illustration</h2>
+        <span style="font-size:15px;color:#6B6453">आँगन शैली</span>
+      </div>
+      <p style="max-width:70ch;font-size:16px;line-height:1.75;color:#37322A;margin:14px 0 0">The <b>Aangan</b> (courtyard) style: flat, soft-edged shapes in the earthen palette — mitti, haldi, banyan tints on malai — with modest, realistic people and objects from local life: दउरा baskets, jute bags, diyas, brass kalash, hand carts, the banyan itself. No gradients, no 3D, no glossy startup blobs, no Memphis confetti-people.</p>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:22px">
+        <div style="border:1px solid #E7E2D5;border-radius:16px;overflow:hidden;background:#FFFFFF">
+          <div style="height:130px;background:repeating-linear-gradient(45deg,#F4E1D7,#F4E1D7 10px,#FAF1EC 10px,#FAF1EC 20px);display:grid;place-items:center"><span style="font-family:ui-monospace,monospace;font-size:12px;color:#7C3D20;background:#FFFFFF;border-radius:6px;padding:3px 8px">illustration: empty cart + दउरा</span></div>
+          <div style="padding:12px 16px 14px"><b style="font-size:14px">Empty states</b><div style="font-size:13px;color:#6B6453;line-height:1.55">“कार्ट खाली है — चलिए भरते हैं!” Empty is an invitation, never a dead end.</div></div>
+        </div>
+        <div style="border:1px solid #E7E2D5;border-radius:16px;overflow:hidden;background:#FFFFFF">
+          <div style="height:130px;background:repeating-linear-gradient(45deg,#F9EDD1,#F9EDD1 10px,#FCF6E8 10px,#FCF6E8 20px);display:grid;place-items:center"><span style="font-family:ui-monospace,monospace;font-size:12px;color:#8A5F0B;background:#FFFFFF;border-radius:6px;padding:3px 8px">illustration: scooter in the lane</span></div>
+          <div style="padding:12px 16px 14px"><b style="font-size:14px">Onboarding &amp; how-it-works</b><div style="font-size:13px;color:#6B6453;line-height:1.55">Three steps, three drawings — for customers who prefer pictures to paragraphs.</div></div>
+        </div>
+        <div style="border:1px solid #E7E2D5;border-radius:16px;overflow:hidden;background:#FFFFFF">
+          <div style="height:130px;background:repeating-linear-gradient(45deg,#DEEBE1,#DEEBE1 10px,#F0F5F1 10px,#F0F5F1 20px);display:grid;place-items:center"><span style="font-family:ui-monospace,monospace;font-size:12px;color:#235C3F;background:#FFFFFF;border-radius:6px;padding:3px 8px">illustration: banyan + shop board</span></div>
+          <div style="padding:12px 16px 14px"><b style="font-size:14px">Festival heroes &amp; 404</b><div style="font-size:13px;color:#6B6453;line-height:1.55">Seasonal motifs (diya, दउरा, gulal) drawn in the same hand, swapped by the Seasonal Engine.</div></div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin-top:12px">
+        <div style="background:#F0F5F1;border:1px solid #C1D9C9;border-radius:16px;padding:18px 20px">
+          <div style="font-size:13px;font-weight:700;color:#235C3F;margin-bottom:8px">✓ Where illustration lives</div>
+          <div style="font-size:14px;line-height:1.7;color:#37322A">Empty states · onboarding · error pages · festival hero art · loyalty &amp; community storytelling · WhatsApp stickers and greetings.</div>
+        </div>
+        <div style="background:#F3F0E7;border:1px solid #D3CDBC;border-radius:16px;padding:18px 20px">
+          <div style="font-size:13px;font-weight:700;color:#8E2C21;margin-bottom:8px">✗ Where it never goes</div>
+          <div style="font-size:14px;line-height:1.7;color:#514B3D">Next to product photos · in the checkout flow · as decoration on grids · as a substitute for a real photo of the shop, the team, or the goods.</div>
+        </div>
+      </div>
+
+      <div style="background:#F0F5F1;border:1px solid #C1D9C9;border-radius:12px;padding:16px 18px;margin:20px 0 0">
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#235C3F;margin-bottom:6px">क्यों · WHY</div>
+        <div style="font-size:15px;line-height:1.7;color:#37322A">Illustration exists to keep the interface human in the moments when there is nothing real to show — an empty cart, a lost page. Everywhere else, reality outsells drawings: a real photo of atta builds more trust than any artwork of it. Drawing our own courtyard — not licensing generic startup illustration packs — means a Chhath दउरा actually looks like one from East Champaran. That precision is felt even when it isn't noticed.</div>
+      </div>
+    </section>
+
+    <!-- ============ 15 PHOTOGRAPHY ============ -->
+    <section id="s15" data-screen-label="15 Photography" style="padding:52px 0 20px;border-top:1px solid #E7E2D5;margin-top:32px">
+      <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+        <span style="font-family:'Martel',serif;font-size:15px;color:#8A8370">15</span>
+        <h2 style="margin:0;font-family:'Martel',serif;font-weight:800;font-size:clamp(26px,3vw,32px);line-height:1.4">Photography</h2>
+        <span style="font-size:15px;color:#6B6453">असली तस्वीरें</span>
+      </div>
+      <p style="max-width:70ch;font-size:16px;line-height:1.75;color:#37322A;margin:14px 0 0">Two lanes, one law: <b>everything is real</b>. Real shelves, real staff, real customers, real puja baskets. Stock photography of laughing models in fake kitchens is banned — it is the fastest way to look like everyone else and belong to no one.</p>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin-top:22px">
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:20px">
+          <div style="font-size:14px;font-weight:700;margin-bottom:12px">Lane 1 — Products</div>
+          <div style="display:flex;gap:10px">
+            <div style="flex:1;aspect-ratio:1;border-radius:12px;background:repeating-linear-gradient(45deg,#F3F0E7,#F3F0E7 10px,#FAF8F2 10px,#FAF8F2 20px);display:grid;place-items:center"><span style="font-family:ui-monospace,monospace;font-size:11px;color:#6B6453;background:#FFFFFF;border-radius:6px;padding:2px 7px;text-align:center">product photo<br>1:1 on malai</span></div>
+            <div style="flex:1;aspect-ratio:1;border-radius:12px;background:repeating-linear-gradient(45deg,#F3F0E7,#F3F0E7 10px,#FAF8F2 10px,#FAF8F2 20px);display:grid;place-items:center"><span style="font-family:ui-monospace,monospace;font-size:11px;color:#6B6453;background:#FFFFFF;border-radius:6px;padding:2px 7px;text-align:center">pack shot<br>front, true color</span></div>
+          </div>
+          <div style="display:grid;gap:6px;font-size:13.5px;line-height:1.6;color:#37322A;margin-top:12px">
+            <div>Square 1:1, centered, on seamless Malai / khadi-100.</div>
+            <div>Soft daylight, one direction, gentle true shadow.</div>
+            <div>True color — what you see is what arrives. No beautifying filters on food.</div>
+            <div>No props, no borrowed marketplace images with white boxes.</div>
+          </div>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:20px">
+          <div style="font-size:14px;font-weight:700;margin-bottom:12px">Lane 2 — Shop &amp; community</div>
+          <div style="aspect-ratio:16/9;border-radius:12px;background:repeating-linear-gradient(45deg,#F4E1D7,#F4E1D7 10px,#FAF1EC 10px,#FAF1EC 20px);display:grid;place-items:center"><span style="font-family:ui-monospace,monospace;font-size:11.5px;color:#7C3D20;background:#FFFFFF;border-radius:6px;padding:3px 8px;text-align:center">real store photo — morning light,<br>eye level, staff at the counter</span></div>
+          <div style="display:grid;gap:6px;font-size:13.5px;line-height:1.6;color:#37322A;margin-top:12px">
+            <div>Candid, eye-level, warm natural light — mornings and golden hour.</div>
+            <div>Hands in frame: weighing, packing, handing over. Work is the story.</div>
+            <div>Festivals photographed for real — the shop's own Chhath arrangements, not stock diyas.</div>
+            <div>Consistent warm grade, low contrast lift. Never HDR, never filters, never watermarks.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#F0F5F1;border:1px solid #C1D9C9;border-radius:12px;padding:16px 18px;margin:20px 0 0">
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#235C3F;margin-bottom:6px">क्यों · WHY</div>
+        <div style="font-size:15px;line-height:1.7;color:#37322A">For a neighborhood brand, photography is proof, not decoration. Customers within 5 km can walk in and check — so photos that match reality compound trust with every visit, and photos that flatter it would spend trust instead. The consistent malai tile does quiet work too: grids stay calm, colors stay honest, and food sits on warmth instead of clinical white. Every image ships with bilingual alt text; photography of customers requires their consent, and children appear only with a parent's.</div>
+      </div>
+    </section>
+
+    <!-- ============ 16 MOTION ============ -->
+    <section id="s16" data-screen-label="16 Motion" style="padding:52px 0 20px;border-top:1px solid #E7E2D5;margin-top:32px">
+      <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+        <span style="font-family:'Martel',serif;font-size:15px;color:#8A8370">16</span>
+        <h2 style="margin:0;font-family:'Martel',serif;font-weight:800;font-size:clamp(26px,3vw,32px);line-height:1.4">Motion</h2>
+        <span style="font-size:15px;color:#6B6453">शांत हरकत</span>
+      </div>
+      <p style="max-width:70ch;font-size:16px;line-height:1.75;color:#37322A;margin:14px 0 0">Motion is a shopkeeper's hands: quick, sure, never theatrical. Five principles — <b>purposeful</b> (guides the eye), <b>quick</b> (≤320 ms), <b>grounded</b> (things slide and settle; nothing bounces), <b>honest</b> (skeletons over spinners, progress never fake), <b>respectful</b> (reduced-motion collapses everything to fades).</p>
+
+      <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:6px 22px 12px;margin-top:22px">
+        <sc-for list="{{ motion }}" as="mo" hint-placeholder-count="5">
+          <div style="display:flex;align-items:center;gap:16px;padding:10px 0;border-top:1px solid #F3F0E7;flex-wrap:wrap">
+            <b style="flex:0 0 150px;font-size:14px;font-family:ui-monospace,monospace">{{ mo.k }}</b>
+            <span style="flex:0 0 64px;font-size:14px;font-weight:700;color:#235C3F">{{ mo.v }}</span>
+            <span style="flex:1;min-width:200px;font-size:13.5px;color:#514B3D">{{ mo.use }}</span>
+          </div>
+        </sc-for>
+        <div style="display:flex;align-items:center;gap:16px;padding:10px 0;border-top:1px solid #F3F0E7;flex-wrap:wrap">
+          <b style="flex:0 0 150px;font-size:14px;font-family:ui-monospace,monospace">easing</b>
+          <span style="flex:1;min-width:200px;font-size:13.5px;color:#514B3D">enter/standard <span style="font-family:ui-monospace,monospace;font-size:12.5px">cubic-bezier(0.2, 0, 0, 1)</span> · exit <span style="font-family:ui-monospace,monospace;font-size:12.5px">cubic-bezier(0.4, 0, 1, 1)</span> · springs and overshoot: never</span>
+        </div>
+      </div>
+
+      <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:20px;margin-top:12px">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px">
+          <div style="font-size:14px;font-weight:700">Live — the bottom sheet, our most important move</div>
+          <button onClick="{{ toggleSheet }}" style="background:#235C3F;color:#FAF8F2;border:none;border-radius:12px;padding:11px 18px;font-family:'Mukta',sans-serif;font-size:14.5px;font-weight:600;cursor:pointer;transition:background-color 180ms cubic-bezier(0.2,0,0,1)" style-hover="background:#1B4831" style-active="transform:scale(0.98)">{{ sheetLabel }}</button>
+        </div>
+        <div style="position:relative;height:230px;border-radius:12px;overflow:hidden;background:#FAF8F2;border:1px solid #E7E2D5">
+          <div style="padding:14px 16px;display:grid;gap:8px">
+            <div style="height:12px;width:45%;background:#E7E2D5;border-radius:6px"></div>
+            <div style="height:12px;width:70%;background:#EDE9DE;border-radius:6px"></div>
+            <div style="height:12px;width:60%;background:#EDE9DE;border-radius:6px"></div>
+          </div>
+          <div style="position:absolute;inset:0;background:#133523;opacity:{{ scrimOpacity }};transition:opacity 320ms cubic-bezier(0.2,0,0,1);pointer-events:none"></div>
+          <div style="position:absolute;left:0;right:0;bottom:0;background:#FFFFFF;border-radius:24px 24px 0 0;box-shadow:0 -12px 36px rgba(36,32,26,0.18);padding:14px 18px 18px;transform:{{ sheetTransform }};transition:transform 320ms cubic-bezier(0.2,0,0,1)">
+            <div style="width:36px;height:4px;border-radius:999px;background:#D3CDBC;margin:0 auto 12px"></div>
+            <div style="font-size:15px;font-weight:700">डिलीवरी का समय चुनें <span style="font-weight:400;color:#6B6453">· Choose delivery slot</span></div>
+            <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+              <span style="border:1.5px solid #235C3F;background:#F0F5F1;color:#1B4831;border-radius:999px;padding:8px 14px;font-size:13.5px;font-weight:600">आज शाम 5–7</span>
+              <span style="border:1.5px solid #E7E2D5;border-radius:999px;padding:8px 14px;font-size:13.5px;color:#514B3D">कल सुबह 8–10</span>
+              <span style="border:1.5px solid #E7E2D5;border-radius:999px;padding:8px 14px;font-size:13.5px;color:#514B3D">कल शाम 5–7</span>
+            </div>
+          </div>
+        </div>
+        <p style="font-size:13.5px;color:#6B6453;margin:12px 0 0">Sheet rises 320 ms decelerating, scrim fades in step. Exit is faster than entry (240 ms) — leaving should feel lighter than arriving.</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:12px">
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px 20px">
+          <div style="font-size:14px;font-weight:700;margin-bottom:8px">Performance is the budget</div>
+          <p style="font-size:14px;line-height:1.65;color:#37322A;margin:0">Animate only <span style="font-family:ui-monospace,monospace;font-size:13px">transform</span> and <span style="font-family:ui-monospace,monospace;font-size:13px">opacity</span>. One thing moves at a time. No parallax, no scroll-jacking, no looping decoration. On a ₹6,000 phone, a dropped frame costs more trust than a beautiful transition earns.</p>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px 20px">
+          <div style="font-size:14px;font-weight:700;margin-bottom:8px">One celebration</div>
+          <p style="font-size:14px;line-height:1.65;color:#37322A;margin:0">The system celebrates exactly once: when an order is placed, a 600 ms glow of the success tick — like a diya catching flame. Played once, never looped. Rarity is what makes it felt.</p>
+        </div>
+      </div>
+
+      <div style="background:#F0F5F1;border:1px solid #C1D9C9;border-radius:12px;padding:16px 18px;margin:20px 0 0">
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#235C3F;margin-bottom:6px">क्यों · WHY</div>
+        <div style="font-size:15px;line-height:1.7;color:#37322A">Motion is the body language of the interface. Bouncy overshoot says “startup demo”; instant snapping says “broken”; a short settled slide says “handled with care” — the register of a shop that packs your bag properly. Skeletons over spinners because a spinner admits nothing is happening, while a skeleton shows the shape of what's coming; on slow networks that difference is the difference between waiting and leaving. And celebration is rationed for the same reason red is: scarcity is what keeps meaning.</div>
+      </div>
+    </section>
+
+    <!-- ============ 17 COMPONENT PHILOSOPHY ============ -->
+    <section id="s17" data-screen-label="17 Component philosophy" style="padding:52px 0 20px;border-top:1px solid #E7E2D5;margin-top:32px">
+      <div style="font-size:13px;font-weight:700;letter-spacing:0.12em;color:#235C3F;margin-bottom:12px">Part C — Components · घटक</div>
+      <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+        <span style="font-family:'Martel',serif;font-size:15px;color:#8A8370">17</span>
+        <h2 style="margin:0;font-family:'Martel',serif;font-weight:800;font-size:clamp(26px,3vw,32px);line-height:1.4">Component philosophy</h2>
+        <span style="font-size:15px;color:#6B6453">हर घटक एक दुकानदार</span>
+      </div>
+      <p style="max-width:70ch;font-size:16px;line-height:1.75;color:#37322A;margin:14px 0 0">Every component must behave the way a good shopkeeper behaves. Seven behaviors, testable on every piece of UI before it ships:</p>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:12px;margin-top:22px">
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px 20px">
+          <div style="font-size:15px;font-weight:700">1 · Greets clearly</div>
+          <p style="font-size:14px;line-height:1.65;color:#514B3D;margin:7px 0 0">Labels are always visible — on fields, on icons, on states. Nothing relies on memory or guessing.</p>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px 20px">
+          <div style="font-size:15px;font-weight:700">2 · Speaks both languages</div>
+          <p style="font-size:14px;line-height:1.65;color:#514B3D;margin:7px 0 0">Hindi and English are content slots in every component, budgeted from day one — never a retrofit.</p>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px 20px">
+          <div style="font-size:15px;font-weight:700">3 · Honest about money</div>
+          <p style="font-size:14px;line-height:1.65;color:#514B3D;margin:7px 0 0">₹ totals always visible, fees explained before checkout, the ₹500 rule stated in the cart — never at payment.</p>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px 20px">
+          <div style="font-size:15px;font-weight:700">4 · Fits every hand</div>
+          <p style="font-size:14px;line-height:1.65;color:#514B3D;margin:7px 0 0">48 px targets, 56 px for money. Designed for thumbs, trembling hands, and phones used in sunlight.</p>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px 20px">
+          <div style="font-size:15px;font-weight:700">5 · Patient</div>
+          <p style="font-size:14px;line-height:1.65;color:#514B3D;margin:7px 0 0">No timeouts, no countdowns, forgiving inputs (spaces in phone numbers, Hindi or English search). Nobody is rushed.</p>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px 20px">
+          <div style="font-size:15px;font-weight:700">6 · Works on slow days</div>
+          <p style="font-size:14px;line-height:1.65;color:#514B3D;margin:7px 0 0">Every component specifies its loading, empty, offline and error states. 2G is a design constraint, not an edge case.</p>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px 20px">
+          <div style="font-size:15px;font-weight:700">7 · Never pressures</div>
+          <p style="font-size:14px;line-height:1.65;color:#514B3D;margin:7px 0 0">No dark patterns, no fake scarcity, no pre-ticked boxes, no guilt copy. Ever. (Product Strategy §12.)</p>
+        </div>
+        <div style="background:#F0F5F1;border:1px solid #C1D9C9;border-radius:16px;padding:18px 20px">
+          <div style="font-size:15px;font-weight:700;color:#235C3F">Definition of done</div>
+          <p style="font-size:14px;line-height:1.65;color:#37322A;margin:7px 0 0">A component ships only with: anatomy · all 9 states (default, hover, press, focus, disabled, loading, error, empty, offline) · both languages tested · contrast audited · keyboard &amp; screen-reader paths · token-only styling.</p>
+        </div>
+      </div>
+
+      <div style="background:#F0F5F1;border:1px solid #C1D9C9;border-radius:12px;padding:16px 18px;margin:20px 0 0">
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#235C3F;margin-bottom:6px">क्यों · WHY</div>
+        <div style="font-size:15px;line-height:1.7;color:#37322A">Components are where philosophy becomes muscle memory. A principles document nobody can test is poetry; a checklist every button must pass is a system. Framing the checklist as a shopkeeper keeps it honest for everyone — the founder can audit a screen without knowing what a “focus state” is, by asking whether the screen behaves like his own counter.</div>
+      </div>
+    </section>
+
+    <!-- ============ 18 BUTTONS ============ -->
+    <section id="s18" data-screen-label="18 Buttons" style="padding:52px 0 20px;border-top:1px solid #E7E2D5;margin-top:32px">
+      <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+        <span style="font-family:'Martel',serif;font-size:15px;color:#8A8370">18</span>
+        <h2 style="margin:0;font-family:'Martel',serif;font-weight:800;font-size:clamp(26px,3vw,32px);line-height:1.4">Buttons</h2>
+        <span style="font-size:15px;color:#6B6453">बटन</span>
+      </div>
+      <p style="max-width:70ch;font-size:16px;line-height:1.75;color:#37322A;margin:14px 0 0">Five variants, one hierarchy, one primary per screen. Labels are verbs in sentence case — never all-caps, never “OK”. Hover and press below are live.</p>
+
+      <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:24px;margin-top:22px;display:grid;gap:22px">
+        <div>
+          <div style="font-size:12.5px;font-weight:700;color:#8A8370;margin-bottom:10px">Variants — मकसद के हिसाब से</div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+            <button style="min-height:48px;padding:0 22px;background:#235C3F;color:#FAF8F2;border:none;border-radius:12px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:16px;font-weight:600;cursor:pointer;transition:background-color 180ms cubic-bezier(0.2,0,0,1),transform 100ms" style-hover="background:#1B4831" style-active="background:#133523;transform:scale(0.985)">कार्ट में डालें</button>
+            <button style="min-height:48px;padding:0 22px;background:#DEEBE1;color:#133523;border:none;border-radius:12px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:16px;font-weight:600;cursor:pointer;transition:background-color 180ms cubic-bezier(0.2,0,0,1)" style-hover="background:#C1D9C9" style-active="transform:scale(0.985)">विशलिस्ट में रखें</button>
+            <button style="min-height:48px;padding:0 22px;background:#FFFFFF;color:#24201A;border:1.5px solid #D3CDBC;border-radius:12px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:16px;font-weight:600;cursor:pointer;transition:border-color 180ms cubic-bezier(0.2,0,0,1)" style-hover="border-color:#8A8370" style-active="transform:scale(0.985)">रद्द करें</button>
+            <button style="min-height:48px;padding:0 14px;background:transparent;color:#235C3F;border:none;border-radius:12px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:16px;font-weight:600;cursor:pointer;transition:background-color 180ms cubic-bezier(0.2,0,0,1)" style-hover="background:#F0F5F1">सभी देखें →</button>
+            <button style="min-height:48px;padding:0 22px;background:#B23B2E;color:#FFFFFF;border:none;border-radius:12px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:16px;font-weight:600;cursor:pointer;transition:background-color 180ms cubic-bezier(0.2,0,0,1)" style-hover="background:#8E2C21" style-active="transform:scale(0.985)">ऑर्डर रद्द करें</button>
+          </div>
+          <div style="font-size:12.5px;color:#8A8370;margin-top:8px">Primary (one per screen) · Tonal (frequent secondary) · Outline (quiet/neutral) · Ghost (inline) · Destructive (only inside confirm dialogs)</div>
+        </div>
+        <div>
+          <div style="font-size:12.5px;font-weight:700;color:#8A8370;margin-bottom:10px">Sizes — L 56 for money · M 48 default · S 40 desktop-only</div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+            <button style="min-height:56px;padding:0 26px;background:#235C3F;color:#FAF8F2;border:none;border-radius:12px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:17px;font-weight:600;cursor:pointer" style-hover="background:#1B4831">ऑर्डर करें · ₹1,240</button>
+            <button style="min-height:48px;padding:0 22px;background:#235C3F;color:#FAF8F2;border:none;border-radius:12px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:16px;font-weight:600;cursor:pointer" style-hover="background:#1B4831">आगे बढ़ें</button>
+            <button style="min-height:40px;padding:0 16px;background:#235C3F;color:#FAF8F2;border:none;border-radius:12px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:14.5px;font-weight:600;cursor:pointer" style-hover="background:#1B4831">सेव करें</button>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12.5px;font-weight:700;color:#8A8370;margin-bottom:10px">States — loading keeps its width and tells the truth</div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+            <button style="min-height:48px;padding:0 22px;background:#235C3F;color:#FAF8F2;border:none;border-radius:12px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:16px;font-weight:600;display:inline-flex;align-items:center;gap:10px;cursor:progress"><span style="width:16px;height:16px;border:2px solid rgba(250,248,242,0.35);border-top-color:#FAF8F2;border-radius:999px;display:inline-block;animation:bargad-spin 800ms linear infinite"></span>ऑर्डर हो रहा है…</button>
+            <button style="min-height:48px;padding:0 22px;background:#E7E2D5;color:#8A8370;border:none;border-radius:12px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:16px;font-weight:600;cursor:not-allowed">स्लॉट चुनें पहले</button>
+            <button style="min-height:48px;padding:0 22px;background:#235C3F;color:#FAF8F2;border:none;border-radius:12px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:16px;font-weight:600;box-shadow:0 0 0 2px #FAF8F2, 0 0 0 4px #235C3F;cursor:pointer">focused — ring 2 px</button>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12.5px;font-weight:700;color:#8A8370;margin-bottom:10px">Money actions go full-width on mobile</div>
+          <div style="max-width:375px;border:1px solid #E7E2D5;border-radius:16px;padding:14px;background:#FAF8F2">
+            <div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:10px"><span style="color:#514B3D">कुल · Total</span><b style="font-size:16px">₹1,240</b></div>
+            <button style="width:100%;min-height:56px;background:#235C3F;color:#FAF8F2;border:none;border-radius:12px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:17px;font-weight:600;cursor:pointer" style-hover="background:#1B4831">चेकआउट करें · Checkout</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#F0F5F1;border:1px solid #C1D9C9;border-radius:12px;padding:16px 18px;margin:20px 0 0">
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#235C3F;margin-bottom:6px">क्यों · WHY</div>
+        <div style="font-size:15px;line-height:1.7;color:#37322A">One primary per screen because decision fatigue is real and our primary personas include people shopping online for the first time — the green button IS the answer to “what should I do next?” (Design Principles §5). Verbs because “कार्ट में डालें” requires no interpretation while “OK” requires context. 56 px for money because mis-taps around payment are the most expensive trust failures. Loading buttons keep width and narrate (“ऑर्डर हो रहा है…”) because a button that shrinks to a spinner looks broken on a 3-second network — and disabled states always say <i>why</i> (“स्लॉट चुनें पहले”), because a mute grey button is a locked door without a sign.</div>
+      </div>
+    </section>
+
+    <!-- ============ 19 FORM CONTROLS ============ -->
+    <section id="s19" data-screen-label="19 Form controls" style="padding:52px 0 20px;border-top:1px solid #E7E2D5;margin-top:32px">
+      <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+        <span style="font-family:'Martel',serif;font-size:15px;color:#8A8370">19</span>
+        <h2 style="margin:0;font-family:'Martel',serif;font-weight:800;font-size:clamp(26px,3vw,32px);line-height:1.4">Form controls</h2>
+        <span style="font-size:15px;color:#6B6453">फ़ॉर्म</span>
+      </div>
+      <p style="max-width:70ch;font-size:16px;line-height:1.75;color:#37322A;margin:14px 0 0">Forms are where trust is won or lost. Ours ask only what is necessary, in 52 px fields with labels that never disappear, validated gently on blur — and they are phone-first, because in Pipra a phone number is an identity and an email address often is not.</p>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;margin-top:22px">
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:22px;display:grid;gap:18px;align-content:start">
+          <div>
+            <div style="font-size:14px;font-weight:600;margin-bottom:6px">मोबाइल नंबर <span style="color:#8A8370;font-weight:400">· Mobile number</span></div>
+            <div style="display:flex;align-items:stretch;border:1.5px solid #D3CDBC;border-radius:12px;overflow:hidden;background:#FFFFFF">
+              <span style="display:grid;place-items:center;padding:0 14px;background:#F3F0E7;font-size:16px;font-weight:600;color:#514B3D;border-right:1.5px solid #E7E2D5">+91</span>
+              <input placeholder="98765 43210" style="flex:1;min-width:0;border:none;outline:none;padding:14px;font-family:'Mukta',sans-serif;font-size:16px;color:#24201A;background:transparent" />
+            </div>
+            <div style="font-size:13px;color:#6B6453;margin-top:6px">OTP इसी नंबर पर आएगा। No password needed.</div>
+          </div>
+          <div>
+            <div style="font-size:14px;font-weight:600;margin-bottom:6px">OTP डालें <span style="color:#8A8370;font-weight:400">· Enter OTP</span></div>
+            <div style="display:flex;gap:8px">
+              <span style="width:44px;height:52px;border:1.5px solid #235C3F;border-radius:12px;display:grid;place-items:center;font-size:19px;font-weight:700;background:#F0F5F1">4</span>
+              <span style="width:44px;height:52px;border:1.5px solid #235C3F;border-radius:12px;display:grid;place-items:center;font-size:19px;font-weight:700;background:#F0F5F1">7</span>
+              <span style="width:44px;height:52px;border:1.5px solid #D3CDBC;border-radius:12px;display:grid;place-items:center;font-size:19px;font-weight:700;color:#B0A995">·</span>
+              <span style="width:44px;height:52px;border:1.5px solid #D3CDBC;border-radius:12px;display:grid;place-items:center;font-size:19px;font-weight:700;color:#B0A995">·</span>
+              <span style="width:44px;height:52px;border:1.5px solid #D3CDBC;border-radius:12px;display:grid;place-items:center;font-size:19px;font-weight:700;color:#B0A995">·</span>
+              <span style="width:44px;height:52px;border:1.5px solid #D3CDBC;border-radius:12px;display:grid;place-items:center;font-size:19px;font-weight:700;color:#B0A995">·</span>
+            </div>
+            <div style="font-size:13px;color:#6B6453;margin-top:6px">Numeric keypad opens automatically · resend after 30 s, no penalty</div>
+          </div>
+          <div>
+            <div style="font-size:14px;font-weight:600;margin-bottom:6px">पहचान का निशान <span style="color:#8A8370;font-weight:400">· Landmark (optional)</span></div>
+            <input placeholder="जैसे: हनुमान मंदिर के पास" style="width:100%;box-sizing:border-box;border:1.5px solid #D3CDBC;border-radius:12px;padding:14px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:16px;color:#24201A;outline:none;background:#FFFFFF" style-focus="border-color:#235C3F;box-shadow:0 0 0 3px rgba(35,92,63,0.16)" />
+            <div style="font-size:13px;color:#6B6453;margin-top:6px">Addresses here are landmarks, not street numbers — so the form has a field for how people actually give directions.</div>
+          </div>
+        </div>
+
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:22px;display:grid;gap:16px;align-content:start">
+          <div>
+            <div style="font-size:14px;font-weight:600;margin-bottom:6px">Error — explains and helps</div>
+            <div style="border:1.5px solid #B23B2E;border-radius:12px;padding:14px;font-size:16px;color:#24201A;background:#FFFFFF">98765</div>
+            <div style="display:flex;gap:6px;align-items:center;margin-top:6px;font-size:13.5px;color:#8E2C21"><b>✕</b> नंबर 10 अंकों का होना चाहिए — अभी 5 ही हैं।</div>
+          </div>
+          <div>
+            <div style="font-size:14px;font-weight:600;margin-bottom:6px">Success — quiet confirmation</div>
+            <div style="border:1.5px solid #316F4E;border-radius:12px;padding:14px;font-size:16px;color:#24201A;background:#FFFFFF;display:flex;justify-content:space-between;align-items:center"><span>845412 — पिपरा</span><b style="color:#316F4E">✓</b></div>
+            <div style="font-size:13.5px;color:#316F4E;margin-top:6px">बहुत बढ़िया — हम यहाँ डिलीवरी करते हैं!</div>
+          </div>
+          <div>
+            <div style="font-size:14px;font-weight:600;margin-bottom:8px">Choices — big enough for thumbs</div>
+            <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center">
+              <span style="display:inline-flex;align-items:center;gap:8px;font-size:14.5px"><span style="width:24px;height:24px;border-radius:6px;background:#235C3F;display:grid;place-items:center;color:#FFFFFF;font-size:13px;font-weight:800">✓</span>चेकबॉक्स</span>
+              <span style="display:inline-flex;align-items:center;gap:8px;font-size:14.5px"><span style="width:24px;height:24px;border-radius:6px;border:1.5px solid #B0A995;background:#FFFFFF;display:inline-block"></span>unchecked</span>
+              <span style="display:inline-flex;align-items:center;gap:8px;font-size:14.5px"><span style="width:24px;height:24px;border-radius:999px;border:7px solid #235C3F;background:#FFFFFF;display:inline-block;box-sizing:border-box"></span>रेडियो</span>
+              <span style="display:inline-flex;align-items:center;gap:8px;font-size:14.5px"><span style="width:52px;height:30px;border-radius:999px;background:#235C3F;position:relative;display:inline-block"><span style="position:absolute;top:3px;right:3px;width:24px;height:24px;border-radius:999px;background:#FFFFFF"></span></span>स्विच</span>
+            </div>
+            <div style="font-size:13px;color:#6B6453;margin-top:8px">24 px marks inside 48 px tap rows. Never pre-ticked.</div>
+          </div>
+          <div>
+            <div style="font-size:14px;font-weight:600;margin-bottom:8px">Slots as chips — not a dropdown</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span style="border:1.5px solid #235C3F;background:#F0F5F1;color:#1B4831;border-radius:999px;padding:9px 15px;font-size:14px;font-weight:600">आज 5–7 शाम</span>
+              <span style="border:1.5px solid #E7E2D5;border-radius:999px;padding:9px 15px;font-size:14px;color:#514B3D">कल 8–10 सुबह</span>
+              <span style="border:1.5px solid #E7E2D5;border-radius:999px;padding:9px 15px;font-size:14px;color:#B0A995;text-decoration:line-through">कल 5–7 शाम</span>
+            </div>
+            <div style="font-size:13px;color:#6B6453;margin-top:8px">All options visible at once; full slots stay visible (struck through), honestly.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:12px">
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px 20px">
+          <div style="font-size:14px;font-weight:700;margin-bottom:8px">Field rules</div>
+          <div style="display:grid;gap:7px;font-size:14px;line-height:1.6;color:#37322A">
+            <div>52 px height · r-12 · 1.5 px khadi-300 border · white fill</div>
+            <div>Focus = banyan border + 3 px soft ring (visible in sunlight)</div>
+            <div>Labels above, always visible — placeholders are hints, never labels</div>
+            <div>16 px input text — no browser auto-zoom, no squinting</div>
+            <div>Numeric inputmode for phone, OTP, pincode</div>
+          </div>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px 20px">
+          <div style="font-size:14px;font-weight:700;margin-bottom:8px">Behavior rules</div>
+          <div style="display:grid;gap:7px;font-size:14px;line-height:1.6;color:#37322A">
+            <div>Validate on blur, never on every keystroke</div>
+            <div>Errors never erase what the customer typed</div>
+            <div>Mark the optional, not the required — most fields should be required or absent</div>
+            <div>Selects open as bottom sheets on mobile (thumb reach, big targets)</div>
+            <div>Autofill welcomed: correct <span style="font-family:ui-monospace,monospace;font-size:13px">autocomplete</span> on every field</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#F0F5F1;border:1px solid #C1D9C9;border-radius:12px;padding:16px 18px;margin:20px 0 0">
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#235C3F;margin-bottom:6px">क्यों · WHY</div>
+        <div style="font-size:15px;line-height:1.7;color:#37322A">Every form field is a small interrogation, and interrogations erode apnapan — so we ask less, explain more, and never punish. Persistent labels because placeholder-only labels vanish the moment typing begins, which defeats exactly the users who need them most: first-timers and elderly customers who look down at the keypad and back up. Phone + OTP because passwords are the single biggest abandonment point for new internet users. And the landmark field is the system bending to local reality instead of forcing Pipra into a Bangalore address schema — small, but it tells customers <i>this was built for here</i>.</div>
+      </div>
+    </section>
+
+    <!-- ============ 20 CARDS ============ -->
+    <section id="s20" data-screen-label="20 Cards" style="padding:52px 0 20px;border-top:1px solid #E7E2D5;margin-top:32px">
+      <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+        <span style="font-family:'Martel',serif;font-size:15px;color:#8A8370">20</span>
+        <h2 style="margin:0;font-family:'Martel',serif;font-weight:800;font-size:clamp(26px,3vw,32px);line-height:1.4">Cards</h2>
+        <span style="font-size:15px;color:#6B6453">कार्ड</span>
+      </div>
+      <p style="max-width:70ch;font-size:16px;line-height:1.75;color:#37322A;margin:14px 0 0">The product card is the most-seen component in the whole business — it must sell honestly a thousand times a day. Try the ADD button; it becomes a stepper in place, so adding two of something never means leaving the shelf.</p>
+
+      <div style="display:flex;gap:20px;flex-wrap:wrap;margin-top:22px;align-items:flex-start">
+        <div style="background:#FAF8F2;border:1px solid #E7E2D5;border-radius:16px;padding:16px;display:flex;gap:12px;flex:0 1 auto">
+          <div style="width:172px;background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:10px;box-shadow:0 1px 2px rgba(36,32,26,0.05), 0 2px 8px rgba(36,32,26,0.05)">
+            <div style="position:relative">
+              <div style="aspect-ratio:1;border-radius:12px;background:repeating-linear-gradient(45deg,#F3F0E7,#F3F0E7 10px,#FAF8F2 10px,#FAF8F2 20px);display:grid;place-items:center"><span style="font-family:ui-monospace,monospace;font-size:11px;color:#6B6453;background:#FFFFFF;border-radius:6px;padding:2px 7px">product photo</span></div>
+              <span style="position:absolute;top:8px;left:8px;background:#E0A93E;color:#24201A;font-size:12px;font-weight:700;border-radius:8px;padding:2px 8px">₹3 बचत</span>
+            </div>
+            <div style="font-size:14.5px;font-weight:500;line-height:1.45;margin-top:9px;min-height:42px">ताज़ा टमाटर · Tomato (local)</div>
+            <div style="font-size:13px;color:#6B6453">500 g</div>
+            <div style="display:flex;align-items:baseline;gap:7px;margin-top:5px">
+              <b style="font-size:18px">₹22</b>
+              <span style="font-size:13px;color:#8A8370;text-decoration:line-through">₹25</span>
+              <span style="font-size:12.5px;color:#316F4E;font-weight:700">12% बचत</span>
+            </div>
+            <div style="margin-top:9px">
+              <sc-if value="{{ noQty }}" hint-placeholder-val="{{ true }}">
+                <button onClick="{{ addOne }}" style="width:100%;height:42px;border:1.5px solid #235C3F;background:#FFFFFF;color:#235C3F;border-radius:999px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:background-color 180ms cubic-bezier(0.2,0,0,1)" style-hover="background:#F0F5F1">जोड़ें + </button>
+              </sc-if>
+              <sc-if value="{{ hasQty }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;align-items:center;justify-content:space-between;background:#235C3F;color:#FAF8F2;border-radius:999px;height:42px;padding:0 6px">
+                  <button onClick="{{ dec }}" style="width:36px;height:36px;border:none;background:transparent;color:#FAF8F2;font-size:20px;font-weight:700;cursor:pointer;border-radius:999px" style-hover="background:rgba(250,248,242,0.14)">−</button>
+                  <span style="font-size:16px;font-weight:700">{{ qty }}</span>
+                  <button onClick="{{ inc }}" style="width:36px;height:36px;border:none;background:transparent;color:#FAF8F2;font-size:19px;font-weight:700;cursor:pointer;border-radius:999px" style-hover="background:rgba(250,248,242,0.14)">+</button>
+                </div>
+              </sc-if>
+            </div>
+          </div>
+
+          <div style="width:172px;background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:10px">
+            <div style="position:relative">
+              <div style="aspect-ratio:1;border-radius:12px;background:repeating-linear-gradient(45deg,#F3F0E7,#F3F0E7 10px,#FAF8F2 10px,#FAF8F2 20px);opacity:0.45;display:grid;place-items:center"><span style="font-family:ui-monospace,monospace;font-size:11px;color:#6B6453;background:#FFFFFF;border-radius:6px;padding:2px 7px">product photo</span></div>
+              <span style="position:absolute;top:8px;left:8px;background:#F3F0E7;color:#514B3D;font-size:12px;font-weight:700;border-radius:8px;padding:2px 8px;border:1px solid #D3CDBC">जल्द वापस</span>
+            </div>
+            <div style="font-size:14.5px;font-weight:500;line-height:1.45;margin-top:9px;min-height:42px;color:#6B6453">सरसों तेल · Mustard oil 1 L</div>
+            <div style="font-size:13px;color:#8A8370">1 L</div>
+            <div style="display:flex;align-items:baseline;gap:7px;margin-top:5px"><b style="font-size:18px;color:#8A8370">₹165</b></div>
+            <div style="margin-top:9px">
+              <button style="width:100%;height:42px;border:1.5px solid #D3CDBC;background:#F3F0E7;color:#6B6453;border-radius:999px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:14px;font-weight:600;cursor:pointer" style-hover="border-color:#8A8370">आने पर बताएँ · Notify</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="flex:1 1 280px;min-width:260px;display:grid;gap:10px;font-size:14px;line-height:1.6;color:#37322A;align-content:start">
+          <div style="display:flex;gap:10px"><b style="color:#235C3F;flex:none">1.</b><span>Photo on a malai tile, r-12, 1:1 — the hero of the card.</span></div>
+          <div style="display:flex;gap:10px"><b style="color:#235C3F;flex:none">2.</b><span>One badge maximum, top-left, haldi for savings — stated as a gain (“₹3 बचत”), never urgency.</span></div>
+          <div style="display:flex;gap:10px"><b style="color:#235C3F;flex:none">3.</b><span>Name up to two lines, then ellipsis; unit always separate — never buried in the name.</span></div>
+          <div style="display:flex;gap:10px"><b style="color:#235C3F;flex:none">4.</b><span>Price ₹22 bold 18 px · MRP struck in quiet khadi, never red · savings in green.</span></div>
+          <div style="display:flex;gap:10px"><b style="color:#235C3F;flex:none">5.</b><span>ADD is a 42 px pill in a 48 px hit area; whole rest of the card opens the product page.</span></div>
+          <div style="display:flex;gap:10px"><b style="color:#235C3F;flex:none">6.</b><span>Out of stock tells the truth — dimmed photo, “जल्द वापस”, and a notify action. No hiding, no fake scarcity.</span></div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:20px">
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px;display:flex;gap:14px;align-items:center">
+          <div style="width:64px;height:64px;border-radius:12px;background:repeating-linear-gradient(45deg,#F3F0E7,#F3F0E7 8px,#FAF8F2 8px,#FAF8F2 16px);flex:none;display:grid;place-items:center"><span style="font-family:ui-monospace,monospace;font-size:10px;color:#6B6453">photo</span></div>
+          <div>
+            <div style="font-size:15.5px;font-weight:600">आटा · Atta</div>
+            <div style="font-size:13px;color:#6B6453">48 products →</div>
+          </div>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline"><b style="font-size:15px">ऑर्डर #1284</b><span style="font-size:13px;color:#316F4E;font-weight:700">रास्ते में · On the way</span></div>
+          <div style="display:flex;align-items:center;gap:0;margin-top:14px">
+            <span style="width:14px;height:14px;border-radius:999px;background:#316F4E;flex:none"></span><span style="flex:1;height:2.5px;background:#316F4E"></span>
+            <span style="width:14px;height:14px;border-radius:999px;background:#316F4E;flex:none"></span><span style="flex:1;height:2.5px;background:#316F4E"></span>
+            <span style="width:16px;height:16px;border-radius:999px;background:#FFFFFF;border:3px solid #316F4E;flex:none;box-sizing:border-box"></span><span style="flex:1;height:2.5px;background:#E7E2D5"></span>
+            <span style="width:14px;height:14px;border-radius:999px;background:#E7E2D5;flex:none"></span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:11.5px;color:#6B6453;margin-top:7px"><span>मिला</span><span>पैक हुआ</span><span style="color:#316F4E;font-weight:700">रास्ते में</span><span>पहुँचा</span></div>
+        </div>
+      </div>
+
+      <div style="background:#F0F5F1;border:1px solid #C1D9C9;border-radius:12px;padding:16px 18px;margin:20px 0 0">
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#235C3F;margin-bottom:6px">क्यों · WHY</div>
+        <div style="font-size:15px;line-height:1.7;color:#37322A">The card's pricing row is transparent pricing made physical: the real price loud, the MRP quiet but present, the saving named in rupees — the exact arithmetic a shopkeeper does aloud across the counter. The in-place stepper respects effort: pantry shopping means quantities, and a detour to the cart for “2 kg instead of 1” is a tax on every order. The order card's four honest dots replace the anxiety question (“कहाँ है मेरा सामान?”) with a glance — and anxiety, not price, is the real enemy of first online orders.</div>
+      </div>
+    </section>
+
+    <!-- ============ 21 NAVIGATION ============ -->
+    <section id="s21" data-screen-label="21 Navigation" style="padding:52px 0 20px;border-top:1px solid #E7E2D5;margin-top:32px">
+      <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+        <span style="font-family:'Martel',serif;font-size:15px;color:#8A8370">21</span>
+        <h2 style="margin:0;font-family:'Martel',serif;font-weight:800;font-size:clamp(26px,3vw,32px);line-height:1.4">Navigation</h2>
+        <span style="font-size:15px;color:#6B6453">रास्ते</span>
+      </div>
+      <p style="max-width:70ch;font-size:16px;line-height:1.75;color:#37322A;margin:14px 0 0">Navigation answers three questions at all times — where am I, where can I go, how do I return (IA §16). Five fixed destinations on mobile, every icon labeled, cart always visible, language always one tap away.</p>
+
+      <div style="display:flex;gap:20px;flex-wrap:wrap;margin-top:22px;align-items:flex-start">
+        <div style="flex:0 1 375px;min-width:300px;border:1px solid #E7E2D5;border-radius:24px;overflow:hidden;background:#FFFFFF;box-shadow:0 1px 2px rgba(36,32,26,0.05), 0 2px 8px rgba(36,32,26,0.05)">
+          <div style="background:#133523;color:#DEEBE1;font-size:12.5px;text-align:center;padding:7px 12px">पिपरा में मुफ़्त डिलीवरी — ₹500 से ऊपर के ऑर्डर पर</div>
+          <div style="display:flex;align-items:center;gap:10px;padding:12px 14px 4px">
+            <div style="width:34px;height:34px;border-radius:10px;background:#235C3F;color:#FAF8F2;display:grid;place-items:center;font-family:'Martel',serif;font-weight:900;font-size:13px;flex:none">MG</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-family:'Martel',serif;font-weight:800;font-size:15px;line-height:1.3">MG Supermart</div>
+              <div style="font-size:11.5px;color:#6B6453;line-height:1.3">एमजी सुपरमार्केट</div>
+            </div>
+            <span style="display:inline-flex;border:1.5px solid #D3CDBC;border-radius:999px;overflow:hidden;font-size:12.5px;font-weight:700"><span style="padding:4px 10px;background:#235C3F;color:#FAF8F2">अ</span><span style="padding:4px 10px;color:#514B3D">A</span></span>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#24201A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M6.5 15.5v-5a5.5 5.5 0 0 1 11 0v5l1.5 2.5h-14l1.5-2.5z"></path><path d="M10.2 20.5a2 2 0 0 0 3.6 0"></path></svg>
+          </div>
+          <div style="padding:10px 14px 4px">
+            <div style="display:flex;align-items:center;gap:9px;border:1.5px solid #D3CDBC;border-radius:12px;padding:12px 14px;background:#FAF8F2">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B6453" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"></circle><path d="m16.5 16.5 4 4"></path></svg>
+              <span style="font-size:14px;color:#8A8370">खोजें: आटा, दाल, साबुन…</span>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:7px;padding:9px 16px;background:#F0F5F1;margin:8px 0 0;font-size:12.5px;color:#1B4831">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#235C3F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-5.5-6.5-10.3a6.5 6.5 0 1 1 13 0C18.5 15.5 12 21 12 21z"></path><circle cx="12" cy="10.5" r="2.2"></circle></svg>
+            <b>डिलीवरी: पिपरा व 5 किमी</b><span style="color:#316F4E">· आज शाम 5–7 बजे</span>
+          </div>
+          <div style="padding:14px;display:grid;gap:8px">
+            <div style="height:11px;width:52%;background:#EDE9DE;border-radius:6px"></div>
+            <div style="height:11px;width:76%;background:#F3F0E7;border-radius:6px"></div>
+            <div style="height:11px;width:64%;background:#F3F0E7;border-radius:6px"></div>
+          </div>
+          <div style="display:flex;border-top:1px solid #E7E2D5;background:#FFFFFF">
+            <div style="flex:1;display:grid;justify-items:center;gap:3px;padding:9px 0 8px">
+              <svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 3.5 3.5 10.4V20.5h17V10.4L12 3.5z" fill="#235C3F"></path></svg>
+              <span style="font-size:11.5px;font-weight:700;color:#235C3F">घर</span>
+            </div>
+            <div style="flex:1;display:grid;justify-items:center;gap:3px;padding:9px 0 8px">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6B6453" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1.5"></rect><rect x="13" y="4" width="7" height="7" rx="1.5"></rect><rect x="4" y="13" width="7" height="7" rx="1.5"></rect><rect x="13" y="13" width="7" height="7" rx="1.5"></rect></svg>
+              <span style="font-size:11.5px;color:#6B6453">श्रेणियाँ</span>
+            </div>
+            <div style="flex:1;display:grid;justify-items:center;gap:3px;padding:9px 0 8px">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6B6453" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"></circle><path d="m16.5 16.5 4 4"></path></svg>
+              <span style="font-size:11.5px;color:#6B6453">खोजें</span>
+            </div>
+            <div style="flex:1;display:grid;justify-items:center;gap:3px;padding:9px 0 8px">
+              <span style="position:relative;display:inline-block">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6B6453" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 9.5h15L18 18.6a1.9 1.9 0 0 1-1.9 1.4H7.9A1.9 1.9 0 0 1 6 18.6L4.5 9.5z"></path><path d="M8.5 9.5a3.5 3.5 0 0 1 7 0"></path></svg>
+                <span style="position:absolute;top:-6px;right:-9px;min-width:18px;height:18px;border-radius:999px;background:#E0A93E;color:#24201A;font-size:11px;font-weight:800;display:grid;place-items:center;padding:0 4px;box-sizing:border-box">3</span>
+              </span>
+              <span style="font-size:11.5px;color:#6B6453">कार्ट</span>
+            </div>
+            <div style="flex:1;display:grid;justify-items:center;gap:3px;padding:9px 0 8px">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6B6453" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8.2" r="3.4"></circle><path d="M5.2 20a6.8 6.8 0 0 1 13.6 0"></path></svg>
+              <span style="font-size:11.5px;color:#6B6453">खाता</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="flex:1 1 300px;min-width:280px;display:grid;gap:12px;align-content:start">
+          <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px 20px">
+            <div style="font-size:14px;font-weight:700;margin-bottom:8px">Mobile stack, top to bottom</div>
+            <div style="display:grid;gap:6px;font-size:14px;line-height:1.6;color:#37322A">
+              <div>1 · Announcement bar — one line, one fact, no carousel</div>
+              <div>2 · Identity row + अ/A language toggle (global, always)</div>
+              <div>3 · Search — 48 px, the widest thing on screen</div>
+              <div>4 · Delivery strip — area + next slot, always honest</div>
+              <div>5 · Bottom bar — Home, Categories, Search, Cart, Account</div>
+            </div>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px 20px">
+            <div style="font-size:14px;font-weight:700;margin-bottom:8px">Floating actions — the community bridge</div>
+            <div style="display:flex;gap:14px;align-items:center">
+              <span style="width:52px;height:52px;border-radius:999px;background:#FFFFFF;border:1px solid #E7E2D5;box-shadow:0 4px 16px rgba(36,32,26,0.10);display:grid;place-items:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#316F4E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8.5 8.5 0 0 1-12.4 7.5L4 21l1.5-4.4A8.5 8.5 0 1 1 21 12z"></path></svg></span>
+              <span style="width:52px;height:52px;border-radius:999px;background:#FFFFFF;border:1px solid #E7E2D5;box-shadow:0 4px 16px rgba(36,32,26,0.10);display:grid;place-items:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#235C3F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4.5h4L10.5 9 8.5 10.5a12.5 12.5 0 0 0 5 5L15 13.5l4.5 1.5v4a2 2 0 0 1-2 2A16.5 16.5 0 0 1 3 6.5a2 2 0 0 1 2-2z"></path></svg></span>
+              <p style="font-size:13.5px;line-height:1.6;color:#514B3D;margin:0">WhatsApp and Call, 52 px discs above the bottom bar. Talking to a human is a feature, not a failure — these are never more than a thumb away (Founder Brief §14).</p>
+            </div>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px 20px">
+            <div style="font-size:14px;font-weight:700;margin-bottom:8px">Rules</div>
+            <div style="display:grid;gap:6px;font-size:14px;line-height:1.6;color:#37322A">
+              <div>Bottom bar never hides on scroll — predictability beats pixels</div>
+              <div>Active = filled icon + Banyan + bold label; never color alone</div>
+              <div>Cart count in haldi — good news, not alarm</div>
+              <div>Back always top-left on inner pages; no dead ends</div>
+              <div>Wholesale lives behind its own quiet door — never mixed into retail navigation (IA §12)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="border:1px solid #E7E2D5;border-radius:16px;overflow:hidden;margin-top:20px;background:#FFFFFF">
+        <div style="display:flex;align-items:center;gap:16px;padding:12px 18px;border-bottom:1px solid #F3F0E7;flex-wrap:wrap">
+          <div style="display:flex;align-items:center;gap:9px;flex:none">
+            <div style="width:30px;height:30px;border-radius:9px;background:#235C3F;color:#FAF8F2;display:grid;place-items:center;font-family:'Martel',serif;font-weight:900;font-size:12px">MG</div>
+            <b style="font-family:'Martel',serif;font-size:15px">MG Supermart</b>
+          </div>
+          <div style="flex:1 1 220px;display:flex;align-items:center;gap:8px;border:1.5px solid #D3CDBC;border-radius:12px;padding:9px 13px;background:#FAF8F2;min-width:180px">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B6453" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"></circle><path d="m16.5 16.5 4 4"></path></svg>
+            <span style="font-size:13.5px;color:#8A8370">Search आटा, दाल, साबुन…</span>
+          </div>
+          <div style="display:flex;gap:16px;align-items:center;font-size:13px;color:#514B3D;flex:none">
+            <span style="display:inline-flex;border:1.5px solid #D3CDBC;border-radius:999px;overflow:hidden;font-size:12px;font-weight:700"><span style="padding:3px 9px;background:#235C3F;color:#FAF8F2">अ</span><span style="padding:3px 9px">A</span></span>
+            <span>पसंद</span><span>खाता</span><b style="color:#235C3F">कार्ट (3)</b>
+          </div>
+        </div>
+        <div style="display:flex;gap:22px;padding:11px 18px;font-size:14px;color:#37322A;flex-wrap:wrap">
+          <b style="color:#235C3F;border-bottom:2.5px solid #235C3F;padding-bottom:6px;margin-bottom:-11px">होम</b><span>शॉप</span><span>श्रेणियाँ</span><span>ऑफ़र</span><span>मेंबरशिप</span><span>हमारे बारे में</span><span>संपर्क</span>
+        </div>
+      </div>
+      <p style="font-size:13.5px;color:#6B6453;margin:10px 0 0">Desktop: same vocabulary, wider counter. The category row is a mega-menu on hover and a page on tap; breadcrumbs appear on every inner page.</p>
+
+      <div style="background:#F0F5F1;border:1px solid #C1D9C9;border-radius:12px;padding:16px 18px;margin:20px 0 0">
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#235C3F;margin-bottom:6px">क्यों · WHY</div>
+        <div style="font-size:15px;line-height:1.7;color:#37322A">Bottom navigation because thumbs live at the bottom of one-handed phones — and labels on every item because for a first-time user an icon-only bar is five locked doors. The bar never hides on scroll: saving 64 px of screen is not worth a customer wondering where the shop went. The अ/A toggle sits in the header on every screen because language is dignity — nobody should hunt through Settings to be spoken to properly.</div>
+      </div>
+    </section>
+
+    <!-- ============ 22 ACCESSIBILITY ============ -->
+    <section id="s22" data-screen-label="22 Accessibility" style="padding:52px 0 20px;border-top:1px solid #E7E2D5;margin-top:32px">
+      <div style="font-size:13px;font-weight:700;letter-spacing:0.12em;color:#235C3F;margin-bottom:12px">Part D — Systems · व्यवस्था</div>
+      <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+        <span style="font-family:'Martel',serif;font-size:15px;color:#8A8370">22</span>
+        <h2 style="margin:0;font-family:'Martel',serif;font-weight:800;font-size:clamp(26px,3vw,32px);line-height:1.4">Accessibility standards</h2>
+        <span style="font-size:15px;color:#6B6453">सबके लिए</span>
+      </div>
+      <p style="max-width:70ch;font-size:16px;line-height:1.75;color:#37322A;margin:14px 0 0">Our primary personas include elderly customers, first-time smartphone users and slow connections — accessibility is not an audit at the end, it is who the product is for. Baseline: <b>WCAG 2.2 AA everywhere, AAA for body text</b>.</p>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:12px;margin-top:22px">
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px 20px">
+          <div style="font-size:14px;font-weight:700;margin-bottom:8px">Seeing</div>
+          <div style="display:grid;gap:6px;font-size:14px;line-height:1.6;color:#37322A">
+            <div>Body ink 15.2:1 · primary green 7.9:1 — certified pairs only (§04–06)</div>
+            <div>Meaning never by color alone — always icon + word</div>
+            <div>Text scales with system settings (rem); pinch-zoom never locked</div>
+            <div>Focus ring: 2 px Banyan, 2 px offset, on every interactive element</div>
+          </div>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px 20px">
+          <div style="font-size:14px;font-weight:700;margin-bottom:8px">Touching</div>
+          <div style="display:grid;gap:6px;font-size:14px;line-height:1.6;color:#37322A">
+            <div>48 px minimum target · 56 px for money · ≥8 px between targets</div>
+            <div>No long-press-only or swipe-only actions — always a visible alternative</div>
+            <div>No time limits anywhere; OTP resend without penalty</div>
+          </div>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px 20px">
+          <div style="font-size:14px;font-weight:700;margin-bottom:8px">Understanding</div>
+          <div style="display:grid;gap:6px;font-size:14px;line-height:1.6;color:#37322A">
+            <div>बोलचाल Hindi — everyday words, never Sanskritized formal register</div>
+            <div>One primary action per screen; errors explain and offer a next step</div>
+            <div>Icons always labeled; no jargon (“SKU”, “fulfilment”) ever reaches customers</div>
+          </div>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px 20px">
+          <div style="font-size:14px;font-weight:700;margin-bottom:8px">Hearing &amp; assistive tech</div>
+          <div style="display:grid;gap:6px;font-size:14px;line-height:1.6;color:#37322A">
+            <div>Proper landmarks, headings and <span style="font-family:ui-monospace,monospace;font-size:13px">lang="hi"/"en"</span> per element — screen readers pronounce both languages correctly</div>
+            <div>Form labels programmatic; errors announced, not just painted</div>
+            <div>Bilingual alt text on every image</div>
+          </div>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px 20px">
+          <div style="font-size:14px;font-weight:700;margin-bottom:8px">Slow networks — also accessibility</div>
+          <div style="display:grid;gap:6px;font-size:14px;line-height:1.6;color:#37322A">
+            <div>LCP under 2.5 s on 3G is a design requirement</div>
+            <div>Skeletons over spinners; images lazy, sized, compressed</div>
+            <div>Offline states explain and offer retry — never a blank page</div>
+          </div>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px 20px">
+          <div style="font-size:14px;font-weight:700;margin-bottom:8px">Moving</div>
+          <div style="display:grid;gap:6px;font-size:14px;line-height:1.6;color:#37322A">
+            <div><span style="font-family:ui-monospace,monospace;font-size:13px">prefers-reduced-motion</span> collapses all motion to fades</div>
+            <div>Nothing flashes, loops or auto-plays</div>
+            <div>Keyboard path through every flow, checkout included</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#F0F5F1;border:1px solid #C1D9C9;border-radius:12px;padding:16px 18px;margin:20px 0 0">
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#235C3F;margin-bottom:6px">क्यों · WHY</div>
+        <div style="font-size:15px;line-height:1.7;color:#37322A">In this market, accessibility and business are the same number: the customer who cannot read small grey text, or whose 3G page never loads, simply walks to another shop. Every standard above traces to a named persona in the Product Strategy — the grandmother re-reading the OTP, the farmer on patchy network, the student on a small cracked screen. Designing for them first is why the design also feels effortless to everyone else.</div>
+      </div>
+    </section>
+
+    <!-- ============ 23 RESPONSIVE ============ -->
+    <section id="s23" data-screen-label="23 Responsive strategy" style="padding:52px 0 20px;border-top:1px solid #E7E2D5;margin-top:32px">
+      <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+        <span style="font-family:'Martel',serif;font-size:15px;color:#8A8370">23</span>
+        <h2 style="margin:0;font-family:'Martel',serif;font-weight:800;font-size:clamp(26px,3vw,32px);line-height:1.4">Responsive strategy</h2>
+        <span style="font-size:15px;color:#6B6453">हर स्क्रीन पर</span>
+      </div>
+      <p style="max-width:70ch;font-size:16px;line-height:1.75;color:#37322A;margin:14px 0 0">One system that re-arranges, never two designs. Mobile is the original; desktop is the same shop with a wider counter. Nothing exists on desktop that a mobile customer cannot do.</p>
+
+      <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:8px 22px 12px;margin-top:22px">
+        <div style="display:flex;gap:12px;padding:11px 0;border-top:1px solid #F3F0E7;flex-wrap:wrap;font-size:14px"><b style="flex:0 0 175px">Navigation</b><span style="color:#514B3D;flex:1;min-width:220px">Bottom bar + FABs → top bar + category row with mega-menu</span></div>
+        <div style="display:flex;gap:12px;padding:11px 0;border-top:1px solid #F3F0E7;flex-wrap:wrap;font-size:14px"><b style="flex:0 0 175px">Product grid</b><span style="color:#514B3D;flex:1;min-width:220px">2-up → 3-up → 4/5-up; card anatomy identical at every size</span></div>
+        <div style="display:flex;gap:12px;padding:11px 0;border-top:1px solid #F3F0E7;flex-wrap:wrap;font-size:14px"><b style="flex:0 0 175px">Overlays</b><span style="color:#514B3D;flex:1;min-width:220px">Bottom sheets → centered dialogs and popovers</span></div>
+        <div style="display:flex;gap:12px;padding:11px 0;border-top:1px solid #F3F0E7;flex-wrap:wrap;font-size:14px"><b style="flex:0 0 175px">Filters</b><span style="color:#514B3D;flex:1;min-width:220px">Filter sheet → left sidebar, same options in the same order</span></div>
+        <div style="display:flex;gap:12px;padding:11px 0;border-top:1px solid #F3F0E7;flex-wrap:wrap;font-size:14px"><b style="flex:0 0 175px">Money actions</b><span style="color:#514B3D;flex:1;min-width:220px">Sticky full-width bar → inline button beside the order summary</span></div>
+        <div style="display:flex;gap:12px;padding:11px 0;border-top:1px solid #F3F0E7;flex-wrap:wrap;font-size:14px"><b style="flex:0 0 175px">Hover</b><span style="color:#514B3D;flex:1;min-width:220px">Enhancement only — nothing is revealed exclusively on hover</span></div>
+        <div style="display:flex;gap:12px;padding:11px 0;border-top:1px solid #F3F0E7;flex-wrap:wrap;font-size:14px"><b style="flex:0 0 175px">Images</b><span style="color:#514B3D;flex:1;min-width:220px">srcset per breakpoint; every image box pre-sized — zero layout shift on slow networks</span></div>
+      </div>
+
+      <div style="background:#F0F5F1;border:1px solid #C1D9C9;border-radius:12px;padding:16px 18px;margin:20px 0 0">
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#235C3F;margin-bottom:6px">क्यों · WHY</div>
+        <div style="font-size:15px;line-height:1.7;color:#37322A">The overwhelming majority of customers are Android-mobile (Founder Brief §5) — so mobile is designed first and desktop derives from it, never the reverse. Feature parity is a trust rule as much as a technical one: a family shares one account across a phone and a school laptop, and the shop must be the same shop on both. One re-arranging system is also the only thing a small team can actually maintain for years — two diverging designs is how brands rot.</div>
+      </div>
+    </section>
+
+    <!-- ============ 24 DARK MODE ============ -->
+    <section id="s24" data-screen-label="24 Dark mode strategy" style="padding:52px 0 20px;border-top:1px solid #E7E2D5;margin-top:32px">
+      <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+        <span style="font-family:'Martel',serif;font-size:15px;color:#8A8370">24</span>
+        <h2 style="margin:0;font-family:'Martel',serif;font-weight:800;font-size:clamp(26px,3vw,32px);line-height:1.4">Dark mode strategy</h2>
+        <span style="font-size:15px;color:#6B6453">रात का रूप</span>
+      </div>
+      <p style="max-width:70ch;font-size:16px;line-height:1.75;color:#37322A;margin:14px 0 0"><b>Light is canonical.</b> Groceries are shopped in daylight, product photos live on warm tiles, and first-time users get one consistent world. Dark mode ships later as a token remap — named <b>Raat</b> — arriving first on the admin panel, where staff work evenings, then to customers as a system-respecting option. Because every screen is built from semantic tokens, this is configuration, not redesign.</p>
+
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:22px">
+        <div style="flex:1 1 250px;background:#FAF8F2;border:1px solid #E7E2D5;border-radius:16px;padding:18px">
+          <div style="font-size:12.5px;font-weight:700;color:#8A8370;margin-bottom:12px">Din दिन — canonical</div>
+          <div style="width:180px;background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:10px">
+            <div style="aspect-ratio:1;border-radius:12px;background:repeating-linear-gradient(45deg,#F3F0E7,#F3F0E7 10px,#FAF8F2 10px,#FAF8F2 20px);display:grid;place-items:center"><span style="font-family:ui-monospace,monospace;font-size:11px;color:#6B6453;background:#FFFFFF;border-radius:6px;padding:2px 7px">photo</span></div>
+            <div style="font-size:14px;font-weight:500;margin-top:8px;color:#24201A">अरहर दाल · Toor dal</div>
+            <div style="font-size:12.5px;color:#6B6453">1 kg</div>
+            <div style="display:flex;align-items:baseline;gap:6px;margin-top:4px"><b style="font-size:17px;color:#24201A">₹142</b><span style="font-size:12.5px;color:#8A8370;text-decoration:line-through">₹150</span></div>
+            <div style="margin-top:8px;height:38px;border:1.5px solid #235C3F;color:#235C3F;border-radius:999px;display:grid;place-items:center;font-size:14px;font-weight:700">जोड़ें +</div>
+          </div>
+        </div>
+        <div style="flex:1 1 250px;background:#141B16;border:1px solid #2E3A32;border-radius:16px;padding:18px">
+          <div style="font-size:12.5px;font-weight:700;color:#A9B3AB;margin-bottom:12px">Raat रात — token remap</div>
+          <div style="width:180px;background:#1C2620;border:1px solid #2E3A32;border-radius:16px;padding:10px">
+            <div style="aspect-ratio:1;border-radius:12px;background:repeating-linear-gradient(45deg,#F3F0E7,#F3F0E7 10px,#FAF8F2 10px,#FAF8F2 20px);display:grid;place-items:center"><span style="font-family:ui-monospace,monospace;font-size:11px;color:#6B6453;background:#FFFFFF;border-radius:6px;padding:2px 7px">photo</span></div>
+            <div style="font-size:14px;font-weight:500;margin-top:8px;color:#F1EEE5">अरहर दाल · Toor dal</div>
+            <div style="font-size:12.5px;color:#A9B3AB">1 kg</div>
+            <div style="display:flex;align-items:baseline;gap:6px;margin-top:4px"><b style="font-size:17px;color:#F1EEE5">₹142</b><span style="font-size:12.5px;color:#8A8370;text-decoration:line-through">₹150</span></div>
+            <div style="margin-top:8px;height:38px;background:#9ABFA8;color:#0C2417;border-radius:999px;display:grid;place-items:center;font-size:14px;font-weight:700">जोड़ें +</div>
+          </div>
+        </div>
+        <div style="flex:1.2 1 280px;background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px 20px;align-self:stretch">
+          <div style="font-size:14px;font-weight:700;margin-bottom:8px">The Raat remap</div>
+          <div style="display:grid;gap:7px;font-size:13.5px;line-height:1.6;color:#37322A;font-family:ui-monospace,monospace">
+            <div>malai #FAF8F2 → raat #141B16</div>
+            <div>card #FFFFFF → #1C2620</div>
+            <div>kajal #24201A → #F1EEE5</div>
+            <div>border #E7E2D5 → #2E3A32</div>
+            <div>primary fill 700 → banyan-300 + ink text</div>
+            <div>haldi 500 → haldi-300 · sindoor lightened</div>
+          </div>
+          <div style="display:grid;gap:7px;font-size:14px;line-height:1.6;color:#37322A;margin-top:12px">
+            <div><b>Product tiles stay malai</b> — food stays appetizing, photos stay consistent, the brand stays recognizable at night.</div>
+            <div>Never pure black — green-tinted dark, like a courtyard at dusk; kinder to astigmatic eyes, no OLED smear.</div>
+            <div>Elevation becomes surface lightness; shadows retire.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#F0F5F1;border:1px solid #C1D9C9;border-radius:12px;padding:16px 18px;margin:20px 0 0">
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#235C3F;margin-bottom:6px">क्यों · WHY</div>
+        <div style="font-size:15px;line-height:1.7;color:#37322A">Shipping dark mode at launch would double every visual QA surface for an audience that mostly hasn't asked for it — the wrong trade for a small team whose currency is polish. But <i>architecting</i> for it now costs nothing: it is the same token discipline the Seasonal Engine needs. So dark mode is sequenced where it earns trust first — staff dashboards at 9 pm — and arrives for customers already mature.</div>
+      </div>
+    </section>
+
+    <!-- ============ 25 SEASONAL THEMES ============ -->
+    <section id="s25" data-screen-label="25 Seasonal theme strategy" style="padding:52px 0 20px;border-top:1px solid #E7E2D5;margin-top:32px">
+      <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+        <span style="font-family:'Martel',serif;font-size:15px;color:#8A8370">25</span>
+        <h2 style="margin:0;font-family:'Martel',serif;font-weight:800;font-size:clamp(26px,3vw,32px);line-height:1.4">Seasonal theme strategy</h2>
+        <span style="font-size:15px;color:#6B6453">आँगन और रंगोली</span>
+      </div>
+      <p style="max-width:70ch;font-size:16px;line-height:1.75;color:#37322A;margin:14px 0 0">The principle: <b>the courtyard doesn't change — the rangoli does.</b> A festival redecorates the same trusted house; it never rebuilds it. This is the design contract the future Seasonal Experience Engine will execute through tokens. Use the Tweaks panel to preview a theme below.</p>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin-top:22px">
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px 20px">
+          <div style="font-size:13px;font-weight:700;color:#235C3F;margin-bottom:8px">Fixed forever — the courtyard</div>
+          <div style="font-size:14px;line-height:1.7;color:#37322A">Logo &amp; seal · Banyan on every button and nav state · Malai surfaces · Kajal ink · typography · spacing &amp; radius · semantic colors · component behavior.</div>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px 20px">
+          <div style="font-size:13px;font-weight:700;color:#8A5F0B;margin-bottom:8px">Themeable slots — the rangoli</div>
+          <div style="font-size:14px;line-height:1.7;color:#37322A"><span style="font-family:ui-monospace,monospace;font-size:13px">--festival-accent</span> · <span style="font-family:ui-monospace,monospace;font-size:13px">--festival-surface</span> · hero art &amp; greeting strip · one collection section · collection badge · illustration motif set · greeting copy.</div>
+        </div>
+      </div>
+
+      <sc-if value="{{ hasFestival }}" hint-placeholder-val="{{ true }}">
+        <div style="border:1px solid {{ f.border }};border-radius:16px;overflow:hidden;margin-top:16px;background:#FFFFFF">
+          <div style="background:{{ f.surface }};padding:22px 24px;border-bottom:1px solid {{ f.border }}">
+            <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:{{ f.deep }}">{{ f.sub }}</div>
+            <div style="font-family:'Martel',serif;font-weight:800;font-size:clamp(21px,3vw,27px);line-height:1.5;color:{{ f.deep }};margin-top:4px">{{ f.greet }}</div>
+            <div style="font-size:14px;color:{{ f.deep }};opacity:0.85">{{ f.en }}</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px">
+              <sc-for list="{{ f.chips }}" as="chip" hint-placeholder-count="4">
+                <span style="background:#FFFFFF;border:1px solid {{ f.border }};color:{{ f.deep }};border-radius:999px;padding:7px 14px;font-size:13.5px;font-weight:600">{{ chip }}</span>
+              </sc-for>
+            </div>
+          </div>
+          <div style="padding:16px 24px;display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap">
+            <div style="font-size:13.5px;color:#6B6453;max-width:52ch;line-height:1.6">{{ f.motif }}</div>
+            <button style="min-height:48px;padding:0 22px;background:#235C3F;color:#FAF8F2;border:none;border-radius:12px;font-family:'Mukta','Noto Sans Devanagari',sans-serif;font-size:15.5px;font-weight:600;cursor:pointer;flex:none" style-hover="background:#1B4831">कलेक्शन देखें</button>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px 24px;flex-wrap:wrap;margin-top:10px;font-size:13.5px;color:#6B6453">
+          <span><b style="color:#37322A">What changed:</b> greeting, surface, chips, motifs.</span>
+          <span><b style="color:#37322A">What didn't:</b> the button is still Banyan, the type is still Martel + Mukta, prices and semantics untouched.</span>
+        </div>
+      </sc-if>
+      <sc-if value="{{ noFestival }}" hint-placeholder-val="{{ false }}">
+        <div style="border:1px solid #E7E2D5;border-radius:16px;padding:22px 24px;margin-top:16px;background:#FFFFFF">
+          <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#8A8370">कोई अभियान नहीं · No campaign active</div>
+          <div style="font-family:'Martel',serif;font-weight:800;font-size:clamp(21px,3vw,27px);line-height:1.5;margin-top:4px">The shop on an ordinary Tuesday</div>
+          <div style="font-size:14px;color:#6B6453;margin-top:4px">This is the resting state every theme returns to — and it must always feel complete without one.</div>
+        </div>
+      </sc-if>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin-top:16px">
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px 20px">
+          <div style="font-size:14px;font-weight:700;margin-bottom:8px">Guardrails</div>
+          <div style="display:grid;gap:6px;font-size:14px;line-height:1.6;color:#37322A">
+            <div>≤10% of any screen's pixels may be festival-tinted</div>
+            <div>One accent + one surface per theme; two festival hues max on a screen</div>
+            <div>Every theme re-passes contrast checks before it goes live</div>
+            <div>Auto-revert dates — no forgotten Diwali banner in January</div>
+            <div>Semantic colors, buttons and navigation are untouchable</div>
+          </div>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px 20px">
+          <div style="font-size:14px;font-weight:700;margin-bottom:8px">The Bihar calendar</div>
+          <p style="font-size:14px;line-height:1.7;color:#37322A;margin:0">Shravan · Raksha Bandhan · Janmashtami · Navratri · Durga Puja · Dussehra · Dhanteras · Diwali · <b>Chhath (the flagship)</b> · Wedding Season · Makar Sankranti · Holi — plus non-festival seasons: monsoon, school reopening, exams. Each becomes a theme file: accent, surface, motifs, greeting, collections (Founder Brief §13, §20).</p>
+        </div>
+      </div>
+
+      <div style="background:#F0F5F1;border:1px solid #C1D9C9;border-radius:12px;padding:16px 18px;margin:20px 0 0">
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#235C3F;margin-bottom:6px">क्यों · WHY</div>
+        <div style="font-size:15px;line-height:1.7;color:#37322A">Festivals are the heartbeat of commerce in Bihar, and a shop that ignores them feels foreign — but a shop that repaints itself for every campaign has no face to remember. The courtyard/rangoli split resolves the founder's hardest requirement: “the website should feel alive” <i>and</i> “MG Supermart should always remain recognizable.” Keeping actions Banyan inside every theme also protects learned behavior — the green button means “proceed” in October and in March. Decoration may celebrate; machinery may not.</div>
+      </div>
+    </section>
+
+    <!-- ============ GOVERNANCE ============ -->
+    <section id="s26" data-screen-label="Governance" style="padding:52px 0 8px;border-top:1px solid #E7E2D5;margin-top:32px">
+      <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+        <span style="font-family:'Martel',serif;font-size:15px;color:#8A8370">—</span>
+        <h2 style="margin:0;font-family:'Martel',serif;font-weight:800;font-size:clamp(26px,3vw,32px);line-height:1.4">Governance &amp; what's next</h2>
+        <span style="font-size:15px;color:#6B6453">नियम</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:12px;margin-top:20px">
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px 20px">
+          <div style="font-size:14px;font-weight:700;margin-bottom:8px">Tokens are law</div>
+          <p style="font-size:14px;line-height:1.65;color:#37322A;margin:0">No hex, px or ms value outside this document may appear in any screen or code. A value that isn't a token is a bug. New tokens require a written “why” added to this spec.</p>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:18px 20px">
+          <div style="font-size:14px;font-weight:700;margin-bottom:8px">Change process</div>
+          <p style="font-size:14px;line-height:1.65;color:#37322A;margin:0">Propose → audit (contrast, bilingual, shopkeeper test) → add to spec with rationale → then build. The version table below is the only history that counts.</p>
+        </div>
+        <div style="background:#F0F5F1;border:1px solid #C1D9C9;border-radius:16px;padding:18px 20px">
+          <div style="font-size:14px;font-weight:700;color:#235C3F;margin-bottom:8px">Milestone 3 — next</div>
+          <p style="font-size:14px;line-height:1.65;color:#37322A;margin:0">Design the homepage and core shopping screens (IA §5) entirely from these tokens and components — hero to footer, in both languages, mobile first.</p>
+        </div>
+      </div>
+      <div style="background:#FFFFFF;border:1px solid #E7E2D5;border-radius:16px;padding:8px 22px 10px;margin-top:12px">
+        <div style="display:flex;gap:12px;padding:10px 0;border-bottom:1px solid #F3F0E7;font-size:13px;color:#8A8370;font-weight:700"><span style="flex:0 0 80px">Version</span><span style="flex:0 0 110px">Date</span><span style="flex:1">Changes</span></div>
+        <div style="display:flex;gap:12px;padding:10px 0;font-size:14px"><b style="flex:0 0 80px">1.0</b><span style="flex:0 0 110px;color:#514B3D">July 2026</span><span style="flex:1;color:#514B3D">Initial Bargad design language — Document 05, Milestone 2</span></div>
+      </div>
+    </section>
+
+    <!-- ::BARGAD-END:: -->
+  </div>
+</div>
+
+<div style="border-top:1px solid #E7E2D5;background:#133523;color:#9ABFA8;margin-top:24px">
+  <div style="max-width:1440px;margin:0 auto;padding:28px clamp(20px,5vw,64px);display:flex;flex-wrap:wrap;gap:12px 28px;align-items:center;justify-content:space-between;font-size:13.5px">
+    <div style="display:flex;align-items:center;gap:10px"><span style="width:30px;height:30px;border-radius:9px;background:#FAF8F2;color:#133523;display:grid;place-items:center;font-family:'Martel',serif;font-weight:900;font-size:12px">MG</span><span style="color:#DEEBE1;font-weight:600">बरगद · Bargad Design Language v1.0</span></div>
+    <div>Document 05 · Milestone 2 · MG Supermart, Pipra, East Champaran</div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;festivalPreview&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Chhath&quot;,&quot;Diwali&quot;,&quot;Holi&quot;,&quot;Off&quot;],&quot;default&quot;:&quot;Chhath&quot;,&quot;tsType&quot;:&quot;'Chhath' | 'Diwali' | 'Holi' | 'Off'&quot;,&quot;section&quot;:&quot;Seasonal Engine preview&quot;}}">
+class Component extends DCLogic {
+  state = { qty: 0, sheetOpen: false };
+
+  renderVals() {
+    const greens = [
+      { t: 'banyan-50',  hex: '#F0F5F1', fg: '#133523', use: 'Success surfaces · tinted wells', ratio: '' },
+      { t: 'banyan-100', hex: '#DEEBE1', fg: '#133523', use: 'Tonal button fill · hover tints', ratio: '' },
+      { t: 'banyan-200', hex: '#C1D9C9', fg: '#133523', use: 'Borders on green surfaces', ratio: '' },
+      { t: 'banyan-300', hex: '#9ABFA8', fg: '#133523', use: 'Dark-mode primary · charts', ratio: '' },
+      { t: 'banyan-400', hex: '#6DA184', fg: '#0C2417', use: 'Charts · decorative only', ratio: '' },
+      { t: 'banyan-500', hex: '#478562', fg: '#FFFFFF', use: '“Fresh” tags · dark-mode fills', ratio: '4.4:1 on white' },
+      { t: 'banyan-600', hex: '#316F4E', fg: '#FFFFFF', use: 'Success text & icons', ratio: '6.0:1 on white' },
+      { t: 'banyan-700 · PRIMARY', hex: '#235C3F', fg: '#FAF8F2', use: 'Primary buttons · links · active nav', ratio: '7.9:1 on white' },
+      { t: 'banyan-800', hex: '#1B4831', fg: '#FAF8F2', use: 'Hover on primary', ratio: '10.3:1 on white' },
+      { t: 'banyan-900', hex: '#133523', fg: '#FAF8F2', use: 'Pressed · footer · cover surfaces', ratio: '13.6:1 on white' },
+    ];
+    const khadi = [
+      { t: 'khadi-0',   hex: '#FFFFFF', fg: '#24201A', use: 'Cards · inputs · sheets', ratio: '' },
+      { t: 'khadi-50 · MALAI', hex: '#FAF8F2', fg: '#24201A', use: 'Page background — the default air', ratio: '' },
+      { t: 'khadi-100', hex: '#F3F0E7', fg: '#24201A', use: 'Wells · image tiles · table stripes', ratio: '' },
+      { t: 'khadi-200', hex: '#E7E2D5', fg: '#24201A', use: 'Default borders · dividers', ratio: '' },
+      { t: 'khadi-300', hex: '#D3CDBC', fg: '#24201A', use: 'Strong borders · disabled fills', ratio: '' },
+      { t: 'khadi-400', hex: '#B0A995', fg: '#24201A', use: 'Placeholders · decorative only', ratio: '' },
+      { t: 'khadi-500', hex: '#8A8370', fg: '#FFFFFF', use: 'Muted icons · large captions only', ratio: '3.8:1 — large text only' },
+      { t: 'khadi-600', hex: '#6B6453', fg: '#FFFFFF', use: 'Secondary text', ratio: '5.4:1 on white' },
+      { t: 'khadi-700', hex: '#514B3D', fg: '#FFFFFF', use: 'Strong secondary text', ratio: '7.8:1 on white' },
+      { t: 'khadi-800', hex: '#37322A', fg: '#FAF8F2', use: 'Sub-headings', ratio: '11.6:1 on white' },
+      { t: 'khadi-900 · KAJAL', hex: '#24201A', fg: '#FAF8F2', use: 'Primary text — the ink', ratio: '15.2:1 on Malai' },
+    ];
+    const accents = [
+      {
+        name: 'Mitti मिट्टी', sub: 'terracotta clay · दउरा, दीये, आँगन',
+        role: 'Community & festival warmth. Illustration mid-tones, About/Community sections, Chhath & wedding-season themes. Never on buttons.',
+        rows: [
+          { t: 'mitti-50',  hex: '#FAF1EC', fg: '#7C3D20', use: 'Washes' },
+          { t: 'mitti-100', hex: '#F4E1D7', fg: '#7C3D20', use: 'Festival surfaces' },
+          { t: 'mitti-300', hex: '#E0B49E', fg: '#5A2B15', use: 'Illustration mid-tone' },
+          { t: 'mitti-500', hex: '#BC6844', fg: '#FFFFFF', use: 'Illustration deep · badges on dark' },
+          { t: 'mitti-600', hex: '#A0522F', fg: '#FFFFFF', use: 'Accents on light washes' },
+          { t: 'mitti-700', hex: '#7C3D20', fg: '#FFFFFF', use: 'Text on mitti-50/100 · 5.6:1' },
+        ],
+      },
+      {
+        name: 'Haldi हल्दी', sub: 'turmeric & marigold · शुभ रंग',
+        role: 'Offers, savings highlights, loyalty gold, festive accents. The ONLY yellow in the system — and yellow means “good news about money”, never alarm.',
+        rows: [
+          { t: 'haldi-50',  hex: '#FCF6E8', fg: '#8A5F0B', use: 'Offer washes' },
+          { t: 'haldi-100', hex: '#F9EDD1', fg: '#8A5F0B', use: 'Offer strips · loyalty cards' },
+          { t: 'haldi-300', hex: '#F0CE8A', fg: '#5C3F06', use: 'Festive borders' },
+          { t: 'haldi-500', hex: '#E0A93E', fg: '#24201A', use: 'Offer badge fill · Kajal text 7.7:1' },
+          { t: 'haldi-600', hex: '#C08A1E', fg: '#FFFFFF', use: 'Icons · Diwali accent' },
+          { t: 'haldi-700', hex: '#8A5F0B', fg: '#FFFFFF', use: 'Offer text on haldi-50 · 5.3:1' },
+        ],
+      },
+      {
+        name: 'Asmani आसमानी', sub: 'calm sky blue',
+        role: 'Information — policies, delivery notes, helpful explanations. Chosen over “neel”: indigo carries heavy history in Champaran; the sky belongs to everyone.',
+        rows: [
+          { t: 'asmani-50',  hex: '#EFF3F8', fg: '#2F4767', use: 'Info washes' },
+          { t: 'asmani-100', hex: '#DFE7F1', fg: '#2F4767', use: 'Info surfaces' },
+          { t: 'asmani-300', hex: '#A8BCD8', fg: '#1D2E45', use: 'Info borders' },
+          { t: 'asmani-500', hex: '#4E6E99', fg: '#FFFFFF', use: 'Charts · secondary data' },
+          { t: 'asmani-600', hex: '#3D5A82', fg: '#FFFFFF', use: 'Info icons & text · 7.0:1' },
+          { t: 'asmani-700', hex: '#2F4767', fg: '#FFFFFF', use: 'Info text on asmani-50' },
+        ],
+      },
+    ];
+    const semantics = [
+      { k: 'सफलता Success', bg: '#F0F5F1', bd: '#C1D9C9', tx: '#1B4831', fill: '#316F4E',
+        msg: 'ऑर्डर मिल गया — शाम 5–7 बजे के बीच पहुँचेगा। · Order placed, arriving 5–7 pm.',
+        rule: 'Confirmations, delivered states, savings (“₹40 की बचत”). Success is also the color of freshness — one meaning family: good things growing.' },
+      { k: 'सावधानी Warning', bg: '#FCF6E8', bd: '#F0CE8A', tx: '#8A5F0B', fill: '#C08A1E',
+        msg: 'बारिश की वजह से डिलीवरी में थोड़ी देरी हो सकती है। · Delivery may run a little late due to rain.',
+        rule: 'A heads-up that deserves attention but not fear. Warnings explain the cause — a shopkeeper never says just “problem”.' },
+      { k: 'त्रुटि Error', bg: '#FBEFED', bd: '#EFC4BC', tx: '#8E2C21', fill: '#B23B2E',
+        msg: 'भुगतान नहीं हो पाया — दोबारा कोशिश करें या कैश-ऑन-डिलीवरी चुनें। · Payment failed — try again or choose cash on delivery.',
+        rule: 'Sindoor red is reserved for genuine failure and destructive confirmation. NEVER for prices, MRP strikethroughs, discounts or countdown urgency.' },
+      { k: 'जानकारी Info', bg: '#EFF3F8', bd: '#C6D4E6', tx: '#2F4767', fill: '#3D5A82',
+        msg: 'तेल और खुली चीनी ₹500 की न्यूनतम राशि में नहीं गिने जाते। · Oils & loose sugar don\u2019t count toward the ₹500 minimum.',
+        rule: 'Policies and helpful notes, always stated up-front — “never surprise customers during checkout” (Founder Brief §9).' },
+    ];
+    const typeRoles = [
+      { role: 'Display',   font: "'Martel', serif", w: 800, px: 34, lh: '1.45', m: '32 / 46', d: '52 / 74', hi: 'त्योहार की तैयारी, अपनों के साथ', en: 'Ready for the season, together', use: 'Hero, festival greetings' },
+      { role: 'Headline',  font: "'Martel', serif", w: 700, px: 26, lh: '1.5',  m: '24 / 36', d: '34 / 50', hi: 'आज की ताज़ा सब्ज़ियाँ', en: 'Today\u2019s fresh vegetables', use: 'Page & section titles' },
+      { role: 'Title',     font: "'Mukta', sans-serif", w: 600, px: 21, lh: '1.5', m: '20 / 30', d: '22 / 32', hi: 'खाने-पीने का सामान', en: 'Food & grocery', use: 'Card groups, sheet titles' },
+      { role: 'Body large', font: "'Mukta', sans-serif", w: 400, px: 18, lh: '1.7', m: '18 / 30', d: '18 / 30', hi: 'हम पिपरा और आस-पास के 5 किमी क्षेत्र में डिलीवरी करते हैं।', en: 'We deliver within 5 km of Pipra.', use: 'Lead paragraphs, product descriptions' },
+      { role: 'Body',      font: "'Mukta', sans-serif", w: 400, px: 16, lh: '1.65', m: '16 / 26 · hi 28', d: '16 / 26 · hi 28', hi: 'सोमवार से शनिवार, सुबह 8 से रात 9 बजे तक।', en: 'Monday–Saturday, 8 am to 9 pm.', use: 'Default text everywhere' },
+      { role: 'Label',     font: "'Mukta', sans-serif", w: 600, px: 16, lh: '1.5', m: '16 / 24', d: '16 / 24', hi: 'कार्ट में डालें', en: 'Add to cart', use: 'Buttons, inputs, navigation' },
+      { role: 'Body small', font: "'Mukta', sans-serif", w: 400, px: 14, lh: '1.6', m: '14 / 22', d: '14 / 22', hi: '500 ग्राम · ताज़ा', en: '500 g · packed today', use: 'Meta, units, secondary info' },
+      { role: 'Caption',   font: "'Mukta', sans-serif", w: 500, px: 13, lh: '1.5', m: '13 / 18', d: '13 / 18', hi: 'MRP ₹75, सभी कर सहित', en: 'MRP ₹75 incl. all taxes', use: 'Legal, MRP — the floor. Nothing smaller, ever.' },
+      { role: 'Price',     font: "'Mukta', sans-serif", w: 700, px: 20, lh: '1.4', m: '18 / 24', d: '20 / 26', hi: '₹68', en: '₹1,240', use: 'All prices — tabular numerals, ₹ always attached' },
+    ];
+    const spacing = [
+      { k: 'space-1',  v: 4,  use: 'Icon ↔ label gap' },
+      { k: 'space-2',  v: 8,  use: 'Inside chips · stacked text' },
+      { k: 'space-3',  v: 12, use: 'Chip padding · dense grid gutters' },
+      { k: 'space-4',  v: 16, use: 'Card padding · screen margins · default gap' },
+      { k: 'space-6',  v: 24, use: 'Between related blocks · desktop gutters' },
+      { k: 'space-8',  v: 32, use: 'Between groups' },
+      { k: 'space-12', v: 48, use: 'Between page sections (mobile)' },
+      { k: 'space-16', v: 64, use: 'Between page sections (desktop)' },
+      { k: 'space-24', v: 96, use: 'Hero breathing room' },
+    ];
+    const radii = [
+      { k: 'r-sm · 8',   v: 8,   w: 72,  use: 'Tags, badges, tiny controls' },
+      { k: 'r-md · 12',  v: 12,  w: 96,  use: 'Buttons, inputs, image tiles' },
+      { k: 'r-lg · 16',  v: 16,  w: 120, use: 'Cards' },
+      { k: 'r-xl · 24',  v: 24,  w: 140, use: 'Bottom sheets, dialogs, hero blocks' },
+      { k: 'r-pill · 999', v: 999, w: 120, use: 'Chips, steppers, count badges' },
+    ];
+    const elev = [
+      { k: 'Level 0 · ज़मीन Zameen', shadow: 'none', bd: '1px solid #E7E2D5', use: 'The default. Almost everything rests on the ground, separated by borders — not shadows.' },
+      { k: 'Level 1 · छाया Chhaya', shadow: '0 1px 2px rgba(36,32,26,0.05), 0 2px 8px rgba(36,32,26,0.05)', bd: '1px solid #E7E2D5', use: 'Cards that invite touch — product cards, offer tiles.' },
+      { k: 'Level 2 · डाली Daali', shadow: '0 4px 16px rgba(36,32,26,0.10)', bd: '1px solid #E7E2D5', use: 'Things that float while you scroll — sticky cart bar, dropdowns, FABs.' },
+      { k: 'Level 3 · छतरी Chhatri', shadow: '0 12px 36px rgba(36,32,26,0.18)', bd: 'none', use: 'Bottom sheets & dialogs. One per screen, always with a scrim.' },
+    ];
+    const motion = [
+      { k: 'motion-instant', v: '100 ms', use: 'Color/state changes, checkbox ticks' },
+      { k: 'motion-quick',   v: '180 ms', use: 'Buttons, chips, toggles, qty steppers' },
+      { k: 'motion-settle',  v: '260 ms', use: 'Cards, accordions, dropdowns' },
+      { k: 'motion-sheet',   v: '320 ms', use: 'Bottom sheets, dialogs, page transitions' },
+      { k: 'motion-celebrate', v: '600 ms', use: 'Order-placed moment only — plays once, never loops' },
+    ];
+    const festivalMap = {
+      Chhath: {
+        greet: 'छठ महापर्व की हार्दिक शुभकामनाएँ',
+        en: 'Chhath Puja essentials, together in one place',
+        sub: 'छठ कलेक्शन · Chhath Collection',
+        accent: '#C2591B', deep: '#8F3E11', surface: '#FBEFE3', border: '#F0CFAF',
+        motif: 'Motifs: उगते सूरज का अर्घ्य · दउरा-सूप · गन्ना — photography of real ghats and real puja baskets.',
+        chips: ['ठेकुआ सामग्री', 'दउरा और सूप', 'फल', 'गुड़ व घी'],
+      },
+      Diwali: {
+        greet: 'दीपावली की हार्दिक शुभकामनाएँ',
+        en: 'Diwali essentials & gifts',
+        sub: 'दिवाली कलेक्शन · Diwali Collection',
+        accent: '#B07E10', deep: '#7A560A', surface: '#FBF3DC', border: '#EFD79A',
+        motif: 'Motifs: दीये · रंगोली · तोरण — warm lamp-light photography, deep gold accents.',
+        chips: ['दीये व बाती', 'पूजा सामग्री', 'मिठाई', 'ड्राई फ्रूट्स'],
+      },
+      Holi: {
+        greet: 'होली की हार्दिक शुभकामनाएँ',
+        en: 'Colours, thandai & festive snacks',
+        sub: 'होली कलेक्शन · Holi Collection',
+        accent: '#B84A6B', deep: '#8C3350', surface: '#FAEEF2', border: '#EFC3D2',
+        motif: 'Motifs: गुलाल · पिचकारी · ठंडाई — one gulal rose accent, never a rainbow of them.',
+        chips: ['हर्बल गुलाल', 'पिचकारी', 'ठंडाई', 'नमकीन व नाश्ता'],
+      },
+      Off: null,
+    };
+    const fk = this.props.festivalPreview ?? 'Chhath';
+    const f = festivalMap[fk] || null;
+
+    return {
+      greens, khadi, accents, semantics, typeRoles, spacing, radii, elev, motion,
+      f, hasFestival: !!f, noFestival: !f, festivalName: fk,
+      qty: this.state.qty,
+      hasQty: this.state.qty > 0,
+      noQty: this.state.qty === 0,
+      addOne: () => this.setState({ qty: 1 }),
+      inc: () => this.setState(s => ({ qty: Math.min(s.qty + 1, 9) })),
+      dec: () => this.setState(s => ({ qty: Math.max(s.qty - 1, 0) })),
+      sheetOpen: this.state.sheetOpen,
+      toggleSheet: () => this.setState(s => ({ sheetOpen: !s.sheetOpen })),
+      sheetTransform: this.state.sheetOpen ? 'translateY(0%)' : 'translateY(112%)',
+      scrimOpacity: this.state.sheetOpen ? 0.32 : 0,
+      sheetLabel: this.state.sheetOpen ? 'Close the sheet' : 'Play — bottom sheet enters at 320 ms',
+    };
+  }
+}
+</script>
+</body>
+</html>
