@@ -13,3 +13,4 @@ export { OnboardingScreen } from "./OnboardingScreen";
 export { AuthScreen } from "./AuthScreen";
 export { LoginScreen } from "./LoginScreen";
 export { RegisterScreen } from "./RegisterScreen";
+export { default as CategoriesScreen } from "./CategoriesScreen";
