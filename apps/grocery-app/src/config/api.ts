@@ -14,9 +14,9 @@ const apiEndpoints: ApiEndpoints = {
   PRODUCTS: {
     CREATE_PRODUCT: "products",
     LIST: "/products",
-    DETAIL: (productId: string) => `/products/${productId}}`,
-    UPDATE_PRODUCT: (productId: string) => `/products/${productId}}`,
-    DELETE_PRODUCT: (productId: string) => `/products/${productId}}`,
+    DETAIL: (productId: string) => `/products/${productId}`,
+    UPDATE_PRODUCT: (productId: string) => `/products/${productId}`,
+    DELETE_PRODUCT: (productId: string) => `/products/${productId}`,
   },
 
   // Shopping cart endpoints
