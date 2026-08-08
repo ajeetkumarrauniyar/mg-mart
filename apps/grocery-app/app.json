@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "MG Mart - Grocery App",
-    "slug": "mg-mart-grocery",
+    "name": "MG Supermart",
+    "slug": "mg-supermart",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -11,10 +11,12 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.mgmart.grocery",
+      "bundleIdentifier": "com.mgsupermart.app",
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "This app needs access to your location to verify delivery address and ensure accurate order placement.",
         "NSLocationAlwaysAndWhenInUseUsageDescription": "This app needs access to your location to verify delivery address and ensure accurate order placement."
@@ -27,20 +29,22 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.mgmart.grocery",
+      "bundleIdentifier": "com.mgsupermart.app",
       "permissions": [
         "ACCESS_COARSE_LOCATION",
         "ACCESS_FINE_LOCATION"
-      ]
+      ],
+      "package": "com.mgsupermart.app"
     },
     "web": {
       "favicon": "./assets/favicon.png",
       "bundler": "metro"
     },
-    "scheme": "mg-mart-grocery",
+    "scheme": "mg-supermart",
+    "owner": "it-maverick-solutions",
     "extra": {
       "eas": {
-        "projectId": "your-project-id"
+        "projectId": "3b25b5c3-b041-4365-b554-fefb3ece085e"
       }
     }
   }
