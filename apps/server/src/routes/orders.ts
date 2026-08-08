@@ -22,6 +22,7 @@ router.post("/", orderController.createOrder);
 router.get("/", orderController.getAllOrders);
 router.get("/:orderId", orderController.getOrderById);
 router.put("/:orderId/status", orderController.updateOrderStatus);
+router.put("/:orderId/cancel", orderController.cancelOrder);
 
 export default router;
 
