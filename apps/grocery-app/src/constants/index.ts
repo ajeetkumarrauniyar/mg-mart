@@ -244,9 +244,10 @@ export const ACCURACY_THRESHOLDS = {
 
 // Location fetch timeouts (in milliseconds)
 export const LOCATION_TIMEOUTS = {
-  QUICK_FETCH: 10000,   // 10 seconds for quick location
-  NORMAL_FETCH: 30000,  // 30 seconds for normal location
-  EXTENDED_FETCH: 60000, // 60 seconds for extended location
+  QUICK_FETCH: 15000,   // 15 seconds for quick location
+  NORMAL_FETCH: 45000,  // 45 seconds for normal location
+  EXTENDED_FETCH: 90000, // 90 seconds for extended location
+  HIGH_PRECISION: 120000, // 120 seconds for high precision location
 } as const;
 
 // Cache settings
@@ -258,10 +259,11 @@ export const CACHE_SETTINGS = {
 
 // Retry settings
 export const RETRY_SETTINGS = {
-  MAX_LOCATION_RETRIES: 3,
+  MAX_LOCATION_RETRIES: 5,             // Increased from 3 to 5 retries
   MAX_API_RETRIES: 3,
-  RETRY_DELAY_BASE: 1000,              // Base delay for exponential backoff
-  RETRY_DELAY_MAX: 10000,              // Maximum retry delay
+  RETRY_DELAY_BASE: 2000,              // Base delay for exponential backoff (increased from 1s to 2s)
+  RETRY_DELAY_MAX: 15000,              // Maximum retry delay (increased from 10s to 15s)
+  MIN_ACCURACY_IMPROVEMENT: 10,        // Minimum accuracy improvement (in meters) to accept new reading
 } as const;
 
 // User messages

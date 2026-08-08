@@ -18,9 +18,40 @@ export class DistanceCalculator implements IDistanceCalculator {
      * @returns Distance in kilometers
      */
     calculateDistance(point1: LocationCoordinates, point2: LocationCoordinates): number {
+        // Debug logging to see what coordinates we're getting
+        console.log('🔍 Distance calculation input:', {
+            point1: {
+                lat: point1.latitude,
+                lon: point1.longitude,
+                acc: point1.accuracy,
+                timestamp: point1.timestamp
+            },
+            point2: {
+                lat: point2.latitude,
+                lon: point2.longitude,
+                acc: point2.accuracy,
+                timestamp: point2.timestamp
+            }
+        });
+
         // Validate input coordinates
         if (!validateCoordinates(point1) || !validateCoordinates(point2)) {
+            console.error('❌ Coordinate validation failed:', { point1, point2 });
             throw new Error('Invalid coordinates provided for distance calculation');
+        }
+
+        // Additional null/undefined checks
+        if (point1.latitude == null || point1.longitude == null ||
+            point2.latitude == null || point2.longitude == null) {
+            console.error('❌ Null coordinates detected:', { point1, point2 });
+            throw new Error('Coordinates cannot be null or undefined');
+        }
+
+        // Check for NaN values
+        if (isNaN(point1.latitude) || isNaN(point1.longitude) ||
+            isNaN(point2.latitude) || isNaN(point2.longitude)) {
+            console.error('❌ NaN coordinates detected:', { point1, point2 });
+            throw new Error('Coordinates cannot be NaN');
         }
 
         // Convert latitude and longitude from degrees to radians
@@ -28,6 +59,15 @@ export class DistanceCalculator implements IDistanceCalculator {
         const lat2Rad = this.degreesToRadians(point2.latitude);
         const deltaLatRad = this.degreesToRadians(point2.latitude - point1.latitude);
         const deltaLonRad = this.degreesToRadians(point2.longitude - point1.longitude);
+
+        // Check for NaN after conversion
+        if (isNaN(lat1Rad) || isNaN(lat2Rad) || isNaN(deltaLatRad) || isNaN(deltaLonRad)) {
+            console.error('❌ NaN after radian conversion:', {
+                lat1Rad, lat2Rad, deltaLatRad, deltaLonRad,
+                originalCoords: { point1, point2 }
+            });
+            throw new Error('Invalid coordinate conversion resulted in NaN');
+        }
 
         // Haversine formula
         const a = Math.sin(deltaLatRad / 2) * Math.sin(deltaLatRad / 2) +
@@ -39,8 +79,27 @@ export class DistanceCalculator implements IDistanceCalculator {
         // Distance in kilometers
         const distance = DistanceCalculator.EARTH_RADIUS_KM * c;
 
+        // Check for NaN result
+        if (isNaN(distance)) {
+            console.error('❌ Distance calculation resulted in NaN:', {
+                point1,
+                point2,
+                lat1Rad,
+                lat2Rad,
+                deltaLatRad,
+                deltaLonRad,
+                a,
+                c,
+                earthRadius: DistanceCalculator.EARTH_RADIUS_KM
+            });
+            throw new Error('Distance calculation failed - result is NaN');
+        }
+
         // Round to 3 decimal places for precision
-        return Math.round(distance * 1000) / 1000;
+        const finalDistance = Math.round(distance * 1000) / 1000;
+
+        console.log(`✅ Distance calculated: ${finalDistance}km`);
+        return finalDistance;
     }
 
     /**

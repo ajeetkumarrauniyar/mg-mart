@@ -119,13 +119,21 @@ export const useCartStore = create<CartStore>()(
           console.log("✅ Cart updated successfully. Total items:", updatedItems.length);
 
           // Sync with API in background (don't block UI)
-          cartService.addItem({ productId, quantity })
-            .then(() => {
-              console.log("✅ API sync successful");
-            })
-            .catch((error) => {
-              console.warn("⚠️ API sync failed (local cart still updated):", error);
-            });
+          // Check if user is still authenticated before making API call
+          try {
+            const { useAuthStore } = require('./authStore');
+            if (useAuthStore.getState().isAuthenticated) {
+              cartService.addItem({ productId, quantity })
+                .then(() => {
+                  console.log("✅ API sync successful");
+                })
+                .catch((error) => {
+                  console.warn("⚠️ API sync failed:", error);
+                });
+            }
+          } catch (error) {
+            console.warn("Failed to check auth state for cart sync:", error);
+          }
 
         } catch (error: any) {
           console.error("❌ Failed to add item to cart:", error);
@@ -163,10 +171,17 @@ export const useCartStore = create<CartStore>()(
           get().calculateTotals();
 
           // Sync with API in background
-          cartService.updateItem({ productId, quantity })
-            .catch((error) => {
-              console.warn("⚠️ API sync failed:", error);
-            });
+          try {
+            const { useAuthStore } = require('./authStore');
+            if (useAuthStore.getState().isAuthenticated) {
+              cartService.updateItem({ productId, quantity })
+                .catch((error) => {
+                  console.warn("⚠️ API sync failed:", error);
+                });
+            }
+          } catch (error) {
+            console.warn("Failed to check auth state for cart sync:", error);
+          }
         } catch (error: any) {
           set({
             isLoading: false,
@@ -195,10 +210,17 @@ export const useCartStore = create<CartStore>()(
           get().calculateTotals();
 
           // Sync with API in background
-          cartService.removeItem(productId)
-            .catch((error) => {
-              console.warn("⚠️ API sync failed:", error);
-            });
+          try {
+            const { useAuthStore } = require('./authStore');
+            if (useAuthStore.getState().isAuthenticated) {
+              cartService.removeItem(productId)
+                .catch((error) => {
+                  console.warn("⚠️ API sync failed:", error);
+                });
+            }
+          } catch (error) {
+            console.warn("Failed to check auth state for cart sync:", error);
+          }
         } catch (error: any) {
           set({
             isLoading: false,

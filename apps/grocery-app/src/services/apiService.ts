@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosResponse, AxiosError } from "axios";
+import axios, { AxiosInstance, AxiosResponse, AxiosError, CancelTokenSource } from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { config, getApiTimeout, getTokenKey, isFeatureEnabled } from "@/config";
 
@@ -8,7 +8,30 @@ export const setUnauthorizedCallback = (cb: UnauthorizedCallback) => {
   onUnauthorizedCallback = cb;
 };
 
-// Request headers
+// Global state to manage API calls after logout
+let isLoggedOut = false;
+let pendingRequests: CancelTokenSource[] = [];
+
+// Function to cancel all pending requests
+const cancelAllPendingRequests = () => {
+  console.log(`🚫 Cancelling ${pendingRequests.length} pending requests`);
+  pendingRequests.forEach((source) => {
+    try {
+      source.cancel('Request cancelled due to logout');
+    } catch (error) {
+      // Ignore cancellation errors
+    }
+  });
+  pendingRequests = [];
+};
+// Function to set logout state and cancel requests
+export const setLogoutState = (loggedOut: boolean) => {
+  isLoggedOut = loggedOut;
+  if (loggedOut) {
+    cancelAllPendingRequests();
+  }
+};
+
 export const getDefaultHeaders = (token?: string) => ({
   "Content-Type": "application/json",
   Accept: "application/json",
@@ -38,11 +61,22 @@ const apiClient: AxiosInstance = axios.create({
 // Request interceptor to add auth token
 apiClient.interceptors.request.use(
   async (requestConfig) => {
+    // Prevent API calls after logout
+    if (isLoggedOut) {
+      console.log('🚫 Blocking API call after logout:', requestConfig.url);
+      throw new axios.Cancel('Request blocked - user logged out');
+    }
+
     try {
       const token = await AsyncStorage.getItem(getTokenKey());
       if (token) {
         requestConfig.headers.Authorization = `Bearer ${token}`;
       }
+
+      // Create cancel token for this request
+      const cancelSource = axios.CancelToken.source();
+      requestConfig.cancelToken = cancelSource.token;
+      pendingRequests.push(cancelSource);
 
       // Log API calls if logging is enabled
       if (apiConfig.enableLogging) {
@@ -66,6 +100,14 @@ apiClient.interceptors.request.use(
 // Response interceptor for error handling
 apiClient.interceptors.response.use(
   (response: AxiosResponse) => {
+    // Remove completed request from pending list
+    const requestConfig = response.config;
+    if (requestConfig.cancelToken) {
+      pendingRequests = pendingRequests.filter(source =>
+        source.token !== requestConfig.cancelToken
+      );
+    }
+
     // Log successful responses if logging is enabled
     if (apiConfig.enableLogging) {
       console.log(`✅ API Response ${response.status}:`, response.data);
@@ -73,11 +115,27 @@ apiClient.interceptors.response.use(
     return response;
   },
   async (error: AxiosError) => {
+    // Handle cancelled requests
+    if (axios.isCancel(error)) {
+      console.log('🚫 Request cancelled:', error.message);
+      return Promise.reject(error);
+    }
+
+    // Remove failed request from pending list
     const originalRequest = error.config;
+    if (originalRequest?.cancelToken) {
+      pendingRequests = pendingRequests.filter(source =>
+        source.token !== originalRequest.cancelToken
+      );
+    }
 
     // Handle 401 unauthorized errors
-    if (error.response?.status === 401 && originalRequest) {
+    if (error.response?.status === 401 && originalRequest && !isLoggedOut) {
       console.log('🚨 401 Unauthorized - Token expired or invalid');
+
+      // Set logout state to prevent further API calls
+      isLoggedOut = true;
+
       try {
         await AsyncStorage.removeItem(getTokenKey());
 
@@ -93,6 +151,9 @@ apiClient.interceptors.response.use(
       } catch (storageError) {
         console.error("Error removing auth token:", storageError);
       }
+
+      // Cancel all pending requests
+      cancelAllPendingRequests();
     }
 
     // Transform error for consistent handling
