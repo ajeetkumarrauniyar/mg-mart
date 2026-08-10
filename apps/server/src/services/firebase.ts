@@ -168,4 +168,5 @@ export const COLLECTIONS = {
   PRODUCTS: "products",
   ORDERS: "orders",
   CART: "cart",
+  CATEGORY_SYNC_QUEUE: "category_sync_queue",
 } as const;

@@ -1,5 +1,4 @@
 /**
- * Product Repository for MG Mart grocery application
  *
  * This repository handles all database operations related to product catalog management
  * including CRUD operations, inventory tracking, search functionality, and featured products.
@@ -100,10 +99,18 @@ export class ProductRepository {
     }
 
     // Prepare update data with timestamp
-    const updatedData = {
+    const updatedData: Record<string, unknown> = {
       ...updateData,
       updatedAt: createTimestamp(),
     };
+
+    // Any admin-initiated category change is a manual decision — mark it so
+    // the BUSY sync script (working-sync.js) never silently overwrites it
+    // on the next sync. Sync-originated writes never go through this admin
+    // update path, so this flag only ever gets set here, by a human.
+    if (updateData.category !== undefined) {
+      updatedData.categoryManuallySet = true;
+    }
 
     // Apply updates to the document
     await productRef.update(updatedData);
@@ -258,6 +265,7 @@ export class ProductRepository {
       description: product.description,
       price: product.price,
       category: product.category,
+      categoryManuallySet: product.categoryManuallySet ?? false,
       imageUrl: product.imageUrl,
       stock: product.stock,
       unit: product.unit,

@@ -27,6 +27,11 @@ export interface Product {
   description: string;
   price: number;
   category: ProductCategory;
+  // True once an admin has manually set/changed this product's category
+  // via the admin panel. When true, the BUSY sync script must NOT
+  // silently overwrite category on the next sync — it must queue the
+  // BUSY-side value for review instead. See working-sync.js.
+  categoryManuallySet?: boolean;
   imageUrl: string;
   stock: number;
   unit: ProductUnit;
@@ -51,6 +56,7 @@ export interface UpdateProductInput {
   description?: string;
   price?: number;
   category?: ProductCategory;
+  categoryManuallySet?: boolean;
   imageUrl?: string;
   stock?: number;
   unit?: ProductUnit;
@@ -63,6 +69,7 @@ export interface ProductResponse {
   description: string;
   price: number;
   category: ProductCategory;
+  categoryManuallySet?: boolean;
   imageUrl: string;
   stock: number;
   unit: ProductUnit;
