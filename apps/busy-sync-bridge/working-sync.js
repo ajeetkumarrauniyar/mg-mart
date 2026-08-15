@@ -385,114 +385,38 @@ async function uploadProductsToFirestore(products, options = {}) {
         }
     }
 
-    // Summary
-    log.info('\n' + '='.repeat(60));
-    log.info('🎯 FIREBASE UPLOAD SUMMARY');
-    log.info('='.repeat(60));
-    log.info(`📊 Total Products: ${results.totalProducts}`);
-    log.info(`📦 Total Batches: ${results.totalBatches}`);
-    log.success(`✅ Successful Batches: ${results.successfulBatches}`);
-    
-    if (results.failedBatches > 0) {
-        log.error(`❌ Failed Batches: ${results.failedBatches}`);
-        results.errors.forEach(error => {
-            log.error(`   Batch ${error.batch}: ${error.error} (${error.products} products)`);
-        });
-    }
-    
-    const successRate = ((results.successfulBatches / results.totalBatches) * 100).toFixed(1);
-    log.info(`📈 Success Rate: ${successRate}%`);
-    
-    if (results.successfulBatches === results.totalBatches) {
-        log.success('🎉 All products uploaded successfully!');
-    }
+  // Summary
+  log.info("\n" + "=".repeat(60));
+  log.info("🎯 FIREBASE UPLOAD SUMMARY");
+  log.info("=".repeat(60));
+  log.info(`📊 Total Products: ${results.totalProducts}`);
+  log.info(`📦 Total Batches: ${results.totalBatches}`);
+  log.success(`✅ Successful Batches: ${results.successfulBatches}`);
+
+  if (results.failedBatches > 0) {
+    log.error(`❌ Failed Batches: ${results.failedBatches}`);
+    results.errors.forEach((error) => {
+      log.error(
+        `   Batch ${error.batch}: ${error.error} (${error.products} products)`,
+      );
+    });
+  }
 
     return results;
 }
 
 /**
- * Analyze schema differences between manual and BUSY products
+ * Get products with prices from BUSY database via PowerShell
  */
-async function analyzeSchemaConsistency() {
-    try {
-        log.info("🔍 Analyzing Product Schema Consistency");
-        log.info("=".repeat(50));
-        
-        const firestore = initializeFirebase();
-        if (!firestore) {
-            log.error("❌ Firebase not initialized");
-            return;
-        }
-        
-        const productsRef = firestore.collection('products');
-        const snapshot = await productsRef.get();
-        
-        if (snapshot.empty) {
-            log.warn("⚠️  No products found");
-            return;
-        }
-        
-        const manualProducts = [];
-        const busyProducts = [];
-        const allFields = new Set();
-        
-        // Categorize products and collect all fields
-        snapshot.forEach(doc => {
-            const product = doc.data();
-            
-            // Collect all field names
-            Object.keys(product).forEach(field => allFields.add(field));
-            
-            // Categorize by source
-            if (product.source === 'BUSY_ERP') {
-                busyProducts.push(product);
-            } else {
-                manualProducts.push(product);
-            }
-        });
-        
-        log.info(`📊 Found ${manualProducts.length} manual products and ${busyProducts.length} BUSY products`);
-        log.info(`📋 Total unique fields: ${allFields.size}`);
-        
-        // Show sample products
-        if (manualProducts.length > 0) {
-            log.info("\n🏪 Sample Manual Product:");
-            const sample = manualProducts[0];
-            Object.entries(sample).slice(0, 5).forEach(([key, value]) => {
-                log.info(`   ${key}: ${typeof value === 'string' ? `"${value}"` : value}`);
-            });
-        }
-        
-        if (busyProducts.length > 0) {
-            log.info("\n🔄 Sample BUSY Product:");
-            const sample = busyProducts[0];
-            Object.entries(sample).slice(0, 5).forEach(([key, value]) => {
-                log.info(`   ${key}: ${typeof value === 'string' ? `"${value}"` : value}`);
-            });
-        }
-        
-        return {
-            totalProducts: snapshot.size,
-            manualProducts: manualProducts.length,
-            busyProducts: busyProducts.length,
-            allFields: Array.from(allFields)
-        };
-        
-    } catch (error) {
-        log.error(`Schema analysis failed: ${error.message}`);
-    }
-}
 async function getProductsWithPrices() {
-    log.info("Getting products with price discovery...");
-    
-    // Use the exact same pattern that worked for sample data
-    const productsScriptContent = `
+  log.info("Getting products with prices...");
+
+  const productsScriptContent = `
 try {
     $conn = New-Object System.Data.OleDb.OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=${dbPath};Jet OLEDB:Database Password=${dbPw};Mode=Read;")
     $conn.Open()
     
-    # Use the same simple pattern that worked for sample data
-    $cmd = New-Object System.Data.OleDb.OleDbCommand("SELECT Name, Code, D1, D2, D3, ParentGrp FROM Master1 WHERE MasterType = 6 ORDER BY Code", $conn)
+    $cmd = New-Object System.Data.OleDb.OleDbCommand("SELECT Name, Code, D1, D2, D3, ParentGrp FROM Master1 WHERE MasterType = 6", $conn)
     $reader = $cmd.ExecuteReader()
     
     $items = @()
@@ -500,13 +424,12 @@ try {
     
     while ($reader.Read()) {
         $rowCount++
-        
-        $item = @{
-            Name = if ($reader["Name"] -eq [DBNull]::Value) { "Unknown Product" } else { $reader["Name"].ToString().Trim() }
-            Code = if ($reader["Code"] -eq [DBNull]::Value) { "UNKNOWN_$rowCount" } else { $reader["Code"].ToString().Trim() }
-            D1 = if ($reader["D1"] -eq [DBNull]::Value) { 0 } else { try { [double]$reader["D1"] } catch { 0 } }
-            D2 = if ($reader["D2"] -eq [DBNull]::Value) { 0 } else { try { [double]$reader["D2"] } catch { 0 } }
-            D3 = if ($reader["D3"] -eq [DBNull]::Value) { 0 } else { try { [double]$reader["D3"] } catch { 0 } }
+        $item = [PSCustomObject]@{
+            Name = if ($reader["Name"] -eq [DBNull]::Value) { "Unknown" } else { $reader["Name"].ToString().Trim() }
+            Code = if ($reader["Code"] -eq [DBNull]::Value) { "0" } else { $reader["Code"].ToString().Trim() }
+            D1 = if ($reader["D1"] -eq [DBNull]::Value) { 0 } else { [double]$reader["D1"] }
+            D2 = if ($reader["D2"] -eq [DBNull]::Value) { 0 } else { [double]$reader["D2"] }
+            D3 = if ($reader["D3"] -eq [DBNull]::Value) { 0 } else { [double]$reader["D3"] }
             ParentGrp = if ($reader["ParentGrp"] -eq [DBNull]::Value) { "General" } else { $reader["ParentGrp"].ToString().Trim() }
         }
         
@@ -538,223 +461,361 @@ try {
     throw
 }
 `;
-    
-    const scriptPath = path.join(__dirname, 'get_products.ps1');
-    
-    try {
-        fs.writeFileSync(scriptPath, productsScriptContent, 'utf8');
-        
-        const result = execSync(`powershell -ExecutionPolicy Bypass -File "${scriptPath}"`, { 
-            encoding: 'utf8',
-            timeout: 60000
-        });
-        
-        if (!fs.existsSync(tempJsonPath)) {
-            throw new Error("JSON file not created by PowerShell script");
-        }
-        
-        // Read the JSON file and handle BOM issues
-        let jsonContent = fs.readFileSync(tempJsonPath, 'utf8');
-        
-        // Remove BOM if present
-        if (jsonContent.charCodeAt(0) === 0xFEFF) {
-            jsonContent = jsonContent.slice(1);
-        }
-        
-        // Clean up any extra characters
-        jsonContent = jsonContent.trim();
-        
-        const rawData = JSON.parse(jsonContent);
-        log.success(`Retrieved ${rawData.itemCount} products using ${rawData.method}`);
-        
-        // Transform to Firebase format with corrected pricing logic
-        const firebaseProducts = rawData.items.map((item, index) => {
-            // D1 = 1 appears to be a flag, D2 = actual price
-            const actualPrice = Number(item.D2) || 0;
-            const mappedCategory = mapCategory(item.ParentGrp);
-            
-            // Debug first few items
-            if (index < 3) {
-                console.log(`\nDEBUG Item ${index + 1}:`);
-                console.log(`  Name: ${item.Name}`);
-                console.log(`  D1: ${item.D1} (flag)`);
-                console.log(`  D2: ${item.D2} (actual price)`);
-                console.log(`  ParentGrp: "${item.ParentGrp}" -> Category: "${mappedCategory}"`);
-                console.log(`  Final Price: ${actualPrice}`);
-            }
-            
-            return {
-                productId: String(item.Code),
-                name: item.Name,
-                barcode: "", // We'll skip barcode for now since Alias column causes issues
-                price: actualPrice, // Use D2 as the actual selling price
-                mrp: actualPrice,   // Use D2 as MRP too (can be adjusted later)
-                category: mappedCategory,
-                unit: "piece", // Default unit since Unit column causes issues
-                inStock: true,
-                stock: 0, // TODO: Extract from BUSY stock fields
-                description: "", // Empty - can be filled via admin panel
-                imageUrl: "", // Empty - can be filled via admin panel
-                isFeatured: false, // Default to false
-                createdAt: new Date().toISOString(),
-                updatedAt: new Date().toISOString(),
-                lastUpdated: new Date().toISOString(),
-                source: 'BUSY_ERP'
-            };
-        });
-        
-        // Save processed data
-        const outputPath = path.join(__dirname, 'firebase_ready_products.json');
-        fs.writeFileSync(outputPath, JSON.stringify({
-            products: firebaseProducts,
-            metadata: {
-                totalItems: rawData.itemCount,
-                syncTime: new Date().toISOString(),
-                method: rawData.method
-            }
-        }, null, 2));
-        
-        log.success(`✅ Processed data saved to: ${outputPath}`);
-        
-        // Cleanup temp file
-        fs.unlinkSync(tempJsonPath);
-        
-        return firebaseProducts;
-    } catch (error) {
-        log.error("Product fetch failed");
-        log.error(error.message);
-        throw error;
-    } finally {
-        // Cleanup
-        try {
-            if (fs.existsSync(scriptPath)) {
-                fs.unlinkSync(scriptPath);
-            }
-        } catch (cleanupError) {
-            // Ignore cleanup errors
-        }
+
+  const scriptPath = path.join(__dirname, "get_products.ps1");
+
+  try {
+    fs.writeFileSync(scriptPath, productsScriptContent, "utf8");
+
+    const result = execSync(
+      `powershell -ExecutionPolicy Bypass -File "${scriptPath}"`,
+      {
+        encoding: "utf8",
+        timeout: 60000,
+      },
+    );
+
+    if (!fs.existsSync(tempJsonPath)) {
+      throw new Error("JSON file not created by PowerShell script");
     }
+
+    // Read the JSON file and handle BOM issues
+    let jsonContent = fs.readFileSync(tempJsonPath, "utf8");
+
+    // Remove BOM if present
+    if (jsonContent.charCodeAt(0) === 0xfeff) {
+      jsonContent = jsonContent.slice(1);
+    }
+
+    // Clean up any extra characters
+    jsonContent = jsonContent.trim();
+
+    const rawData = JSON.parse(jsonContent);
+    log.success(
+      `Retrieved ${rawData.itemCount} products using ${rawData.method}`,
+    );
+
+    // Transform to Firebase format with corrected pricing logic
+    const firebaseProducts = rawData.items.map((item, index) => {
+      // D1 = 1 appears to be a flag, D2 = actual price
+      const actualPrice = Number(item.D2) || 0;
+      const mappedCategory = mapCategory(item.ParentGrp);
+
+      // Debug first few items
+      if (index < 3) {
+        console.log(`\nDEBUG Item ${index + 1}:`);
+        console.log(`  Name: ${item.Name}`);
+        console.log(`  D1: ${item.D1} (flag)`);
+        console.log(`  D2: ${item.D2} (actual price)`);
+        console.log(
+          `  ParentGrp: "${item.ParentGrp}" -> Category: "${mappedCategory}"`,
+        );
+        console.log(`  Final Price: ${actualPrice}`);
+      }
+
+      return {
+        productId: String(item.Code),
+        name: item.Name,
+        barcode: "", // We'll skip barcode for now since Alias column causes issues
+        price: actualPrice, // Use D2 as the actual selling price
+        mrp: actualPrice, // Use D2 as MRP too (can be adjusted later)
+        category: mappedCategory,
+        unit: "piece", // Default unit since Unit column causes issues
+        inStock: true,
+        stock: 0, // TODO: Extract from BUSY stock fields
+        description: "", // Empty - can be filled via admin panel
+        imageUrl: "", // Empty - can be filled via admin panel
+        isFeatured: false, // Default to false
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        lastUpdated: new Date().toISOString(),
+        source: "BUSY_ERP",
+      };
+    });
+
+    // Save processed data
+    const outputPath = path.join(__dirname, "firebase_ready_products.json");
+    fs.writeFileSync(
+      outputPath,
+      JSON.stringify(
+        {
+          products: firebaseProducts,
+          metadata: {
+            totalItems: rawData.itemCount,
+            syncTime: new Date().toISOString(),
+            method: rawData.method,
+          },
+        },
+        null,
+        2,
+      ),
+    );
+
+    log.success(`✅ Processed data saved to: ${outputPath}`);
+
+    // Cleanup temp file
+    fs.unlinkSync(tempJsonPath);
+
+    return firebaseProducts;
+  } catch (error) {
+    log.error("Product fetch failed");
+    log.error(error.message);
+    throw error;
+  } finally {
+    // Cleanup
+    try {
+      if (fs.existsSync(scriptPath)) {
+        fs.unlinkSync(scriptPath);
+      }
+    } catch (cleanupError) {
+      // Ignore cleanup errors
+    }
+  }
 }
 
 /**
  * Utility functions
  */
 function mapCategory(category) {
-    const categoryStr = String(category || "").trim();
-    
-    // Handle numeric category codes
-    const mapping = {
-        // Numeric codes from BUSY
-        '401': 'Household',
-        '402': 'Personal Care', 
-        '403': 'Beverages',
-        '404': 'Snacks',
-        '405': 'Dairy & Eggs',
-        '406': 'Pantry',
-        
-        // Text categories
-        'General': 'Pantry',
-        'Beverages': 'Beverages',
-        'Snacks': 'Snacks',
-        'Personal Care': 'Personal Care',
-        'House Hold': 'Household',
-        'Household': 'Household',
-        'Dairy': 'Dairy & Eggs'
-    };
-    
-    return mapping[categoryStr] || 'Pantry';
+  const categoryStr = String(category || "").trim();
+
+  // Handle numeric category codes
+  const mapping = {
+    // Numeric codes from BUSY
+    401: "Household",
+    402: "Personal Care",
+    403: "Beverages",
+    404: "Snacks",
+    405: "Dairy & Eggs",
+    406: "Pantry",
+
+    // Text categories
+    General: "Pantry",
+    Beverages: "Beverages",
+    Snacks: "Snacks",
+    "Personal Care": "Personal Care",
+    "House Hold": "Household",
+    Household: "Household",
+    Dairy: "Dairy & Eggs",
+  };
+
+  return mapping[categoryStr] || "Pantry";
+}
+
+/**
+ * Category protection pass.
+ *
+ * Before uploading, check each product's CURRENT state in Firestore.
+ * - If the admin has manually set the category (categoryManuallySet === true)
+ *   and BUSY's mapped category is DIFFERENT from what's currently live,
+ *   we do NOT overwrite it. Instead we drop `category` from this product's
+ *   payload (so the upload's merge:true leaves the live value untouched)
+ *   and write the conflict to a `category_sync_queue` collection doc for
+ *   an admin to approve/deny in the admin panel.
+ * - Otherwise (no manual flag, or BUSY agrees with what's live), category
+ *   is left in the payload and syncs normally, same as before.
+ *
+ * This directly fixes: admin corrects a category in the admin panel ->
+ * next sync run used to silently revert it. Now it won't.
+ */
+async function applyCategoryProtection(products) {
+  const firestore = initializeFirebase();
+  if (!firestore) {
+    log.warn(
+      "Firebase not initialized — skipping category protection, syncing categories as-is",
+    );
+    return products;
+  }
+
+  log.info(
+    `🛡️  Checking ${products.length} products for manually-set categories...`,
+  );
+
+  let queued = 0;
+  const protectedProducts = [];
+
+  // Firestore getAll() can take up to 500 refs per call — chunk to be safe
+  const chunkSize = 300;
+  for (let i = 0; i < products.length; i += chunkSize) {
+    const chunk = products.slice(i, i + chunkSize);
+    const refs = chunk.map((p) =>
+      firestore.collection("products").doc(p.productId),
+    );
+    const snapshots = refs.length > 0 ? await firestore.getAll(...refs) : [];
+
+    for (let j = 0; j < chunk.length; j++) {
+      const product = chunk[j];
+      const snap = snapshots[j];
+      const existing = snap && snap.exists ? snap.data() : null;
+
+      const isManuallySet = existing?.categoryManuallySet === true;
+      const liveCategory = existing?.category;
+      const busyCategory = product.category;
+
+      if (isManuallySet && liveCategory && liveCategory !== busyCategory) {
+        // Conflict: don't touch category, queue it for admin review
+        const { category, ...rest } = product;
+        protectedProducts.push(rest);
+        await queueCategoryConflict(firestore, {
+          productId: product.productId,
+          productName: product.name,
+          currentCategory: liveCategory,
+          busyCategory: busyCategory,
+        });
+        queued++;
+      } else {
+        protectedProducts.push(product);
+      }
+    }
+  }
+
+  if (queued > 0) {
+    log.warn(
+      `🛡️  ${queued} category change(s) held back — waiting for admin review in category_sync_queue`,
+    );
+  } else {
+    log.info(
+      "🛡️  No manually-set categories conflict with BUSY — syncing normally",
+    );
+  }
+
+  return protectedProducts;
+}
+
+/**
+ * Write (or refresh) a pending conflict doc. Uses a deterministic doc ID
+ * per productId so re-running the sync updates the same pending entry
+ * instead of creating duplicates every run.
+ */
+async function queueCategoryConflict(firestore, conflict) {
+  const queueRef = firestore
+    .collection("category_sync_queue")
+    .doc(conflict.productId);
+  const existing = await queueRef.get();
+
+  // Don't re-open something the admin already approved/denied this run;
+  // only (re)write if it's new or still pending.
+  if (existing.exists && existing.data().status !== "pending") {
+    return;
+  }
+
+  await queueRef.set(
+    {
+      productId: conflict.productId,
+      productName: conflict.productName,
+      currentCategory: conflict.currentCategory,
+      busyCategory: conflict.busyCategory,
+      status: "pending", // 'pending' | 'approved' | 'denied'
+      detectedAt: admin.firestore.FieldValue.serverTimestamp(),
+      resolvedAt: null,
+      resolvedBy: null,
+    },
+    { merge: true },
+  );
 }
 
 function mapUnit(unit) {
-    const unitStr = String(unit || "").toLowerCase();
-    if (unitStr.includes('kg')) return 'kg';
-    if (unitStr.includes('ltr')) return 'liter';
-    if (unitStr.includes('ml')) return 'ml';
-    return 'piece';
+  const unitStr = String(unit || "").toLowerCase();
+  if (unitStr.includes("kg")) return "kg";
+  if (unitStr.includes("ltr")) return "liter";
+  if (unitStr.includes("ml")) return "ml";
+  return "piece";
 }
 
 /**
  * Main execution with integrated commands
  */
 async function main() {
-    try {
-        const args = process.argv.slice(2);
-        
-        // Handle different commands
-        if (args.includes('--analyze-schema')) {
-            await analyzeSchemaConsistency();
-            return;
-        }
-        
-        if (args.includes('--test-firebase')) {
-            log.info("🧪 Testing Firebase Integration");
-            const connectionOk = await testFirebaseConnection();
-            if (connectionOk) {
-                const count = await getProductCount();
-                log.info(`📊 Current products in Firebase: ${count}`);
-                log.success("✅ Firebase test completed successfully!");
-            }
-            return;
-        }
-        
-        if (args.includes('--dry-run')) {
-            log.warn("🏃 DRY RUN MODE - No data will be uploaded to Firebase");
-        }
-        
-        // Main sync process
-        log.info("🚀 Starting Working BUSY Sync...");
-        
-        // Test connection
-        const totalProducts = await testConnection();
-        
-        if (!totalProducts) {
-            throw new Error("Database connection failed");
-        }
-        
-        console.log('\n' + '='.repeat(50));
-        
-        // Get sample data
-        log.info("📝 Getting sample data...");
-        await getSampleData();
-        
-        console.log('\n' + '='.repeat(50));
-        
-        // Get products
-        log.info("💰 Getting products...");
-        const products = await getProductsWithPrices();
-        
-        // Upload to Firebase (unless dry run)
-        const isDryRun = args.includes('--dry-run');
-        const uploadSuccess = await uploadToFirebase(products, { dryRun: isDryRun });
-        
-        if (uploadSuccess) {
-            log.success(`🎉 Sync completed! Processed and uploaded ${products.length} products to Firebase`);
-            log.info("🔗 Products are now live in your admin panel!");
-        } else if (isDryRun) {
-            log.info(`🏃 Dry run completed! ${products.length} products processed (not uploaded)`);
-        } else {
-            log.warn(`⚠️  Sync completed with issues. ${products.length} products processed but Firebase upload had problems`);
-        }
-        
-        log.info("💾 Local backup saved to 'firebase_ready_products.json'");
-        
-    } catch (error) {
-        log.error(`Sync failed: ${error.message}`);
-        process.exit(1);
+  try {
+    const args = process.argv.slice(2);
+
+    // Handle different commands
+    if (args.includes("--analyze-schema")) {
+      await analyzeSchemaConsistency();
+      return;
     }
+
+    if (args.includes("--test-firebase")) {
+      log.info("🧪 Testing Firebase Integration");
+      const connectionOk = await testFirebaseConnection();
+      if (connectionOk) {
+        const count = await getProductCount();
+        log.info(`📊 Current products in Firebase: ${count}`);
+        log.success("✅ Firebase test completed successfully!");
+      }
+      return;
+    }
+
+    if (args.includes("--dry-run")) {
+      log.warn("🏃 DRY RUN MODE - No data will be uploaded to Firebase");
+    }
+
+    // Main sync process
+    log.info("🚀 Starting Working BUSY Sync...");
+
+    // Test connection
+    const totalProducts = await testConnection();
+
+    if (!totalProducts) {
+      throw new Error("Database connection failed");
+    }
+
+    console.log("\n" + "=".repeat(50));
+
+    // Get sample data
+    log.info("📝 Getting sample data...");
+    await getSampleData();
+
+    console.log("\n" + "=".repeat(50));
+
+    // Get products
+    log.info("💰 Getting products...");
+    const products = await getProductsWithPrices();
+
+    // Protect any admin-set categories before upload
+    const protectedProducts = await applyCategoryProtection(products);
+
+    // Upload to Firebase (unless dry run)
+    const isDryRun = args.includes("--dry-run");
+    const uploadSuccess = await uploadToFirebase(protectedProducts, {
+      dryRun: isDryRun,
+    });
+
+    if (uploadSuccess) {
+      log.success(
+        `🎉 Sync completed! Processed and uploaded ${protectedProducts.length} products to Firebase`,
+      );
+      log.info("🔗 Products are now live in your admin panel!");
+    } else if (isDryRun) {
+      log.info(
+        `🏃 Dry run completed! ${protectedProducts.length} products processed (not uploaded)`,
+      );
+    } else {
+      log.warn(
+        `⚠️  Sync completed with issues. ${protectedProducts.length} products processed but Firebase upload had problems`,
+      );
+    }
+
+    log.info("💾 Local backup saved to 'firebase_ready_products.json'");
+  } catch (error) {
+    log.error(`Sync failed: ${error.message}`);
+    process.exit(1);
+  }
 }
 
 // Run if executed directly
 if (require.main === module) {
-    main();
+  main();
 }
 
-module.exports = { 
-    testConnection, 
-    getSampleData, 
-    getProductsWithPrices, 
-    uploadToFirebase,
-    analyzeSchemaConsistency,
-    testFirebaseConnection,
-    getProductCount
+module.exports = {
+  testConnection,
+  getSampleData,
+  getProductsWithPrices,
+  uploadToFirebase,
+  applyCategoryProtection,
+  queueCategoryConflict,
+  analyzeSchemaConsistency,
+  testFirebaseConnection,
+  getProductCount,
 };
