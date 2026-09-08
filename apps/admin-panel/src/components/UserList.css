@@ -1,0 +1,71 @@
+.users-v2,
+.categories-v2 {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.users-v2 .users-filters-v2 {
+  grid-template-columns: 2fr minmax(180px, 1fr);
+}
+
+.categories-v2 .categories-filters {
+  grid-template-columns: 2fr minmax(220px, 1fr);
+}
+
+/* Modal and form styles */
+.user-form {
+  padding: 1.5rem;
+}
+
+.form-note {
+  display: block;
+  margin-top: 0.25rem;
+  color: #666;
+  font-size: 0.8rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.form-group {
+  margin-bottom: 0.9rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: #2c4d40;
+  font-weight: 600;
+  font-size: 0.84rem;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+}
+
+.error-message {
+  background: #fff1f3;
+  border: 1px solid #efc6ce;
+  color: #8f2137;
+  padding: 0.6rem 0.7rem;
+  border-radius: 8px;
+  margin-bottom: 0.8rem;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 1024px) {
+  .users-v2 .users-filters-v2,
+  .categories-v2 .categories-filters {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
