@@ -18,6 +18,108 @@ const log = {
 
 let db = null;
 
+// Firestore collection that holds category conflicts awaiting admin review.
+// Must match COLLECTIONS.CATEGORY_SYNC_QUEUE in apps/server/src/services/firebase.ts
+const CATEGORY_SYNC_QUEUE_COLLECTION = 'category_sync_queue';
+
+/**
+ * Protect admin-locked categories before any product write.
+ *
+ * When an admin manually sets a product's category in the admin panel the
+ * server flags it with `categoryManuallySet: true`. From then on this sync
+ * must never silently revert that category to BUSY's value. For every such
+ * product where BUSY now disagrees we:
+ *   1. strip `category` from the outgoing payload (so the merge keeps the
+ *      admin's value), and
+ *   2. write a `pending` conflict into the category-sync-queue collection so
+ *      an admin can approve ("use BUSY") or deny ("keep current") it via the
+ *      admin panel.
+ *
+ * A conflict that was already resolved (approved/denied) is only re-raised if
+ * BUSY's category changes to a new value.
+ *
+ * Mutates `products` in place (removes `category` from protected entries).
+ */
+async function guardManualCategories(firestore, products, { dryRun = false } = {}) {
+    if (!Array.isArray(products) || products.length === 0) {
+        return { protected: 0, queued: 0 };
+    }
+
+    const productsCol = firestore.collection('products');
+    const queueCol = firestore.collection(CATEGORY_SYNC_QUEUE_COLLECTION);
+
+    let protectedCount = 0;
+    let queuedCount = 0;
+
+    const CHUNK = 200;
+    for (let i = 0; i < products.length; i += CHUNK) {
+        const slice = products.slice(i, i + CHUNK);
+        const refs = slice.map((p) => productsCol.doc(String(p.productId)));
+        const snaps = await firestore.getAll(...refs);
+
+        const writer = dryRun ? null : firestore.batch();
+        let chunkWrites = 0;
+
+        for (let j = 0; j < slice.length; j++) {
+            const product = slice[j];
+            const snap = snaps[j];
+            if (!snap || !snap.exists) continue;
+
+            const existing = snap.data() || {};
+            if (!existing.categoryManuallySet) continue;
+
+            const currentCategory = existing.category;
+            const busyCategory = product.category;
+            if (!busyCategory || busyCategory === currentCategory) continue;
+
+            // Admin has locked this category and BUSY disagrees — keep the
+            // admin's value by dropping `category` from the merge payload.
+            delete product.category;
+            protectedCount++;
+
+            const queueRef = queueCol.doc(String(product.productId));
+            const queueSnap = await queueRef.get();
+            const prev = queueSnap.exists ? queueSnap.data() : null;
+
+            // Already have a conflict recorded for this exact BUSY value —
+            // leave the admin's decision (or existing pending row) alone.
+            if (prev && prev.busyCategory === busyCategory) continue;
+
+            queuedCount++;
+            if (writer) {
+                writer.set(
+                    queueRef,
+                    {
+                        productId: String(product.productId),
+                        productName: product.name || existing.name || '',
+                        currentCategory: currentCategory || '',
+                        busyCategory,
+                        status: 'pending',
+                        detectedAt: admin.firestore.Timestamp.now(),
+                    },
+                    { merge: true }
+                );
+                chunkWrites++;
+            }
+        }
+
+        if (writer && chunkWrites > 0) {
+            await writer.commit();
+        }
+    }
+
+    if (protectedCount > 0) {
+        log.warn(
+            `🛡️  Category guard: kept ${protectedCount} admin-set categor${protectedCount === 1 ? 'y' : 'ies'}, ` +
+            `queued ${queuedCount} new conflict(s) for admin review`
+        );
+    } else {
+        log.info('🛡️  Category guard: no admin-locked category conflicts');
+    }
+
+    return { protected: protectedCount, queued: queuedCount };
+}
+
 /**
  * Initialize Firebase Admin SDK
  */
@@ -307,6 +409,10 @@ async function uploadProductsToFirestore(products, options = {}) {
     if (dryRun) {
         log.warn("DRY RUN MODE - No actual data will be uploaded");
     }
+
+    // Protect admin-locked categories and queue any BUSY conflicts for review
+    // before we write a single product document.
+    await guardManualCategories(firestore, products, { dryRun });
 
     // Split products into batches
     const batches = [];
