@@ -10,18 +10,15 @@ export interface CategorySyncConflict {
     detectedAt: string | null;
 }
 
-interface ApiListResponse {
-    success: boolean;
-    data: CategorySyncConflict[];
-}
-
 export const categorySyncQueueService = {
-    // Products where the BUSY sync found a category conflict awaiting review
+    // Products where the BUSY sync found a category conflict awaiting review.
+    // api.get already unwraps the { success, data } envelope, so this
+    // resolves to the conflict array directly.
     getPending: async (): Promise<CategorySyncConflict[]> => {
-        const response = await api.get<ApiListResponse>(
+        const conflicts = await api.get<CategorySyncConflict[]>(
             config.api.ENDPOINTS.CATEGORY_SYNC_QUEUE.LIST
         );
-        return response.data;
+        return conflicts ?? [];
     },
 
     // Accept BUSY's category — product's live category updates to it
