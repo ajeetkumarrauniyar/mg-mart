@@ -56,6 +56,13 @@ const apiEndpoints: ApiEndpoints = {
         HEALTH: "/image-management/health",
         CLEANUP: "/image-management/cleanup",
     },
+
+    // Category sync queue endpoints (BUSY -> Firebase category conflicts)
+    CATEGORY_SYNC_QUEUE: {
+        LIST: "/category-sync-queue",
+        APPROVE: (productId: string) => `/category-sync-queue/${productId}/approve`,
+        DENY: (productId: string) => `/category-sync-queue/${productId}/deny`,
+    },
 };
 
 // API configuration object

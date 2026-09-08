@@ -7,6 +7,7 @@ export { productService } from "./productService";
 export { orderService } from "./orderService";
 export { userService } from "./userService";
 export { imageManagementService } from "./imageManagementService";
+export { categorySyncQueueService } from "./categorySyncQueueService";
 
 // Export types
 export type { ApiResponse, ApiError } from "./apiService";
@@ -52,3 +53,4 @@ export type {
     CleanupResponse
 } from "./imageManagementService";
 export { buildDisplayImages } from "./imageManagementService";
+export type { CategorySyncConflict } from "./categorySyncQueueService";

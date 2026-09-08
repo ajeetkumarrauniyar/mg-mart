@@ -14,12 +14,13 @@ import {
   TrendingUp,
   AlertCircle,
 } from 'lucide-react'
-import { dashboardService, authService } from './services'
+import { dashboardService, authService, categorySyncQueueService } from './services'
 import type { DashboardStats } from './services'
 import { LoginForm } from './components/LoginForm'
 import { ProductList } from './components/ProductList'
 import { UserList } from './components/UserList'
 import { OrderManagement } from './components/OrderManagement'
+import { CategorySyncQueue } from './components/CategorySyncQueue'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -150,6 +151,7 @@ function App() {
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [pendingCategoryConflicts, setPendingCategoryConflicts] = useState(0)
 
   useEffect(() => {
     setIsAuthenticated(authService.isAuthenticated())
@@ -174,6 +176,25 @@ function App() {
     }
 
     void loadDashboardStats()
+  }, [isAuthenticated])
+
+  useEffect(() => {
+    if (!isAuthenticated) return
+
+    // Poll for pending category-sync conflicts so the sidebar badge stays fresh
+    // even when the admin isn't on the Categories page.
+    const loadPendingCount = async () => {
+      try {
+        const conflicts = await categorySyncQueueService.getPending()
+        setPendingCategoryConflicts(conflicts.length)
+      } catch (err) {
+        console.error('Category sync queue check failed:', err)
+      }
+    }
+
+    void loadPendingCount()
+    const intervalId = setInterval(() => void loadPendingCount(), 60_000)
+    return () => clearInterval(intervalId)
   }, [isAuthenticated])
 
   const handleLoginSuccess = () => setIsAuthenticated(true)
@@ -297,6 +318,7 @@ function App() {
             {NAV_ITEMS.map((item) => {
               const Icon = item.icon
               const isActive = activePage === item.key
+              const badgeCount = item.key === 'categories' ? pendingCategoryConflicts : 0
               return (
                 <button
                   key={item.key}
@@ -309,7 +331,7 @@ function App() {
                   <Icon
                     className={`h-4 w-4 shrink-0 ${isActive ? 'text-primary-foreground' : 'text-muted-foreground group-hover:text-accent-foreground'}`}
                   />
-                  <div className="min-w-0">
+                  <div className="min-w-0 flex-1">
                     <p className={`text-sm font-medium ${isActive ? 'text-primary-foreground' : ''}`}>
                       {item.label}
                     </p>
@@ -317,6 +339,14 @@ function App() {
                       {item.subtitle}
                     </p>
                   </div>
+                  {badgeCount > 0 && (
+                    <Badge
+                      variant={isActive ? 'outline' : 'destructive'}
+                      className="shrink-0 h-5 min-w-5 justify-center px-1.5"
+                    >
+                      {badgeCount}
+                    </Badge>
+                  )}
                 </button>
               )
             })}
@@ -485,6 +515,7 @@ function App() {
           {activePage === 'categories' && (
             <div className="space-y-6">
               <InsightGrid title="Category Performance" items={sectionSnapshots.categories} />
+              <CategorySyncQueue onPendingCountChange={setPendingCategoryConflicts} />
               <WorkflowBoard
                 title="Category Maintenance Queue"
                 rows={[

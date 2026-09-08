@@ -47,6 +47,12 @@ export interface ImageManagementEndpoints {
     CLEANUP: string;
 }
 
+export interface CategorySyncQueueEndpoints {
+    LIST: string;
+    APPROVE: (productId: string) => string;
+    DENY: (productId: string) => string;
+}
+
 export interface ApiEndpoints {
     AUTH: AuthEndpoints;
     PRODUCTS: ProductEndpoints;
@@ -54,6 +60,7 @@ export interface ApiEndpoints {
     USERS: UserEndpoints;
     ADMIN: AdminEndpoints;
     IMAGE_MANAGEMENT: ImageManagementEndpoints;
+    CATEGORY_SYNC_QUEUE: CategorySyncQueueEndpoints;
 }
 
 // Environment configuration interface
